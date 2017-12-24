@@ -13,9 +13,16 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += src/main.cpp \
-    src/mainwindow.cpp
+    src/mainwindow.cpp \
+    src/unitbase.cpp \
+    src/animation.cpp
 
-HEADERS += include/mainwindow.h
+HEADERS += include/mainwindow.h \
+    include/unitbase.h \
+    include/unitinfo.h \
+    include/types.h \
+    include/traits.h \
+    include/animation.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET
