@@ -15,6 +15,9 @@ struct Traits <Unit> {
     using HealthType = UIntegerType;
     using AttackType = UIntegerType;
     using DefenseType = UIntegerType;
+
+    using PositionType = IntegerType;
+    using AngleType = IntegerType;
 };
 
 template<>

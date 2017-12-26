@@ -6,9 +6,10 @@ class UnitBase;
 class UnitInfo;
 
 class MainWindow;
+class BattleWidget;
 
 class Animation;
-class AnimationItem;
+class AnimatedObject;
 
 using IntegerType = std::ptrdiff_t;
 using UIntegerType = std::size_t;
