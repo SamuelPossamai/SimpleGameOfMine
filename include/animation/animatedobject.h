@@ -3,18 +3,15 @@
 
 #include "animation.h"
 
-class AnimatedObject : public Animation::Object {
-
-    using Object = Animation::Object;
+class AnimatedObject : public QGraphicsPixmapItem {
 
 public:
 
-    explicit AnimationObject(PositionType x = 0, PositionType y = 0, PositionType angle = 0) :
-        Object(x, y, angle), _cur_animation(0), _idle_animation(0) {}
+    AnimatedObject() : _cur_animation(0), _idle_animation(0) { }
 
-    UIntegerType addAnimation(const Animation& animation) const { _animations.push_back(animation); return _animations.size() - 1; }
+    UIntegerType addAnimation(const Animation& animation) { _animations.push_back(animation); return _animations.size() - 1; }
 
-    void selectAnimation(UIntegerType n) { _cur_animation = n; }
+    void selectAnimation(UIntegerType n);
     UIntegerType currentAnimation() const { return _cur_animation; }
 
     UIntegerType animations() const { return _animations.size(); }
@@ -22,6 +19,10 @@ public:
     void setIdleAnimation(UIntegerType idle_animation) { _idle_animation = idle_animation; }
 
     UIntegerType idleAnimation() const { return _idle_animation; }
+
+    void step();
+
+    void next() { step(); }
 
 private:
 

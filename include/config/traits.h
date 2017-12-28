@@ -23,6 +23,8 @@ struct Traits <Unit> {
 template<>
 struct Traits <MainWindow> {
 
+    static constexpr const char * name = "SGOM";
+
     static const UIntegerType x = 200;
     static const UIntegerType y = 200;
     static const UIntegerType width = 800;

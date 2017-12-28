@@ -5,7 +5,7 @@
 #include <QGraphicsView>
 
 #include "types.h"
-#include "animation.h"
+#include "animatedobject.h"
 
 class BattleWidget : public QWidget {
 
@@ -24,9 +24,7 @@ private:
     QGraphicsView *_gview;
     QTimer *_timer;
 
-    Animation::Object _obj;
-
-    Animation _animation;
+    AnimatedObject *_obj;
 };
 
 #endif // BATTLEWIDGET_H
