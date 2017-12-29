@@ -2,8 +2,9 @@
 #define UNITBASE_H
 
 #include "unitinfo.h"
+#include "animatedobject.h"
 
-class UnitBase {
+class UnitBase : public AnimatedObject {
 
 public:
 
@@ -11,24 +12,31 @@ public:
     using AttackType = Traits<Unit>::AttackType;
     using DefenseType = Traits<Unit>::DefenseType;
 
+    using PositionType = Traits<Unit>::PositionType;
+    using AngleType = Traits<Unit>::AngleType;
+    using SizeType = Traits<Unit>::SizeType;
+
     UnitBase(UnitInfo *info) : _info(info) {}
 
     const UnitInfo *unitInfo();
 
-    void x(IntegerType x) { _x = x; }
-    void y(IntegerType y) { _y = y; }
+    void setX(PositionType x) { AnimatedObject::setX(x); }
+    PositionType x() { return AnimatedObject::x(); }
 
+    void setY(PositionType y) { AnimatedObject::setY(y); }
+    PositionType y() { return AnimatedObject::y(); }
 
-    void angle(IntegerType angle) { _angle = angle; }
-    IntegerType angle() { return _angle; }
+    void setAngle(AngleType angle);
+    AngleType angle();
 
-    IntegerType x() { return _x; }
-    IntegerType y() { return _y; }
+    SizeType size();
 
 private:
 
+    constexpr bool _using_radians();
+
     UnitInfo *_info;
-    IntegerType _x, _y, _angle;
+    SizeType _size;
 };
 
 #endif // UNITBASE_H

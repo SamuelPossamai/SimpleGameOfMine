@@ -17,7 +17,8 @@ SOURCES += src/main.cpp \
     src/engine/unitbase.cpp \
     src/animation/animation.cpp \
     src/interface/battlewidget.cpp \
-    src/animation/animatedobject.cpp
+    src/animation/animatedobject.cpp \
+    src/engine/map.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -27,7 +28,8 @@ HEADERS += include/interface/mainwindow.h \
     include/animation/animation.h \
     include/engine/unit.h \
     include/interface/battlewidget.h \
-    include/animation/animatedobject.h
+    include/animation/animatedobject.h \
+    include/engine/map.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET
