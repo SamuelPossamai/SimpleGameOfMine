@@ -1,7 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-class Engine;
+class BattleEngine;
 
 class Unit;
 class UnitBase;

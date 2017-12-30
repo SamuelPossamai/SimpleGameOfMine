@@ -11,6 +11,8 @@ class Unit : public UnitBase {
 
 public:
 
+    using Base::Base;
+
 private:
 
 };

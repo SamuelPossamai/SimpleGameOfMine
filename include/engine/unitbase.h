@@ -16,7 +16,7 @@ public:
     using AngleType = Traits<Unit>::AngleType;
     using SizeType = Traits<Unit>::SizeType;
 
-    UnitBase(UnitInfo *info) : _info(info) {}
+    UnitBase(const UnitInfo *info) : _info(info) {}
 
     const UnitInfo *unitInfo();
 
@@ -29,13 +29,13 @@ public:
     void setAngle(AngleType angle);
     AngleType angle();
 
-    SizeType size();
+    SizeType size() { return _info->size(); }
 
 private:
 
-    constexpr bool _using_radians();
+    static constexpr bool _using_radians();
 
-    UnitInfo *_info;
+    const UnitInfo *_info;
     SizeType _size;
 };
 

@@ -7,10 +7,10 @@
 
 #include "traits.h"
 #include "battlewidget.h"
+#include "battleengine.h"
+#include "unit.h"
 
 BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent) {
-
-    _obj = new AnimatedObject;
 
     _gview = new QGraphicsView(new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height), this);
 
@@ -19,38 +19,39 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent) {
     _gview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _gview->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    _engine = new BattleEngine();
+    _engine->setScene(_gview->scene());
+
+    Unit *unit1 = new Unit(new UnitInfo);
+    Unit *unit2 = new Unit(new UnitInfo);
+
+    unit1->setX(300);
+    unit1->setY(140);
+
+    unit1->setAngle(3.14/4);
+
+    unit2->setX(600);
+    unit2->setY(140);
+
+    unit2->setAngle(0);
+
+    _engine->addUnit(unit1);
+    _engine->addUnit(unit2);
+
     QPixmap im1 = QPixmap(":/testimage.png").scaled(100, 100);
     QPixmap im2 = QPixmap(":/testimage_red.png").scaled(100, 100);
     QPixmap im3 = im1.scaled(100, 50);
 
-    Animation animation1(1000);
+    Animation animation1(100);
     Animation animation2(1000);
+
+    animation1.addImage(im1, 0);
+    animation1.addImage(im2, 50);
 
     animation2.addImage(im3, 0);
 
-    UIntegerType last = 0, i = 0;
-    while(last < 1000){
-
-        animation1.addImage(im1, last + 3*i);
-
-        last += 6*i;
-        animation1.addImage(im2, last);
-
-        if(last < 500) i++;
-        else i--;
-    }
-
-    _obj->setPos(200, 200);
-
-    _obj->addAnimation(animation1);
-    _obj->addAnimation(animation2);
-    _obj->selectAnimation(1 /* animation 2 */);
-
-    _obj->show();
-
-    step();
-
-   _gview->scene()->addItem(_obj);
+    unit1->addAnimation(animation1);
+    unit2->addAnimation(animation2);
 
    _timer = new QTimer(this);
 
@@ -63,16 +64,7 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent) {
 
 void BattleWidget::step(){
 
-    _obj->step();
-
-    double x_base = 50;
-    double y_base = 50;
-    double x_mul = 3.9;
-    double y_mul = 1.65;
-
-    _obj->setRotation(int(_obj->rotation() + 1)%360);
-    if(_obj->rotation() < 180) _obj->setPos(x_base + x_mul*_obj->rotation(), y_base + y_mul*_obj->rotation());
-    else _obj->setPos(x_base + 360*x_mul - x_mul*_obj->rotation(), y_base + 360*y_mul - y_mul*_obj->rotation());
+    _engine->step();
 }
 
 void BattleWidget::keyPressEvent(QKeyEvent *event) {

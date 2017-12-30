@@ -35,7 +35,7 @@ public:
     void setSteps(UIntegerType steps);
     UIntegerType steps() const { return _steps; }
 
-    const QPixmap& pixmap() const { return _vector[_vec_pos].first; }
+    QPixmap pixmap() const { return (_vec_pos == 0) ? QPixmap() : _vector[_vec_pos - 1].first; }
 
 private:
 

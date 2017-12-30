@@ -10,12 +10,12 @@ struct Traits {
 };
 
 template <>
-struct Traits <Engine> {
+struct Traits <BattleEngine> {
 
     using SizeType = UIntegerType;
 
     using PositionType = IntegerType;
-    using AngleType = IntegerType;
+    using AngleType = RealType;
 
     enum class AngleUnitType { radians, degrees };
 
@@ -23,13 +23,13 @@ struct Traits <Engine> {
 };
 
 template <>
-struct Traits <Map> : public Traits<Engine> {
+struct Traits <Map> : public Traits<BattleEngine> {
 
     using PointType = Vec2Type<PositionType>;
 };
 
 template <>
-struct Traits <Unit> : public Traits<Engine> {
+struct Traits <Unit> : public Traits<BattleEngine> {
 
     using HealthType = UIntegerType;
     using AttackType = UIntegerType;

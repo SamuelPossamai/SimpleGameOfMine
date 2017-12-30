@@ -35,8 +35,7 @@ private:
     QGraphicsView *_gview;
     QTimer *_timer;
 
-    AnimatedObject *_obj;
-    Map *_map;
+    BattleEngine *_engine;
 };
 
 #endif // BATTLEWIDGET_H

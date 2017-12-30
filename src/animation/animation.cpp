@@ -74,7 +74,7 @@ bool Animation::_choose_item() {
 
     while(1){
 
-        if(isOver() || (_vec_pos + 1) >= _vector.size()) return changed;
+        if(isOver() || (_vec_pos) >= _vector.size()) return changed;
 
         if(_cur_step != _vector[_vec_pos].second) return changed;
 
