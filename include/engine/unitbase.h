@@ -4,7 +4,7 @@
 #include "unitinfo.h"
 #include "animatedobject.h"
 
-class UnitBase : public AnimatedObject {
+class UnitBase {
 
 public:
 
@@ -16,20 +16,27 @@ public:
     using AngleType = Traits<Unit>::AngleType;
     using SizeType = Traits<Unit>::SizeType;
 
-    UnitBase(const UnitInfo *info) : _info(info) {}
+    UnitBase(const UnitInfo *info);
+
+    ~UnitBase() { delete _obj; }
 
     const UnitInfo *unitInfo();
 
-    void setX(PositionType x) { AnimatedObject::setX(x); }
-    PositionType x() { return AnimatedObject::x(); }
+    void setX(PositionType x) { _obj->setX(x); }
+    PositionType x() { return _obj->x(); }
 
-    void setY(PositionType y) { AnimatedObject::setY(y); }
-    PositionType y() { return AnimatedObject::y(); }
+    void setY(PositionType y) { _obj->setY(y); }
+    PositionType y() { return _obj->y(); }
 
     void setAngle(AngleType angle);
     AngleType angle();
 
     SizeType size() { return _info->size(); }
+
+    void addToScene(QGraphicsScene *scene);
+    void removeFromScene(QGraphicsScene *scene);
+
+    void animationStep() { _obj->step(); }
 
 private:
 
@@ -37,6 +44,8 @@ private:
 
     const UnitInfo *_info;
     SizeType _size;
+
+    AnimatedObject *_obj;
 };
 
 #endif // UNITBASE_H

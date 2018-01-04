@@ -9,7 +9,7 @@
 
 void Map::step() {
 
-    for(auto *unit : _units) unit->step();
+    for(auto *unit : _units) unit->animationStep();
 }
 
 Map::UnitsVector Map::unitsInRange(PointType p, PositionType range) {
@@ -34,7 +34,7 @@ void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range) {
 
     range *= range;
 
-    for(auto *unit : _units) {
+    for(auto unit : _units) {
 
         if((square(unit->x() - p.x) + square(unit->y() - p.y)) <= PositionType(range + square(unit->size()))) {
 
@@ -50,7 +50,7 @@ void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range, Ang
 
     range *= range;
 
-    for(auto *unit : _units) {
+    for(auto unit : _units) {
 
         PositionType vet_x = unit->x() - p.x;
         PositionType vet_y = unit->y() - p.y;
@@ -78,18 +78,33 @@ void Map::unitsInLine(UnitsVector& vector, PointType p, PositionType range, Angl
 
 void Map::addUnit(Unit *unit) {
 
-    if(_scene != nullptr) _scene->addItem(unit);
+    if(_scene != nullptr) unit->addToScene(_scene);
     _units.push_back(unit);
 }
 
 void Map::setScene(QGraphicsScene *scene) {
 
-    for(auto *unit : _units) {
+    for(auto unit : _units) {
 
-        if(_scene != nullptr) _scene->removeItem(unit);
-        if(scene != nullptr) scene->addItem(unit);
+        if(_scene != nullptr) unit->removeFromScene(_scene);
+        if(scene != nullptr) unit->addToScene(scene);
     }
+
     _scene = scene;
+}
+
+void Map::placeUnits(){
+
+    if(units() == 0) return;
+
+    for(UIntegerType i = 0; i < units(); i++) {
+
+        Unit *unit = unitAccess(i);
+
+        unit->setX(_width/2);
+        unit->setY(_height/4 + (_height/2)*(RealType(i + 1)/(units() + 1)));
+        unit->setAngle(M_PI/2);
+    }
 }
 
 constexpr bool Map::_using_radians() {

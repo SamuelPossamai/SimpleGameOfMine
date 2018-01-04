@@ -12,4 +12,6 @@ MainWindow::MainWindow() {
     _b_scene = new BattleWidget(this);
 
     _b_scene->setGeometry(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height);
+
+    _b_scene->show();
 }

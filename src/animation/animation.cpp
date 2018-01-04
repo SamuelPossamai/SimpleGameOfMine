@@ -4,6 +4,8 @@
 
 #include "animation.h"
 
+std::mt19937 Animation::_gen((std::random_device())());
+
 Animation::Animation(UIntegerType steps, bool restart) : _cur_step(steps), _steps(steps), _restart(restart) {
 }
 
@@ -15,7 +17,7 @@ bool Animation::next() {
 
     if(isOver()){
 
-        if(_restart) start();
+        if(_restart) restart();
 
         return true;
     }
@@ -47,14 +49,24 @@ void Animation::addImage(const QPixmap& p, UIntegerType initial_step) {
 
 }
 
-void Animation::start() {
+void Animation::start(bool rnd_start) {
 
     _cur_step = 0;
     _vec_pos = 0;
 
-    if(_vec_pos >= _vector.size()) return forceOver();
+    if(_vector.empty()) return forceOver();
 
     _choose_item();
+
+    if(rnd_start && getFlag(Flag::RandomStart) && steps() > 0){
+
+
+        std::uniform_int_distribution<UIntegerType> rnd(0, steps() - 1);
+
+        UIntegerType n = rnd(_gen);
+
+        for(UIntegerType i = 0; i < n; i++) next();
+    }
 }
 
 void Animation::forceOver() {

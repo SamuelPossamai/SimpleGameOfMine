@@ -2,6 +2,8 @@
 #define Animation_H
 
 #include <vector>
+#include <bitset>
+#include <random>
 
 #include <QGraphicsItem>
 
@@ -9,11 +11,17 @@
 
 class Animation {
 
+    static const UIntegerType flags_quantity = 1;
+
 public:
+
+    enum class Flag : UIntegerType { RandomStart };
 
     explicit Animation(UIntegerType steps = 1, bool restart = false);
 
     Animation(const Animation& other) = default;
+
+    Animation& operator=(const Animation& other) = default;
 
     bool next();
 
@@ -23,14 +31,19 @@ public:
 
     bool isOver() const { return _cur_step >= _steps; }
 
-    void start();
+    void start(bool rnd_start = true);
 
-    void restart() { start(); }
+    void restart(bool rnd_start = false) { start(rnd_start); }
 
     void forceOver();
 
     void setIsPeriodic(bool restart) { _restart = restart; }
     bool isPeriodic() const { return _restart; }
+
+    void setFlag(Flag f, bool value = true) { _flags[UIntegerType(f)] = value; }
+    void clearFlag(Flag f) { setFlag(f, false); }
+
+    bool getFlag(Flag f) const { return _flags[UIntegerType(f)]; }
 
     void setSteps(UIntegerType steps);
     UIntegerType steps() const { return _steps; }
@@ -48,6 +61,10 @@ private:
 
     UIntegerType _steps;
     bool _restart;
+
+    std::bitset<flags_quantity> _flags;
+
+    static std::mt19937 _gen;
 };
 
 #endif // Animation_H

@@ -10,6 +10,7 @@ public:
     AnimatedObject() : _cur_animation(0), _idle_animation(0) { }
 
     UIntegerType addAnimation(const Animation& animation) { _animations.push_back(animation); return _animations.size() - 1; }
+    void switchAnimation(UIntegerType pos, const Animation& animation) { _animations[pos] = animation; }
 
     void selectAnimation(UIntegerType n);
     UIntegerType currentAnimation() const { return _cur_animation; }

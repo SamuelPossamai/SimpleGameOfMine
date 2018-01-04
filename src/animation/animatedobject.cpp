@@ -3,6 +3,7 @@
 
 void AnimatedObject::step(){
 
+    if(_cur_animation >= _animations.size()) return;
 
     if(_animations[_cur_animation].isOver()) selectAnimation(_idle_animation);
     else if(_animations[_cur_animation].next()) {

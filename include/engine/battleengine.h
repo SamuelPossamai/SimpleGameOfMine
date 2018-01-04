@@ -9,15 +9,18 @@ class BattleEngine {
 
 public:
 
-    BattleEngine() : _map(1000, 1000) {}
+    BattleEngine() : _map(800, 400) {}
 
-    void addUnit(const UnitInfo *unit_info);
-    void addUnit(Unit *unit) { _map.addUnit(unit); } // method for test
+    ~BattleEngine();
+
+    void addUnit(const UnitInfo *unit_info, UIntegerType team);
 
     void step() { _map.step(); }
 
     void setScene(QGraphicsScene *scene) { _map.setScene(scene); }
     QGraphicsScene *scene() const { return _map.scene(); }
+
+    void placeUnits() { _map.placeUnits(); }
 
 private:
 

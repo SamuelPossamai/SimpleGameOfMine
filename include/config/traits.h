@@ -37,13 +37,6 @@ struct Traits <Unit> : public Traits<BattleEngine> {
 };
 
 template<>
-struct Traits <BattleWidget> {
-
-    static constexpr RealType zoomInMultiplier = 1.05;
-    static constexpr RealType zoomOutMultiplier = 1.05;
-};
-
-template<>
 struct Traits <MainWindow> {
 
     static constexpr const char * name = "SGOM";
@@ -52,6 +45,27 @@ struct Traits <MainWindow> {
     static const UIntegerType y = 200;
     static const UIntegerType width = 800;
     static const UIntegerType height = 400;
+};
+
+template<>
+struct Traits <BattleWidget> {
+
+    static constexpr RealType zoomInMultiplier = 1.05;
+    static constexpr RealType zoomOutMultiplier = 1.05;
+
+    enum class Direction { Horizontal, Vertical };
+    static const Direction skillButtonDirection = Direction::Horizontal;
+
+    enum class HorizontalAlign { Left, Center, Right };
+    static const HorizontalAlign skillButtonHorizontalAlign = HorizontalAlign::Center;
+
+    enum class VerticalAlign { Top, Center, Bottom };
+    static const VerticalAlign skillButtonVerticalAlign = VerticalAlign::Bottom;
+
+    static constexpr RealType skillButtonSize = 0.12*Traits<MainWindow>::height;
+    static constexpr RealType skillButtonDistance = 0.2*skillButtonSize;
+    static constexpr RealType skillButtonBorderVerticalDistance = skillButtonDistance;
+    static constexpr RealType skillButtonBorderHorizontalDistance = skillButtonDistance;
 };
 
 #endif // TRAITS_H

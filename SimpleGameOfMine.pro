@@ -19,7 +19,9 @@ SOURCES += src/main.cpp \
     src/interface/battlewidget.cpp \
     src/animation/animatedobject.cpp \
     src/engine/map.cpp \
-    src/engine/battleengine.cpp
+    src/engine/battleengine.cpp \
+    src/engine/unitinfo.cpp \
+    src/engine/skills/testskill.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -31,7 +33,12 @@ HEADERS += include/interface/mainwindow.h \
     include/interface/battlewidget.h \
     include/animation/animatedobject.h \
     include/engine/map.h \
-    include/engine/battleengine.h
+    include/engine/battleengine.h \
+    include/engine/unitskill.h \
+    include/engine/unitcontroller.h \
+    include/engine/skills/testskill.h \
+    include/engine/skills/testskill.h \
+    include/interface/idbutton.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

@@ -11,10 +11,13 @@ class Unit : public UnitBase {
 
 public:
 
-    using Base::Base;
+    Unit(const UnitInfo *info, UIntegerType team) : Base(info), _team(team) {}
+
+    UIntegerType team() const { return _team; }
 
 private:
 
+    UIntegerType _team;
 };
 
 #endif // UNIT_H

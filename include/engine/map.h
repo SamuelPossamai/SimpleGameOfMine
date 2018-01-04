@@ -15,6 +15,7 @@ public:
     using PositionType = Traits<Map>::PositionType;
     using AngleType = Traits<Map>::AngleType;
     using UnitsVector = std::vector<Unit *>;
+    using ConstUnitsVector = std::vector<const Unit *>;
 
     Map(PositionType width, PositionType height) : _width(width), _height(height), _scene(nullptr) {}
 
@@ -31,8 +32,15 @@ public:
     void unitsInRange(UnitsVector& vector, PointType p, PositionType range, AngleType angle, AngleType region_angle);
     void unitsInLine(UnitsVector& vector, PointType p, PositionType range, AngleType angle);
 
+    Unit *unitAccess(UIntegerType n) { return _units[n]; }
+    const Unit *unitAccess(UIntegerType n) const { return _units[n]; }
+
+    UIntegerType units() const { return _units.size(); }
+
     void setScene(QGraphicsScene *scene);
     QGraphicsScene *scene() const { return _scene; }
+
+    void placeUnits();
 
 private:
 
@@ -42,7 +50,7 @@ private:
 
     PositionType _width, _height;
 
-    std::vector<Unit *> _units;
+    UnitsVector _units;
 
     QGraphicsScene *_scene;
 };

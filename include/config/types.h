@@ -7,10 +7,14 @@ class Unit;
 class UnitBase;
 class UnitInfo;
 
+class UnitController;
+class UnitSkill;
+
 class Map;
 
 class MainWindow;
 class BattleWidget;
+class IdButton;
 
 class Animation;
 class AnimatedObject;

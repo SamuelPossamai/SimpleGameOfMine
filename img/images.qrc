@@ -2,5 +2,10 @@
     <qresource prefix="/">
         <file>testimage.png</file>
         <file>testimage_red.png</file>
+        <file>slime_idle1.png</file>
+        <file>slime_idle2.png</file>
+        <file>slime_idle3.png</file>
+        <file>slime_idle4.png</file>
+        <file>slime_idle5.png</file>
     </qresource>
 </RCC>
