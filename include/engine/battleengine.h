@@ -2,29 +2,66 @@
 #ifndef BATTLEENGINE_H
 #define BATTLEENGINE_H
 
+#include <thread>
+#include <mutex>
+
 #include "traits.h"
 #include "map.h"
+#include "unit.h"
 
 class BattleEngine {
 
+    using Controller = UnitController;
+
 public:
 
-    BattleEngine() : _map(800, 400) {}
-
+    BattleEngine(BattleWidget *interface) : _map(800, 400), _interface(interface), _cur_unit(0), _t(nullptr) {}
     ~BattleEngine();
 
-    void addUnit(const UnitInfo *unit_info, UIntegerType team);
+    void addUnit(const UnitInfo *unit_info, Controller *, UIntegerType team);
 
-    void step() { _map.step(); }
+    void step();
 
     void setScene(QGraphicsScene *scene) { _map.setScene(scene); }
     QGraphicsScene *scene() const { return _map.scene(); }
 
     void placeUnits() { _map.placeUnits(); }
 
+    bool skillButtonsVisible() const;
+
+    UIntegerType askSkill();
+
 private:
 
+    struct UnitEngineInfo {
+
+        template<typename... Args>
+        UnitEngineInfo(Controller *c, Args... args);
+
+        bool performingSkill() { return skill < unit->unitInfo()->skills(); }
+        void finishSkill() { skill = unit->unitInfo()->skills(); }
+
+        Unit * const unit;
+        Controller * const controller;
+        UIntegerType step;
+        UIntegerType nextCall;
+        UIntegerType skill;
+    };
+
+    bool _step_loop();
+    void _skill_step(Unit * const &, UnitEngineInfo&);
+    void _ask_controller(Unit * const &, Controller * const &, UnitEngineInfo&);
+
+    static void _step_internal(Unit *, Controller *, BattleEngine *, UIntegerType *);
+
     Map _map;
+    BattleWidget *_interface;
+
+    UIntegerType _cur_unit;
+    std::vector<UnitEngineInfo> _units;
+
+    std::mutex _step_mut;
+    std::thread *_t;
 };
 
 #endif // BATTLEENGINE_H

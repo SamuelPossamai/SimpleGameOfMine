@@ -14,7 +14,7 @@ public:
 
     UIntegerType operator() (Unit *unit, Map *map, UIntegerType step) { return this->action(unit, map, step); }
 
-    virtual UnitSkill *clone() = 0;
+    virtual UnitSkill *clone() const = 0;
 };
 
 #endif // UNITSKILL_H

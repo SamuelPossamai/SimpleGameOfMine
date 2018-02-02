@@ -1,9 +1,6 @@
 #ifndef BATTLEWIDGET_H
 #define BATTLEWIDGET_H
 
-#include <thread>
-#include <mutex>
-
 #include <QWidget>
 #include <QGraphicsView>
 #include <QPushButton>
@@ -57,9 +54,6 @@ private:
     std::vector<IdButton *> _skill_buttons;
 
     UIntegerType _last_skill_button_clicked;
-
-    std::mutex _step_mut;
-    std::thread *_t;
 };
 
 #endif // BATTLEWIDGET_H

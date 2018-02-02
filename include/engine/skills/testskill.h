@@ -1,17 +1,17 @@
-#ifndef TESTSKILL_H
-#define TESTSKILL_H
+#ifndef SKILLS_TESTSKILL_H
+#define SKILLS_TESTSKILL_H
 
-#include <unitskill.h>
+#include "unitskill.h"
 
-namespace Skill {
+namespace skill {
 
 class TestSkill : public UnitSkill {
 
-    virtual UIntegerType action(Unit*, Map*, UIntegerType) override { return 0; }
+    virtual UIntegerType action(Unit*, Map*, UIntegerType) override;
 
-    virtual UnitSkill *clone() override { return new TestSkill; }
+    virtual UnitSkill *clone() const override { return new TestSkill; }
 };
 
-} /* namespace Skills */
+} /* namespace skill */
 
 #endif // TESTSKILL_H

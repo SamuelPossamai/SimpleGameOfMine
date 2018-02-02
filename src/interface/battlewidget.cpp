@@ -11,11 +11,10 @@
 #include "battleengine.h"
 #include "unit.h"
 #include "skills/testskill.h"
+#include "controllers/human.h"
 #include "idbutton.h"
 
-#include <iostream> // remove
-
-BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _t(nullptr) {
+BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent) {
 
     _gview = new QGraphicsView(new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height), this);
 
@@ -24,7 +23,7 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _
     _gview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _gview->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    _engine = new BattleEngine();
+    _engine = new BattleEngine(this);
     _engine->setScene(_gview->scene());
 
 
@@ -44,8 +43,8 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _
     slime_animation.addImage(slime_im4, 600);
     slime_animation.addImage(slime_im5, 800);
 
-    QPixmap im1 = QPixmap(":/testimage.png").scaled(100, 100);
-    QPixmap im2 = QPixmap(":/testimage_red.png").scaled(100, 100);
+    QPixmap im1 = QPixmap(":/testimage.png").scaled(30, 40);
+    QPixmap im2 = QPixmap(":/testimage_red.png").scaled(30, 40);
     QPixmap im3 = im1.scaled(100, 50);
 
     Animation animation1(100);
@@ -57,7 +56,8 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _
     animation2.addImage(im3, 0);
 
     UnitInfo *u_info = new UnitInfo;
-    UnitSkill *test_skill = new Skill::TestSkill;
+    UnitInfo *u_info2 = new UnitInfo;
+    UnitSkill *test_skill = new skill::TestSkill;
 
     u_info->addSkill(test_skill, slime_animation, im1);
     u_info->addSkill(test_skill, slime_animation, im2);
@@ -65,9 +65,15 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _
     u_info->addSkill(test_skill, slime_animation, slime_im2);
     u_info->setIdleAnimation(slime_animation);
 
-    showSkillButtons(u_info);
+    u_info2->addSkill(test_skill, slime_animation, im1);
+    u_info2->addSkill(test_skill, slime_animation, im2);
+    u_info2->setIdleAnimation(animation1);
 
-    for(UIntegerType i = 0; i < 3; i++) _engine->addUnit(u_info, 0);
+    UnitController *human = new controller::Human;
+
+    for(UIntegerType i = 0; i < 3; i++) _engine->addUnit(u_info, human, 0);
+
+    _engine->addUnit(u_info2, human, 0);
 
     _engine->placeUnits();
 
@@ -126,6 +132,11 @@ void BattleWidget::showSkillButtons(UnitInfo *info) {
 
         button->show();
     }
+
+    for(UIntegerType i = info->skills(); i < _skill_buttons.size(); i++){
+
+        _skill_buttons[i]->hide();
+    }
 }
 
 UIntegerType BattleWidget::askSkill() {
@@ -150,17 +161,6 @@ bool BattleWidget::skillButtonsVisible() const {
 void BattleWidget::step(){
 
     _engine->step();
-
-    if(_step_mut.try_lock()) {
-
-        if(_t != nullptr) {
-
-            if(_t->joinable()) _t->detach();
-            delete _t;
-        }
-
-        _t = new std::thread(_step_internal, this);
-    }
 }
 
 void BattleWidget::keyPressEvent(QKeyEvent *event) {
@@ -170,13 +170,6 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
         if(event->key() == Qt::Key_Plus || event->key() == Qt::Key_Equal) zoomIn();
         else if(event->key() == Qt::Key_Minus) zoomOut();
     }
-}
-
-void BattleWidget::_step_internal(BattleWidget *bw) {
-
-    std::cout << bw->askSkill() << std::endl; // test
-
-    bw->_step_mut.unlock();
 }
 
 void BattleWidget::_skill_button_clicked(UIntegerType id){

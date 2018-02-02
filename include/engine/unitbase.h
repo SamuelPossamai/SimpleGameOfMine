@@ -20,7 +20,7 @@ public:
 
     ~UnitBase() { delete _obj; }
 
-    const UnitInfo *unitInfo();
+    const UnitInfo *unitInfo() const { return _info; }
 
     void setX(PositionType x) { _obj->setX(x); }
     PositionType x() { return _obj->x(); }
