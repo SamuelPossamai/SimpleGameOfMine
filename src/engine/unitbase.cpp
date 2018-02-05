@@ -8,6 +8,8 @@
 UnitBase::UnitBase(const UnitInfo *info) : _info(info), _obj(new AnimatedObject) {
 
     _obj->addAnimation(info->idleAnimation());
+
+    for(UIntegerType i = 0; i < info->skills(); i++) _obj->addAnimation(info->skillAnimation(i));
 }
 
 void UnitBase::setAngle(AngleType angle) {

@@ -7,5 +7,6 @@
         <file>slime_idle3.png</file>
         <file>slime_idle4.png</file>
         <file>slime_idle5.png</file>
+        <file>arrow_image.png</file>
     </qresource>
 </RCC>

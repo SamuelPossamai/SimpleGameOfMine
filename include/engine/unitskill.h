@@ -10,9 +10,15 @@ class UnitSkill {
 
 public:
 
-    virtual UIntegerType action(Unit *unit, Map *map, UIntegerType step) = 0;
+    struct Info {
 
-    UIntegerType operator() (Unit *unit, Map *map, UIntegerType step) { return this->action(unit, map, step); }
+        UIntegerType step;
+        RealType angle;
+    };
+
+    virtual UIntegerType action(Unit *unit, Map *map, const Info& info) = 0;
+
+    UIntegerType operator() (Unit *unit, Map *map, const Info& info) { return this->action(unit, map, info); }
 
     virtual UnitSkill *clone() const = 0;
 };

@@ -1,5 +1,6 @@
 
 #include <limits>
+#include <cmath>
 
 #include <QGraphicsScene>
 #include <QGraphicsPixmapItem>
@@ -10,22 +11,32 @@
 #include "battlewidget.h"
 #include "battleengine.h"
 #include "unit.h"
-#include "skills/testskill.h"
-#include "controllers/human.h"
 #include "idbutton.h"
+#include "skills/testskill.h"
+#include "skills/walk.h"
+#include "controllers/human.h"
 
-BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent) {
+BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _arrow_item(nullptr) {
 
-    _gview = new QGraphicsView(new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height), this);
+    _gview = new BattleView(this, new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height), this);
 
     _gview->setGeometry(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height);
 
     _gview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _gview->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    _gview->setMouseTracking(true);
+
     _engine = new BattleEngine(this);
     _engine->setScene(_gview->scene());
 
+    _arrow_item = new QGraphicsPixmapItem(QPixmap(":/arrow_image.png").scaled(100, 50));
+
+    hideArrow();
+
+    _arrow_item->setOffset(0, -_arrow_item->pixmap().height()/2);
+
+    _gview->scene()->addItem(_arrow_item);
 
     QPixmap slime_im1 = QPixmap(":/slime_idle1.png").scaled(50, 50);
     QPixmap slime_im2 = QPixmap(":/slime_idle2.png").scaled(50, 50);
@@ -58,22 +69,23 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent) {
     UnitInfo *u_info = new UnitInfo;
     UnitInfo *u_info2 = new UnitInfo;
     UnitSkill *test_skill = new skill::TestSkill;
+    UnitSkill *test_skill_2 = new skill::TestSkill_2;
 
-    u_info->addSkill(test_skill, slime_animation, im1);
+    u_info->addSkill(new skill::Walk(10, 100), slime_animation, im1);
     u_info->addSkill(test_skill, slime_animation, im2);
     u_info->addSkill(test_skill, slime_animation, slime_im1);
     u_info->addSkill(test_skill, slime_animation, slime_im2);
     u_info->setIdleAnimation(slime_animation);
 
-    u_info2->addSkill(test_skill, slime_animation, im1);
-    u_info2->addSkill(test_skill, slime_animation, im2);
+    u_info2->addSkill(test_skill_2, slime_animation, im1);
+    u_info2->addSkill(test_skill_2, slime_animation, im2);
     u_info2->setIdleAnimation(animation1);
 
     UnitController *human = new controller::Human;
 
-    for(UIntegerType i = 0; i < 3; i++) _engine->addUnit(u_info, human, 0);
+    for(UIntegerType i = 0; i < 2; i++) _engine->addUnit(u_info, human, 0);
 
-    _engine->addUnit(u_info2, human, 0);
+    //_engine->addUnit(u_info2, human, 0);
 
     _engine->placeUnits();
 
@@ -86,7 +98,7 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent) {
    _timer->start();
 }
 
-void BattleWidget::showSkillButtons(UnitInfo *info) {
+void BattleWidget::showSkillButtons(const UnitInfo *info) {
 
     static const auto button_size = Traits<BattleWidget>::skillButtonSize;
 
@@ -133,10 +145,12 @@ void BattleWidget::showSkillButtons(UnitInfo *info) {
         button->show();
     }
 
-    for(UIntegerType i = info->skills(); i < _skill_buttons.size(); i++){
+    for(UIntegerType i = info->skills(); i < _skill_buttons.size(); i++) _skill_buttons[i]->hide();
+}
 
-        _skill_buttons[i]->hide();
-    }
+void BattleWidget::hideSkillButtons() {
+
+    for(UIntegerType i = 0; i < _skill_buttons.size(); i++) _skill_buttons[i]->hide();
 }
 
 UIntegerType BattleWidget::askSkill() {
@@ -170,6 +184,33 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
         if(event->key() == Qt::Key_Plus || event->key() == Qt::Key_Equal) zoomIn();
         else if(event->key() == Qt::Key_Minus) zoomOut();
     }
+}
+
+Vec2Type<IntegerType> BattleWidget::askMouseClick() {
+
+    _mouse_clicked = false;
+
+    while(!_mouse_clicked);
+
+    return _last_clicked_point;
+}
+
+void BattleWidget::battleViewMouseMoveEvent(QMouseEvent *event) {
+
+    auto x = event->x() - _arrow_item->x();
+    auto y = event->y() - _arrow_item->y();
+
+    RealType angle = 180*atan2(y, x)/M_PI;
+
+    _arrow_item->setRotation(angle);
+}
+
+void BattleWidget::battleViewMouseReleaseEvent(QMouseEvent *event) {
+
+    _last_clicked_point.x = event->x();
+    _last_clicked_point.y = event->y();
+
+    _mouse_clicked = true;
 }
 
 void BattleWidget::_skill_button_clicked(UIntegerType id){

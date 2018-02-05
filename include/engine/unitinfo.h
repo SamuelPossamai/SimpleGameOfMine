@@ -30,7 +30,7 @@ public:
     void addSkill(UnitSkill *skill, const Animation& an, const QPixmap& icon) { _skills.emplace_back(skill, an, icon); }
     const Animation& skillAnimation(UIntegerType n) const { return std::get<1>(_skills[n]); }
     const QPixmap& skillIcon(UIntegerType n) const { return std::get<2>(_skills[n]); }
-    UIntegerType callSkill(UIntegerType n, Unit *u, Map *m, UIntegerType step) const;
+    UIntegerType callSkill(UIntegerType n, Unit *u, Map *m, const UnitSkill::Info&) const;
 
     UIntegerType skills() const { return _skills.size(); }
 

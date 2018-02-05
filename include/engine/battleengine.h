@@ -15,7 +15,8 @@ class BattleEngine {
 
 public:
 
-    BattleEngine(BattleWidget *interface) : _map(800, 400), _interface(interface), _cur_unit(0), _t(nullptr) {}
+    BattleEngine(BattleWidget *interface) : _map(800, 400), _interface(interface), _cur_unit(0),
+        _waiting_arrow_input(false), _t(nullptr) {}
     ~BattleEngine();
 
     void addUnit(const UnitInfo *unit_info, Controller *, UIntegerType team);
@@ -44,6 +45,7 @@ private:
         Unit * const unit;
         Controller * const controller;
         UIntegerType step;
+        RealType angle;
         UIntegerType nextCall;
         UIntegerType skill;
     };
@@ -51,14 +53,19 @@ private:
     bool _step_loop();
     void _skill_step(Unit * const &, UnitEngineInfo&);
     void _ask_controller(Unit * const &, Controller * const &, UnitEngineInfo&);
+    static void _get_direction_step(Unit * const &, Controller * const &, BattleEngine *, UnitEngineInfo *);
 
     static void _step_internal(Unit *, Controller *, BattleEngine *, UIntegerType *);
+
+    void _delete_thread();
 
     Map _map;
     BattleWidget *_interface;
 
     UIntegerType _cur_unit;
     std::vector<UnitEngineInfo> _units;
+
+    bool _waiting_arrow_input;
 
     std::mutex _step_mut;
     std::thread *_t;

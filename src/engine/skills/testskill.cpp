@@ -6,18 +6,29 @@
 
 namespace skill {
 
-UIntegerType TestSkill::action(Unit *u, Map*, UIntegerType s) {
+UIntegerType TestSkill::action(Unit *u, Map*, const Info& info) {
 
-    if(s < 20) {
+    if(info.step < 20) {
 
         u->setX(u->x() + 2);
         u->setAngle(u->angle() + 0.01);
 
-        return s + 1;
+        return info.step + 1;
     }
 
     return 0;
 }
 
+UIntegerType TestSkill_2::action(Unit *u, Map*, const Info& info) {
+
+    if(info.step < 200) {
+
+        u->setX(u->x() + 1);
+
+        return info.step + 10;
+    }
+
+    return 0;
+}
 
 } /* namespace skill */

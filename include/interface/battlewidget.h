@@ -7,8 +7,9 @@
 
 #include "types.h"
 #include "animatedobject.h"
+#include "battleview.h"
 
-class BattleWidget : public QWidget {
+class BattleWidget : public QWidget, public BattleView::Handler {
 
     Q_OBJECT
 
@@ -21,7 +22,13 @@ public:
 
     void translate(IntegerType dx, IntegerType dy) { _gview->translate(dx, dy); }
 
-    void showSkillButtons(UnitInfo *info);
+    void showSkillButtons(const UnitInfo *info);
+    void hideSkillButtons();
+
+    void showArrow(UIntegerType x, UIntegerType y) { _arrow_item->setPos(x, y); _arrow_item->show(); }
+    void hideArrow() { _arrow_item->hide(); }
+
+    Vec2Type<IntegerType> askMouseClick();
 
     UIntegerType askSkill();
 
@@ -34,6 +41,10 @@ public slots:
 protected:
 
     virtual void keyPressEvent(QKeyEvent *event) override;
+
+    virtual void battleViewMouseMoveEvent(QMouseEvent *event) override;
+
+    virtual void battleViewMouseReleaseEvent(QMouseEvent *event) override;
 
 private slots:
 
@@ -54,6 +65,11 @@ private:
     std::vector<IdButton *> _skill_buttons;
 
     UIntegerType _last_skill_button_clicked;
+    Vec2Type<IntegerType> _last_clicked_point;
+
+    bool _mouse_clicked;
+
+    QGraphicsPixmapItem *_arrow_item;
 };
 
 #endif // BATTLEWIDGET_H

@@ -38,6 +38,9 @@ public:
 
     void animationStep() { _obj->step(); }
 
+    void startSkillAnimation(UIntegerType skill) { _obj->selectAnimation(skill + 1); }
+    void endSkillAnimation() { _obj->selectAnimation(_obj->idleAnimation()); }
+
 private:
 
     static constexpr bool _using_radians();
