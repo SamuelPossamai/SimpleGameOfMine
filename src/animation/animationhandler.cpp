@@ -3,6 +3,8 @@
 
 std::mt19937 AnimationHandler::_gen((std::random_device())());
 
+#include <iostream>
+
 void AnimationHandler::start(bool rnd_start) {
 
     _cur_step = 0;
@@ -41,6 +43,13 @@ bool AnimationHandler::next() {
 void AnimationHandler::forceOver() {
 
     _cur_step = _animation->steps();
+}
+
+QPixmap AnimationHandler::pixmap() const {
+
+    if(_vec_pos == 0 || _vec_pos > _animation->images()) return QPixmap();
+
+    return _animation->pixmap(_vec_pos - 1);
 }
 
 bool AnimationHandler::_choose_item() {

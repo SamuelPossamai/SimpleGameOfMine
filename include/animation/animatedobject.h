@@ -1,7 +1,7 @@
 #ifndef ANIMATEDOBJECT_H
 #define ANIMATEDOBJECT_H
 
-#include "animation.h"
+#include "animationhandler.h"
 
 /*!
  * \brief A graphics item used to display animations.
@@ -21,7 +21,7 @@ public:
      * \param animation this parameter is the animation that will be added to the list
      * \return The id number of the animation in the list will nbe returned
      */
-    UIntegerType addAnimation(const Animation& animation) { _animations.push_back(animation); return _animations.size() - 1; }
+    UIntegerType addAnimation(const Animation& animation);
 
     /*!
      * \brief Used to switch an animation from the list for another one
@@ -78,9 +78,13 @@ public:
 
 private:
 
+    void _update() { _animation_h.setAnimation(&_animations[_cur_animation]); }
+
     UIntegerType _cur_animation;
     UIntegerType _idle_animation;
     std::vector<Animation> _animations;
+
+    AnimationHandler _animation_h;
 };
 
 

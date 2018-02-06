@@ -9,7 +9,8 @@ class AnimationHandler {
 
 public:
 
-    AnimationHandler(Animation *animation = nullptr) : _animation(animation), _cur_step(0), _vec_pos(0) { }
+    AnimationHandler(Animation *animation = nullptr) : _animation(animation), _cur_step((animation) ? animation->steps() : 0),
+        _vec_pos(0) { }
 
     void setAnimation(Animation *animation) { _animation = animation; }
     const Animation *animation() const { return _animation; }
@@ -25,6 +26,8 @@ public:
     bool isOver() const { return _cur_step >= _animation->steps(); }
 
     void forceOver();
+
+    QPixmap pixmap() const;
 
 private:
 

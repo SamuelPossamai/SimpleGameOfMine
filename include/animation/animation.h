@@ -26,19 +26,7 @@ public:
 
     Animation& operator=(const Animation& other) = default;
 
-    bool next();
-
-    bool step() { return next(); }
-
     void addImage(const QPixmap& p, UIntegerType initial_step);
-
-    bool isOver() const { return _cur_step >= _steps; }
-
-    void start(bool rnd_start = true);
-
-    void restart(bool rnd_start = false) { start(rnd_start); }
-
-    void forceOver();
 
     void setIsPeriodic(bool restart) { _restart = restart; }
     bool isPeriodic() const { return _restart; }
@@ -51,8 +39,6 @@ public:
     void setSteps(UIntegerType steps);
     UIntegerType steps() const { return _steps; }
 
-    QPixmap pixmap() const { return (_vec_pos == 0) ? QPixmap() : _vector[_vec_pos - 1].first; }
-
     QPixmap pixmap(UIntegerType n) const { return _vector[n].first; }
     UIntegerType startingStep(UIntegerType n) const { return _vector[n].second; }
 
@@ -62,19 +48,12 @@ public:
 
 private:
 
-    bool _choose_item();
-
     std::vector<std::pair<QPixmap, UIntegerType> > _vector;
-
-    UIntegerType _cur_step;
-    UIntegerType _vec_pos;
 
     UIntegerType _steps;
     bool _restart;
 
     std::bitset<flags_quantity> _flags;
-
-    static std::mt19937 _gen;
 };
 
 #endif // Animation_H

@@ -5,23 +5,35 @@ void AnimatedObject::step(){
 
     if(_cur_animation >= _animations.size()) return;
 
-    if(_animations[_cur_animation].isOver()) selectAnimation(_idle_animation);
-    else if(_animations[_cur_animation].next()) {
+    if(_animation_h.isOver()) selectAnimation(_idle_animation);
+    else if(_animation_h.next()) {
 
-        auto&& pixmap = _animations[_cur_animation].pixmap();
+        auto&& pixmap = _animation_h.pixmap();
 
         setPixmap(pixmap);
         setOffset(-pixmap.width()/2, -pixmap.height()/2);
     }
 }
 
+UIntegerType AnimatedObject::addAnimation(const Animation& animation) {
+
+    _animations.push_back(animation);
+
+    if(_animations.size() == 1) selectAnimation(0);
+    else _update();
+
+    return _animations.size() - 1;
+}
+
 void AnimatedObject::selectAnimation(UIntegerType n) {
 
     _cur_animation = n;
 
-    _animations[n].start();
+    _update();
 
-    auto&& pixmap = _animations[n].pixmap();
+    _animation_h.start();
+
+    auto&& pixmap = _animation_h.pixmap();
 
     setPixmap(pixmap);
 

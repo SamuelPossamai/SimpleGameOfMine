@@ -141,6 +141,7 @@ void BattleEngine::_step_internal(Unit *unit, Controller *controller, BattleEngi
     *result = controller->choose(unit, &e->_map, e);
 
     if(unit->unitInfo()->skillNeedAngle(*result)) e->_waiting_arrow_input = true;
+    else e->_cur_unit++;
 
     e->_step_mut.unlock();
 }
