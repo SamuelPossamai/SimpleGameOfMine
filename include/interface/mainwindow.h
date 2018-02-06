@@ -13,9 +13,13 @@ public:
 
     MainWindow();
 
+    void pushWidget(QWidget *w);
+    void popWidget();
+    void switchWidget(QWidget *w);
+
 private:
 
-    BattleWidget *_b_scene;
+    std::vector<QWidget *> _widgets;
 };
 
 #endif // MAINWINDOW_H

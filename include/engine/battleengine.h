@@ -5,7 +5,6 @@
 #include <thread>
 #include <mutex>
 
-#include "traits.h"
 #include "map.h"
 #include "unit.h"
 

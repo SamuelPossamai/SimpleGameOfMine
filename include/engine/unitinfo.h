@@ -1,6 +1,7 @@
 #ifndef UNITINFO_H
 #define UNITINFO_H
 
+#include "engine_traits.h"
 #include "animation.h"
 #include "unitskill.h"
 
@@ -31,6 +32,7 @@ public:
     const Animation& skillAnimation(UIntegerType n) const { return std::get<1>(_skills[n]); }
     const QPixmap& skillIcon(UIntegerType n) const { return std::get<2>(_skills[n]); }
     UIntegerType callSkill(UIntegerType n, Unit *u, Map *m, const UnitSkill::Info&) const;
+    bool skillNeedAngle(UIntegerType n) const { return std::get<0>(_skills[n])->needAngle(); }
 
     UIntegerType skills() const { return _skills.size(); }
 

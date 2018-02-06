@@ -5,7 +5,7 @@
 
 #include <QGraphicsScene>
 
-#include "traits.h"
+#include "engine_traits.h"
 
 class Map {
 

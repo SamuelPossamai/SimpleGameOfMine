@@ -1,7 +1,7 @@
 #ifndef UNITCONTROLLER_H
 #define UNITCONTROLLER_H
 
-#include "traits.h"
+#include "engine_traits.h"
 
 class UnitController {
 

@@ -1,6 +1,7 @@
 
 #include <iostream>
 
+#include "traits.h"
 #include "battleengine.h"
 #include "battlewidget.h"
 #include "unit.h"
@@ -75,8 +76,6 @@ bool BattleEngine::_step_loop(){
 
             _ask_controller(unit, controller, unitEInfo);
 
-            _waiting_arrow_input = true;
-
             return false;
         }
 
@@ -140,6 +139,8 @@ void BattleEngine::_delete_thread() {
 void BattleEngine::_step_internal(Unit *unit, Controller *controller, BattleEngine *e, UIntegerType *result) {
 
     *result = controller->choose(unit, &e->_map, e);
+
+    if(unit->unitInfo()->skillNeedAngle(*result)) e->_waiting_arrow_input = true;
 
     e->_step_mut.unlock();
 }

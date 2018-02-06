@@ -2,7 +2,6 @@
 #ifndef UNIT_H
 #define UNIT_H
 
-#include "traits.h"
 #include "unitbase.h"
 
 class Unit : public UnitBase {

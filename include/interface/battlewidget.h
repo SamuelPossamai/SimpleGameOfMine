@@ -5,7 +5,7 @@
 #include <QGraphicsView>
 #include <QPushButton>
 
-#include "types.h"
+#include "interface_traits.h"
 #include "animatedobject.h"
 #include "battleview.h"
 

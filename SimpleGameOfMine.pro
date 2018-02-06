@@ -24,7 +24,9 @@ SOURCES += src/main.cpp \
     src/engine/skills/testskill.cpp \
     src/engine/controllers/human.cpp \
     src/engine/unit.cpp \
-    src/engine/skills/walk.cpp
+    src/engine/skills/walk.cpp \
+    src/interface/menu.cpp \
+    src/animation/animationhandler.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -43,7 +45,11 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/controllers/human.h \
     include/interface/idbutton.h \
     include/interface/battleview.h \
-    include/engine/skills/walk.h
+    include/engine/skills/walk.h \
+    include/interface/menu.h \
+    include/config/engine_traits.h \
+    include/config/interface_traits.h \
+    include/animation/animationhandler.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

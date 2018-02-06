@@ -1,5 +1,8 @@
+
 #ifndef TYPES_H
 #define TYPES_H
+
+#include <cstddef>
 
 class BattleEngine;
 
@@ -15,6 +18,8 @@ class Map;
 class MainWindow;
 class BattleWidget;
 class IdButton;
+class BattleView;
+class Menu;
 
 class Animation;
 class AnimatedObject;

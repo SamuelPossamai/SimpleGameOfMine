@@ -57,6 +57,7 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _
     QPixmap im1 = QPixmap(":/testimage.png").scaled(30, 40);
     QPixmap im2 = QPixmap(":/testimage_red.png").scaled(30, 40);
     QPixmap im3 = im1.scaled(100, 50);
+    QPixmap im4 = QPixmap(":/wing_boot.png").scaled(50, 50);
 
     Animation animation1(100);
     Animation animation2(1000);
@@ -71,7 +72,7 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _
     UnitSkill *test_skill = new skill::TestSkill;
     UnitSkill *test_skill_2 = new skill::TestSkill_2;
 
-    u_info->addSkill(new skill::Walk(10, 100), slime_animation, im1);
+    u_info->addSkill(new skill::Walk(10, 100), slime_animation, im4);
     u_info->addSkill(test_skill, slime_animation, im2);
     u_info->addSkill(test_skill, slime_animation, slime_im1);
     u_info->addSkill(test_skill, slime_animation, slime_im2);

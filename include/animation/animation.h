@@ -7,8 +7,11 @@
 
 #include <QGraphicsItem>
 
-#include "traits.h"
+#include "types.h"
 
+/*!
+ * \brief Abstraction for an animation.
+ */
 class Animation {
 
     static const UIntegerType flags_quantity = 1;
@@ -49,6 +52,13 @@ public:
     UIntegerType steps() const { return _steps; }
 
     QPixmap pixmap() const { return (_vec_pos == 0) ? QPixmap() : _vector[_vec_pos - 1].first; }
+
+    QPixmap pixmap(UIntegerType n) const { return _vector[n].first; }
+    UIntegerType startingStep(UIntegerType n) const { return _vector[n].second; }
+
+    UIntegerType images() const { return _vector.size(); }
+
+    bool cyclic() const { return _restart; }
 
 private:
 
