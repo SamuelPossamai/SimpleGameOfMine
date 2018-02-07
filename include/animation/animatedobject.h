@@ -5,6 +5,7 @@
 
 /*!
  * \brief A graphics item used to display animations.
+ * \sa Animation
  */
 class AnimatedObject : public QGraphicsPixmapItem {
 

@@ -1,6 +1,6 @@
 
-#ifndef WALK_H
-#define WALK_H
+#ifndef SKILLS_WALK_H
+#define SKILLS_WALK_H
 
 #include "unitskill.h"
 
@@ -24,4 +24,4 @@ private:
 
 } /* namespace skill */
 
-#endif // WALK_H
+#endif // SKILLS_WALK_H

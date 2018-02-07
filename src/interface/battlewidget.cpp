@@ -158,9 +158,11 @@ UIntegerType BattleWidget::askSkill() {
 
     if(!skillButtonsVisible()) return std::numeric_limits<UIntegerType>::max();
 
+    std::unique_lock<std::mutex> lock(_input_mut);
+
     _last_skill_button_clicked = _skill_buttons.size();
 
-    while(_last_skill_button_clicked >= _skill_buttons.size());
+    while(_last_skill_button_clicked >= _skill_buttons.size()) _input_wait.wait(lock);
 
     return _last_skill_button_clicked;
 }
@@ -189,9 +191,11 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
 
 Vec2Type<IntegerType> BattleWidget::askMouseClick() {
 
+    std::unique_lock<std::mutex> lock(_input_mut);
+
     _mouse_clicked = false;
 
-    while(!_mouse_clicked);
+    while(!_mouse_clicked) _input_wait.wait(lock);
 
     return _last_clicked_point;
 }
@@ -208,15 +212,27 @@ void BattleWidget::battleViewMouseMoveEvent(QMouseEvent *event) {
 
 void BattleWidget::battleViewMouseReleaseEvent(QMouseEvent *event) {
 
+    std::unique_lock lock(_input_mut);
+
+    Q_UNUSED(lock);
+
     _last_clicked_point.x = event->x();
     _last_clicked_point.y = event->y();
 
     _mouse_clicked = true;
+
+    _input_wait.notify_all();
 }
 
 void BattleWidget::_skill_button_clicked(UIntegerType id){
 
+    std::unique_lock lock(_input_mut);
+
+    Q_UNUSED(lock);
+
     _last_skill_button_clicked = id;
+
+    _input_wait.notify_all();
 }
 
 RealType BattleWidget::_button_pos_calculate_static(bool x_dir, UIntegerType mode) {

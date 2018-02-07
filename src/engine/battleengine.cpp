@@ -9,6 +9,8 @@
 
 BattleEngine::~BattleEngine() {
 
+    _delete_thread();
+
     for(UIntegerType i = 0; i < _map.units(); i++) delete _map.unitAccess(i);
 }
 

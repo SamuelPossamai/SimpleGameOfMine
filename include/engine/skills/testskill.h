@@ -1,3 +1,4 @@
+
 #ifndef SKILLS_TESTSKILL_H
 #define SKILLS_TESTSKILL_H
 
@@ -29,4 +30,4 @@ public:
 
 } /* namespace skill */
 
-#endif // TESTSKILL_H
+#endif // SKILLS_TESTSKILL_H

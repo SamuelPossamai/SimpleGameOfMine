@@ -4,7 +4,9 @@
 
 #include "animation.h"
 
-Animation::Animation(UIntegerType steps, bool restart) : _steps(steps), _restart(restart) {
+Animation::Animation(UIntegerType steps, bool restart) : _steps(steps) {
+
+    setIsPeriodic(restart);
 }
 
 void Animation::addImage(const QPixmap& p, UIntegerType initial_step) {

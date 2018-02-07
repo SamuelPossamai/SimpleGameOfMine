@@ -1,6 +1,9 @@
 #ifndef BATTLEWIDGET_H
 #define BATTLEWIDGET_H
 
+#include <mutex>
+#include <condition_variable>
+
 #include <QWidget>
 #include <QGraphicsView>
 #include <QPushButton>
@@ -70,6 +73,9 @@ private:
     bool _mouse_clicked;
 
     QGraphicsPixmapItem *_arrow_item;
+
+    std::mutex _input_mut;
+    std::condition_variable _input_wait;
 };
 
 #endif // BATTLEWIDGET_H
