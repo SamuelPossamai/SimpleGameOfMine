@@ -20,9 +20,9 @@ public:
 
 protected:
 
-    virtual void mouseMoveEvent(QMouseEvent *event) override { if(_handler) _handler->battleViewMouseMoveEvent(event); }
-    virtual void mousePressEvent(QMouseEvent *event) override { if(_handler) _handler->battleViewMousePressEvent(event); }
-    virtual void mouseReleaseEvent(QMouseEvent *event) override { if(_handler) _handler->battleViewMouseReleaseEvent(event); }
+    virtual void mouseMoveEvent(QMouseEvent *event) override;
+    virtual void mousePressEvent(QMouseEvent *event) override;
+    virtual void mouseReleaseEvent(QMouseEvent *event) override;
 
 private:
 

@@ -5,12 +5,12 @@
 #include <condition_variable>
 
 #include <QWidget>
-#include <QGraphicsView>
-#include <QPushButton>
+#include <QGraphicsPixmapItem>
 
 #include "interface_traits.h"
-#include "animatedobject.h"
 #include "battleview.h"
+
+#include <iostream>
 
 class BattleWidget : public QWidget, public BattleView::Handler {
 
@@ -19,6 +19,8 @@ class BattleWidget : public QWidget, public BattleView::Handler {
 public:
 
     BattleWidget(QWidget *parent = nullptr);
+
+    ~BattleWidget() { _mouse_clicked = true; _skill_button_clicked(0); }
 
     void zoomIn(RealType value = Traits<BattleWidget>::zoomInMultiplier) { _set_zoom(value);  }
     void zoomOut(RealType value = Traits<BattleWidget>::zoomOutMultiplier) { _set_zoom(1/value);  }
@@ -36,6 +38,10 @@ public:
     UIntegerType askSkill();
 
     bool skillButtonsVisible() const;
+
+    void start();
+
+    void displayUnit(Unit *);
 
 public slots:
 

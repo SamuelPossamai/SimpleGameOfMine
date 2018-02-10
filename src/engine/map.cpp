@@ -32,11 +32,15 @@ Map::UnitsVector Map::unitsInRange(PointType p, PositionType range, AngleType an
 
 void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range) {
 
+
     range *= range;
 
     for(auto unit : _units) {
 
-        if((square(unit->x() - p.x) + square(unit->y() - p.y)) <= PositionType(range + square(unit->size()))) {
+        auto x_dis = square(RealType(unit->x()) - p.x);
+        auto y_dis = square(RealType(unit->y()) - p.y);
+
+        if((x_dis + y_dis) <= RealType(range + square(unit->size()))) {
 
             vector.push_back(unit);
         }
@@ -52,8 +56,8 @@ void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range, Ang
 
     for(auto unit : _units) {
 
-        PositionType vet_x = unit->x() - p.x;
-        PositionType vet_y = unit->y() - p.y;
+        auto vet_x = RealType(unit->x()) - p.x;
+        auto vet_y = RealType(unit->y()) - p.y;
         auto squared_distance = square(vet_x) + square(vet_y);
 
         if(squared_distance <= PositionType(range + square(unit->size()))) {
@@ -97,13 +101,20 @@ void Map::placeUnits(){
 
     if(units() == 0) return;
 
+    UIntegerType team_0 = 0, team_1 = 0;
+
     for(UIntegerType i = 0; i < units(); i++) {
+
+        UIntegerType n = team_0;
 
         Unit *unit = unitAccess(i);
 
-        unit->setX(_width/2);
-        unit->setY(_height/4 + (_height/2)*(RealType(i + 1)/(units() + 1)));
-        unit->setAngle(M_PI/2);
+        if(unit->team() == 1) n = team_1++;
+        else team_0++;
+
+        unit->setX(unit->team() ? _width - 50 : 50);
+        unit->setY(_height/4 + (_height/2)*(RealType(n + 1)/(units() + 1)));
+        unit->setAngle(unit->team() ? M_PI : 0);
     }
 }
 

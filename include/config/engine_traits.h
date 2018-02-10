@@ -15,12 +15,13 @@ struct Traits <BattleEngine> {
     enum class AngleUnitType { radians, degrees };
 
     static const AngleUnitType angle_unit = AngleUnitType::radians;
+
+    using PointType = Vec2Type<PositionType>;
 };
 
 template <>
 struct Traits <Map> : public Traits<BattleEngine> {
 
-    using PointType = Vec2Type<PositionType>;
 };
 
 template <>

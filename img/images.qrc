@@ -9,5 +9,7 @@
         <file>slime_idle5.png</file>
         <file>arrow_image.png</file>
         <file>wing_boot.png</file>
+        <file>wing_boot_blue.png</file>
+        <file>slime_attack.png</file>
     </qresource>
 </RCC>

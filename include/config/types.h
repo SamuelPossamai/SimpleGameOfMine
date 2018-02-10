@@ -32,6 +32,8 @@ using RealType = double;
 template <typename T>
 struct Vec2Type {
 
+    using CoordType = T;
+
     T x, y;
 };
 

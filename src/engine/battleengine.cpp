@@ -16,7 +16,7 @@ BattleEngine::~BattleEngine() {
 
 void BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team) {
 
-    _units.emplace_back(controller, unit_info, team);
+    _units.emplace_back(controller, unit_info, team, _interface);
     _map.addUnit(_units.back().unit);
 }
 
@@ -81,7 +81,7 @@ bool BattleEngine::_step_loop(){
             return false;
         }
 
-        _units[_cur_unit].unit->animationStep();
+        unit->animationStep();
     }
 
     return true;
@@ -100,11 +100,17 @@ void BattleEngine::_get_direction_step(Unit * const & u, Controller * const &, B
 
 void BattleEngine::_skill_step(Unit * const & unit, UnitEngineInfo& unitEInfo) {
 
-    if(unitEInfo.step == 0) unit->startSkillAnimation(unitEInfo.skill);
+    if(unitEInfo.step == 0) {
+
+        unit->startSkillAnimation(unitEInfo.skill);
+
+        unit->removeSelectEffect();
+    }
 
     if(unitEInfo.nextCall == unitEInfo.step){
 
-        unitEInfo.nextCall = unit->unitInfo()->callSkill(unitEInfo.skill, unit, &_map, { unitEInfo.step, unitEInfo.angle });
+        unitEInfo.nextCall = unitEInfo.step + \
+                unit->unitInfo()->callSkill(unitEInfo.skill, unit, &_map, { unitEInfo.step, unitEInfo.angle });
 
         if(unitEInfo.nextCall <= unitEInfo.step) {
 
@@ -121,6 +127,10 @@ void BattleEngine::_ask_controller(Unit * const & unit, Controller * const & con
     if(controller->showButtons()) _interface->showSkillButtons(unit->unitInfo());
 
     _delete_thread();
+
+    unit->selectEffect();
+
+    _units[(_cur_unit != 0) ? _cur_unit - 1 : _units.size() - 1].unit->removeSelectEffect();
 
     unitEInfo.step = unitEInfo.nextCall = 0;
 

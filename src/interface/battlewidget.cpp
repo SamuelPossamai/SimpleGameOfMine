@@ -14,6 +14,8 @@
 #include "idbutton.h"
 #include "skills/testskill.h"
 #include "skills/walk.h"
+#include "skills/evade.h"
+#include "skills/thrust.h"
 #include "controllers/human.h"
 
 BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _arrow_item(nullptr) {
@@ -54,49 +56,23 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _
     slime_animation.addImage(slime_im4, 600);
     slime_animation.addImage(slime_im5, 800);
 
-    QPixmap im1 = QPixmap(":/testimage.png").scaled(30, 40);
-    QPixmap im2 = QPixmap(":/testimage_red.png").scaled(30, 40);
-    QPixmap im3 = im1.scaled(100, 50);
-    QPixmap im4 = QPixmap(":/wing_boot.png").scaled(50, 50);
+    Animation slime_attack_animation(10, true);
 
-    Animation animation1(100);
-    Animation animation2(1000);
-
-    animation1.addImage(im1, 0);
-    animation1.addImage(im2, 50);
-
-    animation2.addImage(im3, 0);
+    slime_attack_animation.addImage(QPixmap(":/slime_attack.png").scaled(150, 50), 0);
 
     UnitInfo *u_info = new UnitInfo;
-    UnitInfo *u_info2 = new UnitInfo;
-    UnitSkill *test_skill = new skill::TestSkill;
-    UnitSkill *test_skill_2 = new skill::TestSkill_2;
 
-    u_info->addSkill(new skill::Walk(10, 100), slime_animation, im4);
-    u_info->addSkill(test_skill, slime_animation, im2);
-    u_info->addSkill(test_skill, slime_animation, slime_im1);
-    u_info->addSkill(test_skill, slime_animation, slime_im2);
+    u_info->addSkill(new skill::Walk(10, 100), slime_animation, QPixmap(":/wing_boot.png").scaled(50, 50));
+    u_info->addSkill(new skill::Evade, slime_animation, QPixmap(":/wing_boot_blue.png").scaled(50, 50));
+    u_info->addSkill(new skill::Thrust(12, 90), slime_attack_animation, QPixmap(":/wing_boot_blue.png").scaled(50, 50));
     u_info->setIdleAnimation(slime_animation);
 
-    u_info2->addSkill(test_skill_2, slime_animation, im1);
-    u_info2->addSkill(test_skill_2, slime_animation, im2);
-    u_info2->setIdleAnimation(animation1);
+    u_info->setSize(35);
+    u_info->setHealth(10);
 
     UnitController *human = new controller::Human;
 
-    for(UIntegerType i = 0; i < 2; i++) _engine->addUnit(u_info, human, 0);
-
-    //_engine->addUnit(u_info2, human, 0);
-
-    _engine->placeUnits();
-
-    _timer = new QTimer(this);
-
-   _timer->setInterval(10);
-
-   QObject::connect(_timer, SIGNAL(timeout()), this, SLOT(step()));
-
-   _timer->start();
+    for(UIntegerType i = 0; i < 2; i++) _engine->addUnit(u_info, human, i);
 }
 
 void BattleWidget::showSkillButtons(const UnitInfo *info) {
@@ -224,6 +200,19 @@ void BattleWidget::battleViewMouseReleaseEvent(QMouseEvent *event) {
     _input_wait.notify_all();
 }
 
+void BattleWidget::start(){
+
+    _engine->placeUnits();
+
+    _timer = new QTimer(this);
+
+    _timer->setInterval(10);
+
+    QObject::connect(_timer, &QTimer::timeout, this, &BattleWidget::step);
+
+    _timer->start();
+}
+
 void BattleWidget::_skill_button_clicked(UIntegerType id){
 
     std::unique_lock lock(_input_mut);
@@ -267,9 +256,12 @@ RealType BattleWidget::_button_pos_calculate_dynamic(UIntegerType i, UIntegerTyp
         case 0:
             return border_distance + i*(button_size + buttons_distance);
         case 1:
-            return max/2 + (RealType(i) - RealType(i_max)/2)*(button_size + buttons_distance) + \
-                    (i_max%2 ? -button_size/2 : buttons_distance/2);
+            return max/2 + (RealType(i) - i_max/2)*(button_size + buttons_distance) + \
+                    (i_max%2 ? -button_size/2 : RealType(buttons_distance)/2);
         default:
             return max - border_distance - i*(button_size + buttons_distance) - Traits<BattleWidget>::skillButtonSize;
     }
+}
+
+void BattleWidget::displayUnit(Unit *){
 }

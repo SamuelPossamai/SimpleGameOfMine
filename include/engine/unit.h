@@ -10,7 +10,7 @@ class Unit : public UnitBase {
 
 public:
 
-    Unit(const UnitInfo *info, UIntegerType team) : Base(info), _team(team) {}
+    Unit(const UnitInfo *info, UIntegerType team, QWidget *w) : Base(info, w), _team(team) {}
 
     UIntegerType team() const { return _team; }
 

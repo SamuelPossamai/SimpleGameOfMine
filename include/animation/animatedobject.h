@@ -1,6 +1,8 @@
 #ifndef ANIMATEDOBJECT_H
 #define ANIMATEDOBJECT_H
 
+#include <iostream>
+
 #include "animationhandler.h"
 
 /*!
@@ -12,9 +14,23 @@ class AnimatedObject : public QGraphicsPixmapItem {
 public:
 
     /*!
+     * \brief Class used to handle AnimatedObject events.
+     * \brief To handle events from AnimatedObject you should create an class that inherits from this class.
+     */
+    class Handler {
+
+    public:
+
+        virtual void animatedObjectMouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {}
+        virtual void animatedObjectMouseMoveEvent(QGraphicsSceneMouseEvent *) {}
+        virtual void animatedObjectMousePressEvent(QGraphicsSceneMouseEvent *) {}
+        virtual void animatedObjectMouseReleaseEvent(QGraphicsSceneMouseEvent *) {}
+    };
+
+    /*!
      * \brief Construct an AnimatedObject without any animation
      */
-    AnimatedObject() : _cur_animation(0), _idle_animation(0) { }
+    AnimatedObject() : _cur_animation(0), _idle_animation(0), _handler(nullptr) { }
 
     /*!
      * \brief Used to add an animation to the list of animations this item can display
@@ -77,6 +93,26 @@ public:
      */
     void next() { step(); }
 
+    /*!
+     * \brief Set a class to handle this object events.
+     * \sa handler()
+     * \param handler class that inherit from Handler, will handle events from this object.
+     */
+    void setHandler(Handler *handler) { _handler = handler; }
+
+    /*!
+     * \brief Return a pointer to this object handler.
+     * \return Pointer to this object event handler.
+     */
+    const Handler *handler() const { return _handler; }
+
+protected:
+
+    virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *) override;
+    virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *) override;
+    virtual void mousePressEvent(QGraphicsSceneMouseEvent *) override;
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *) override;
+
 private:
 
     void _update() { _animation_h.setAnimation(&_animations[_cur_animation]); }
@@ -86,6 +122,8 @@ private:
     std::vector<Animation> _animations;
 
     AnimationHandler _animation_h;
+
+    Handler *_handler;
 };
 
 

@@ -25,5 +25,9 @@ void Menu::setParent(MainWindow *parent){
 
 void Menu::_start_button_clicked(){
 
-    static_cast<MainWindow *>(parent())->switchWidget(new BattleWidget);
+    BattleWidget *bw = new BattleWidget;
+
+    bw->start();
+
+    static_cast<MainWindow *>(parent())->switchWidget(bw);
 }

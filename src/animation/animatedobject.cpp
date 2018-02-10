@@ -1,4 +1,6 @@
 
+#include <QGraphicsScene>
+
 #include "animatedobject.h"
 
 void AnimatedObject::step(){
@@ -37,5 +39,27 @@ void AnimatedObject::selectAnimation(UIntegerType n) {
 
     setPixmap(pixmap);
 
+    if(scene() != nullptr) scene()->update();
+
     setOffset(-pixmap.width()/2, -pixmap.height()/2);
+}
+
+void AnimatedObject::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) {
+
+    if(_handler != nullptr) _handler->animatedObjectMouseDoubleClickEvent(event);
+}
+
+void AnimatedObject::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
+
+    if(_handler != nullptr) _handler->animatedObjectMouseMoveEvent(event);
+}
+
+void AnimatedObject::mousePressEvent(QGraphicsSceneMouseEvent *event) {
+
+    if(_handler != nullptr) _handler->animatedObjectMousePressEvent(event);
+}
+
+void AnimatedObject::mouseReleaseEvent(QGraphicsSceneMouseEvent *event) {
+
+    if(_handler != nullptr) _handler->animatedObjectMouseReleaseEvent(event);
 }

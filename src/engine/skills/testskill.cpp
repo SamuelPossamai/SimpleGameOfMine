@@ -13,7 +13,7 @@ UIntegerType TestSkill::action(Unit *u, Map*, const Info& info) {
         u->setX(u->x() + 2);
         u->setAngle(u->angle() + 0.01);
 
-        return info.step + 1;
+        return 1;
     }
 
     return 0;
@@ -25,7 +25,7 @@ UIntegerType TestSkill_2::action(Unit *u, Map*, const Info& info) {
 
         u->setX(u->x() + 1);
 
-        return info.step + 10;
+        return 10;
     }
 
     return 0;
