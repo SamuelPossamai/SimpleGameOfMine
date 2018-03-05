@@ -35,10 +35,7 @@ signals:
 
 private slots:
 
-    void _button_signal_received() {
-
-        emit clickedId(_id);
-    }
+    void _button_signal_received() { emit clickedId(_id); }
 
 private:
 

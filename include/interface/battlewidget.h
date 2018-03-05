@@ -9,10 +9,9 @@
 
 #include "interface_traits.h"
 #include "battleview.h"
+#include "unitcontroller.h"
 
-#include <iostream>
-
-class BattleWidget : public QWidget, public BattleView::Handler {
+class BattleWidget : public QWidget, public BattleView::Handler, public UnitController::UserInterface {
 
     Q_OBJECT
 
@@ -41,8 +40,6 @@ public:
 
     void start();
 
-    void displayUnit(Unit *);
-
 public slots:
 
     void step();
@@ -54,6 +51,10 @@ protected:
     virtual void battleViewMouseMoveEvent(QMouseEvent *event) override;
 
     virtual void battleViewMouseReleaseEvent(QMouseEvent *event) override;
+
+    virtual UIntegerType controllerUserInterfaceAskSkillInput();
+
+    virtual UnitController::AngleType controllerUserInterfaceAskAngleInput();
 
 private slots:
 

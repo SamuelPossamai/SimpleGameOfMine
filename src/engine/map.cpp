@@ -32,7 +32,6 @@ Map::UnitsVector Map::unitsInRange(PointType p, PositionType range, AngleType an
 
 void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range) {
 
-
     range *= range;
 
     for(auto unit : _units) {
@@ -40,10 +39,7 @@ void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range) {
         auto x_dis = square(RealType(unit->x()) - p.x);
         auto y_dis = square(RealType(unit->y()) - p.y);
 
-        if((x_dis + y_dis) <= RealType(range + square(unit->size()))) {
-
-            vector.push_back(unit);
-        }
+        if((x_dis + y_dis) <= RealType(range + square(unit->size()))) vector.push_back(unit);
     }
 }
 
@@ -72,12 +68,25 @@ void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range, Ang
     }
 }
 
-void Map::unitsInLine(UnitsVector& vector, PointType p, PositionType range, AngleType angle) {
+Unit *Map::closerEnemy(const Unit *u) {
 
-    (void) vector;
-    (void) p;
-    (void) range;
-    (void) angle;
+    Unit *closer = nullptr;
+    RealType closer_sqr_dist = 0;
+
+    for(auto unit : _units) {
+
+        if(unit->team() == u->team()) continue;
+
+        auto cur_squared_distance = _units_squared_distance(unit, u);
+
+        if(closer == nullptr || closer_sqr_dist > cur_squared_distance) {
+
+            closer_sqr_dist = cur_squared_distance;
+            closer = unit;
+        }
+    }
+
+    return closer;
 }
 
 void Map::addUnit(Unit *unit) {
@@ -95,6 +104,19 @@ void Map::setScene(QGraphicsScene *scene) {
     }
 
     _scene = scene;
+}
+
+bool Map::setUnitPosition(Unit *u, const PointType& p) {
+
+    if(Traits<Map>::solid_border && (p.x < PointType::CoordType(u->size()) ||
+                                     p.x + PointType::CoordType(u->size()) > _width ||
+                                     p.y < PointType::CoordType(u->size()) ||
+                                     p.y + PointType::CoordType(u->size()) > _height)) return false;
+
+    u->setX(p.x);
+    u->setY(p.y);
+
+    return true;
 }
 
 void Map::placeUnits(){
@@ -118,9 +140,17 @@ void Map::placeUnits(){
     }
 }
 
-constexpr bool Map::_using_radians() {
+RealType Map::unitsDistance(const Unit *u1, const Unit *u2) {
 
-    return Traits<Map>::angle_unit == Traits<Map>::AngleUnitType::radians;
+    return std::sqrt(_units_squared_distance(u1, u2));
+}
+
+RealType Map::_units_squared_distance(const Unit *u1, const Unit *u2) {
+
+    auto vet_x = RealType(u1->x()) - u2->x();
+    auto vet_y = RealType(u1->y()) - u2->y();
+
+    return square(vet_x) + square(vet_y);
 }
 
 bool Map::_inside_region(AngleType a1, AngleType r1, AngleType a2, AngleType r2) {

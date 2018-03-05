@@ -36,7 +36,7 @@ void UnitBase::setAngle(AngleType angle) {
     _obj->setRotation(angle*(_using_radians() ? 180/M_PI : 1));
 }
 
-UnitBase::AngleType UnitBase::angle() {
+UnitBase::AngleType UnitBase::angle() const {
 
     return _obj->rotation()*(_using_radians() ? M_PI/180 : 1);
 }
@@ -66,12 +66,21 @@ void UnitBase::removeFromScene(QGraphicsScene *scene) {
     scene->removeItem(_obj);
 }
 
+void UnitBase::setHealth(HealthType h) {
+
+    if(h == _health) return;
+
+    if(h > maxHealth()) _health = _info->health();
+    else _health = h;
+
+    _update_health_bar();
+}
+
 void UnitBase::_update_health_bar() {
 
     QRectF rect = _obj->boundingRect();
 
-    _health_bar->setGeometry( QRect( x() + rect.x() + (RealType(rect.width()) - size())/2,
-                                     y() - rect.y(), 2.5*size(), size() ) );
+    _health_bar->setGeometry( QRect( x() - 2.5*size()/2, y() - rect.y(), 4.2*size(), size() ));
 
     _health_bar->setValue(100*health()/maxHealth());
 }

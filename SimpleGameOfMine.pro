@@ -29,7 +29,8 @@ SOURCES += src/main.cpp \
     src/animation/animationhandler.cpp \
     src/engine/skills/evade.cpp \
     src/engine/skills/thrust.cpp \
-    src/interface/battleview.cpp
+    src/interface/battleview.cpp \
+    src/engine/controllers/ai/slime.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -54,7 +55,8 @@ HEADERS += include/interface/mainwindow.h \
     include/config/interface_traits.h \
     include/animation/animationhandler.h \
     include/engine/skills/evade.h \
-    include/engine/skills/thrust.h
+    include/engine/skills/thrust.h \
+    include/engine/controllers/ai/slime.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

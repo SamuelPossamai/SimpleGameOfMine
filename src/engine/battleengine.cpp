@@ -5,7 +5,6 @@
 #include "battleengine.h"
 #include "battlewidget.h"
 #include "unit.h"
-#include "unitcontroller.h"
 
 BattleEngine::~BattleEngine() {
 
@@ -18,16 +17,13 @@ void BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UI
 
     _units.emplace_back(controller, unit_info, team, _interface);
     _map.addUnit(_units.back().unit);
+
+    _units.back().unit->setHandler(this);
 }
 
 bool BattleEngine::skillButtonsVisible() const {
 
     return _interface->skillButtonsVisible();
-}
-
-UIntegerType BattleEngine::askSkill() {
-
-    return _interface->askSkill();
 }
 
 void BattleEngine::step(){
@@ -42,6 +38,8 @@ void BattleEngine::step(){
     }else {
 
         for(UIntegerType i = 0; i < _units.size(); i++) {
+
+            if(!_units[i].unit->isDead()) continue;
 
             if(!_units[i].performingSkill() || _units[i].step == 0) _units[i].unit->animationStep();
         }
@@ -58,11 +56,13 @@ bool BattleEngine::_step_loop(){
         auto &unit = unitEInfo.unit;
         auto &controller = unitEInfo.controller;
 
+        if(unit->isDead()) continue;
+
         if(unitEInfo.performingSkill()) {
 
             if(_waiting_arrow_input) {
 
-                _interface->showArrow(unit->x(), unit->y());
+                if(controller->showArrow()) _interface->showArrow(unit->x(), unit->y());
 
                 _delete_thread();
 
@@ -87,11 +87,9 @@ bool BattleEngine::_step_loop(){
     return true;
 }
 
-void BattleEngine::_get_direction_step(Unit * const & u, Controller * const &, BattleEngine *e, UnitEngineInfo *unitEInfo) {
+void BattleEngine::_get_direction_step(Unit * const & u, Controller * const & c, BattleEngine *e, UnitEngineInfo *unitEInfo) {
 
-    auto cursor = e->_interface->askMouseClick();
-
-    unitEInfo->angle = atan2(cursor.y - u->y(), cursor.x - u->x());
+    unitEInfo->angle = c->chooseAngle(u, &e->_map, e->_interface);
 
     e->_cur_unit++;
 
@@ -150,7 +148,7 @@ void BattleEngine::_delete_thread() {
 
 void BattleEngine::_step_internal(Unit *unit, Controller *controller, BattleEngine *e, UIntegerType *result) {
 
-    *result = controller->choose(unit, &e->_map, e);
+    *result = controller->chooseSkill(unit, &e->_map, e->_interface);
 
     if(unit->unitInfo()->skillNeedAngle(*result)) e->_waiting_arrow_input = true;
     else e->_cur_unit++;

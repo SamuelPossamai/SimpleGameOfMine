@@ -10,9 +10,10 @@ class Human : public UnitController {
 
 public:
 
-    Human() : UnitController(true) {}
+    Human() : UnitController(true, true) {}
 
-    virtual UIntegerType choose(Unit *, Map *, BattleEngine *);
+    virtual UIntegerType chooseSkill(const Unit *, const Map *, UserInterface *);
+    virtual AngleType chooseAngle(const Unit *, const Map *, UserInterface *);
 
     virtual UnitController *clone() const { return new Human(); }
 };

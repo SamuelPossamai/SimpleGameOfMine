@@ -27,17 +27,19 @@ public:
     const UnitInfo *unitInfo() const { return _info; }
 
     void setX(PositionType x) { _obj->setX(x); _update_health_bar(); }
-    PositionType x() { return _obj->x(); _update_health_bar(); }
+    PositionType x() const { return _obj->x(); }
 
     void setY(PositionType y) { _obj->setY(y); _update_health_bar(); }
-    PositionType y() { return _obj->y(); _update_health_bar(); }
+    PositionType y() const { return _obj->y(); }
 
-    PointType pos() { return { x(), y() }; }
+    void setPos(PositionType x, PositionType y) { _obj->setX(x); _obj->setY(y); _update_health_bar(); }
+    void setPos(PointType p) { setPos(p.x, p.y); }
+    PointType pos() const { return { x(), y() }; }
 
     void setAngle(AngleType angle);
-    AngleType angle();
+    AngleType angle() const;
 
-    SizeType size() { return _info->size(); }
+    SizeType size() const { return _info->size(); }
 
     void addToScene(QGraphicsScene *scene);
     void removeFromScene(QGraphicsScene *scene);
@@ -50,10 +52,13 @@ public:
     void selectEffect();
     void removeSelectEffect();
 
-    void setHealth(HealthType health) { if(health > maxHealth()) _health = _info->health(); else _health = health; }
+    void setHealth(HealthType health);
     HealthType health() const { return _health; }
 
     HealthType maxHealth() const { return _info->health(); }
+
+    void showAnimation() { _obj->show(); _health_bar->show(); }
+    void hideAnimation() { _obj->hide(); _health_bar->hide(); }
 
 private:
 

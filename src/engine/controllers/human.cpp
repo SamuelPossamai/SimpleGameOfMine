@@ -1,11 +1,19 @@
 
+#include <cmath>
+
 #include "controllers/human.h"
+#include "battlewidget.h"
 #include "battleengine.h"
 #include "unit.h"
 
 using namespace controller;
 
-UIntegerType Human::choose(Unit *, Map *, BattleEngine *e) {
+UIntegerType Human::chooseSkill(const Unit *, const Map *, UserInterface *i) {
 
-    return e->askSkill();
+    return i->askSkill();
+}
+
+Human::AngleType Human::chooseAngle(const Unit *, const Map *, UserInterface *i) {
+
+    return i->askAngle();
 }

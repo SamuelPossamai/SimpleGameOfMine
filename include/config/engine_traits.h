@@ -22,6 +22,7 @@ struct Traits <BattleEngine> {
 template <>
 struct Traits <Map> : public Traits<BattleEngine> {
 
+    static const bool solid_border = true;
 };
 
 template <>

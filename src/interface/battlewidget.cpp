@@ -17,6 +17,7 @@
 #include "skills/evade.h"
 #include "skills/thrust.h"
 #include "controllers/human.h"
+#include "controllers/ai/slime.h"
 
 BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _arrow_item(nullptr) {
 
@@ -67,12 +68,16 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _
     u_info->addSkill(new skill::Thrust(12, 90), slime_attack_animation, QPixmap(":/wing_boot_blue.png").scaled(50, 50));
     u_info->setIdleAnimation(slime_animation);
 
-    u_info->setSize(35);
+    u_info->setSize(22);
     u_info->setHealth(10);
 
     UnitController *human = new controller::Human;
+    UnitController *ai = new controller::AI::Slime;
 
-    for(UIntegerType i = 0; i < 2; i++) _engine->addUnit(u_info, human, i);
+    UIntegerType i = 0;
+
+    for(; i < 1; i++) _engine->addUnit(u_info, human, i);
+    for(; i < 2; i++) _engine->addUnit(u_info, ai, i);
 }
 
 void BattleWidget::showSkillButtons(const UnitInfo *info) {
@@ -213,6 +218,18 @@ void BattleWidget::start(){
     _timer->start();
 }
 
+UIntegerType BattleWidget::controllerUserInterfaceAskSkillInput() {
+
+    return askSkill();
+}
+
+UnitController::AngleType BattleWidget::controllerUserInterfaceAskAngleInput() {
+
+    auto cursor = askMouseClick();
+
+    return atan2(cursor.y - _arrow_item->y(), cursor.x - _arrow_item->x());
+}
+
 void BattleWidget::_skill_button_clicked(UIntegerType id){
 
     std::unique_lock lock(_input_mut);
@@ -263,5 +280,3 @@ RealType BattleWidget::_button_pos_calculate_dynamic(UIntegerType i, UIntegerTyp
     }
 }
 
-void BattleWidget::displayUnit(Unit *){
-}

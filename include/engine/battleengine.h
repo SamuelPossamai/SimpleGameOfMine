@@ -7,8 +7,9 @@
 
 #include "map.h"
 #include "unit.h"
+#include "unitcontroller.h"
 
-class BattleEngine {
+class BattleEngine : Unit::Handler {
 
     using Controller = UnitController;
 
@@ -29,9 +30,9 @@ public:
 
     bool skillButtonsVisible() const;
 
-    UIntegerType askSkill();
-
 private:
+
+    void unitHandlerDeathEvent(Unit *u) { u->hideAnimation(); }
 
     struct UnitEngineInfo {
 

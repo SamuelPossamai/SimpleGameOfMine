@@ -1,10 +1,11 @@
 
 #include "skills/evade.h"
 #include "unit.h"
+#include "map.h"
 
 namespace skill {
 
-UIntegerType Evade::action(Unit *u, Map*, const Info& info) {
+UIntegerType Evade::action(Unit *u, Map *m, const Info& info) {
 
     if(info.step < 10) {
 
@@ -13,8 +14,7 @@ UIntegerType Evade::action(Unit *u, Map*, const Info& info) {
 
         u->setAngle(u->angle() + 0.05);
 
-        u->setX(u->x() - dx);
-        u->setY(u->y() - dy);
+        m->setUnitPosition(u, Map::PointType(u->x() - dx, u->y() - dy));
 
         return 2;
     }

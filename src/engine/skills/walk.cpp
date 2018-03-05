@@ -3,6 +3,7 @@
 
 #include "skills/walk.h"
 #include "unit.h"
+#include "map.h"
 
 namespace skill {
 
@@ -11,7 +12,7 @@ UIntegerType Walk::action(Unit *u, Map *m, const Info& info) {
     return doAction(u, m, info, info.angle);
 }
 
-UIntegerType Walk::doAction(Unit *u, Map *, const Info& info, RealType angle){
+UIntegerType Walk::doAction(Unit *u, Map *m, const Info& info, RealType angle){
 
     if(info.step == 0) u->setAngle(angle);
 
@@ -20,8 +21,7 @@ UIntegerType Walk::doAction(Unit *u, Map *, const Info& info, RealType angle){
     UIntegerType dx = _ds*cos(angle);
     UIntegerType dy = _ds*sin(angle);
 
-    u->setX(u->x() + dx);
-    u->setY(u->y() + dy);
+    m->setUnitPosition(u, Map::PointType(u->x() + dx, u->y() + dy));
 
     return 3;
 }

@@ -34,6 +34,9 @@ struct Vec2Type {
 
     using CoordType = T;
 
+    Vec2Type() : x(0), y(0) {}
+    Vec2Type(T x_value, T y_value) : x(x_value), y(y_value) {}
+
     T x, y;
 };
 
