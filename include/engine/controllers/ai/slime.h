@@ -1,6 +1,6 @@
 
-#ifndef SLIME_AI_H
-#define SLIME_AI_H
+#ifndef CONTROLLERS_AI_SLIME_H
+#define CONTROLLERS_AI_SLIME_H
 
 #include "unitcontroller.h"
 
@@ -25,4 +25,4 @@ public:
 
 } /* namespace controller */
 
-#endif // SLIME_AI_H
+#endif // CONTROLLERS_AI_SLIME_H

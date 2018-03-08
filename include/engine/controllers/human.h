@@ -10,7 +10,7 @@ class Human : public UnitController {
 
 public:
 
-    Human() : UnitController(true, true) {}
+    Human() : UnitController(false, true, true) {}
 
     virtual UIntegerType chooseSkill(const Unit *, const Map *, UserInterface *);
     virtual AngleType chooseAngle(const Unit *, const Map *, UserInterface *);
@@ -19,7 +19,5 @@ public:
 };
 
 } /* namespace Controllers */
-
-
 
 #endif // CONTROLLERS_HUMAN

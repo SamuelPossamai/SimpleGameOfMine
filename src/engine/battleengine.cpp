@@ -21,11 +21,6 @@ void BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UI
     _units.back().unit->setHandler(this);
 }
 
-bool BattleEngine::skillButtonsVisible() const {
-
-    return _interface->skillButtonsVisible();
-}
-
 void BattleEngine::step(){
 
     if(_step_mut.try_lock()) {
@@ -66,7 +61,8 @@ bool BattleEngine::_step_loop(){
 
                 _delete_thread();
 
-                _t = new std::thread(_get_direction_step, unit, controller, this, &unitEInfo);
+                if(controller->isFast()) _get_direction_step(unit, controller, this, &unitEInfo);
+                else _t = new std::thread(_get_direction_step, unit, controller, this, &unitEInfo);
 
                 _waiting_arrow_input = false;
 
@@ -126,13 +122,14 @@ void BattleEngine::_ask_controller(Unit * const & unit, Controller * const & con
 
     _delete_thread();
 
-    unit->selectEffect();
+    if(!controller->isFast()) unit->selectEffect();
 
     _units[(_cur_unit != 0) ? _cur_unit - 1 : _units.size() - 1].unit->removeSelectEffect();
 
     unitEInfo.step = unitEInfo.nextCall = 0;
 
-    _t = new std::thread(_step_internal, unit, controller, this, &unitEInfo.skill);
+    if(controller->isFast()) _step_internal(unit, controller, this, &unitEInfo.skill);
+    else _t = new std::thread(_step_internal, unit, controller, this, &unitEInfo.skill);
 }
 
 void BattleEngine::_delete_thread() {

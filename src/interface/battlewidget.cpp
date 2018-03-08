@@ -8,18 +8,13 @@
 #include <QScrollBar>
 #include <QKeyEvent>
 
+#include "mainwindow.h"
 #include "battlewidget.h"
 #include "battleengine.h"
 #include "unit.h"
 #include "idbutton.h"
-#include "skills/testskill.h"
-#include "skills/walk.h"
-#include "skills/evade.h"
-#include "skills/thrust.h"
-#include "controllers/human.h"
-#include "controllers/ai/slime.h"
 
-BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _arrow_item(nullptr) {
+BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) : QWidget(parent), _arrow_item(nullptr) {
 
     _gview = new BattleView(this, new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height), this);
 
@@ -41,43 +36,16 @@ BattleWidget::BattleWidget(QWidget *parent /* = nullptr */) : QWidget(parent), _
 
     _gview->scene()->addItem(_arrow_item);
 
-    QPixmap slime_im1 = QPixmap(":/slime_idle1.png").scaled(50, 50);
-    QPixmap slime_im2 = QPixmap(":/slime_idle2.png").scaled(50, 50);
-    QPixmap slime_im3 = QPixmap(":/slime_idle3.png").scaled(50, 50);
-    QPixmap slime_im4 = QPixmap(":/slime_idle4.png").scaled(50, 50);
-    QPixmap slime_im5 = QPixmap(":/slime_idle5.png").scaled(50, 50);
+    QPushButton *ret_button = new QPushButton("Return", this);
 
-    Animation slime_animation(1000, true);
+    ret_button->setGeometry(0, 0.9*Traits<MainWindow>::height,
+                            0.1*Traits<MainWindow>::width, 0.1*Traits<MainWindow>::height);
 
-    slime_animation.setFlag(Animation::Flag::RandomStart);
+    QObject::connect(ret_button, &QPushButton::clicked, this, &BattleWidget::_return_button_pressed);
 
-    slime_animation.addImage(slime_im1, 0);
-    slime_animation.addImage(slime_im2, 200);
-    slime_animation.addImage(slime_im3, 400);
-    slime_animation.addImage(slime_im4, 600);
-    slime_animation.addImage(slime_im5, 800);
+    ret_button->setFocusPolicy(Qt::NoFocus);
 
-    Animation slime_attack_animation(10, true);
-
-    slime_attack_animation.addImage(QPixmap(":/slime_attack.png").scaled(150, 50), 0);
-
-    UnitInfo *u_info = new UnitInfo;
-
-    u_info->addSkill(new skill::Walk(10, 100), slime_animation, QPixmap(":/wing_boot.png").scaled(50, 50));
-    u_info->addSkill(new skill::Evade, slime_animation, QPixmap(":/wing_boot_blue.png").scaled(50, 50));
-    u_info->addSkill(new skill::Thrust(12, 90), slime_attack_animation, QPixmap(":/wing_boot_blue.png").scaled(50, 50));
-    u_info->setIdleAnimation(slime_animation);
-
-    u_info->setSize(22);
-    u_info->setHealth(10);
-
-    UnitController *human = new controller::Human;
-    UnitController *ai = new controller::AI::Slime;
-
-    UIntegerType i = 0;
-
-    for(; i < 1; i++) _engine->addUnit(u_info, human, i);
-    for(; i < 2; i++) _engine->addUnit(u_info, ai, i);
+    ret_button->show();
 }
 
 void BattleWidget::showSkillButtons(const UnitInfo *info) {
@@ -168,6 +136,10 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
         if(event->key() == Qt::Key_Plus || event->key() == Qt::Key_Equal) zoomIn();
         else if(event->key() == Qt::Key_Minus) zoomOut();
     }
+    else {
+
+        if(event->key() >= Qt::Key_1 && event->key() <= Qt::Key_9) _skill_button_clicked(event->key() - Qt::Key_1);
+    }
 }
 
 Vec2Type<IntegerType> BattleWidget::askMouseClick() {
@@ -193,7 +165,7 @@ void BattleWidget::battleViewMouseMoveEvent(QMouseEvent *event) {
 
 void BattleWidget::battleViewMouseReleaseEvent(QMouseEvent *event) {
 
-    std::unique_lock lock(_input_mut);
+    std::unique_lock<std::mutex> lock(_input_mut);
 
     Q_UNUSED(lock);
 
@@ -218,6 +190,11 @@ void BattleWidget::start(){
     _timer->start();
 }
 
+void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UIntegerType team) {
+
+    _engine->addUnit(u, c, team);
+}
+
 UIntegerType BattleWidget::controllerUserInterfaceAskSkillInput() {
 
     return askSkill();
@@ -230,9 +207,14 @@ UnitController::AngleType BattleWidget::controllerUserInterfaceAskAngleInput() {
     return atan2(cursor.y - _arrow_item->y(), cursor.x - _arrow_item->x());
 }
 
+void BattleWidget::_return_button_pressed(){
+
+    static_cast<MainWindow *>(parent())->popWidget();
+}
+
 void BattleWidget::_skill_button_clicked(UIntegerType id){
 
-    std::unique_lock lock(_input_mut);
+    std::unique_lock<std::mutex> lock(_input_mut);
 
     Q_UNUSED(lock);
 

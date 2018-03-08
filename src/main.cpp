@@ -13,7 +13,6 @@ int main(int argc, char **argv) {
 
     mw.show();
 
-    //mw.pushWidget(new BattleWidget);
     mw.pushWidget(new Menu);
 
     return app.exec();

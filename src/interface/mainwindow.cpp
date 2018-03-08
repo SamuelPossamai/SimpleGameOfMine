@@ -19,6 +19,7 @@ void MainWindow::pushWidget(QWidget *w) {
     if(_widgets.size() > 0) _widgets.back()->hide();
     _widgets.push_back(w);
 
+    w->setFocus();
     w->show();
 }
 
@@ -27,6 +28,7 @@ void MainWindow::popWidget() {
     delete _widgets.back();
     _widgets.pop_back();
 
+    _widgets.back()->setFocus();
     _widgets.back()->show();
 }
 
@@ -37,5 +39,6 @@ void MainWindow::switchWidget(QWidget *w) {
 
     delete _widgets.back();
 
+    w->setFocus();
     (_widgets.back() = w)->show();
 }

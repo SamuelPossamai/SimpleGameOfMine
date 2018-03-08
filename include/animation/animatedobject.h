@@ -17,15 +17,7 @@ public:
      * \brief Class used to handle AnimatedObject events.
      * \brief To handle events from AnimatedObject you should create an class that inherits from this class.
      */
-    class Handler {
-
-    public:
-
-        virtual void animatedObjectMouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {}
-        virtual void animatedObjectMouseMoveEvent(QGraphicsSceneMouseEvent *) {}
-        virtual void animatedObjectMousePressEvent(QGraphicsSceneMouseEvent *) {}
-        virtual void animatedObjectMouseReleaseEvent(QGraphicsSceneMouseEvent *) {}
-    };
+    class Handler;
 
     /*!
      * \brief Construct an AnimatedObject without any animation
@@ -126,5 +118,14 @@ private:
     Handler *_handler;
 };
 
+class AnimatedObject::Handler {
+
+public:
+
+    virtual void animatedObjectMouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {}
+    virtual void animatedObjectMouseMoveEvent(QGraphicsSceneMouseEvent *) {}
+    virtual void animatedObjectMousePressEvent(QGraphicsSceneMouseEvent *) {}
+    virtual void animatedObjectMouseReleaseEvent(QGraphicsSceneMouseEvent *) {}
+};
 
 #endif // ANIMATEDOBJECT_H

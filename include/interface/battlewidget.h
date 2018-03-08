@@ -17,7 +17,7 @@ class BattleWidget : public QWidget, public BattleView::Handler, public UnitCont
 
 public:
 
-    BattleWidget(QWidget *parent = nullptr);
+    BattleWidget(MainWindow *parent = nullptr);
 
     ~BattleWidget() { _mouse_clicked = true; _skill_button_clicked(0); }
 
@@ -40,6 +40,8 @@ public:
 
     void start();
 
+    void addUnit(UnitInfo *, UnitController *, UIntegerType team);
+
 public slots:
 
     void step();
@@ -52,11 +54,13 @@ protected:
 
     virtual void battleViewMouseReleaseEvent(QMouseEvent *event) override;
 
-    virtual UIntegerType controllerUserInterfaceAskSkillInput();
+    virtual UIntegerType controllerUserInterfaceAskSkillInput() override;
 
-    virtual UnitController::AngleType controllerUserInterfaceAskAngleInput();
+    virtual UnitController::AngleType controllerUserInterfaceAskAngleInput() override;
 
 private slots:
+
+    void _return_button_pressed();
 
     void _skill_button_clicked(UIntegerType id);
 

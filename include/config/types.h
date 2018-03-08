@@ -20,9 +20,11 @@ class BattleWidget;
 class IdButton;
 class BattleView;
 class Menu;
+class HelpWidget;
 
 class Animation;
 class AnimatedObject;
+class AnimationHandler;
 
 using IntegerType = std::ptrdiff_t;
 using UIntegerType = std::size_t;

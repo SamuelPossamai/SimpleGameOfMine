@@ -12,6 +12,8 @@ TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
+CONFIG += object_parallel_to_source
+
 SOURCES += src/main.cpp \
     src/interface/mainwindow.cpp \
     src/engine/unitbase.cpp \
@@ -30,7 +32,10 @@ SOURCES += src/main.cpp \
     src/engine/skills/evade.cpp \
     src/engine/skills/thrust.cpp \
     src/interface/battleview.cpp \
-    src/engine/controllers/ai/slime.cpp
+    src/engine/controllers/ai/slime.cpp \
+    src/engine/creatures/slime.cpp \
+    src/interface/helpwidget.cpp \
+    src/engine/unitcontroller.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -56,7 +61,9 @@ HEADERS += include/interface/mainwindow.h \
     include/animation/animationhandler.h \
     include/engine/skills/evade.h \
     include/engine/skills/thrust.h \
-    include/engine/controllers/ai/slime.h
+    include/engine/controllers/ai/slime.h \
+    include/engine/creatures/slime.h \
+    include/interface/helpwidget.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

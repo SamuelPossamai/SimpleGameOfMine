@@ -18,8 +18,8 @@ struct Traits <MainWindow> {
 template<>
 struct Traits <BattleWidget> {
 
-    static constexpr RealType zoomInMultiplier = 1.05;
-    static constexpr RealType zoomOutMultiplier = 1.05;
+    static constexpr RealType zoomInMultiplier = 1; // should be 1 or higher, 1 means disabled
+    static constexpr RealType zoomOutMultiplier = 1; // should be 1 or higher, 1 means disabled
 
     enum class Direction { Horizontal, Vertical };
     static const Direction skillButtonDirection = Direction::Horizontal;
@@ -43,7 +43,9 @@ struct Traits <Menu> {
     static const UIntegerType buttonsHeight = 0.1*Traits<MainWindow>::height;
 
     static const UIntegerType buttonsX = (Traits<MainWindow>::width - buttonsWidth)/2;
-    static const UIntegerType buttonsY = 0.3*Traits<MainWindow>::height;
+    static const UIntegerType buttonsY = 0.2*Traits<MainWindow>::height;
+
+    static const UIntegerType buttonsDistance = 0.05*Traits<MainWindow>::height;
 };
 
 
