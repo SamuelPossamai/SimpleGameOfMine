@@ -6,6 +6,7 @@
 #include "battlewidget.h"
 #include "helpwidget.h"
 #include "creatures/slime.h"
+#include "creatures/fighter.h"
 #include "controllers/human.h"
 #include "controllers/ai/slime.h"
 
@@ -38,7 +39,7 @@ void Menu::_player_vs_ai_start_button_clicked(){
 
     BattleWidget *bw = new BattleWidget;
 
-    bw->addUnit(creature::slimeInfo(), human_controller, 0);
+    bw->addUnit(creature::fighterInfo(), human_controller, 0);
     bw->addUnit(creature::slimeInfo(), ai_controller, 1);
 
     bw->start();

@@ -19,6 +19,8 @@ public:
 
     Map(PositionType width, PositionType height) : _width(width), _height(height), _scene(nullptr) {}
 
+    bool gameEndVerify() const;
+
     void addUnit(Unit *unit);
     void removeUnit(Unit *unit);
 

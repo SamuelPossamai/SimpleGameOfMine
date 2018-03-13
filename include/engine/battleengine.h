@@ -25,7 +25,7 @@ public:
      * \param interface interface used to get user's input.
      */
     BattleEngine(BattleWidget *interface) : _map(800, 400), _interface(interface), _cur_unit(0),
-        _waiting_arrow_input(false), _t(nullptr) {}
+        _waiting_arrow_input(false), _t(nullptr), _game_status(status::WORKING) {}
 
     ~BattleEngine();
 
@@ -62,7 +62,7 @@ public:
 
 private:
 
-    void unitHandlerDeathEvent(Unit *u) { u->hideAnimation(); }
+    void unitHandlerDeathEvent(Unit *u);
 
     struct UnitEngineInfo {
 
@@ -99,6 +99,9 @@ private:
 
     std::mutex _step_mut;
     std::thread *_t;
+
+    enum class status : UIntegerType { WORKING, FINISHING, FINISHED };
+    status _game_status;
 };
 
 #endif // BATTLEENGINE_H

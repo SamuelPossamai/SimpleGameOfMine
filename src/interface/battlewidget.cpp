@@ -8,13 +8,14 @@
 #include <QScrollBar>
 #include <QKeyEvent>
 
+#include "unit.h"
 #include "mainwindow.h"
 #include "battlewidget.h"
 #include "battleengine.h"
 #include "unit.h"
 #include "idbutton.h"
 
-BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) : QWidget(parent), _arrow_item(nullptr) {
+BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) : QWidget(parent), _arrow_item(nullptr), _message(nullptr) {
 
     _gview = new BattleView(this, new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height), this);
 
@@ -46,9 +47,32 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) : QWidget(parent)
     ret_button->setFocusPolicy(Qt::NoFocus);
 
     ret_button->show();
+
+    qRegisterMetaType<UIntegerType>("UIntegerType");
+
+    QObject::connect(this, &BattleWidget::hideSkillButtonsSignal, this, &BattleWidget::hideSkillButtons);
+    QObject::connect(this, &BattleWidget::showSkillButtonsSignal, this, &BattleWidget::showSkillButtons);
+    QObject::connect(this, &BattleWidget::showArrowSignal, this, &BattleWidget::showArrow);
+    QObject::connect(this, &BattleWidget::hideArrowSignal, this, &BattleWidget::hideArrow);
+
+    _timer = new QTimer(this);
+
+    _timer->setInterval(10);
+
+    QObject::connect(_timer, &QTimer::timeout, this, &BattleWidget::step);
+    QObject::connect(this, &BattleWidget::startTimer, _timer, static_cast<void (QTimer::*)()>(&QTimer::start));
+    QObject::connect(this, &BattleWidget::stopTimer, _timer, &QTimer::stop);
+}
+
+void BattleWidget::setParent(MainWindow *p) {
+
+    QWidget::setParent(p);
 }
 
 void BattleWidget::showSkillButtons(const UnitInfo *info) {
+
+    std::unique_lock<std::mutex> lock(_input_mut);
+    Q_UNUSED(lock);
 
     static const auto button_size = Traits<BattleWidget>::skillButtonSize;
 
@@ -100,14 +124,17 @@ void BattleWidget::showSkillButtons(const UnitInfo *info) {
 
 void BattleWidget::hideSkillButtons() {
 
+    std::unique_lock<std::mutex> lock(_input_mut);
+    Q_UNUSED(lock);
+
     for(UIntegerType i = 0; i < _skill_buttons.size(); i++) _skill_buttons[i]->hide();
 }
 
 UIntegerType BattleWidget::askSkill() {
 
-    if(!skillButtonsVisible()) return std::numeric_limits<UIntegerType>::max();
-
     std::unique_lock<std::mutex> lock(_input_mut);
+
+    if(!skillButtonsVisible()) return std::numeric_limits<UIntegerType>::max();
 
     _last_skill_button_clicked = _skill_buttons.size();
 
@@ -181,12 +208,6 @@ void BattleWidget::start(){
 
     _engine->placeUnits();
 
-    _timer = new QTimer(this);
-
-    _timer->setInterval(10);
-
-    QObject::connect(_timer, &QTimer::timeout, this, &BattleWidget::step);
-
     _timer->start();
 }
 
@@ -195,16 +216,53 @@ void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UIntegerType team) {
     _engine->addUnit(u, c, team);
 }
 
-UIntegerType BattleWidget::controllerUserInterfaceAskSkillInput() {
+UIntegerType BattleWidget::controllerUserInterfaceAskSkillInput(const Unit *u) {
 
-    return askSkill();
+    emit showSkillButtonsSignal(u->unitInfo());
+    emit stopTimer();
+
+    UIntegerType input;
+    while((input = askSkill()) == std::numeric_limits<UIntegerType>::max());
+
+    emit hideSkillButtonsSignal();
+    emit startTimer();
+
+    return input;
 }
 
-UnitController::AngleType BattleWidget::controllerUserInterfaceAskAngleInput() {
+UnitController::AngleType BattleWidget::controllerUserInterfaceAskAngleInput(const Unit *u) {
+
+    emit showArrowSignal(u->x(), u->y());
+    emit stopTimer();
 
     auto cursor = askMouseClick();
 
+    emit hideArrow();
+    emit startTimer();
+
     return atan2(cursor.y - _arrow_item->y(), cursor.x - _arrow_item->x());
+}
+
+void BattleWidget::displayMessage(std::string message) {
+
+    if(_message == nullptr){
+
+        _message = new QLabel(this);
+        _message->setGeometry(this->geometry());
+        _message->setAlignment(Qt::AlignCenter);
+        _message->setFocusPolicy(Qt::NoFocus);
+        _message->setAttribute(Qt::WA_TransparentForMouseEvents, true);
+
+        QFont font = _message->font();
+
+        font.setBold(true);
+        font.setPointSize(40);
+
+        _message->setFont(font);
+    }
+
+    _message->setText(QString::fromStdString(message));
+    _message->show();
 }
 
 void BattleWidget::_return_button_pressed(){

@@ -11,5 +11,11 @@
         <file>wing_boot.png</file>
         <file>wing_boot_blue.png</file>
         <file>slime_attack.png</file>
+        <file>x_simbol.png</file>
+        <file>fighter_idle.png</file>
+        <file>fighter_walking_1n3.png</file>
+        <file>fighter_walking_2.png</file>
+        <file>fighter_walking_4.png</file>
+        <file>fighter_walking_5.png</file>
     </qresource>
 </RCC>

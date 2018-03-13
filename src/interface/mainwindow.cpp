@@ -28,11 +28,14 @@ void MainWindow::popWidget() {
     delete _widgets.back();
     _widgets.pop_back();
 
-    _widgets.back()->setFocus();
-    _widgets.back()->show();
+    if(!_widgets.empty()){
+
+        _widgets.back()->setFocus();
+        _widgets.back()->show();
+    }
 }
 
-void MainWindow::switchWidget(QWidget *w) {
+void MainWindow::swapWidget(QWidget *w) {
 
     w->setParent(this);
     w->setGeometry(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height);

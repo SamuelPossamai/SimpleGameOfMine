@@ -46,7 +46,7 @@ void __slime_init__() {
 
     __slime_info__.addSkill(new skill::Walk(10, 100), slime_animation, QPixmap(":/wing_boot.png").scaled(50, 50));
     __slime_info__.addSkill(new skill::Evade, slime_animation, QPixmap(":/wing_boot_blue.png").scaled(50, 50));
-    __slime_info__.addSkill(new skill::Thrust(12, 90), slime_attack_animation, QPixmap(":/wing_boot_blue.png").scaled(50, 50));
+    __slime_info__.addSkill(new skill::Thrust(12, 90), slime_attack_animation, QPixmap(":/x_simbol.png").scaled(50, 50));
     __slime_info__.setIdleAnimation(slime_animation);
 
     __slime_info__.setSize(22);

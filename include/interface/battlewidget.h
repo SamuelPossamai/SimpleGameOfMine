@@ -6,11 +6,15 @@
 
 #include <QWidget>
 #include <QGraphicsPixmapItem>
+#include <QLabel>
 
 #include "interface_traits.h"
 #include "battleview.h"
 #include "unitcontroller.h"
 
+/*!
+ * \brief Widget that manages the interface in a battle
+ */
 class BattleWidget : public QWidget, public BattleView::Handler, public UnitController::UserInterface {
 
     Q_OBJECT
@@ -19,15 +23,15 @@ public:
 
     BattleWidget(MainWindow *parent = nullptr);
 
+    void setParent(MainWindow *p);
+    void setParent(QWidget *) = delete;
+
     ~BattleWidget() { _mouse_clicked = true; _skill_button_clicked(0); }
 
     void zoomIn(RealType value = Traits<BattleWidget>::zoomInMultiplier) { _set_zoom(value);  }
     void zoomOut(RealType value = Traits<BattleWidget>::zoomOutMultiplier) { _set_zoom(1/value);  }
 
     void translate(IntegerType dx, IntegerType dy) { _gview->translate(dx, dy); }
-
-    void showSkillButtons(const UnitInfo *info);
-    void hideSkillButtons();
 
     void showArrow(UIntegerType x, UIntegerType y) { _arrow_item->setPos(x, y); _arrow_item->show(); }
     void hideArrow() { _arrow_item->hide(); }
@@ -42,9 +46,25 @@ public:
 
     void addUnit(UnitInfo *, UnitController *, UIntegerType team);
 
+    void displayMessage(std::string);
+
+signals:
+
+    void showSkillButtonsSignal(const UnitInfo *info);
+    void hideSkillButtonsSignal();
+
+    void showArrowSignal(UIntegerType x, UIntegerType y);
+    void hideArrowSignal();
+
+    void startTimer();
+    void stopTimer();
+
 public slots:
 
     void step();
+
+    void showSkillButtons(const UnitInfo *info);
+    void hideSkillButtons();
 
 protected:
 
@@ -54,9 +74,9 @@ protected:
 
     virtual void battleViewMouseReleaseEvent(QMouseEvent *event) override;
 
-    virtual UIntegerType controllerUserInterfaceAskSkillInput() override;
+    virtual UIntegerType controllerUserInterfaceAskSkillInput(const Unit *) override;
 
-    virtual UnitController::AngleType controllerUserInterfaceAskAngleInput() override;
+    virtual UnitController::AngleType controllerUserInterfaceAskAngleInput(const Unit *) override;
 
 private slots:
 
@@ -84,6 +104,7 @@ private:
     bool _mouse_clicked;
 
     QGraphicsPixmapItem *_arrow_item;
+    QLabel *_message;
 
     std::mutex _input_mut;
     std::condition_variable _input_wait;

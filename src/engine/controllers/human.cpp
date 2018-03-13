@@ -8,12 +8,12 @@
 
 using namespace controller;
 
-UIntegerType Human::chooseSkill(const Unit *, const Map *, UserInterface *i) {
+UIntegerType Human::chooseSkill(const Unit *unit, const Map *, UserInterface *i) {
 
-    return i->askSkill();
+    return i->askSkill(unit);
 }
 
-Human::AngleType Human::chooseAngle(const Unit *, const Map *, UserInterface *i) {
+Human::AngleType Human::chooseAngle(const Unit *unit, const Map *, UserInterface *i) {
 
-    return i->askAngle();
+    return i->askAngle(unit);
 }

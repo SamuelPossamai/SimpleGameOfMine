@@ -89,10 +89,28 @@ Unit *Map::closerEnemy(const Unit *u) {
     return closer;
 }
 
+bool Map::gameEndVerify() const {
+
+    if(_units.empty()) return true;
+
+    UIntegerType first_team = _units[0]->team();
+
+    for(Unit *unit : _units) if(unit->team() != first_team) return false;
+
+    return true;
+}
+
 void Map::addUnit(Unit *unit) {
 
     if(_scene != nullptr) unit->addToScene(_scene);
     _units.push_back(unit);
+}
+
+void Map::removeUnit(Unit *unit) {
+
+     *std::find(_units.begin(), _units.end(), unit) = _units.back();
+
+    _units.pop_back();
 }
 
 void Map::setScene(QGraphicsScene *scene) {

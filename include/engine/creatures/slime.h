@@ -10,4 +10,4 @@ UnitInfo *slimeInfo();
 
 } /* namespace creature */
 
-#endif
+#endif // CREATURES_SLIME_H

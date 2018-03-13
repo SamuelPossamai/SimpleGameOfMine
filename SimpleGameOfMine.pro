@@ -35,7 +35,8 @@ SOURCES += src/main.cpp \
     src/engine/controllers/ai/slime.cpp \
     src/engine/creatures/slime.cpp \
     src/interface/helpwidget.cpp \
-    src/engine/unitcontroller.cpp
+    src/engine/unitcontroller.cpp \
+    src/engine/creatures/fighter.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -63,7 +64,8 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/thrust.h \
     include/engine/controllers/ai/slime.h \
     include/engine/creatures/slime.h \
-    include/interface/helpwidget.h
+    include/interface/helpwidget.h \
+    include/engine/creatures/fighter.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

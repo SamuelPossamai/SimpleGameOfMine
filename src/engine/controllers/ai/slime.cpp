@@ -5,8 +5,6 @@
 #include "map.h"
 #include "unit.h"
 
-#include <iostream>
-
 using namespace controller::AI;
 
 UIntegerType Slime::chooseSkill(const Unit *u, const Map *m, UserInterface *) {

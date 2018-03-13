@@ -10,7 +10,7 @@ BattleEngine::~BattleEngine() {
 
     _delete_thread();
 
-    for(UIntegerType i = 0; i < _map.units(); i++) delete _map.unitAccess(i);
+    for(UnitEngineInfo& ueinfo : _units) delete ueinfo.unit;
 }
 
 void BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team) {
@@ -23,10 +23,17 @@ void BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UI
 
 void BattleEngine::step(){
 
-    if(_step_mut.try_lock()) {
+    if(_game_status == status::FINISHED) return;
+    if(_game_status == status::FINISHING) {
 
-        _interface->hideSkillButtons();
-        _interface->hideArrow();
+        _interface->displayMessage("Team " + std::to_string(_map.unitAccess(0)->team()) + " Won");
+
+        _game_status = status::FINISHED;
+
+        return;
+    }
+
+    if(_step_mut.try_lock()) {
 
         if(_step_loop()) _step_mut.unlock();
 
@@ -39,6 +46,14 @@ void BattleEngine::step(){
             if(!_units[i].performingSkill() || _units[i].step == 0) _units[i].unit->animationStep();
         }
     }
+}
+
+void BattleEngine::unitHandlerDeathEvent(Unit *u) {
+
+    u->hideAnimation();
+    _map.removeUnit(u);
+
+    if(_map.gameEndVerify()) _game_status = status::FINISHING;
 }
 
 bool BattleEngine::_step_loop(){
@@ -56,8 +71,6 @@ bool BattleEngine::_step_loop(){
         if(unitEInfo.performingSkill()) {
 
             if(_waiting_arrow_input) {
-
-                if(controller->showArrow()) _interface->showArrow(unit->x(), unit->y());
 
                 _delete_thread();
 
@@ -117,8 +130,6 @@ void BattleEngine::_skill_step(Unit * const & unit, UnitEngineInfo& unitEInfo) {
 }
 
 void BattleEngine::_ask_controller(Unit * const & unit, Controller * const & controller, UnitEngineInfo& unitEInfo){
-
-    if(controller->showButtons()) _interface->showSkillButtons(unit->unitInfo());
 
     _delete_thread();
 
