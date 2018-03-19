@@ -17,5 +17,8 @@
         <file>fighter_walking_2.png</file>
         <file>fighter_walking_4.png</file>
         <file>fighter_walking_5.png</file>
+        <file>fighter_attack_2.png</file>
+        <file>fighter_attack_1.png</file>
+        <file>fighter_attack_3.png</file>
     </qresource>
 </RCC>

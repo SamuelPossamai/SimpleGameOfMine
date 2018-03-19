@@ -68,6 +68,14 @@ void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range, Ang
     }
 }
 
+void Map::unitsInLine(UnitsVector& vector, PointType p, PositionType range, AngleType angle) {
+
+    (void) vector;
+    (void) p;
+    (void) range;
+    (void) angle;
+}
+
 Unit *Map::closerEnemy(const Unit *u) {
 
     Unit *closer = nullptr;
