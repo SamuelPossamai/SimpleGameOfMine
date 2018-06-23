@@ -15,9 +15,10 @@
 #include "unit.h"
 #include "idbutton.h"
 
-BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) : QWidget(parent), _arrow_item(nullptr), _message(nullptr) {
+BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
+    QWidget(parent), _arrow_item(nullptr), _message(nullptr), _input_allowed(true), _waiting_input(0) {
 
-    _gview = new BattleView(this, new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height), this);
+    _gview = new BattleView(this, new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height, this), this);
 
     _gview->setGeometry(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height);
 
@@ -62,6 +63,15 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) : QWidget(parent)
     QObject::connect(_timer, &QTimer::timeout, this, &BattleWidget::step);
     QObject::connect(this, &BattleWidget::startTimer, _timer, static_cast<void (QTimer::*)()>(&QTimer::start));
     QObject::connect(this, &BattleWidget::stopTimer, _timer, &QTimer::stop);
+}
+
+BattleWidget::~BattleWidget() {
+
+    std::unique_lock<std::mutex> l(_input_mut);
+
+    _input_wait.notify_all();
+
+    _input_allowed = false;
 }
 
 void BattleWidget::setParent(MainWindow *p) {
@@ -134,13 +144,17 @@ UIntegerType BattleWidget::askSkill() {
 
     std::unique_lock<std::mutex> lock(_input_mut);
 
+    _waiting_input++;
+
     if(!skillButtonsVisible()) return std::numeric_limits<UIntegerType>::max();
 
     _last_skill_button_clicked = _skill_buttons.size();
 
-    while(_last_skill_button_clicked >= _skill_buttons.size()) _input_wait.wait(lock);
+    while(_last_skill_button_clicked >= _skill_buttons.size() && _input_allowed) _input_wait.wait(lock);
 
-    return _last_skill_button_clicked;
+    _waiting_input--;
+
+    return _input_allowed ? _last_skill_button_clicked : 0;
 }
 
 bool BattleWidget::skillButtonsVisible() const {
@@ -173,9 +187,13 @@ Vec2Type<IntegerType> BattleWidget::askMouseClick() {
 
     std::unique_lock<std::mutex> lock(_input_mut);
 
+    _waiting_input++;
+
     _mouse_clicked = false;
 
-    while(!_mouse_clicked) _input_wait.wait(lock);
+    while(!_mouse_clicked && _input_allowed) _input_wait.wait(lock);
+
+    _waiting_input--;
 
     return _last_clicked_point;
 }
@@ -219,13 +237,13 @@ void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UIntegerType team) {
 UIntegerType BattleWidget::controllerUserInterfaceAskSkillInput(const Unit *u) {
 
     emit showSkillButtonsSignal(u->unitInfo());
-    emit stopTimer();
+//    emit stopTimer();
 
     UIntegerType input;
     while((input = askSkill()) == std::numeric_limits<UIntegerType>::max());
 
     emit hideSkillButtonsSignal();
-    emit startTimer();
+//    emit startTimer();
 
     return input;
 }

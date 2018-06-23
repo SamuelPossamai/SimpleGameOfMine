@@ -26,7 +26,7 @@ public:
     void setParent(MainWindow *p);
     void setParent(QWidget *) = delete;
 
-    ~BattleWidget() { _mouse_clicked = true; _skill_button_clicked(0); }
+    ~BattleWidget();
 
     void zoomIn(RealType value = Traits<BattleWidget>::zoomInMultiplier) { _set_zoom(value);  }
     void zoomOut(RealType value = Traits<BattleWidget>::zoomOutMultiplier) { _set_zoom(1/value);  }
@@ -105,6 +105,9 @@ private:
 
     QGraphicsPixmapItem *_arrow_item;
     QLabel *_message;
+
+    bool _input_allowed;
+    UIntegerType _waiting_input;
 
     std::mutex _input_mut;
     std::condition_variable _input_wait;

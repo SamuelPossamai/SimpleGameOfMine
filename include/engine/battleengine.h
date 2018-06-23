@@ -25,7 +25,7 @@ public:
      * \param interface interface used to get user's input.
      */
     BattleEngine(BattleWidget *interface) : _map(800, 400), _interface(interface), _cur_unit(0),
-        _waiting_arrow_input(false), _t(nullptr), _game_status(status::WORKING) {}
+        _t(nullptr), _game_status(status::WORKING) {}
 
     ~BattleEngine();
 
@@ -67,13 +67,12 @@ private:
     struct UnitEngineInfo {
 
         template<typename... Args>
-        UnitEngineInfo(Controller *c, Args... args);
+        UnitEngineInfo(Args... args);
 
         bool performingSkill() { return skill < unit->unitInfo()->skills(); }
         void finishSkill() { skill = unit->unitInfo()->skills(); }
 
         Unit * const unit;
-        Controller * const controller;
         UIntegerType step;
         RealType angle;
         UIntegerType nextCall;
@@ -82,10 +81,9 @@ private:
 
     bool _step_loop();
     void _skill_step(Unit * const &, UnitEngineInfo&);
-    void _ask_controller(Unit * const &, Controller * const &, UnitEngineInfo&);
-    static void _get_direction_step(Unit * const &, Controller * const &, BattleEngine *, UnitEngineInfo *);
+    void _ask_controller(Unit * const &, const Controller *, UnitEngineInfo&);
 
-    static void _step_internal(Unit *, Controller *, BattleEngine *, UIntegerType *);
+    static void _step_internal(Unit *, BattleEngine *, UnitEngineInfo *unitEInfo);
 
     void _delete_thread();
 
@@ -94,8 +92,6 @@ private:
 
     UIntegerType _cur_unit;
     std::vector<UnitEngineInfo> _units;
-
-    bool _waiting_arrow_input;
 
     std::mutex _step_mut;
     std::thread *_t;

@@ -11,7 +11,7 @@ class BasicAttack : public UnitSkill {
 public:
 
     BasicAttack(UIntegerType distance, UIntegerType damage) : UnitSkill(true), _distance(distance), _damage(damage) {}
-    BasicAttack(const BasicAttack& other) : _distance(other._distance), _damage(other._damage) {}
+    BasicAttack(const BasicAttack& other) : UnitSkill(true), _distance(other._distance), _damage(other._damage) {}
 
     virtual UIntegerType action(Unit*, Map*, const Info&) override;
 

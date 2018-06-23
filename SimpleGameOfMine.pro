@@ -67,7 +67,8 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/creatures/slime.h \
     include/interface/helpwidget.h \
     include/engine/creatures/fighter.h \
-    include/engine/skills/basicattack.h
+    include/engine/skills/basicattack.h \
+    include/animation/unitanimationitem.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

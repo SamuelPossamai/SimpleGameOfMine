@@ -5,7 +5,7 @@
 
 namespace skill {
 
-UIntegerType Evade::action(Unit *u, Map *m, const Info& info) {
+UIntegerType Evade::action(Unit *u, Map *, const Info& info) {
 
     if(info.step < 10) {
 
@@ -14,7 +14,7 @@ UIntegerType Evade::action(Unit *u, Map *m, const Info& info) {
 
         u->setAngle(u->angle() + 0.05);
 
-        m->setUnitPosition(u, Map::PointType(u->x() - dx, u->y() - dy));
+        u->setPos(u->x() - dx, u->y() - dy);;
 
         return 2;
     }

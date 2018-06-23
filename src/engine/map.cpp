@@ -132,15 +132,12 @@ void Map::setScene(QGraphicsScene *scene) {
     _scene = scene;
 }
 
-bool Map::setUnitPosition(Unit *u, const PointType& p) {
+bool Map::unitMoveVerify(Unit *u, const PointType& p) {
 
     if(Traits<Map>::solid_border && (p.x < PointType::CoordType(u->size()) ||
                                      p.x + PointType::CoordType(u->size()) > _width ||
                                      p.y < PointType::CoordType(u->size()) ||
                                      p.y + PointType::CoordType(u->size()) > _height)) return false;
-
-    u->setX(p.x);
-    u->setY(p.y);
 
     return true;
 }
@@ -160,9 +157,9 @@ void Map::placeUnits(){
         if(unit->team() == 1) n = team_1++;
         else team_0++;
 
-        unit->setX(unit->team() ? _width - 50 : 50);
-        unit->setY(_height/4 + (_height/2)*(RealType(n + 1)/(units() + 1)));
-        unit->setAngle(unit->team() ? M_PI : 0);
+        unit->UnitBase::setX(unit->team() ? _width - 50 : 50);
+        unit->UnitBase::setY(_height/4 + (_height/2)*(RealType(n + 1)/(units() + 1)));
+        unit->UnitBase::setAngle(unit->team() ? M_PI : 0);
     }
 }
 

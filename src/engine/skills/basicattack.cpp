@@ -7,8 +7,8 @@ using namespace skill;
 
 UIntegerType BasicAttack::action(Unit *, Map *, const Info& info) {
 
+    (void) info;
 
 
-
-    return 1
+    return 1;
 }

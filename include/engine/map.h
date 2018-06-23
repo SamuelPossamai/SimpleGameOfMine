@@ -45,7 +45,7 @@ public:
     void setScene(QGraphicsScene *scene);
     QGraphicsScene *scene() const { return _scene; }
 
-    bool setUnitPosition(Unit *, const PointType&);
+    bool unitMoveVerify(Unit *, const PointType&);
 
     void placeUnits();
 

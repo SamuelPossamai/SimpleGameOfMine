@@ -3,8 +3,6 @@
 
 std::mt19937 AnimationHandler::_gen((std::random_device())());
 
-#include <iostream>
-
 void AnimationHandler::start(bool rnd_start) {
 
     _cur_step = 0;
