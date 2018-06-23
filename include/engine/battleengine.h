@@ -64,26 +64,10 @@ private:
 
     void unitHandlerDeathEvent(Unit *u);
 
-    struct UnitEngineInfo {
-
-        template<typename... Args>
-        UnitEngineInfo(Args... args);
-
-        bool performingSkill() { return skill < unit->unitInfo()->skills(); }
-        void finishSkill() { skill = unit->unitInfo()->skills(); }
-
-        Unit * const unit;
-        UIntegerType step;
-        RealType angle;
-        UIntegerType nextCall;
-        UIntegerType skill;
-    };
-
     bool _step_loop();
-    void _skill_step(Unit * const &, UnitEngineInfo&);
-    void _ask_controller(Unit * const &, const Controller *, UnitEngineInfo&);
+    void _ask_controller(Unit * const &, const Controller *);
 
-    static void _step_internal(Unit *, BattleEngine *, UnitEngineInfo *unitEInfo);
+    static void _ask_controller_internal(Unit *, BattleEngine *);
 
     void _delete_thread();
 
@@ -91,7 +75,7 @@ private:
     BattleWidget *_interface;
 
     UIntegerType _cur_unit;
-    std::vector<UnitEngineInfo> _units;
+    std::vector<Unit *> _units;
 
     std::mutex _step_mut;
     std::thread *_t;

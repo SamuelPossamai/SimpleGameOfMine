@@ -37,7 +37,8 @@ SOURCES += src/main.cpp \
     src/interface/helpwidget.cpp \
     src/engine/unitcontroller.cpp \
     src/engine/creatures/fighter.cpp \
-    src/engine/skills/basicattack.cpp
+    src/engine/skills/basicattack.cpp \
+    src/animation/progressbaritem.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -68,7 +69,8 @@ HEADERS += include/interface/mainwindow.h \
     include/interface/helpwidget.h \
     include/engine/creatures/fighter.h \
     include/engine/skills/basicattack.h \
-    include/animation/unitanimationitem.h
+    include/animation/unitanimationitem.h \
+    include/animation/progressbaritem.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

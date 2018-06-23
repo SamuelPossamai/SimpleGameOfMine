@@ -15,8 +15,8 @@ public:
 
     using HandlersList = std::vector<Handler *>;
 
-    Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *w) :
-        Base(info, static_cast<QWidget *>(w)), _team(team), _controller(controller), _map(m), _interface(w) {}
+    Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i) :
+        Base(info), _team(team), _controller(controller), _map(m), _skill(info->skills()), _interface(i) {}
 
     ~Unit();
 
@@ -40,8 +40,10 @@ public:
     bool setAngle(AngleType angle);
 
     bool act();
-    std::pair<UIntegerType, AngleType> choose();
+    bool choose();
     bool perform();
+
+    bool performingSkill() { return _skill < unitInfo()->skills(); }
 
     const UnitController *controller() const { return _controller; }
 
@@ -58,7 +60,7 @@ private:
     Map * const _map;
 
     UIntegerType _skill_step;
-    RealType _skill_angle;
+    AngleType _skill_angle;
     UIntegerType _skill_next_call;
     UIntegerType _skill;
 

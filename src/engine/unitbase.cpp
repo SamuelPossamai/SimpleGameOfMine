@@ -6,7 +6,7 @@
 
 #include "unitbase.h"
 
-UnitBase::UnitBase(const UnitInfo *info, QWidget *w) : _info(info), _obj(new AnimatedObject), _health(info->health()) {
+UnitBase::UnitBase(const UnitInfo *info) : _info(info), _obj(new AnimatedObject), _health(info->health()) {
 
     _obj->addAnimation(info->idleAnimation());
 
@@ -21,12 +21,7 @@ UnitBase::UnitBase(const UnitInfo *info, QWidget *w) : _info(info), _obj(new Ani
 
     _obj->setGraphicsEffect(_effect = effect);
 
-    _health_bar = new QProgressBar(w);
-
-    QPalette p = _health_bar->palette();
-    p.setColor(QPalette::Highlight, Qt::red);
-
-    _health_bar->setPalette(p);
+    _health_bar = new ProgressBarItem;
 
     _update_health_bar();
 }
@@ -59,11 +54,13 @@ constexpr bool UnitBase::_using_radians() {
 void UnitBase::addToScene(QGraphicsScene *scene) {
 
     scene->addItem(_obj);
+    scene->addItem(_health_bar);
 }
 
 void UnitBase::removeFromScene(QGraphicsScene *scene) {
 
     scene->removeItem(_obj);
+    scene->removeItem(_health_bar);
 }
 
 void UnitBase::setHealth(HealthType h) {
@@ -80,7 +77,11 @@ void UnitBase::_update_health_bar() {
 
     QRectF rect = _obj->boundingRect();
 
-    _health_bar->setGeometry( QRect( x() - 2.5*size()/2, y() - rect.y(), 4.2*size(), size() ));
+    _health_bar->setPos(x()/2 - 2.5*size()/4, y()/2 + rect.height()/3);
+    _health_bar->setWidth(2.5*size());
+    _health_bar->setHeight(10);
 
     _health_bar->setValue(100*health()/maxHealth());
+
+    _health_bar->update();
 }

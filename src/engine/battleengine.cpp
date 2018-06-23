@@ -8,15 +8,15 @@ BattleEngine::~BattleEngine() {
 
     _delete_thread();
 
-    for(UnitEngineInfo& ueinfo : _units) delete ueinfo.unit;
+    for(Unit *unit : _units) delete unit;
 }
 
 void BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team) {
 
-    _units.emplace_back(unit_info, controller, &_map, team, _interface);
-    _map.addUnit(_units.back().unit);
+    _units.push_back(new Unit(unit_info, controller, &_map, team, _interface));
+    _map.addUnit(_units.back());
 
-    _units.back().unit->attachHandler(this);
+    _units.back()->attachHandler(this);
 }
 
 void BattleEngine::step(){
@@ -39,9 +39,9 @@ void BattleEngine::step(){
 
         for(UIntegerType i = 0; i < _units.size(); i++) {
 
-            if(_units[i].unit->isDead()) continue;
+            if(_units[i]->isDead()) continue;
 
-            if(!_units[i].performingSkill() || _units[i].step == 0) _units[i].unit->animationStep();
+            if(!_units[i]->performingSkill()) _units[i]->animationStep();
         }
     }
 }
@@ -60,16 +60,15 @@ bool BattleEngine::_step_loop(){
 
     for(; _cur_unit < _units.size(); _cur_unit++) {
 
-        auto &unitEInfo = _units[_cur_unit];
-        auto &unit = unitEInfo.unit;
+        auto &unit = _units[_cur_unit];
         auto controller = unit->controller();
 
         if(unit->isDead()) continue;
 
-        if(unitEInfo.performingSkill()) _skill_step(unit, unitEInfo);
+        if(unit->performingSkill()) unit->perform();
         else {
 
-            _ask_controller(unit, controller, unitEInfo);
+            _ask_controller(unit, controller);
 
             return false;
         }
@@ -80,42 +79,16 @@ bool BattleEngine::_step_loop(){
     return true;
 }
 
-void BattleEngine::_skill_step(Unit * const & unit, UnitEngineInfo& unitEInfo) {
-
-    if(unitEInfo.step == 0) {
-
-        unit->startSkillAnimation(unitEInfo.skill);
-
-        unit->removeSelectEffect();
-    }
-
-    if(unitEInfo.nextCall == unitEInfo.step){
-
-        unitEInfo.nextCall = unitEInfo.step + \
-                unit->unitInfo()->callSkill(unitEInfo.skill, unit, &_map, { unitEInfo.step, unitEInfo.angle });
-
-        if(unitEInfo.nextCall <= unitEInfo.step) {
-
-            unit->endSkillAnimation();
-            unitEInfo.finishSkill();
-        }
-    }
-
-    unitEInfo.step++;
-}
-
-void BattleEngine::_ask_controller(Unit * const & unit, const Controller * controller, UnitEngineInfo& unitEInfo){
+void BattleEngine::_ask_controller(Unit * const & unit, const Controller * controller){
 
     _delete_thread();
 
     if(!controller->isFast()) unit->selectEffect();
 
-    _units[(_cur_unit != 0) ? _cur_unit - 1 : _units.size() - 1].unit->removeSelectEffect();
+    _units[(_cur_unit != 0) ? _cur_unit - 1 : _units.size() - 1]->removeSelectEffect();
 
-    unitEInfo.step = unitEInfo.nextCall = 0;
-
-    if(controller->isFast()) _step_internal(unit, this, &unitEInfo);
-    else _t = new std::thread(_step_internal, unit, this, &unitEInfo);
+    if(controller->isFast()) _ask_controller_internal(unit, this);
+    else _t = new std::thread(_ask_controller_internal, unit, this);
 }
 
 void BattleEngine::_delete_thread() {
@@ -129,21 +102,11 @@ void BattleEngine::_delete_thread() {
     }
 }
 
-void BattleEngine::_step_internal(Unit *u, BattleEngine *e, UnitEngineInfo *unitEInfo) {
+void BattleEngine::_ask_controller_internal(Unit *u, BattleEngine *e) {
 
-    auto p = u->choose();
-
-    unitEInfo->skill = p.first;
-    unitEInfo->angle = p.second;
+    u->choose();
 
     e->_cur_unit++;
 
     e->_step_mut.unlock();
-}
-
-// it's a private nested class, so it will not be used outside this file and this method can be declared here
-template<typename... Args>
-BattleEngine::UnitEngineInfo::UnitEngineInfo(Args... args) : unit(new Unit(args...)), step(0) {
-
-    skill = unit->unitInfo()->skills();
 }

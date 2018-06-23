@@ -237,13 +237,13 @@ void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UIntegerType team) {
 UIntegerType BattleWidget::controllerUserInterfaceAskSkillInput(const Unit *u) {
 
     emit showSkillButtonsSignal(u->unitInfo());
-//    emit stopTimer();
+    if(!Traits<BattleWidget>::allowIdleAnimation) emit stopTimer();
 
     UIntegerType input;
     while((input = askSkill()) == std::numeric_limits<UIntegerType>::max());
 
     emit hideSkillButtonsSignal();
-//    emit startTimer();
+    if(!Traits<BattleWidget>::allowIdleAnimation) emit startTimer();
 
     return input;
 }
@@ -251,12 +251,12 @@ UIntegerType BattleWidget::controllerUserInterfaceAskSkillInput(const Unit *u) {
 UnitController::AngleType BattleWidget::controllerUserInterfaceAskAngleInput(const Unit *u) {
 
     emit showArrowSignal(u->x(), u->y());
-    emit stopTimer();
+    if(!Traits<BattleWidget>::allowIdleAnimation) emit stopTimer();
 
     auto cursor = askMouseClick();
 
     emit hideArrow();
-    emit startTimer();
+    if(!Traits<BattleWidget>::allowIdleAnimation) emit startTimer();
 
     return atan2(cursor.y - _arrow_item->y(), cursor.x - _arrow_item->x());
 }

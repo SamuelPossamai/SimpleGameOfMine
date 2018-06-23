@@ -5,6 +5,7 @@
 
 #include "unitinfo.h"
 #include "animatedobject.h"
+#include "animation/progressbaritem.h"
 
 class UnitBase {
 
@@ -20,9 +21,9 @@ public:
     using AngleType = Traits<Unit>::AngleType;
     using SizeType = Traits<Unit>::SizeType;
 
-    UnitBase(const UnitInfo *info, QWidget *);
+    UnitBase(const UnitInfo *info);
 
-    ~UnitBase() { delete _obj; }
+    ~UnitBase() { delete _obj; delete _health_bar; }
 
     const UnitInfo *unitInfo() const { return _info; }
 
@@ -74,7 +75,7 @@ private:
 
     HealthType _health;
 
-    QProgressBar *_health_bar;
+    ProgressBarItem *_health_bar;
 };
 
 #endif // UNITBASE_H

@@ -54,12 +54,45 @@ bool Unit::setAngle(AngleType angle){
     return true;
 }
 
-std::pair<UIntegerType, Unit::AngleType> Unit::choose() {
+bool Unit::choose() {
 
-    UIntegerType skill = _controller->chooseSkill(this, _map, _interface);
-    AngleType angle = unitInfo()->skillNeedAngle(skill) ? _controller->chooseAngle(this, _map, _interface) : 0;
+    _skill = _controller->chooseSkill(this, _map, _interface);
+    if(!performingSkill()) return false;
 
-    _notifyAll(&Handler::unitHandlerSkillStarted, skill);
+    _skill_angle = unitInfo()->skillNeedAngle(_skill) ? _controller->chooseAngle(this, _map, _interface) : 0;
+    _skill_step = 0;
+    _skill_next_call = 0;
 
-    return { skill, angle };
+    _notifyAll(&Handler::unitHandlerSkillStarted, _skill);
+
+    return true;
 }
+
+bool Unit::perform() {
+
+    if(_skill_step == 0) {
+
+        startSkillAnimation(_skill);
+
+        removeSelectEffect();
+    }
+
+    if(_skill_next_call == _skill_step){
+
+        _skill_next_call = _skill_step + unitInfo()->callSkill(_skill, this, _map, { _skill_step, _skill_angle });
+
+        if(_skill_next_call <= _skill_step) {
+
+            endSkillAnimation();
+            _skill = unitInfo()->skills();
+
+            return false;
+        }
+    }
+
+    _skill_step++;
+
+    return true;
+}
+
+
