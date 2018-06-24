@@ -57,13 +57,13 @@ bool Unit::setAngle(AngleType angle){
 bool Unit::choose() {
 
     _skill = _controller->chooseSkill(this, _map, _interface);
-    if(!performingSkill()) return false;
+    if(!isPerformingSkill()) return false;
 
     _skill_angle = unitInfo()->skillNeedAngle(_skill) ? _controller->chooseAngle(this, _map, _interface) : 0;
     _skill_step = 0;
     _skill_next_call = 0;
 
-    _notifyAll(&Handler::unitHandlerSkillStarted, _skill);
+    _notifyAll(&Handler::unitHandlerSkillStarted);
 
     return true;
 }
@@ -85,6 +85,8 @@ bool Unit::perform() {
 
             endSkillAnimation();
             _skill = unitInfo()->skills();
+
+            _notifyAll(&Unit::Handler::unitHandlerSkillFinished);
 
             return false;
         }

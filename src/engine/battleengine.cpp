@@ -41,7 +41,7 @@ void BattleEngine::step(){
 
             if(_units[i]->isDead()) continue;
 
-            if(!_units[i]->performingSkill()) _units[i]->animationStep();
+            if(!_units[i]->isPerformingSkill()) _units[i]->animationStep();
         }
     }
 }
@@ -65,7 +65,7 @@ bool BattleEngine::_step_loop(){
 
         if(unit->isDead()) continue;
 
-        if(unit->performingSkill()) unit->perform();
+        if(unit->isPerformingSkill()) unit->perform();
         else {
 
             _ask_controller(unit, controller);

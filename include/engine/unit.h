@@ -43,7 +43,11 @@ public:
     bool choose();
     bool perform();
 
-    bool performingSkill() { return _skill < unitInfo()->skills(); }
+    void select();
+    void unselect();
+
+    bool isPerformingSkill() const { return _skill < unitInfo()->skills(); }
+    UIntegerType skillId() const { return _skill; }
 
     const UnitController *controller() const { return _controller; }
 
@@ -71,13 +75,15 @@ class Unit::Handler {
 
 public:
 
-    virtual void unitHandlerSkillStarted(Unit *, UIntegerType skillId) { (void) skillId; }
+    virtual void unitHandlerSkillStarted(Unit *) {}
     virtual void unitHandlerSkillFinished(Unit *) {}
     virtual void unitHandlerReceivedDamage(Unit *) {}
     virtual void unitHandlerMoved(Unit *) {}
     virtual void unitHandlerRotated(Unit *) {}
     virtual void unitHandlerDeathEvent(Unit *) {}
     virtual void unitHandlerObjectDestroyed(Unit *) {}
+    virtual void unitHandlerSelected(Unit *) {}
+    virtual void unitHandlerUnselected(Unit *) {}
 };
 
 #endif // UNIT_H
