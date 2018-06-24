@@ -200,8 +200,10 @@ Vec2Type<IntegerType> BattleWidget::askMouseClick() {
 
 void BattleWidget::battleViewMouseMoveEvent(QMouseEvent *event) {
 
-    auto x = event->x() - _arrow_item->x();
-    auto y = event->y() - _arrow_item->y();
+    QPointF p = _gview->mapToScene(event->pos());
+
+    auto x = p.x() - _arrow_item->x();
+    auto y = p.y() - _arrow_item->y();
 
     RealType angle = 180*atan2(y, x)/M_PI;
 
@@ -258,7 +260,9 @@ UnitController::AngleType BattleWidget::controllerUserInterfaceAskAngleInput(con
     emit hideArrow();
     if(!Traits<BattleWidget>::allowIdleAnimation) emit startTimer();
 
-    return atan2(cursor.y - _arrow_item->y(), cursor.x - _arrow_item->x());
+    QPointF p = _gview->mapToScene(cursor.x, cursor.y);
+
+    return atan2(p.y() - _arrow_item->y(), p.x() - _arrow_item->x());
 }
 
 void BattleWidget::displayMessage(std::string message) {
