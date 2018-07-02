@@ -16,7 +16,7 @@
 #include "idbutton.h"
 
 BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
-    QWidget(parent), _arrow_item(nullptr), _message(nullptr), _input_allowed(true), _waiting_input(0) {
+    QWidget(parent), _arrow_item(nullptr), _message(nullptr), _input_interface(std::make_shared<InputManager>(this)) {
 
     _gview = new BattleView(this, new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height, this), this);
 
@@ -51,27 +51,18 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
 
     qRegisterMetaType<UIntegerType>("UIntegerType");
 
-    QObject::connect(this, &BattleWidget::hideSkillButtonsSignal, this, &BattleWidget::hideSkillButtons);
-    QObject::connect(this, &BattleWidget::showSkillButtonsSignal, this, &BattleWidget::showSkillButtons);
-    QObject::connect(this, &BattleWidget::showArrowSignal, this, &BattleWidget::showArrow);
-    QObject::connect(this, &BattleWidget::hideArrowSignal, this, &BattleWidget::hideArrow);
-
     _timer = new QTimer(this);
 
     _timer->setInterval(10);
 
     QObject::connect(_timer, &QTimer::timeout, this, &BattleWidget::step);
-    QObject::connect(this, &BattleWidget::startTimer, _timer, static_cast<void (QTimer::*)()>(&QTimer::start));
-    QObject::connect(this, &BattleWidget::stopTimer, _timer, &QTimer::stop);
+
+    _input_interface->enable();
 }
 
 BattleWidget::~BattleWidget() {
 
-    std::unique_lock<std::mutex> l(_input_mut);
-
-    _input_wait.notify_all();
-
-    _input_allowed = false;
+    _input_interface->disable();
 }
 
 void BattleWidget::setParent(MainWindow *p) {
@@ -80,9 +71,6 @@ void BattleWidget::setParent(MainWindow *p) {
 }
 
 void BattleWidget::showSkillButtons(const UnitInfo *info) {
-
-    std::unique_lock<std::mutex> lock(_input_mut);
-    Q_UNUSED(lock);
 
     static const auto button_size = Traits<BattleWidget>::skillButtonSize;
 
@@ -134,27 +122,7 @@ void BattleWidget::showSkillButtons(const UnitInfo *info) {
 
 void BattleWidget::hideSkillButtons() {
 
-    std::unique_lock<std::mutex> lock(_input_mut);
-    Q_UNUSED(lock);
-
     for(UIntegerType i = 0; i < _skill_buttons.size(); i++) _skill_buttons[i]->hide();
-}
-
-UIntegerType BattleWidget::askSkill() {
-
-    std::unique_lock<std::mutex> lock(_input_mut);
-
-    _waiting_input++;
-
-    if(!skillButtonsVisible()) return std::numeric_limits<UIntegerType>::max();
-
-    _last_skill_button_clicked = _skill_buttons.size();
-
-    while(_last_skill_button_clicked >= _skill_buttons.size() && _input_allowed) _input_wait.wait(lock);
-
-    _waiting_input--;
-
-    return _input_allowed ? _last_skill_button_clicked : 0;
 }
 
 bool BattleWidget::skillButtonsVisible() const {
@@ -166,6 +134,8 @@ bool BattleWidget::skillButtonsVisible() const {
 }
 
 void BattleWidget::step(){
+
+    _input_interface->handleEvents();
 
     _engine->step();
 }
@@ -183,21 +153,6 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
     }
 }
 
-Vec2Type<IntegerType> BattleWidget::askMouseClick() {
-
-    std::unique_lock<std::mutex> lock(_input_mut);
-
-    _waiting_input++;
-
-    _mouse_clicked = false;
-
-    while(!_mouse_clicked && _input_allowed) _input_wait.wait(lock);
-
-    _waiting_input--;
-
-    return _last_clicked_point;
-}
-
 void BattleWidget::battleViewMouseMoveEvent(QMouseEvent *event) {
 
     QPointF p = _gview->mapToScene(event->pos());
@@ -212,16 +167,7 @@ void BattleWidget::battleViewMouseMoveEvent(QMouseEvent *event) {
 
 void BattleWidget::battleViewMouseReleaseEvent(QMouseEvent *event) {
 
-    std::unique_lock<std::mutex> lock(_input_mut);
-
-    Q_UNUSED(lock);
-
-    _last_clicked_point.x = event->x();
-    _last_clicked_point.y = event->y();
-
-    _mouse_clicked = true;
-
-    _input_wait.notify_all();
+    _input_interface->interfaceMouseReleaseEvent(event);
 }
 
 void BattleWidget::start(){
@@ -234,35 +180,6 @@ void BattleWidget::start(){
 void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UIntegerType team) {
 
     _engine->addUnit(u, c, team);
-}
-
-UIntegerType BattleWidget::controllerUserInterfaceAskSkillInput(const Unit *u) {
-
-    emit showSkillButtonsSignal(u->unitInfo());
-    if(!Traits<BattleWidget>::allowIdleAnimation) emit stopTimer();
-
-    UIntegerType input;
-    while((input = askSkill()) == std::numeric_limits<UIntegerType>::max());
-
-    emit hideSkillButtonsSignal();
-    if(!Traits<BattleWidget>::allowIdleAnimation) emit startTimer();
-
-    return input;
-}
-
-UnitController::AngleType BattleWidget::controllerUserInterfaceAskAngleInput(const Unit *u) {
-
-    emit showArrowSignal(u->x(), u->y());
-    if(!Traits<BattleWidget>::allowIdleAnimation) emit stopTimer();
-
-    auto cursor = askMouseClick();
-
-    emit hideArrow();
-    if(!Traits<BattleWidget>::allowIdleAnimation) emit startTimer();
-
-    QPointF p = _gview->mapToScene(cursor.x, cursor.y);
-
-    return atan2(p.y() - _arrow_item->y(), p.x() - _arrow_item->x());
 }
 
 void BattleWidget::displayMessage(std::string message) {
@@ -294,13 +211,7 @@ void BattleWidget::_return_button_pressed(){
 
 void BattleWidget::_skill_button_clicked(UIntegerType id){
 
-    std::unique_lock<std::mutex> lock(_input_mut);
-
-    Q_UNUSED(lock);
-
-    _last_skill_button_clicked = id;
-
-    _input_wait.notify_all();
+    _input_interface->interfaceSkillButtonClicked(id);
 }
 
 RealType BattleWidget::_button_pos_calculate_static(bool x_dir, UIntegerType mode) {
@@ -342,3 +253,118 @@ RealType BattleWidget::_button_pos_calculate_dynamic(UIntegerType i, UIntegerTyp
     }
 }
 
+void BattleWidget::InputManager::handleEvents() {
+
+    std::unique_lock<std::mutex> lock(_input_mut);
+
+    Q_UNUSED(lock);
+
+    while(!_events.empty()) {
+
+        auto event = _events.front();
+        _events.pop();
+
+        switch (event.first) {
+
+            case Event::AskSkillStart:
+                _interface->showSkillButtons(reinterpret_cast<const Unit *>(event.second)->unitInfo());
+                break;
+
+            case Event::AskSkillFinish:
+                _interface->hideSkillButtons();
+                break;
+
+            case Event::AskAngleStart:
+                {
+                    auto u = reinterpret_cast<const Unit *>(event.second);
+                    _interface->showArrow(u->x(), u->y());
+                }
+                break;
+
+            case Event::AskAngleFinish:
+                _interface->hideArrow();
+                break;
+        }
+    }
+}
+
+
+UIntegerType BattleWidget::InputManager::askSkill() {
+
+    std::unique_lock<std::mutex> lock(_input_mut);
+
+    _waiting_input++;
+
+    if(!_interface->skillButtonsVisible()) return std::numeric_limits<UIntegerType>::max();
+
+    _last_skill_button_clicked = _interface->_skill_buttons.size();
+
+    while(_last_skill_button_clicked >= _interface->_skill_buttons.size() && _enable) _input_wait.wait(lock);
+
+    _waiting_input--;
+
+    return _enable ? _last_skill_button_clicked : 0;
+}
+
+Vec2Type<IntegerType> BattleWidget::InputManager::askMouseClick() {
+
+    std::unique_lock<std::mutex> lock(_input_mut);
+
+    _mouse_clicked = false;
+
+    while(!_mouse_clicked && _enable) _input_wait.wait(lock);
+
+    return _last_clicked_point;
+}
+
+void BattleWidget::InputManager::interfaceMouseReleaseEvent(QMouseEvent *event) {
+
+    std::unique_lock<std::mutex> lock(_input_mut);
+
+    Q_UNUSED(lock);
+
+    _last_clicked_point.x = event->x();
+    _last_clicked_point.y = event->y();
+
+    _mouse_clicked = true;
+
+    _input_wait.notify_all();
+}
+
+
+UIntegerType BattleWidget::InputManager::controllerUserInterfaceAskSkillInput(const Unit *u) {
+
+    _events.push(std::make_pair(Event::AskSkillStart, reinterpret_cast<const void *>(u)));
+
+    UIntegerType input;
+    while((input = askSkill()) == std::numeric_limits<UIntegerType>::max());
+
+    _events.push(std::make_pair(Event::AskSkillFinish, nullptr));
+
+    return input;
+}
+
+UnitController::AngleType BattleWidget::InputManager::controllerUserInterfaceAskAngleInput(const Unit *u) {
+
+    _events.push(std::make_pair(Event::AskAngleStart, reinterpret_cast<const void *>(u)));
+
+    auto cursor = askMouseClick();
+
+    _events.push(std::make_pair(Event::AskAngleFinish, nullptr));
+
+    QPointF p = _interface->_gview->mapToScene(cursor.x, cursor.y);
+
+    return atan2(p.y() - u->y(), p.x() - u->x());
+}
+
+
+void BattleWidget::InputManager::interfaceSkillButtonClicked(UIntegerType id) {
+
+    std::unique_lock<std::mutex> lock(_input_mut);
+
+    Q_UNUSED(lock);
+
+    _last_skill_button_clicked = id;
+
+    _input_wait.notify_all();
+}

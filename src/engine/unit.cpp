@@ -56,10 +56,12 @@ bool Unit::setAngle(AngleType angle){
 
 bool Unit::choose() {
 
-    _skill = _controller->chooseSkill(this, _map, _interface);
+    auto i = _interface->inputInterface();
+
+    _skill = _controller->chooseSkill(this, _map, i.get());
     if(!isPerformingSkill()) return false;
 
-    _skill_angle = unitInfo()->skillNeedAngle(_skill) ? _controller->chooseAngle(this, _map, _interface) : 0;
+    _skill_angle = unitInfo()->skillNeedAngle(_skill) ? _controller->chooseAngle(this, _map, i.get()) : 0;
     _skill_step = 0;
     _skill_next_call = 0;
 

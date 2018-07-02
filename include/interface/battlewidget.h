@@ -3,6 +3,8 @@
 
 #include <mutex>
 #include <condition_variable>
+#include <memory>
+#include <queue>
 
 #include <QWidget>
 #include <QGraphicsPixmapItem>
@@ -15,13 +17,18 @@
 /*!
  * \brief Widget that manages the interface in a battle
  */
-class BattleWidget : public QWidget, public BattleView::Handler, public UnitController::UserInterface {
+class BattleWidget : public QWidget, public BattleView::Handler {
 
     Q_OBJECT
 
 public:
 
+    class InputManager;
+    using InputInterface = std::shared_ptr<InputManager>;
+
     BattleWidget(MainWindow *parent = nullptr);
+
+    void start();
 
     void setParent(MainWindow *p);
     void setParent(QWidget *) = delete;
@@ -36,35 +43,20 @@ public:
     void showArrow(UIntegerType x, UIntegerType y) { _arrow_item->setPos(x, y); _arrow_item->show(); }
     void hideArrow() { _arrow_item->hide(); }
 
-    Vec2Type<IntegerType> askMouseClick();
-
-    UIntegerType askSkill();
-
     bool skillButtonsVisible() const;
 
-    void start();
+    void showSkillButtons(const UnitInfo *);
+    void hideSkillButtons();
 
     void addUnit(UnitInfo *, UnitController *, UIntegerType team);
 
     void displayMessage(std::string);
 
-signals:
-
-    void showSkillButtonsSignal(const UnitInfo *info);
-    void hideSkillButtonsSignal();
-
-    void showArrowSignal(UIntegerType x, UIntegerType y);
-    void hideArrowSignal();
-
-    void startTimer();
-    void stopTimer();
+    InputInterface inputInterface() const { return _input_interface; }
 
 public slots:
 
     void step();
-
-    void showSkillButtons(const UnitInfo *info);
-    void hideSkillButtons();
 
 protected:
 
@@ -73,10 +65,6 @@ protected:
     virtual void battleViewMouseMoveEvent(QMouseEvent *event) override;
 
     virtual void battleViewMouseReleaseEvent(QMouseEvent *event) override;
-
-    virtual UIntegerType controllerUserInterfaceAskSkillInput(const Unit *) override;
-
-    virtual UnitController::AngleType controllerUserInterfaceAskAngleInput(const Unit *) override;
 
 private slots:
 
@@ -98,19 +86,57 @@ private:
 
     std::vector<IdButton *> _skill_buttons;
 
+    QGraphicsPixmapItem *_arrow_item;
+    QLabel *_message;
+
+    InputInterface _input_interface;
+};
+
+class BattleWidget::InputManager : public UnitController::UserInterface {
+
+    friend class BattleWidget;
+
+    enum class Event : UIntegerType { AskSkillStart, AskSkillFinish, AskAngleStart, AskAngleFinish };
+    using EventList = std::queue<std::pair<Event, const void *> >;
+
+public:
+
+    InputManager(BattleWidget *i) : _enable(false), _waiting_input(0), _interface(i) {}
+
+    Vec2Type<IntegerType> askMouseClick();
+
+    UIntegerType askSkill();
+
+protected:
+
+    void handleEvents();
+
+    void enable() { _enable = true; }
+    void disable() { _enable = false; }
+
+    virtual UIntegerType controllerUserInterfaceAskSkillInput(const Unit *) override;
+    virtual UnitController::AngleType controllerUserInterfaceAskAngleInput(const Unit *) override;
+
+    void interfaceSkillButtonClicked(UIntegerType id);
+    void interfaceMouseReleaseEvent(QMouseEvent *event);
+
+private:
+
+    bool _enable;
+
     UIntegerType _last_skill_button_clicked;
     Vec2Type<IntegerType> _last_clicked_point;
 
     bool _mouse_clicked;
 
-    QGraphicsPixmapItem *_arrow_item;
-    QLabel *_message;
-
-    bool _input_allowed;
     UIntegerType _waiting_input;
 
     std::mutex _input_mut;
     std::condition_variable _input_wait;
+
+    BattleWidget *_interface;
+
+    EventList _events;
 };
 
 #endif // BATTLEWIDGET_H
