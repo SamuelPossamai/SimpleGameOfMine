@@ -16,7 +16,7 @@ void BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UI
     _units.push_back(new Unit(unit_info, controller, &_map, team, _interface));
     _map.addUnit(_units.back());
 
-    _units.back()->attachHandler(this);
+    _units.back()->attachObserver(this);
 }
 
 void BattleEngine::step(){
@@ -46,7 +46,7 @@ void BattleEngine::step(){
     }
 }
 
-void BattleEngine::unitHandlerDeathEvent(Unit *u) {
+void BattleEngine::unitDeathEvent(Unit *u) {
 
     u->hideAnimation();
     _map.removeUnit(u);

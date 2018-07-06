@@ -11,9 +11,9 @@ class Unit : public UnitBase {
 
 public:
 
-    class Handler;
+    class Observer;
 
-    using HandlersList = std::vector<Handler *>;
+    using ObserversList = std::vector<Observer *>;
 
     Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i) :
         Base(info), _team(team), _controller(controller), _map(m), _skill(info->skills()), _interface(i) {}
@@ -26,10 +26,10 @@ public:
 
     bool isDead() const { return health() <= 0; }
 
-    void attachHandler(Handler *h) { _handlers.push_back(h); }
-    void detachHandler(Handler *h);
-    void detachAllHandlers() { _handlers.clear(); }
-    const HandlersList& handlers() const { return _handlers; }
+    void attachObserver(Observer *h) { _observers.push_back(h); }
+    void detachObserver(Observer *h);
+    void detachAllObservers() { _observers.clear(); }
+    const ObserversList& observers() const { return _observers; }
 
     bool setX(PositionType x) { return setPos(x, Base::y()); }
     bool setY(PositionType y) { return setPos(Base::x(), y); }
@@ -54,12 +54,12 @@ public:
 private:
 
     template <typename... Args>
-    void _notifyAll(void (Handler::*HandlerMethod)(Unit *, Args...), Args... args) {
-        for(Handler *handler : _handlers) (handler->*HandlerMethod)(this, args...);
+    void _notifyAll(void (Observer::*ObserverMethod)(Unit *, Args...), Args... args) {
+        for(Observer *observer : _observers) (observer->*ObserverMethod)(this, args...);
     }
 
     UIntegerType _team;
-    HandlersList _handlers;
+    ObserversList _observers;
     UnitController * const _controller;
     Map * const _map;
 
@@ -71,19 +71,19 @@ private:
     BattleWidget *_interface;
 };
 
-class Unit::Handler {
+class Unit::Observer {
 
 public:
 
-    virtual void unitHandlerSkillStarted(Unit *) {}
-    virtual void unitHandlerSkillFinished(Unit *) {}
-    virtual void unitHandlerReceivedDamage(Unit *) {}
-    virtual void unitHandlerMoved(Unit *) {}
-    virtual void unitHandlerRotated(Unit *) {}
-    virtual void unitHandlerDeathEvent(Unit *) {}
-    virtual void unitHandlerObjectDestroyed(Unit *) {}
-    virtual void unitHandlerSelected(Unit *) {}
-    virtual void unitHandlerUnselected(Unit *) {}
+    virtual void unitSkillStarted(Unit *) {}
+    virtual void unitSkillFinished(Unit *) {}
+    virtual void unitReceivedDamage(Unit *) {}
+    virtual void unitMoved(Unit *) {}
+    virtual void unitRotated(Unit *) {}
+    virtual void unitDeathEvent(Unit *) {}
+    virtual void unitObjectDestroyed(Unit *) {}
+    virtual void unitSelected(Unit *) {}
+    virtual void unitUnselected(Unit *) {}
 };
 
 #endif // UNIT_H

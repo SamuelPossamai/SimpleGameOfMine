@@ -11,13 +11,13 @@
 #include <QLabel>
 
 #include "interface_traits.h"
-#include "battleview.h"
+#include "graphicsview.h"
 #include "unitcontroller.h"
 
 /*!
  * \brief Widget that manages the interface in a battle
  */
-class BattleWidget : public QWidget, public BattleView::Handler {
+class BattleWidget : public QWidget, public GraphicsView::Handler {
 
     Q_OBJECT
 
@@ -26,8 +26,15 @@ public:
     class InputManager;
     using InputInterface = std::shared_ptr<InputManager>;
 
+    /*!
+     * \brief Creates a BattleWidget passing it's parent
+     * \param parent BattleWidget parent, it must be an MainWindow or a derived class
+     */
     BattleWidget(MainWindow *parent = nullptr);
 
+    /*!
+     * \brief Start the timer that will advance the battle
+     */
     void start();
 
     void setParent(MainWindow *p);
@@ -62,9 +69,9 @@ protected:
 
     virtual void keyPressEvent(QKeyEvent *event) override;
 
-    virtual void battleViewMouseMoveEvent(QMouseEvent *event) override;
+    virtual void graphicsViewMouseMoveEvent(QMouseEvent *event) override;
 
-    virtual void battleViewMouseReleaseEvent(QMouseEvent *event) override;
+    virtual void graphicsViewMouseReleaseEvent(QMouseEvent *event) override;
 
 private slots:
 
@@ -78,6 +85,12 @@ private:
     void _set_zoom(RealType zoom) { _gview->scale(zoom, zoom); }
     RealType _button_pos_calculate_static(bool x_dir, UIntegerType mode);
     RealType _button_pos_calculate_dynamic(UIntegerType i, UIntegerType i_max, bool x_dir, UIntegerType mode);
+
+    void _gview_construct();
+    void _engine_construct();
+    void _arrow_construct();
+    void _retbutton_construct();
+    void _timer_construct();
 
     QGraphicsView *_gview;
     QTimer *_timer;

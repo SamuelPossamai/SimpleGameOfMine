@@ -30,10 +30,10 @@ protected:
     virtual void addToScene(QGraphicsScene *scene) override { scene->addItem(_health_bar); scene->addItem(_obj); }
     virtual void removeFromScene() override { scene()->removeItem(_health_bar); scene()->removeItem(_obj); }
 
-    virtual void unitHandlerDeathEvent(Unit *) override { _events.push(&BasicUnitGraphicItem::unitDeathEvent); }
-    virtual void unitHandlerSelected(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSelected); }
-    virtual void unitHandlerUnselected(Unit *) override { _events.push(&BasicUnitGraphicItem::unitUnselected); }
-    virtual void unitHandlerMoved(Unit *) override { _events.push(&BasicUnitGraphicItem::unitMoved); }
+    virtual void unitDeathEvent(Unit *) override { _events.push(&BasicUnitGraphicItem::unitDeathEvent); }
+    virtual void unitSelected(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSelected); }
+    virtual void unitUnselected(Unit *) override { _events.push(&BasicUnitGraphicItem::unitUnselected); }
+    virtual void unitMoved(Unit *) override { _events.push(&BasicUnitGraphicItem::unitMoved); }
 
     void unitDeathEvent() { hideAnimation(); }
     void unitSelected() { selectEffect(); }

@@ -5,6 +5,10 @@
 
 #include "animation.h"
 
+/*!
+ * \brief The AnimationHandler class is used to manage the current pixmap image that is meant to be displayed based on the animation
+ * \sa Animation, AnimatedObject
+ */
 class AnimationHandler {
 
 public:
@@ -12,7 +16,11 @@ public:
     AnimationHandler(Animation *animation = nullptr) : _animation(animation), _cur_step((animation) ? animation->steps() : 0),
         _vec_pos(0) { }
 
-    void setAnimation(Animation *animation) { _animation = animation; }
+    void setAnimation(Animation *animation) {
+
+        _animation = animation; _vec_pos = 0; _cur_step = (animation) ? animation->steps() : 0;
+    }
+
     const Animation *animation() const { return _animation; }
 
     bool next();

@@ -14,7 +14,7 @@
  * \brief Each time 'step' is called, the battle and animation progress a quantum.
  * \sa Map, BattleWidget, BattleEngine::step()
  */
-class BattleEngine : Unit::Handler {
+class BattleEngine : Unit::Observer {
 
     using Controller = UnitController;
 
@@ -62,7 +62,7 @@ public:
 
 private:
 
-    void unitHandlerDeathEvent(Unit *u);
+    void unitDeathEvent(Unit *u);
 
     bool _step_loop();
     void _ask_controller(Unit * const &, const Controller *);

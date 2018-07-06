@@ -31,7 +31,6 @@ SOURCES += src/main.cpp \
     src/animation/animationhandler.cpp \
     src/engine/skills/evade.cpp \
     src/engine/skills/thrust.cpp \
-    src/interface/battleview.cpp \
     src/engine/controllers/ai/slime.cpp \
     src/engine/creatures/slime.cpp \
     src/interface/helpwidget.cpp \
@@ -39,7 +38,8 @@ SOURCES += src/main.cpp \
     src/engine/creatures/fighter.cpp \
     src/engine/skills/basicattack.cpp \
     src/animation/progressbaritem.cpp \
-    src/animation/basicunitgraphicitem.cpp
+    src/animation/basicunitgraphicitem.cpp \
+    src/interface/graphicsview.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -57,7 +57,6 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/testskill.h \
     include/engine/controllers/human.h \
     include/interface/idbutton.h \
-    include/interface/battleview.h \
     include/engine/skills/walk.h \
     include/interface/menu.h \
     include/config/engine_traits.h \
@@ -72,7 +71,8 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/basicattack.h \
     include/animation/unitanimationitem.h \
     include/animation/progressbaritem.h \
-    include/animation/basicunitgraphicitem.h
+    include/animation/basicunitgraphicitem.h \
+    include/interface/graphicsview.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

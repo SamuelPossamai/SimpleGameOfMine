@@ -4,7 +4,7 @@
 
 Unit::~Unit() {
 
-    _notifyAll(&Handler::unitHandlerObjectDestroyed);
+    _notifyAll(&Observer::unitObjectDestroyed);
 }
 
 bool Unit::receiveDamage(AttackType damage) {
@@ -17,21 +17,21 @@ bool Unit::receiveDamage(AttackType damage) {
 
     if(isDead()) {
 
-        _notifyAll(&Handler::unitHandlerDeathEvent);
+        _notifyAll(&Observer::unitDeathEvent);
 
         return false;
     }
 
-    _notifyAll(&Handler::unitHandlerReceivedDamage);
+    _notifyAll(&Observer::unitReceivedDamage);
 
     return true;
 }
 
-void Unit::detachHandler(Handler *h) {
+void Unit::detachObserver(Observer *h) {
 
-    auto it = std::find(_handlers.begin(), _handlers.end(), h);
-    if(it != _handlers.end()) *it = *_handlers.end();
-    _handlers.pop_back();
+    auto it = std::find(_observers.begin(), _observers.end(), h);
+    if(it != _observers.end()) *it = *_observers.end();
+    _observers.pop_back();
 }
 
 bool Unit::setPos(PointType p) {
@@ -40,7 +40,7 @@ bool Unit::setPos(PointType p) {
 
     Base::setPos(p);
 
-    _notifyAll(&Handler::unitHandlerMoved);
+    _notifyAll(&Observer::unitMoved);
 
     return true;
 }
@@ -49,7 +49,7 @@ bool Unit::setAngle(AngleType angle){
 
     Base::setAngle(angle);
 
-    _notifyAll(&Handler::unitHandlerRotated);
+    _notifyAll(&Observer::unitRotated);
 
     return true;
 }
@@ -65,7 +65,7 @@ bool Unit::choose() {
     _skill_step = 0;
     _skill_next_call = 0;
 
-    _notifyAll(&Handler::unitHandlerSkillStarted);
+    _notifyAll(&Observer::unitSkillStarted);
 
     return true;
 }
@@ -88,7 +88,7 @@ bool Unit::perform() {
             endSkillAnimation();
             _skill = unitInfo()->skills();
 
-            _notifyAll(&Unit::Handler::unitHandlerSkillFinished);
+            _notifyAll(&Unit::Observer::unitSkillFinished);
 
             return false;
         }

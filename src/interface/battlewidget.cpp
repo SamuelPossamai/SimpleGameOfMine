@@ -18,44 +18,13 @@
 BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
     QWidget(parent), _arrow_item(nullptr), _message(nullptr), _input_interface(std::make_shared<InputManager>(this)) {
 
-    _gview = new BattleView(this, new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height, this), this);
-
-    _gview->setGeometry(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height);
-
-    _gview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    _gview->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    _gview->setMouseTracking(true);
-
-    _engine = new BattleEngine(this);
-    _engine->setScene(_gview->scene());
-
-    _arrow_item = new QGraphicsPixmapItem(QPixmap(":/arrow_image.png").scaled(100, 50));
-
-    hideArrow();
-
-    _arrow_item->setOffset(0, -_arrow_item->pixmap().height()/2);
-
-    _gview->scene()->addItem(_arrow_item);
-
-    QPushButton *ret_button = new QPushButton("Return", this);
-
-    ret_button->setGeometry(0, 0.9*Traits<MainWindow>::height,
-                            0.1*Traits<MainWindow>::width, 0.1*Traits<MainWindow>::height);
-
-    QObject::connect(ret_button, &QPushButton::clicked, this, &BattleWidget::_return_button_pressed);
-
-    ret_button->setFocusPolicy(Qt::NoFocus);
-
-    ret_button->show();
+    _gview_construct();
+    _engine_construct();
+    _arrow_construct();
+    _retbutton_construct();
+    _timer_construct();
 
     qRegisterMetaType<UIntegerType>("UIntegerType");
-
-    _timer = new QTimer(this);
-
-    _timer->setInterval(10);
-
-    QObject::connect(_timer, &QTimer::timeout, this, &BattleWidget::step);
 
     _input_interface->enable();
 }
@@ -153,7 +122,7 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
     }
 }
 
-void BattleWidget::battleViewMouseMoveEvent(QMouseEvent *event) {
+void BattleWidget::graphicsViewMouseMoveEvent(QMouseEvent *event) {
 
     QPointF p = _gview->mapToScene(event->pos());
 
@@ -165,7 +134,7 @@ void BattleWidget::battleViewMouseMoveEvent(QMouseEvent *event) {
     _arrow_item->setRotation(angle);
 }
 
-void BattleWidget::battleViewMouseReleaseEvent(QMouseEvent *event) {
+void BattleWidget::graphicsViewMouseReleaseEvent(QMouseEvent *event) {
 
     _input_interface->interfaceMouseReleaseEvent(event);
 }
@@ -251,6 +220,58 @@ RealType BattleWidget::_button_pos_calculate_dynamic(UIntegerType i, UIntegerTyp
         default:
             return max - border_distance - i*(button_size + buttons_distance) - Traits<BattleWidget>::skillButtonSize;
     }
+}
+
+void BattleWidget::_gview_construct() {
+
+    _gview = new GraphicsView(this, new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height, this), this);
+
+    _gview->setGeometry(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height);
+
+    _gview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    _gview->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    _gview->setMouseTracking(true);
+}
+
+void BattleWidget::_engine_construct() {
+
+    _engine = new BattleEngine(this);
+    _engine->setScene(_gview->scene());
+}
+
+void BattleWidget::_arrow_construct() {
+
+    _arrow_item = new QGraphicsPixmapItem(QPixmap(":/arrow_image.png").scaled(100, 50));
+
+    hideArrow();
+
+    _arrow_item->setOffset(0, -_arrow_item->pixmap().height()/2);
+
+    _gview->scene()->addItem(_arrow_item);
+}
+
+void BattleWidget::_retbutton_construct() {
+
+    QPushButton *ret_button = new QPushButton("Return", this);
+
+    ret_button->setGeometry(0, 0.9*Traits<MainWindow>::height,
+                            0.1*Traits<MainWindow>::width, 0.1*Traits<MainWindow>::height);
+
+    QObject::connect(ret_button, &QPushButton::clicked, this, &BattleWidget::_return_button_pressed);
+
+    ret_button->setFocusPolicy(Qt::NoFocus);
+
+    ret_button->show();
+}
+
+void BattleWidget::_timer_construct() {
+
+    _timer = new QTimer(this);
+
+    _timer->setInterval(10);
+
+    QObject::connect(_timer, &QTimer::timeout, this, &BattleWidget::step);
 }
 
 void BattleWidget::InputManager::handleEvents() {
