@@ -31,6 +31,8 @@ void BattleEngine::step(){
         return;
     }
 
+    for(Unit *u : _units) u->redraw();
+
     if(_step_mut.try_lock()) {
 
         if(_step_loop()) _step_mut.unlock();
@@ -40,15 +42,12 @@ void BattleEngine::step(){
         for(UIntegerType i = 0; i < _units.size(); i++) {
 
             if(_units[i]->isDead()) continue;
-
-            if(!_units[i]->isPerformingSkill()) _units[i]->animationStep();
         }
     }
 }
 
 void BattleEngine::unitDeathEvent(Unit *u) {
 
-    u->hideAnimation();
     _map.removeUnit(u);
 
     if(_map.gameEndVerify()) _game_status = status::FINISHING;
@@ -72,8 +71,6 @@ bool BattleEngine::_step_loop(){
 
             return false;
         }
-
-        unit->animationStep();
     }
 
     return true;
@@ -83,9 +80,9 @@ void BattleEngine::_ask_controller(Unit * const & unit, const Controller * contr
 
     _delete_thread();
 
-    if(!controller->isFast()) unit->selectEffect();
+    if(!controller->isFast()) unit->select();
 
-    _units[(_cur_unit != 0) ? _cur_unit - 1 : _units.size() - 1]->removeSelectEffect();
+    _units[(_cur_unit != 0) ? _cur_unit - 1 : _units.size() - 1]->unselect();
 
     if(controller->isFast()) _ask_controller_internal(unit, this);
     else _t = new std::thread(_ask_controller_internal, unit, this);

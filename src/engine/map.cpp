@@ -7,11 +7,6 @@
 #define square(x) ((x)*(x))
 #define abs(x) ((x >= 0) ? x : -x)
 
-void Map::step() {
-
-    for(auto *unit : _units) unit->animationStep();
-}
-
 Map::UnitsVector Map::unitsInRange(PointType p, PositionType range) {
 
     UnitsVector v;
@@ -110,7 +105,7 @@ bool Map::gameEndVerify() const {
 
 void Map::addUnit(Unit *unit) {
 
-    if(_scene != nullptr) unit->addToScene(_scene);
+    if(_scene != nullptr) unit->setScene(_scene);
     _units.push_back(unit);
 }
 
@@ -123,11 +118,7 @@ void Map::removeUnit(Unit *unit) {
 
 void Map::setScene(QGraphicsScene *scene) {
 
-    for(auto unit : _units) {
-
-        if(_scene != nullptr) unit->removeFromScene(_scene);
-        if(scene != nullptr) unit->addToScene(scene);
-    }
+    for(auto unit : _units) unit->setScene(scene);
 
     _scene = scene;
 }
@@ -157,9 +148,8 @@ void Map::placeUnits(){
         if(unit->team() == 1) n = team_1++;
         else team_0++;
 
-        unit->UnitBase::setX(unit->team() ? _width - 50 : 50);
-        unit->UnitBase::setY(_height/4 + (_height/2)*(RealType(n + 1)/(units() + 1)));
-        unit->UnitBase::setAngle(unit->team() ? M_PI : 0);
+        unit->setPos((unit->team() ? _width - 50 : 50), (_height/4 + (_height/2)*(RealType(n + 1)/(units() + 1))));
+        unit->setAngle(unit->team() ? M_PI : 0);
     }
 }
 

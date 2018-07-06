@@ -15,10 +15,11 @@ public:
 
     using ObserversList = std::vector<Observer *>;
 
-    Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i) :
-        Base(info), _team(team), _controller(controller), _map(m), _skill(info->skills()), _interface(i) {}
+    Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i);
 
     ~Unit();
+
+    void setScene(QGraphicsScene *scene);
 
     UIntegerType team() const { return _team; }
 
@@ -46,6 +47,8 @@ public:
     void select();
     void unselect();
 
+    void redraw();
+
     bool isPerformingSkill() const { return _skill < unitInfo()->skills(); }
     UIntegerType skillId() const { return _skill; }
 
@@ -68,6 +71,8 @@ private:
     UIntegerType _skill_next_call;
     UIntegerType _skill;
 
+    UnitAnimationItem *_gitem;
+
     BattleWidget *_interface;
 };
 
@@ -76,6 +81,7 @@ class Unit::Observer {
 public:
 
     virtual void unitSkillStarted(Unit *) {}
+    virtual void unitSkillAdvance(Unit *) {}
     virtual void unitSkillFinished(Unit *) {}
     virtual void unitReceivedDamage(Unit *) {}
     virtual void unitMoved(Unit *) {}

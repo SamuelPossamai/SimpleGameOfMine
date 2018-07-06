@@ -1,10 +1,28 @@
 
 #include "unit.h"
 #include "map.h"
+#include "basicunitgraphicitem.h"
+
+Unit::Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i) :
+    Base(info), _team(team), _controller(controller), _map(m),
+    _skill(info->skills()), _interface(i) {
+
+    _gitem = new BasicUnitGraphicItem(this);
+}
 
 Unit::~Unit() {
 
     _notifyAll(&Observer::unitObjectDestroyed);
+}
+
+void Unit::setScene(QGraphicsScene *scene) {
+
+    _gitem->setScene(scene);
+}
+
+void Unit::redraw() {
+
+    _gitem->redraw();
 }
 
 bool Unit::receiveDamage(AttackType damage) {
@@ -72,20 +90,12 @@ bool Unit::choose() {
 
 bool Unit::perform() {
 
-    if(_skill_step == 0) {
-
-        startSkillAnimation(_skill);
-
-        removeSelectEffect();
-    }
-
     if(_skill_next_call == _skill_step){
 
         _skill_next_call = _skill_step + unitInfo()->callSkill(_skill, this, _map, { _skill_step, _skill_angle });
 
         if(_skill_next_call <= _skill_step) {
 
-            endSkillAnimation();
             _skill = unitInfo()->skills();
 
             _notifyAll(&Unit::Observer::unitSkillFinished);
@@ -95,8 +105,17 @@ bool Unit::perform() {
     }
 
     _skill_step++;
+    _notifyAll(&Unit::Observer::unitSkillAdvance);
 
     return true;
 }
 
+void Unit::select() {
 
+    _notifyAll(&Observer::unitSelected);
+}
+
+void Unit::unselect() {
+
+    _notifyAll(&Observer::unitUnselected);
+}

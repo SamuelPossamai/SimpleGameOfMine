@@ -41,7 +41,7 @@ public:
      * \sa addToScene(QGraphicsScene *), removeFromScene()
      */
     void setScene(QGraphicsScene *scene) {
-        if(!_scene) this->removeFromScene();
+        if(_scene) this->removeFromScene();
         _scene = scene;
         if(scene) this->addToScene(_scene);
     }

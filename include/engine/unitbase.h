@@ -23,17 +23,15 @@ public:
 
     UnitBase(const UnitInfo *info);
 
-    ~UnitBase() { delete _obj; delete _health_bar; }
-
     const UnitInfo *unitInfo() const { return _info; }
 
-    void setX(PositionType x) { _obj->setX(x); _update_health_bar(); }
-    PositionType x() const { return _obj->x(); }
+    void setX(PositionType x) { _x = x; }
+    PositionType x() const { return _x; }
 
-    void setY(PositionType y) { _obj->setY(y); _update_health_bar(); }
-    PositionType y() const { return _obj->y(); }
+    void setY(PositionType y) { _y = y; }
+    PositionType y() const { return _y; }
 
-    void setPos(PositionType x, PositionType y) { _obj->setX(x); _obj->setY(y); _update_health_bar(); }
+    void setPos(PositionType x, PositionType y) { _x = x; _y = y;  }
     void setPos(PointType p) { setPos(p.x, p.y); }
     PointType pos() const { return { x(), y() }; }
 
@@ -42,40 +40,22 @@ public:
 
     SizeType size() const { return _info->size(); }
 
-    void addToScene(QGraphicsScene *scene);
-    void removeFromScene(QGraphicsScene *scene);
-
-    void animationStep() { _obj->step(); }
-
-    void startSkillAnimation(UIntegerType skill) { _obj->selectAnimation(skill + 1); }
-    void endSkillAnimation() { _obj->selectAnimation(_obj->idleAnimation()); }
-
-    void selectEffect();
-    void removeSelectEffect();
-
     void setHealth(HealthType health);
     HealthType health() const { return _health; }
 
     HealthType maxHealth() const { return _info->health(); }
 
-    void showAnimation() { _obj->show(); _health_bar->show(); }
-    void hideAnimation() { _obj->hide(); _health_bar->hide(); }
-
 private:
-
-    void _update_health_bar();
 
     static constexpr bool _using_radians();
 
     const UnitInfo *_info;
     SizeType _size;
 
-    AnimatedObject *_obj;
-    QGraphicsEffect *_effect;
-
     HealthType _health;
 
-    ProgressBarItem *_health_bar;
+    PositionType _x, _y;
+    AngleType _angle;
 };
 
 #endif // UNITBASE_H

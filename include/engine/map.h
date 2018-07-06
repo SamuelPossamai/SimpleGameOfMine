@@ -47,8 +47,6 @@ public:
      */
     void removeUnit(Unit *unit);
 
-    void step(); // this method should be deprecated
-
     UnitsVector unitsInRange(PointType p, PositionType range);
     UnitsVector unitsInRange(PointType p, PositionType range, AngleType angle, AngleType region_angle);
     UnitsVector unitsInLine(PointType p, PositionType range, AngleType angle);

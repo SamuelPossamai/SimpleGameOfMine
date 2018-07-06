@@ -6,7 +6,7 @@
 
 #include "animation/unitanimationitem.h"
 
-class BasicUnitGraphicItem : UnitAnimationItem {
+class BasicUnitGraphicItem : public UnitAnimationItem {
 
     using EventQueue = std::queue<void (BasicUnitGraphicItem::*)()>;
 
@@ -34,17 +34,25 @@ protected:
     virtual void unitSelected(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSelected); }
     virtual void unitUnselected(Unit *) override { _events.push(&BasicUnitGraphicItem::unitUnselected); }
     virtual void unitMoved(Unit *) override { _events.push(&BasicUnitGraphicItem::unitMoved); }
+    virtual void unitRotated(Unit *) override { _events.push(&BasicUnitGraphicItem::unitRotated); }
+    virtual void unitSkillStarted(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSkillStarted); }
+    virtual void unitSkillFinished(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSkillFinished); }
+    virtual void unitSkillAdvance(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSkillAdvance); }
 
     void unitDeathEvent() { hideAnimation(); }
     void unitSelected() { selectEffect(); }
     void unitUnselected() { removeSelectEffect(); }
     void unitMoved();
+    void unitRotated();
+    void unitSkillStarted();
+    void unitSkillFinished();
+    void unitSkillAdvance();
 
     void showAnimation() { _obj->show(); _health_bar->show(); }
     void hideAnimation() { _obj->hide(); _health_bar->hide(); }
 
-    void selectEffect() { _select_effect->setEnabled(true); }
-    void removeSelectEffect() { _select_effect->setEnabled(false); }
+    void selectEffect();
+    void removeSelectEffect();
 
 private:
 
