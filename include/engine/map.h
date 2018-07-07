@@ -25,7 +25,7 @@ public:
      * \param width Width of the region where the units can be
      * \param height Height of the region where the units can be
      */
-    Map(PositionType width, PositionType height) : _width(width), _height(height), _scene(nullptr) {}
+    Map(PositionType width, PositionType height) : _width(width), _height(height) {}
 
     /*!
      * \brief Verify if there is only units from one team, if so this team won
@@ -77,9 +77,6 @@ public:
      */
     UIntegerType units() const { return _units.size(); }
 
-    void setScene(QGraphicsScene *scene); // this method should be deprecated
-    QGraphicsScene *scene() const { return _scene; } // this method should be deprecated
-
     /*!
      * \brief This method verify if 'p' is a valid position for an unit 'u'
      * \param u Unit that want to move
@@ -109,8 +106,6 @@ private:
     PositionType _width, _height;
 
     UnitsVector _units;
-
-    QGraphicsScene *_scene;
 };
 
 #endif // MAP_H

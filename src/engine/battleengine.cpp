@@ -33,8 +33,6 @@ void BattleEngine::step(){
         return;
     }
 
-    for(Unit *u : _units) u->redraw();
-
     if(_step_mut.try_lock()) {
 
         if(_step_loop()) _step_mut.unlock();
@@ -82,10 +80,6 @@ void BattleEngine::_ask_controller(Unit * const & unit, const Controller * contr
 
     _delete_thread();
 
-    if(!controller->isFast()) unit->select();
-
-    _units[(_cur_unit != 0) ? _cur_unit - 1 : _units.size() - 1]->unselect();
-
     if(controller->isFast()) _ask_controller_internal(unit, this);
     else _t = new std::thread(_ask_controller_internal, unit, this);
 }
@@ -103,7 +97,9 @@ void BattleEngine::_delete_thread() {
 
 void BattleEngine::_ask_controller_internal(Unit *u, BattleEngine *e) {
 
+    u->select();
     u->choose();
+    u->unselect();
 
     e->_cur_unit++;
 

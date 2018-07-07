@@ -5,6 +5,10 @@
 #include <queue>
 
 #include "animation/unitanimationitem.h"
+#include "animatedobject.h"
+#include "progressbaritem.h"
+
+namespace unitanimation {
 
 class BasicUnitGraphicItem : public UnitAnimationItem {
 
@@ -24,6 +28,9 @@ public:
             _events.pop();
         }
     }
+
+    template <typename... Animations>
+    void setAnimations(const Animation& idle, Animations&&... skill_animations) { _add_animations(idle, skill_animations...); }
 
 protected:
 
@@ -58,10 +65,20 @@ protected:
 
 private:
 
+    template <typename... Args>
+    void _add_animations(const Animation& a, Args&&... args) { _add_animations(a); _add_animations(args...); }
+
+    void _add_animations(const Animation& a);
+
     AnimatedObject *_obj;
     QGraphicsEffect *_select_effect;
     ProgressBarItem *_health_bar;
     EventQueue _events;
 };
+
+template <typename ...Animations>
+void setAnimations(const Animation& idle, Animations&&... skill_animations);
+
+} /* namespace unitanimation */
 
 #endif // BASICUNITGRAPHICITEM_H

@@ -108,7 +108,6 @@ bool Map::gameEndVerify() const {
 
 void Map::addUnit(Unit *unit) {
 
-    if(_scene != nullptr) unit->setScene(_scene);
     _units.push_back(unit);
 }
 
@@ -117,13 +116,6 @@ void Map::removeUnit(Unit *unit) {
      *std::find(_units.begin(), _units.end(), unit) = _units.back();
 
     _units.pop_back();
-}
-
-void Map::setScene(QGraphicsScene *scene) {
-
-    for(auto unit : _units) unit->setScene(scene);
-
-    _scene = scene;
 }
 
 bool Map::unitMoveVerify(Unit *u, const PointType& p) {

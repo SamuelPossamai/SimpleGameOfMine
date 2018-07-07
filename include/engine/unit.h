@@ -23,8 +23,6 @@ public:
 
     ~Unit();
 
-    void setScene(QGraphicsScene *scene);
-
     UIntegerType team() const { return _team; }
 
     bool receiveDamage(AttackType);
@@ -50,8 +48,6 @@ public:
 
     void select();
     void unselect();
-
-    void redraw();
 
     bool isPerformingSkill() const { return _skill < unitInfo()->skills(); }
     UIntegerType skillId() const { return _skill; }

@@ -38,8 +38,10 @@ SOURCES += src/main.cpp \
     src/engine/unitsinfo/fighter.cpp \
     src/engine/skills/basicattack.cpp \
     src/animation/progressbaritem.cpp \
-    src/animation/basicunitgraphicitem.cpp \
-    src/interface/graphicsview.cpp
+    src/animation/unitanimations/basicunitgraphicitem.cpp \
+    src/interface/graphicsview.cpp \
+    src/animation/unitanimationfactories/slimeanimationfactory.cpp \
+    src/animation/unitanimationfactories/fighteranimationfactory.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -71,8 +73,25 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/basicattack.h \
     include/animation/unitanimationitem.h \
     include/animation/progressbaritem.h \
-    include/animation/basicunitgraphicitem.h \
-    include/interface/graphicsview.h
+    include/animation/unitanimations/basicunitgraphicitem.h \
+    include/interface/graphicsview.h \
+    include/animation/unitanimationitemfactory.h \
+    include/animation/unitanimations/basicunitgraphicitem.h \
+    include/animation/animatedobject.h \
+    include/animation/animation.h \
+    include/animation/animationhandler.h \
+    include/animation/progressbaritem.h \
+    include/animation/unitanimationitem.h \
+    include/animation/unitanimationitemfactory.h \
+    include/animation/unitanimations/basicunitgraphicitem.h \
+    include/animation/animatedobject.h \
+    include/animation/animation.h \
+    include/animation/animationhandler.h \
+    include/animation/progressbaritem.h \
+    include/animation/unitanimationitem.h \
+    include/animation/unitanimationitemfactory.h \
+    include/animation/unitanimationfactories/slimeanimationfactory.h \
+    include/animation/unitanimationfactories/fighteranimationfactory.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

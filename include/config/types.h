@@ -27,6 +27,7 @@ class AnimatedObject;
 class AnimationHandler;
 class ProgressBarItem;
 class UnitAnimationItem;
+class UnitAnimationItemFactory;
 
 using IntegerType = std::ptrdiff_t;
 using UIntegerType = std::size_t;

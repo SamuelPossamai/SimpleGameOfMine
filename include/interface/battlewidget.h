@@ -55,7 +55,7 @@ public:
     void showSkillButtons(const UnitInfo *);
     void hideSkillButtons();
 
-    void addUnit(UnitInfo *, UnitController *, UIntegerType team);
+    void addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory *, UIntegerType team);
 
     void displayMessage(std::string);
 
@@ -103,6 +103,8 @@ private:
     QLabel *_message;
 
     InputInterface _input_interface;
+
+    std::vector<UnitAnimationItem *> _animations;
 };
 
 class BattleWidget::InputManager : public UnitController::UserInterface {
@@ -114,7 +116,7 @@ class BattleWidget::InputManager : public UnitController::UserInterface {
 
 public:
 
-    InputManager(BattleWidget *i) : _enable(false), _waiting_input(0), _interface(i) {}
+    InputManager(BattleWidget *i) : _enable(false), _interface(i) {}
 
     Vec2Type<IntegerType> askMouseClick();
 
@@ -141,8 +143,6 @@ private:
     Vec2Type<IntegerType> _last_clicked_point;
 
     bool _mouse_clicked;
-
-    UIntegerType _waiting_input;
 
     std::mutex _input_mut;
     std::condition_variable _input_wait;

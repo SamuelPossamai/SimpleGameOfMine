@@ -3,16 +3,14 @@
 
 #include <QGraphicsDropShadowEffect>
 
-#include "basicunitgraphicitem.h"
+#include "unitanimations/basicunitgraphicitem.h"
 #include "animatedobject.h"
 #include "progressbaritem.h"
 
+namespace unitanimation {
+
 BasicUnitGraphicItem::BasicUnitGraphicItem(Unit *u) : UnitAnimationItem(u), _obj(new AnimatedObject),
     _health_bar(new ProgressBarItem) {
-
-    _obj->addAnimation(u->unitInfo()->idleAnimation());
-
-    for(UIntegerType i = 0; i < u->unitInfo()->skills(); i++) _obj->addAnimation(u->unitInfo()->skillAnimation(i));
 
     auto *effect = new QGraphicsDropShadowEffect;
 
@@ -67,3 +65,10 @@ void BasicUnitGraphicItem::unitReceivedDamage() {
 
     _health_bar->setValue(100*unit()->health()/unit()->maxHealth());
 }
+
+void BasicUnitGraphicItem::_add_animations(const Animation& a) {
+
+    _obj->addAnimation(a);
+}
+
+} /* namespace unitanimation */

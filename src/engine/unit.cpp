@@ -1,28 +1,17 @@
 
 #include "unit.h"
 #include "map.h"
-#include "basicunitgraphicitem.h"
+#include "unitanimations/basicunitgraphicitem.h"
 
 Unit::Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i) :
     Base(info), _team(team), _controller(controller), _map(m),
     _skill(info->skills()), _interface(i) {
 
-    _gitem = new BasicUnitGraphicItem(this);
 }
 
 Unit::~Unit() {
 
     _notifyAll(&Observer::unitObjectDestroyed);
-}
-
-void Unit::setScene(QGraphicsScene *scene) {
-
-    _gitem->setScene(scene);
-}
-
-void Unit::redraw() {
-
-    _gitem->redraw();
 }
 
 bool Unit::receiveDamage(AttackType damage) {

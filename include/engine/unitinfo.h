@@ -25,20 +25,16 @@ public:
     void setSize(SizeType size) { _size = size; }
     SizeType size() const { return _size; }
 
-    void setIdleAnimation(const Animation& animation) { _idle_animation = animation; }
-    const Animation& idleAnimation() const { return _idle_animation; }
-
-    void addSkill(UnitSkill *skill, const Animation& an, const QPixmap& icon) { _skills.emplace_back(skill, an, icon); }
-    const Animation& skillAnimation(UIntegerType n) const { return std::get<1>(_skills[n]); }
-    const QPixmap& skillIcon(UIntegerType n) const { return std::get<2>(_skills[n]); }
+    void addSkill(UnitSkill *skill, const QPixmap& icon) { _skills.emplace_back(skill, icon); }
+    const QPixmap& skillIcon(UIntegerType n) const { return _skills[n].second; }
     UIntegerType callSkill(UIntegerType n, Unit *u, Map *m, const UnitSkill::Info&) const;
-    bool skillNeedAngle(UIntegerType n) const { return std::get<0>(_skills[n])->needAngle(); }
+    bool skillNeedAngle(UIntegerType n) const { return _skills[n].first->needAngle(); }
 
     UIntegerType skills() const { return _skills.size(); }
 
 private:
 
-    using SkillVector = std::vector<std::tuple<UnitSkill *, Animation, QPixmap> >;
+    using SkillVector = std::vector<std::pair<UnitSkill *, QPixmap> >;
 
     HealthType _max_health;
     AttackType _base_attack;

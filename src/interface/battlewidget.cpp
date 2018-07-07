@@ -8,12 +8,12 @@
 #include <QScrollBar>
 #include <QKeyEvent>
 
-#include "unit.h"
 #include "mainwindow.h"
 #include "battlewidget.h"
 #include "battleengine.h"
-#include "unit.h"
 #include "idbutton.h"
+#include "unitanimationitem.h"
+#include "unitanimationitemfactory.h"
 
 BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
     QWidget(parent), _arrow_item(nullptr), _message(nullptr), _input_interface(std::make_shared<InputManager>(this)) {
@@ -32,6 +32,11 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
 BattleWidget::~BattleWidget() {
 
     _input_interface->disable();
+
+    for(auto *animation : _animations) {
+
+        delete animation;
+    }
 }
 
 void BattleWidget::setParent(MainWindow *p) {
@@ -105,6 +110,7 @@ bool BattleWidget::skillButtonsVisible() const {
 void BattleWidget::step(){
 
     _input_interface->handleEvents();
+    for(auto *animation : _animations) animation->redraw();
 
     _engine->step();
 }
@@ -146,9 +152,11 @@ void BattleWidget::start(){
     _timer->start();
 }
 
-void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UIntegerType team) {
+void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UnitAnimationItemFactory *f, UIntegerType team) {
 
-    _engine->addUnit(u, c, team);
+    _animations.push_back(f->create(_engine->addUnit(u, c, team)));
+
+    _animations.back()->setScene(_gview->scene());
 }
 
 void BattleWidget::displayMessage(std::string message) {
@@ -237,7 +245,6 @@ void BattleWidget::_gview_construct() {
 void BattleWidget::_engine_construct() {
 
     _engine = new BattleEngine(this);
-    _engine->setScene(_gview->scene());
 }
 
 void BattleWidget::_arrow_construct() {
@@ -314,15 +321,11 @@ UIntegerType BattleWidget::InputManager::askSkill() {
 
     std::unique_lock<std::mutex> lock(_input_mut);
 
-    _waiting_input++;
-
     if(!_interface->skillButtonsVisible()) return std::numeric_limits<UIntegerType>::max();
 
     _last_skill_button_clicked = _interface->_skill_buttons.size();
 
     while(_last_skill_button_clicked >= _interface->_skill_buttons.size() && _enable) _input_wait.wait(lock);
-
-    _waiting_input--;
 
     return _enable ? _last_skill_button_clicked : 0;
 }

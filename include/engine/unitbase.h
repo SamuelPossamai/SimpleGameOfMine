@@ -4,8 +4,6 @@
 #include <QProgressBar>
 
 #include "unitinfo.h"
-#include "animatedobject.h"
-#include "animation/progressbaritem.h"
 
 /*!
  * \brief Class for the basic info that an unit engine have

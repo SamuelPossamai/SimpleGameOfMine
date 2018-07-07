@@ -45,18 +45,6 @@ public:
     void step();
 
     /*!
-     * \brief Set a scene for the unit's animation.
-     * \param scene scene that will be set.
-     */
-    void setScene(QGraphicsScene *scene) { _map.setScene(scene); }
-
-    /*!
-     * \brief Return the scene used to display the units.
-     * \return Scene that used by the animations.
-     */
-    QGraphicsScene *scene() const { return _map.scene(); }
-
-    /*!
      * \brief Choose an initial position for every unit in the battle.
      */
     void placeUnits() { _map.placeUnits(); }
