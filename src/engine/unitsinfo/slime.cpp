@@ -1,11 +1,11 @@
 
 #include "animation.h"
-#include "creatures/slime.h"
+#include "unitsinfo/slime.h"
 #include "skills/walk.h"
 #include "skills/evade.h"
 #include "skills/thrust.h"
 
-namespace creature {
+namespace unitsinfo {
 
 static UnitInfo *__slime_info__ = nullptr;
 
@@ -22,7 +22,7 @@ void __slime_init__() {
 
     __slime_info__ = new UnitInfo;
 
-    UnitInfo & __slime_info__ = *creature::__slime_info__;
+    UnitInfo & __slime_info__ = *unitsinfo::__slime_info__;
 
     QPixmap slime_im1 = QPixmap(":/slime_idle1.png").scaled(50, 50);
     QPixmap slime_im2 = QPixmap(":/slime_idle2.png").scaled(50, 50);

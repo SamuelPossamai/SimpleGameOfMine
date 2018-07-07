@@ -11,12 +11,14 @@ BattleEngine::~BattleEngine() {
     for(Unit *unit : _units) delete unit;
 }
 
-void BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team) {
+Unit *BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team) {
 
     _units.push_back(new Unit(unit_info, controller, &_map, team, _interface));
     _map.addUnit(_units.back());
 
     _units.back()->attachObserver(this);
+
+    return _units.back();
 }
 
 void BattleEngine::step(){

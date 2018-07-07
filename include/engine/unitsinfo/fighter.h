@@ -4,7 +4,7 @@
 
 #include "unitinfo.h"
 
-namespace creature {
+namespace unitsinfo {
 
 UnitInfo *fighterInfo();
 

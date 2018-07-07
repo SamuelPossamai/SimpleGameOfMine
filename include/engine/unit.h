@@ -5,6 +5,10 @@
 #include "unitbase.h"
 #include "battlewidget.h"
 
+/*!
+ * \brief Class that represents an unit in the engine
+ * \sa BattleEngine, UnitBase, UnitInfo, UnitAnimationItem
+ */
 class Unit : public UnitBase {
 
     using Base = UnitBase;

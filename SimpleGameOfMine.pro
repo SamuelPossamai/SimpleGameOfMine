@@ -32,10 +32,10 @@ SOURCES += src/main.cpp \
     src/engine/skills/evade.cpp \
     src/engine/skills/thrust.cpp \
     src/engine/controllers/ai/slime.cpp \
-    src/engine/creatures/slime.cpp \
+    src/engine/unitsinfo/slime.cpp \
     src/interface/helpwidget.cpp \
     src/engine/unitcontroller.cpp \
-    src/engine/creatures/fighter.cpp \
+    src/engine/unitsinfo/fighter.cpp \
     src/engine/skills/basicattack.cpp \
     src/animation/progressbaritem.cpp \
     src/animation/basicunitgraphicitem.cpp \
@@ -65,9 +65,9 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/evade.h \
     include/engine/skills/thrust.h \
     include/engine/controllers/ai/slime.h \
-    include/engine/creatures/slime.h \
+    include/engine/unitsinfo/slime.h \
     include/interface/helpwidget.h \
-    include/engine/creatures/fighter.h \
+    include/engine/unitsinfo/fighter.h \
     include/engine/skills/basicattack.h \
     include/animation/unitanimationitem.h \
     include/animation/progressbaritem.h \
@@ -79,5 +79,4 @@ run.commands = ./$$TARGET
 
 QMAKE_EXTRA_TARGETS = run
 
-RESOURCES += \
-    img/images.qrc
+RESOURCES += img/images.qrc

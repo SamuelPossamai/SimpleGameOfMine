@@ -30,13 +30,14 @@ public:
     ~BattleEngine();
 
     /*!
-     * \brief add an unit to the BattleEngine
+     * \brief Create an unit and add it to the BattleEngine
      * \sa placeUnits()
-     * \param unit_info information about the unit that will be added, including animation
-     * \param controller the unit controller, it controls the decisions for the unit
-     * \param team unit team, it determines if other units are allies or enemies
+     * \param unit_info Information about the unit that will be added, including animation
+     * \param controller The unit controller, it controls the decisions for the unit
+     * \param team Unit team, it determines if other units are allies or enemies
+     * \return Return the unit that was just created
      */
-    void addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team);
+    Unit *addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team);
 
     /*!
      * \brief Progress the battle by a quantum, it will do nothing if the game's waiting input.

@@ -4,8 +4,11 @@
 #include "map.h"
 #include "unit.h"
 
-#define square(x) ((x)*(x))
-#define abs(x) ((x >= 0) ? x : -x)
+template<typename T>
+constexpr T square(T x) { return x * x; }
+
+template<typename T>
+constexpr T abs(T x) { return (x >= 0) ? x : -x; }
 
 Map::UnitsVector Map::unitsInRange(PointType p, PositionType range) {
 

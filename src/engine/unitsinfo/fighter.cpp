@@ -1,9 +1,9 @@
 
 #include "animation.h"
-#include "creatures/fighter.h"
+#include "unitsinfo/fighter.h"
 #include "skills/walk.h"
 
-namespace creature {
+namespace unitsinfo {
 
 static UnitInfo *__fighter_info__ = nullptr;
 
@@ -20,7 +20,7 @@ void __fighter_init__() {
 
     __fighter_info__ = new UnitInfo;
 
-    UnitInfo & __fighter_info__ = *creature::__fighter_info__;
+    UnitInfo & __fighter_info__ = *unitsinfo::__fighter_info__;
 
     QPixmap walk_im1 = QPixmap(":/fighter_walking_1n3.png").scaledToWidth(70);
     QPixmap walk_im2 = QPixmap(":/fighter_walking_2.png").scaledToWidth(70);

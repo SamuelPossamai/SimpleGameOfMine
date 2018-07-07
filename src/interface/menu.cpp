@@ -5,8 +5,8 @@
 #include "mainwindow.h"
 #include "battlewidget.h"
 #include "helpwidget.h"
-#include "creatures/slime.h"
-#include "creatures/fighter.h"
+#include "unitsinfo/slime.h"
+#include "unitsinfo/fighter.h"
 #include "controllers/human.h"
 #include "controllers/ai/slime.h"
 
@@ -39,8 +39,8 @@ void Menu::_player_vs_ai_start_button_clicked(){
 
     BattleWidget *bw = new BattleWidget;
 
-    bw->addUnit(creature::fighterInfo(), human_controller, 0);
-    bw->addUnit(creature::slimeInfo(), ai_controller, 1);
+    bw->addUnit(unitsinfo::fighterInfo(), human_controller, 0);
+    bw->addUnit(unitsinfo::slimeInfo(), ai_controller, 1);
 
     bw->start();
 
@@ -51,8 +51,8 @@ void Menu::_player_vs_player_start_button_clicked() {
 
     BattleWidget *bw = new BattleWidget;
 
-    bw->addUnit(creature::slimeInfo(), human_controller, 0);
-    bw->addUnit(creature::slimeInfo(), human_controller, 1);
+    bw->addUnit(unitsinfo::slimeInfo(), human_controller, 0);
+    bw->addUnit(unitsinfo::slimeInfo(), human_controller, 1);
 
     bw->start();
 
@@ -70,8 +70,8 @@ void Menu::_challenge_start_button_clicked() {
 
     BattleWidget *bw = new BattleWidget;
 
-    bw->addUnit(creature::slimeInfo(), human_controller, 0);
-    for(UIntegerType i = 0; i < 5; i++) bw->addUnit(creature::slimeInfo(), ai_controller, 1);
+    bw->addUnit(unitsinfo::slimeInfo(), human_controller, 0);
+    for(UIntegerType i = 0; i < 5; i++) bw->addUnit(unitsinfo::slimeInfo(), ai_controller, 1);
 
     bw->start();
 
