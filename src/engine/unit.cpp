@@ -65,12 +65,7 @@ bool Unit::choose() {
 
     auto i = _interface->inputInterface();
 
-    _skill = _controller->chooseSkill(this, _map, i.get());
-    if(!isPerformingSkill()) return false;
-
-    _skill_angle = unitInfo()->skillNeedAngle(_skill) ? _controller->chooseAngle(this, _map, i.get()) : 0;
-    _skill_step = 0;
-    _skill_next_call = 0;
+    while (!_choose_internal(i));
 
     _notifyAll(&Observer::unitSkillStarted);
 
@@ -107,4 +102,25 @@ void Unit::select() {
 void Unit::unselect() {
 
     _notifyAll(&Observer::unitUnselected);
+}
+
+bool Unit::_choose_internal(BattleWidget::InputInterface& i) {
+
+    _skill = _controller->chooseSkill(this, _map, i.get());
+    if(!isPerformingSkill()) return false;
+
+    _skill_angle = 0;
+
+    if(unitInfo()->skillNeedAngle(_skill)) {
+
+        auto opt = _controller->chooseAngle(this, _map, i.get());
+        if(!opt) return false;
+
+        _skill_angle = *opt;
+    }
+
+    _skill_step = 0;
+    _skill_next_call = 0;
+
+    return true;
 }

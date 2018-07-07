@@ -23,7 +23,6 @@ SOURCES += src/main.cpp \
     src/engine/map.cpp \
     src/engine/battleengine.cpp \
     src/engine/unitinfo.cpp \
-    src/engine/skills/testskill.cpp \
     src/engine/controllers/human.cpp \
     src/engine/unit.cpp \
     src/engine/skills/walk.cpp \
@@ -56,7 +55,6 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/battleengine.h \
     include/engine/unitskill.h \
     include/engine/unitcontroller.h \
-    include/engine/skills/testskill.h \
     include/engine/controllers/human.h \
     include/interface/idbutton.h \
     include/engine/skills/walk.h \

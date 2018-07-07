@@ -2,6 +2,7 @@
 #define UNITCONTROLLER_H
 
 #include <random>
+#include <optional>
 
 #include "engine_traits.h"
 
@@ -28,7 +29,7 @@ public:
      * \param u unit that the skill will be chosen for.
      * \param m map containing all units in play.
      * \param i interface for user's input.
-     * \return It must return the number of the selected skill.
+     * \return It must return the number of the selected skill
      */
     virtual UIntegerType chooseSkill(const Unit *u, const Map *m, UserInterface *i) = 0;
 
@@ -37,9 +38,9 @@ public:
      * \param u unit that the angle will be chosen for.
      * \param m map containing all units in play.
      * \param i interface for user's input.
-     * \return Chosen angle.
+     * \return Chosen angle, if it's return does not have a value it means the choice was canceled
      */
-    virtual AngleType chooseAngle(const Unit *u, const Map *m, UserInterface *i) = 0;
+    virtual std::optional<AngleType> chooseAngle(const Unit *u, const Map *m, UserInterface *i) = 0;
 
     virtual UnitController *clone() const = 0;
 
@@ -62,12 +63,12 @@ class UnitController::UserInterface {
 public:
 
     UIntegerType askSkill(const Unit *u) { return this->controllerUserInterfaceAskSkillInput(u); }
-    UnitController::AngleType askAngle(const Unit *u) { return this->controllerUserInterfaceAskAngleInput(u); }
+    std::optional<UnitController::AngleType> askAngle(const Unit *u) { return this->controllerUserInterfaceAskAngleInput(u); }
 
 protected:
 
     virtual UIntegerType controllerUserInterfaceAskSkillInput(const Unit *) = 0;
-    virtual UnitController::AngleType controllerUserInterfaceAskAngleInput(const Unit *) = 0;
+    virtual std::optional<UnitController::AngleType> controllerUserInterfaceAskAngleInput(const Unit *) = 0;
 };
 
 #endif // UNITCONTROLLER_H

@@ -13,7 +13,7 @@ public:
     Human() : UnitController(false) {}
 
     virtual UIntegerType chooseSkill(const Unit *, const Map *, UserInterface *);
-    virtual AngleType chooseAngle(const Unit *, const Map *, UserInterface *);
+    virtual std::optional<AngleType> chooseAngle(const Unit *, const Map *, UserInterface *);
 
     virtual UnitController *clone() const { return new Human(); }
 };

@@ -13,7 +13,7 @@ UIntegerType Human::chooseSkill(const Unit *unit, const Map *, UserInterface *i)
     return i->askSkill(unit);
 }
 
-Human::AngleType Human::chooseAngle(const Unit *unit, const Map *, UserInterface *i) {
+std::optional<Human::AngleType> Human::chooseAngle(const Unit *unit, const Map *, UserInterface *i) {
 
     return i->askAngle(unit);
 }

@@ -61,6 +61,8 @@ private:
         for(Observer *observer : _observers) (observer->*ObserverMethod)(this, args...);
     }
 
+    bool _choose_internal(BattleWidget::InputInterface&);
+
     UIntegerType _team;
     ObserversList _observers;
     UnitController * const _controller;

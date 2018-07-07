@@ -23,6 +23,7 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
     _arrow_construct();
     _retbutton_construct();
     _timer_construct();
+    _cancel_button_construct();
 
     qRegisterMetaType<UIntegerType>("UIntegerType");
 
@@ -191,6 +192,11 @@ void BattleWidget::_skill_button_clicked(UIntegerType id){
     _input_interface->interfaceSkillButtonClicked(id);
 }
 
+void BattleWidget::_cancel_button_clicked() {
+
+    _input_interface->interfaceCancelButtonClicked();
+}
+
 RealType BattleWidget::_button_pos_calculate_static(bool x_dir, UIntegerType mode) {
 
     auto max = x_dir ? Traits<MainWindow>::width : Traits<MainWindow>::height;
@@ -281,6 +287,16 @@ void BattleWidget::_timer_construct() {
     QObject::connect(_timer, &QTimer::timeout, this, &BattleWidget::step);
 }
 
+void BattleWidget::_cancel_button_construct() {
+
+    _cancel_button = new QPushButton("Cancel", this);
+    _cancel_button->hide();
+    _cancel_button->setGeometry(0.9*Traits<MainWindow>::width, 0.9*Traits<MainWindow>::height,
+                                0.1*Traits<MainWindow>::width, 0.1*Traits<MainWindow>::height);
+
+    QObject::connect(_cancel_button, &QPushButton::clicked, this, &BattleWidget::_cancel_button_clicked);
+}
+
 void BattleWidget::InputManager::handleEvents() {
 
     std::unique_lock<std::mutex> lock(_input_mut);
@@ -306,11 +322,13 @@ void BattleWidget::InputManager::handleEvents() {
                 {
                     auto u = reinterpret_cast<const Unit *>(event.second);
                     _interface->showArrow(u->x(), u->y());
+                    _interface->showCancelButton();
                 }
                 break;
 
             case Event::AskAngleFinish:
                 _interface->hideArrow();
+                _interface->hideCancelButton();
                 break;
         }
     }
@@ -336,7 +354,7 @@ Vec2Type<IntegerType> BattleWidget::InputManager::askMouseClick() {
 
     _mouse_clicked = false;
 
-    while(!_mouse_clicked && _enable) _input_wait.wait(lock);
+    while(!_mouse_clicked && _enable && !_canceled) _input_wait.wait(lock);
 
     return _last_clicked_point;
 }
@@ -368,13 +386,16 @@ UIntegerType BattleWidget::InputManager::controllerUserInterfaceAskSkillInput(co
     return input;
 }
 
-UnitController::AngleType BattleWidget::InputManager::controllerUserInterfaceAskAngleInput(const Unit *u) {
+std::optional<UnitController::AngleType> BattleWidget::InputManager::controllerUserInterfaceAskAngleInput(const Unit *u) {
 
     _events.push(std::make_pair(Event::AskAngleStart, reinterpret_cast<const void *>(u)));
 
+    _canceled = false;
     auto cursor = askMouseClick();
 
     _events.push(std::make_pair(Event::AskAngleFinish, nullptr));
+
+    if(_canceled) return std::nullopt;
 
     QPointF p = _interface->_gview->mapToScene(cursor.x, cursor.y);
 
@@ -389,6 +410,17 @@ void BattleWidget::InputManager::interfaceSkillButtonClicked(UIntegerType id) {
     Q_UNUSED(lock);
 
     _last_skill_button_clicked = id;
+
+    _input_wait.notify_all();
+}
+
+void BattleWidget::InputManager::interfaceCancelButtonClicked() {
+
+    std::unique_lock<std::mutex> lock(_input_mut);
+
+    Q_UNUSED(lock);
+
+    _canceled = true;
 
     _input_wait.notify_all();
 }

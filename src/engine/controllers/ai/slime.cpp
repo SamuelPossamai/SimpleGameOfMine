@@ -25,7 +25,7 @@ UIntegerType Slime::chooseSkill(const Unit *u, const Map *m, UserInterface *) {
     return 0;
 }
 
-Slime::AngleType Slime::chooseAngle(const Unit *u, const Map *m, UserInterface *) {
+std::optional<Slime::AngleType> Slime::chooseAngle(const Unit *u, const Map *m, UserInterface *) {
 
     const Unit *closer_enemy = m->closerEnemy(u);
 

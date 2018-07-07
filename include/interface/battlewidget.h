@@ -9,6 +9,7 @@
 #include <QWidget>
 #include <QGraphicsPixmapItem>
 #include <QLabel>
+#include <QPushButton>
 
 #include "interface_traits.h"
 #include "graphicsview.h"
@@ -61,6 +62,9 @@ public:
 
     InputInterface inputInterface() const { return _input_interface; }
 
+    void showCancelButton() { _cancel_button->show(); }
+    void hideCancelButton() { _cancel_button->hide(); }
+
 public slots:
 
     void step();
@@ -79,6 +83,8 @@ private slots:
 
     void _skill_button_clicked(UIntegerType id);
 
+    void _cancel_button_clicked();
+
 private:
 
     static void _step_internal(BattleWidget *);
@@ -91,6 +97,7 @@ private:
     void _arrow_construct();
     void _retbutton_construct();
     void _timer_construct();
+    void _cancel_button_construct();
 
     QGraphicsView *_gview;
     QTimer *_timer;
@@ -98,6 +105,7 @@ private:
     BattleEngine *_engine;
 
     std::vector<IdButton *> _skill_buttons;
+    QPushButton *_cancel_button;
 
     QGraphicsPixmapItem *_arrow_item;
     QLabel *_message;
@@ -130,10 +138,11 @@ protected:
     void disable() { _enable = false; }
 
     virtual UIntegerType controllerUserInterfaceAskSkillInput(const Unit *) override;
-    virtual UnitController::AngleType controllerUserInterfaceAskAngleInput(const Unit *) override;
+    virtual std::optional<UnitController::AngleType> controllerUserInterfaceAskAngleInput(const Unit *) override;
 
     void interfaceSkillButtonClicked(UIntegerType id);
     void interfaceMouseReleaseEvent(QMouseEvent *event);
+    void interfaceCancelButtonClicked();
 
 private:
 
@@ -143,6 +152,7 @@ private:
     Vec2Type<IntegerType> _last_clicked_point;
 
     bool _mouse_clicked;
+    bool _canceled;
 
     std::mutex _input_mut;
     std::condition_variable _input_wait;
