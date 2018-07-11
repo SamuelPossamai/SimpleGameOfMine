@@ -1,13 +1,22 @@
 
-#ifndef CREATURES_FIGHTER_H
-#define CREATURES_FIGHTER_H
+#ifndef UNITSINFO_FIGHTER_H
+#define UNITSINFO_FIGHTER_H
 
 #include "unitinfo.h"
 
 namespace unitsinfo {
 
-UnitInfo *fighterInfo();
+class Fighter : public UnitInfo {
+
+public:
+
+    static Fighter *getInfo();
+
+private:
+
+    static Fighter *_info;
+};
 
 } /* namespace creature */
 
-#endif // CREATURES_FIGHTER_H
+#endif // UNITSINFO_FIGHTER_H

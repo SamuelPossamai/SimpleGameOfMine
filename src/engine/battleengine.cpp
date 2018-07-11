@@ -17,6 +17,7 @@ Unit *BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, U
     _map.addUnit(_units.back());
 
     _units.back()->attachObserver(this);
+    unit_info->init(_units.back());
 
     return _units.back();
 }

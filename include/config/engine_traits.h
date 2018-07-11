@@ -9,7 +9,7 @@ struct Traits <BattleEngine> {
 
     using SizeType = UIntegerType;
 
-    using PositionType = IntegerType;
+    using PositionType = RealType;
     using AngleType = RealType;
 
     enum class AngleUnitType { radians, degrees };

@@ -18,8 +18,8 @@ UIntegerType Walk::doAction(Unit *u, Map *, const Info& info, RealType angle){
 
     if(info.step >= 3*_dur) return 0;
 
-    UIntegerType dx = _ds*cos(angle);
-    UIntegerType dy = _ds*sin(angle);
+    IntegerType dx = _ds*cos(angle);
+    IntegerType dy = _ds*sin(angle);
 
     u->setPos(u->x() + dx, u->y() + dy);
 

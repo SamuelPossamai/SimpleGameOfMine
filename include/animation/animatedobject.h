@@ -1,8 +1,6 @@
 #ifndef ANIMATEDOBJECT_H
 #define ANIMATEDOBJECT_H
 
-#include <iostream>
-
 #include "animationhandler.h"
 
 /*!

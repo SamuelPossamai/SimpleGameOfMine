@@ -5,28 +5,21 @@
 
 namespace unitsinfo {
 
-static UnitInfo *__fighter_info__ = nullptr;
+Fighter *Fighter::_info = nullptr;
 
-static void __fighter_init__();
+Fighter *Fighter::getInfo() {
 
-UnitInfo *fighterInfo() {
+    if(_info) return _info;
 
-    if(__fighter_info__ == nullptr) __fighter_init__();
+    _info = new Fighter;
 
-    return __fighter_info__;
-}
+    _info->addSkill(new skill::Walk(10, 140), QPixmap(":/wing_boot.png").scaled(50, 50));
+    _info->addSkill(new skill::Walk(60, 0), QPixmap(":/x_simbol.png").scaled(50, 50));
 
-void __fighter_init__() {
+    _info->setSize(20);
+    _info->setHealth(20);
 
-    __fighter_info__ = new UnitInfo;
-
-    UnitInfo & __fighter_info__ = *unitsinfo::__fighter_info__;
-
-    __fighter_info__.addSkill(new skill::Walk(10, 140), QPixmap(":/wing_boot.png").scaled(50, 50));
-    __fighter_info__.addSkill(new skill::Walk(60, 0), QPixmap(":/x_simbol.png").scaled(50, 50));
-
-    __fighter_info__.setSize(20);
-    __fighter_info__.setHealth(20);
+    return _info;
 }
 
 } /* namespace creature */

@@ -1,8 +1,6 @@
 #ifndef UNITBASE_H
 #define UNITBASE_H
 
-#include <QProgressBar>
-
 #include "unitinfo.h"
 
 /*!
@@ -27,7 +25,7 @@ public:
      * \brief Construct an UnitBase passing UnitInfo, UnitInfo must be valid
      * \param info UnitInfo with the basic information of the type of this unit
      */
-    UnitBase(const UnitInfo *info);
+    explicit UnitBase(const UnitInfo *info);
 
     /*!
      * \brief Return the UnitInfo associated with this object

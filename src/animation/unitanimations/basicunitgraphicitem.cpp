@@ -61,7 +61,7 @@ void BasicUnitGraphicItem::unitSkillAdvance() {
     _obj->step();
 }
 
-void BasicUnitGraphicItem::unitReceivedDamage() {
+void BasicUnitGraphicItem::unitHealthChanged() {
 
     _health_bar->setValue(100*unit()->health()/unit()->maxHealth());
 }

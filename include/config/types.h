@@ -12,6 +12,7 @@ class UnitInfo;
 
 class UnitController;
 class UnitSkill;
+class UnitEffect;
 
 class Map;
 
@@ -28,6 +29,13 @@ class AnimationHandler;
 class ProgressBarItem;
 class UnitAnimationItem;
 class UnitAnimationItemFactory;
+
+namespace utility {
+
+class ImageColorChange;
+template<typename> class Interval;
+
+} /* namespace utility */
 
 using IntegerType = std::ptrdiff_t;
 using UIntegerType = std::size_t;

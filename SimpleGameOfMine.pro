@@ -40,7 +40,11 @@ SOURCES += src/main.cpp \
     src/animation/unitanimations/basicunitgraphicitem.cpp \
     src/interface/graphicsview.cpp \
     src/animation/unitanimationfactories/slimeanimationfactory.cpp \
-    src/animation/unitanimationfactories/fighteranimationfactory.cpp
+    src/animation/unitanimationfactories/fighteranimationfactory.cpp \
+    src/engine/effects/regeneration.cpp \
+    src/animation/unitanimationfactories/redslimeanimationfactory.cpp \
+    src/engine/unitsinfo/rslime.cpp \
+    src/utility/random.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -89,7 +93,14 @@ HEADERS += include/interface/mainwindow.h \
     include/animation/unitanimationitem.h \
     include/animation/unitanimationitemfactory.h \
     include/animation/unitanimationfactories/slimeanimationfactory.h \
-    include/animation/unitanimationfactories/fighteranimationfactory.h
+    include/animation/unitanimationfactories/fighteranimationfactory.h \
+    include/engine/uniteffect.h \
+    include/engine/effects/regeneration.h \
+    include/utility/interval.h \
+    include/utility/imagecolorchange.h \
+    include/animation/unitanimationfactories/redslimeanimationfactory.h \
+    include/engine/unitsinfo/rslime.h \
+    include/utility/random.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

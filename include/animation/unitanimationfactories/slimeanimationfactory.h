@@ -14,10 +14,15 @@ public:
 
     static SlimeAnimationFactory *getFactory();
 
+protected:
+
+    SlimeAnimationFactory();
+
+    Animation slimeNormalAnimation;
+    Animation slimeAttackAnimation;
+
 private:
 
-    static Animation _slime_animation;
-    static Animation _slime_attack_animation;
     static SlimeAnimationFactory *_factory;
 };
 

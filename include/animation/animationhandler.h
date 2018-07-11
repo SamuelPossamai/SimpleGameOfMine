@@ -1,8 +1,6 @@
 #ifndef ANIMATIONHANDLER_H
 #define ANIMATIONHANDLER_H
 
-#include <random>
-
 #include "animation.h"
 
 /*!
@@ -18,7 +16,9 @@ public:
 
     void setAnimation(Animation *animation) {
 
-        _animation = animation; _vec_pos = 0; _cur_step = (animation) ? animation->steps() : 0;
+        _animation = animation;
+        _vec_pos = 0;
+        _cur_step = (animation) ? animation->steps() : 0;
     }
 
     const Animation *animation() const { return _animation; }
@@ -45,8 +45,6 @@ private:
 
     UIntegerType _cur_step;
     UIntegerType _vec_pos;
-
-    static std::mt19937 _gen;
 };
 
 #endif // ANIMATIONHANDLER_H

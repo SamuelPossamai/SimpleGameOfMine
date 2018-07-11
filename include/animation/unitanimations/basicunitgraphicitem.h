@@ -45,7 +45,8 @@ protected:
     virtual void unitSkillStarted(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSkillStarted); }
     virtual void unitSkillFinished(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSkillFinished); }
     virtual void unitSkillAdvance(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSkillAdvance); }
-    virtual void unitReceivedDamage(Unit *) override { _events.push(&BasicUnitGraphicItem::unitReceivedDamage); }
+    virtual void unitReceivedDamage(Unit *) override { _events.push(&BasicUnitGraphicItem::unitHealthChanged); }
+    virtual void unitHealed(Unit *) override { _events.push(&BasicUnitGraphicItem::unitHealthChanged); }
 
     void unitDeathEvent() { hideAnimation(); }
     void unitSelected() { selectEffect(); }
@@ -55,7 +56,7 @@ protected:
     void unitSkillStarted();
     void unitSkillFinished();
     void unitSkillAdvance();
-    void unitReceivedDamage();
+    void unitHealthChanged();
 
     void showAnimation() { _obj->show(); _health_bar->show(); }
     void hideAnimation() { _obj->hide(); _health_bar->hide(); }

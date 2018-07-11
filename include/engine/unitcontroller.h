@@ -22,7 +22,9 @@ public:
      * \brief Construct an UnitController.
      * \param fast indicate if the controller computes fast, if so it will be able to perform optimizations, true by default.
      */
-    UnitController(bool fast = true) : _fast(fast) {}
+    explicit UnitController(bool fast = true) : _fast(fast) {}
+
+    virtual ~UnitController() {}
 
     /*!
      * \brief This method is called when this controller needs to choose an skill in a game's battle.

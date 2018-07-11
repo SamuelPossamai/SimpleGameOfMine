@@ -2,7 +2,6 @@
 #define UNITINFO_H
 
 #include "engine_traits.h"
-#include "animation.h"
 #include "unitskill.h"
 
 class UnitInfo {
@@ -15,6 +14,8 @@ public:
     using SizeType = Traits<Unit>::SizeType;
 
     UnitInfo() {}
+
+    virtual ~UnitInfo() {}
 
     void setHealth(HealthType health) { _max_health = health; }
     HealthType health() const { return _max_health; }
@@ -32,6 +33,12 @@ public:
 
     UIntegerType skills() const { return _skills.size(); }
 
+    virtual void init(Unit *u) const { Q_UNUSED(u); }
+
+    void copy(UnitInfo *i) { copySkills(i); copyStatus(i); }
+    void copySkills(UnitInfo *i) { _skills = i->_skills; }
+    void copyStatus(UnitInfo *i);
+
 private:
 
     using SkillVector = std::vector<std::pair<UnitSkill *, QPixmap> >;
@@ -41,7 +48,6 @@ private:
     DefenseType _base_defense;
 
     SizeType _size;
-    Animation _idle_animation;
 
     SkillVector _skills;
 };

@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <bitset>
-#include <random>
 
 #include <QGraphicsItem>
 
@@ -120,6 +119,8 @@ public:
      * \return number of images in the animation.
      */
     UIntegerType images() const { return _vector.size(); }
+
+    void changeColor(const utility::ImageColorChange& icch);
 
 private:
 

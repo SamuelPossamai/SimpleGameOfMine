@@ -1,13 +1,22 @@
 
-#ifndef CREATURES_SLIME_H
-#define CREATURES_SLIME_H
+#ifndef UNITSINFO_SLIME_H
+#define UNITSINFO_SLIME_H
 
 #include "unitinfo.h"
 
 namespace unitsinfo {
 
-UnitInfo *slimeInfo();
+class Slime : public UnitInfo {
+
+public:
+
+    static Slime *getInfo();
+
+private:
+
+    static Slime *_info;
+};
 
 } /* namespace creature */
 
-#endif // CREATURES_SLIME_H
+#endif // UNITSINFO_SLIME_H

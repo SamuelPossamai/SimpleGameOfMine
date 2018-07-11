@@ -1,7 +1,8 @@
 
-#include "animationhandler.h"
 
-std::mt19937 AnimationHandler::_gen((std::random_device())());
+#include <utility/random.h>
+
+#include "animationhandler.h"
 
 void AnimationHandler::start(bool rnd_start) {
 
@@ -14,9 +15,7 @@ void AnimationHandler::start(bool rnd_start) {
 
     if(rnd_start && _animation->getFlag(Animation::Flag::RandomStart) && _animation->steps() > 0){
 
-        std::uniform_int_distribution<UIntegerType> rnd(0, _animation->steps() - 1);
-
-        UIntegerType n = rnd(_gen);
+        UIntegerType n = utility::Random::uniformIntDistribution(0, _animation->steps() - 1);
 
         for(UIntegerType i = 0; i < n; i++) next();
     }

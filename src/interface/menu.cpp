@@ -7,10 +7,12 @@
 #include "helpwidget.h"
 #include "unitsinfo/slime.h"
 #include "unitsinfo/fighter.h"
+#include "unitsinfo/rslime.h"
 #include "controllers/human.h"
 #include "controllers/ai/slime.h"
 #include "unitanimationfactories/fighteranimationfactory.h"
 #include "unitanimationfactories/slimeanimationfactory.h"
+#include "unitanimationfactories/redslimeanimationfactory.h"
 
 static UnitController *human_controller = new controller::Human;
 static UnitController *ai_controller = new controller::AI::Slime;
@@ -41,8 +43,8 @@ void Menu::_player_vs_ai_start_button_clicked(){
 
     BattleWidget *bw = new BattleWidget;
 
-    bw->addUnit(unitsinfo::fighterInfo(), human_controller, unitanimationfactory::FighterAnimationFactory::getFactory(), 0);
-    bw->addUnit(unitsinfo::slimeInfo(), ai_controller, unitanimationfactory::SlimeAnimationFactory::getFactory(), 1);
+    bw->addUnit(unitsinfo::Fighter::getInfo(), human_controller, unitanimationfactory::FighterAnimationFactory::getFactory(), 0);
+    bw->addUnit(unitsinfo::Slime::getInfo(), ai_controller, unitanimationfactory::SlimeAnimationFactory::getFactory(), 1);
 
     bw->start();
 
@@ -53,8 +55,8 @@ void Menu::_player_vs_player_start_button_clicked() {
 
     BattleWidget *bw = new BattleWidget;
 
-    bw->addUnit(unitsinfo::slimeInfo(), human_controller, unitanimationfactory::SlimeAnimationFactory::getFactory(), 0);
-    bw->addUnit(unitsinfo::slimeInfo(), human_controller, unitanimationfactory::SlimeAnimationFactory::getFactory(), 1);
+    bw->addUnit(unitsinfo::RSlime::getInfo(), human_controller, unitanimationfactory::RedSlimeAnimationFactory::getFactory(), 0);
+    bw->addUnit(unitsinfo::Slime::getInfo(), human_controller, unitanimationfactory::SlimeAnimationFactory::getFactory(), 1);
 
     bw->start();
 
@@ -72,9 +74,9 @@ void Menu::_challenge_start_button_clicked() {
 
     BattleWidget *bw = new BattleWidget;
 
-    bw->addUnit(unitsinfo::slimeInfo(), human_controller, unitanimationfactory::SlimeAnimationFactory::getFactory(), 0);
+    bw->addUnit(unitsinfo::Slime::getInfo(), human_controller, unitanimationfactory::SlimeAnimationFactory::getFactory(), 0);
     for(UIntegerType i = 0; i < 5; i++) {
-        bw->addUnit(unitsinfo::slimeInfo(), ai_controller, unitanimationfactory::SlimeAnimationFactory::getFactory(), 1);
+        bw->addUnit(unitsinfo::Slime::getInfo(), ai_controller, unitanimationfactory::SlimeAnimationFactory::getFactory(), 1);
     }
 
     bw->start();

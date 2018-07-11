@@ -8,6 +8,8 @@ namespace unitanimationfactory {
 
 class FighterAnimationFactory : public UnitAnimationItemFactory {
 
+    FighterAnimationFactory();
+
 public:
 
     virtual UnitAnimationItem *create(Unit *) override;
@@ -16,9 +18,9 @@ public:
 
 private:
 
-    static Animation _walking_animation;
-    static Animation _idle_animation;
-    static Animation _attacking_animation;
+    Animation _walking_animation;
+    Animation _idle_animation;
+    Animation _attacking_animation;
     static FighterAnimationFactory *_factory;
 };
 
