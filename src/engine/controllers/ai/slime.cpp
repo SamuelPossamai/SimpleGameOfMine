@@ -1,11 +1,15 @@
 
 #include <cmath>
 
+#include <utility/random.h>
+
 #include "controllers/ai/slime.h"
 #include "map.h"
 #include "unit.h"
 
 using namespace controller::AI;
+
+Slime *Slime::_controller = nullptr;
 
 UIntegerType Slime::chooseSkill(const Unit *u, const Map *m, UserInterface *) {
 
@@ -29,8 +33,6 @@ std::optional<Slime::AngleType> Slime::chooseAngle(const Unit *u, const Map *m, 
 
     const Unit *closer_enemy = m->closerEnemy(u);
 
-    std::uniform_real_distribution<double> dist(-0.1, 0.1);
-
-    return dist(UnitController::generator)*M_PI + atan2(closer_enemy->y() - u->y(), closer_enemy->x() - u->x());
+    return utility::Random::realDistribution(-0.1, 0.1)*M_PI + atan2(closer_enemy->y() - u->y(), closer_enemy->x() - u->x());
 }
 

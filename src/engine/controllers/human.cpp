@@ -8,6 +8,8 @@
 
 using namespace controller;
 
+Human *Human::_controller = nullptr;
+
 UIntegerType Human::chooseSkill(const Unit *unit, const Map *, UserInterface *i) {
 
     return i->askSkill(unit);

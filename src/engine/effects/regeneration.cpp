@@ -1,8 +1,7 @@
 
 #include "effects/regeneration.h"
 
-namespace effect {
+using namespace effect;
 
-std::set<Regeneration *, Regeneration::RegCompare> Regeneration::_effects;
+utility::OneCopyMemoryManager<Regeneration, Regeneration::RegCompare> Regeneration::_effects;
 
-} /* namespace effect */

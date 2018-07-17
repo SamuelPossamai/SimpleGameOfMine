@@ -5,7 +5,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_CXXFLAGS += -std=c++17
 
-INCLUDEPATH += include include/animation include/config include/interface include/engine include/utils
+INCLUDEPATH += include include/animation include/config include/interface include/engine include/utils include/utility
 
 TARGET = SGOM
 TEMPLATE = app
@@ -33,7 +33,6 @@ SOURCES += src/main.cpp \
     src/engine/controllers/ai/slime.cpp \
     src/engine/unitsinfo/slime.cpp \
     src/interface/helpwidget.cpp \
-    src/engine/unitcontroller.cpp \
     src/engine/unitsinfo/fighter.cpp \
     src/engine/skills/basicattack.cpp \
     src/animation/progressbaritem.cpp \
@@ -100,7 +99,8 @@ HEADERS += include/interface/mainwindow.h \
     include/utility/imagecolorchange.h \
     include/animation/unitanimationfactories/redslimeanimationfactory.h \
     include/engine/unitsinfo/rslime.h \
-    include/utility/random.h
+    include/utility/random.h \
+    include/utility/onecopymemorymanager.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

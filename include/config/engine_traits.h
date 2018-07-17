@@ -31,6 +31,7 @@ struct Traits <Unit> : public Traits<BattleEngine> {
     using HealthType = UIntegerType;
     using AttackType = UIntegerType;
     using DefenseType = UIntegerType;
+    using SpeedType = UIntegerType;
 };
 
 

@@ -8,18 +8,20 @@ BattleEngine::~BattleEngine() {
 
     _delete_thread();
 
-    for(Unit *unit : _units) delete unit;
+    for(auto& v : _units) delete v.unit;
 }
 
 Unit *BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team) {
 
-    _units.push_back(new Unit(unit_info, controller, &_map, team, _interface));
-    _map.addUnit(_units.back());
+    _units.push_back(ContainerContent{ new Unit(unit_info, controller, &_map, team, _interface), 0 });
+    _map.addUnit(_units.back().unit);
 
-    _units.back()->attachObserver(this);
-    unit_info->init(_units.back());
+    _units.back().unit->attachObserver(this);
+    unit_info->init(_units.back().unit);
 
-    return _units.back();
+    if(unit_info->speed() > _max_speed) _max_speed = unit_info->speed();
+
+    return _units.back().unit;
 }
 
 void BattleEngine::step(){
@@ -37,13 +39,6 @@ void BattleEngine::step(){
     if(_step_mut.try_lock()) {
 
         if(_step_loop()) _step_mut.unlock();
-
-    }else {
-
-        for(UIntegerType i = 0; i < _units.size(); i++) {
-
-            if(_units[i]->isDead()) continue;
-        }
     }
 }
 
@@ -60,12 +55,20 @@ bool BattleEngine::_step_loop(){
 
     for(; _cur_unit < _units.size(); _cur_unit++) {
 
-        auto &unit = _units[_cur_unit];
+        auto &unit = _units[_cur_unit].unit;
+        auto &to_perform = _units[_cur_unit].to_perform;
         auto controller = unit->controller();
 
         if(unit->isDead()) continue;
 
-        if(unit->isPerformingSkill()) unit->perform();
+        if(unit->isPerformingSkill()) {
+
+            if((to_perform += (RealType(unit->unitInfo()->speed())/_max_speed)) >= 1){
+
+                to_perform -= 1;
+                unit->perform();
+            }
+        }
         else {
 
             _ask_controller(unit, controller);

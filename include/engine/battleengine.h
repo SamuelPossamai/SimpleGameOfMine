@@ -64,7 +64,11 @@ private:
     BattleWidget *_interface;
 
     UIntegerType _cur_unit;
-    std::vector<Unit *> _units;
+
+    struct ContainerContent { Unit *unit; RealType to_perform; };
+    std::vector<ContainerContent> _units;
+
+    Unit::SpeedType _max_speed;
 
     std::mutex _step_mut;
     std::thread *_t;

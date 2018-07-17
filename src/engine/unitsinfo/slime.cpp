@@ -15,12 +15,13 @@ Slime *Slime::getInfo() {
 
     _info = new Slime;
 
-    _info->addSkill(new skill::Walk(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
-    _info->addSkill(new skill::Evade, QPixmap(":/wing_boot_blue.png").scaled(50, 50));
-    _info->addSkill(new skill::Thrust(12, 90), QPixmap(":/x_simbol.png").scaled(50, 50));
+    _info->addSkill(skill::Walk::getSkill(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
+    _info->addSkill(skill::Evade::getSkill(), QPixmap(":/wing_boot_blue.png").scaled(50, 50));
+    _info->addSkill(skill::Thrust::getSkill(12, 90), QPixmap(":/x_simbol.png").scaled(50, 50));
 
     _info->setSize(22);
     _info->setHealth(10);
+    _info->setSpeed(100);
 
     return _info;
 }

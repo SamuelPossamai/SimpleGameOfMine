@@ -10,15 +10,20 @@ namespace AI {
 
 class Slime : public UnitController {
 
-public:
+protected:
 
     Slime() {}
+
+public:
 
     virtual UIntegerType chooseSkill(const Unit *, const Map *, UserInterface *);
     virtual std::optional<AngleType> chooseAngle(const Unit *, const Map *, UserInterface *);
 
-    virtual UnitController *clone() const { return new Slime(); }
+    static Slime *getController() { if(!_controller) _controller = new Slime; return _controller; }
 
+private:
+
+    static Slime *_controller;
 };
 
 } /* namespace AI */

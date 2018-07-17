@@ -2,7 +2,8 @@
 #ifndef FIGHTERANIMATIONFACTORY_H
 #define FIGHTERANIMATIONFACTORY_H
 
-#include <unitanimationitemfactory.h>
+#include "unitanimationitemfactory.h"
+#include "animation.h"
 
 namespace unitanimationfactory {
 

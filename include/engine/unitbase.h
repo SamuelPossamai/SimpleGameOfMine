@@ -20,6 +20,7 @@ public:
     using PositionType = Traits<Unit>::PositionType;
     using AngleType = Traits<Unit>::AngleType;
     using SizeType = Traits<Unit>::SizeType;
+    using SpeedType = Traits<Unit>::SpeedType;
 
     /*!
      * \brief Construct an UnitBase passing UnitInfo, UnitInfo must be valid

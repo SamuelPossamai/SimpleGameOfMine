@@ -2,7 +2,7 @@
 #ifndef UNITSKILL_H
 #define UNITSKILL_H
 
-#include "animation.h"
+#include <config/types.h>
 
 /*!
  * \brief This is a virtual pure class that represents an unit skill, all skills need to inherit it directly or indirectly.
@@ -46,13 +46,6 @@ public:
      * \return Number of steps until the next call to 'action', to stop the skill return 0.
      */
     UIntegerType operator() (Unit *unit, Map *map, const Info& info) { return this->action(unit, map, info); }
-
-    /*!
-     * \brief This function is virtual pure and must be implemented in a derived class.
-     * \brief Create an dynamic allocated copy of the object.
-     * \return An copy of the object.
-     */
-    virtual UnitSkill *clone() const = 0;
 
     /*!
      * \brief Return true if this skill needs an angle to be performed.

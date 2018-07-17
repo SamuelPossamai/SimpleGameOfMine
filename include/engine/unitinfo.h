@@ -1,5 +1,10 @@
+
 #ifndef UNITINFO_H
 #define UNITINFO_H
+
+#include <vector>
+
+#include <QPixmap>
 
 #include "engine_traits.h"
 #include "unitskill.h"
@@ -12,19 +17,16 @@ public:
     using AttackType = Traits<Unit>::AttackType;
     using DefenseType = Traits<Unit>::DefenseType;
     using SizeType = Traits<Unit>::SizeType;
+    using SpeedType = Traits<Unit>::SpeedType;
 
-    UnitInfo() {}
+    UnitInfo() : _max_health(0), _base_attack(0), _speed(0), _size(0) {}
 
     virtual ~UnitInfo() {}
 
-    void setHealth(HealthType health) { _max_health = health; }
     HealthType health() const { return _max_health; }
-
-    void setBaseAttack(AttackType attack) { _base_attack = attack; }
     AttackType baseAttack() { return _base_attack; }
-
-    void setSize(SizeType size) { _size = size; }
     SizeType size() const { return _size; }
+    SpeedType speed() const { return _speed; }
 
     void addSkill(UnitSkill *skill, const QPixmap& icon) { _skills.emplace_back(skill, icon); }
     const QPixmap& skillIcon(UIntegerType n) const { return _skills[n].second; }
@@ -35,9 +37,16 @@ public:
 
     virtual void init(Unit *u) const { Q_UNUSED(u); }
 
-    void copy(UnitInfo *i) { copySkills(i); copyStatus(i); }
-    void copySkills(UnitInfo *i) { _skills = i->_skills; }
-    void copyStatus(UnitInfo *i);
+    void copy(const UnitInfo *i) { copySkills(i); copyStatus(i); }
+    void copySkills(const UnitInfo *i) { _skills = i->_skills; }
+    void copyStatus(const UnitInfo *i);
+
+protected:
+
+    void setHealth(HealthType health) { _max_health = health; }
+    void setSize(SizeType size) { _size = size; }
+    void setBaseAttack(AttackType attack) { _base_attack = attack; }
+    void setSpeed(SpeedType speed) { _speed = speed; }
 
 private:
 
@@ -46,6 +55,7 @@ private:
     HealthType _max_health;
     AttackType _base_attack;
     DefenseType _base_defense;
+    SpeedType _speed;
 
     SizeType _size;
 

@@ -5,18 +5,29 @@
 #include "unitskill.h"
 #include "walk.h"
 
+#include <utility/onecopymemorymanager.h>
+
 namespace skill {
 
 class Thrust : public Walk {
 
-public:
+    friend class utility::OneCopyMemoryManager<Thrust>;
+
+protected:
 
     Thrust(UIntegerType duration, UIntegerType distance) : Walk(false, duration, distance) {}
     Thrust(const Thrust& other) : Walk(false, other) {}
 
+public:
+
     virtual UIntegerType action(Unit*, Map*, const Info&) override;
 
-    virtual UnitSkill *clone() const override { return new Thrust(*this); }
+    template <typename... Args>
+    static Thrust *getSkill(Args... args) { return _skills.get(args...); }
+
+private:
+
+    static utility::OneCopyMemoryManager<Thrust> _skills;
 };
 
 } /* namespace skill */

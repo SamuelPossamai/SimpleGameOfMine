@@ -7,6 +7,8 @@
 
 namespace skill {
 
+Walk::MemoryManager Walk::_skills;
+
 UIntegerType Walk::action(Unit *u, Map *m, const Info& info) {
 
     return doAction(u, m, info, info.angle);
@@ -16,14 +18,16 @@ UIntegerType Walk::doAction(Unit *u, Map *, const Info& info, RealType angle){
 
     if(info.step == 0) u->setAngle(angle);
 
-    if(info.step >= 3*_dur) return 0;
+    static const UIntegerType period = 3;
 
-    IntegerType dx = _ds*cos(angle);
-    IntegerType dy = _ds*sin(angle);
+    if(info.step >= period*_dur) return 0;
+
+    Unit::PositionType dx = _ds*cos(angle);
+    Unit::PositionType dy = _ds*sin(angle);
 
     u->setPos(u->x() + dx, u->y() + dy);
 
-    return 3;
+    return period;
 }
 
 } /* namespace skill */

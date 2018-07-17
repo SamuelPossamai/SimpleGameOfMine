@@ -7,6 +7,8 @@
 
 namespace skill {
 
+utility::OneCopyMemoryManager<Thrust> Thrust::_skills;
+
 UIntegerType Thrust::action(Unit *u, Map *m, const Info& info) {
 
     Map::UnitsVector v;

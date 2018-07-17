@@ -22,6 +22,7 @@ RSlime *RSlime::getInfo() {
     _info = new RSlime;
 
     _info->copy(static_cast<UnitInfo *>(slime_info));
+    _info->setSpeed(_info->speed()*0.9);
 
     return _info;
 }

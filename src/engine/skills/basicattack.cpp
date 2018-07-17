@@ -5,6 +5,8 @@
 
 using namespace skill;
 
+utility::OneCopyMemoryManager<BasicAttack> BasicAttack::_skills;
+
 UIntegerType BasicAttack::action(Unit *, Map *, const Info& info) {
 
     (void) info;

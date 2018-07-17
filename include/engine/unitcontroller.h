@@ -44,13 +44,7 @@ public:
      */
     virtual std::optional<AngleType> chooseAngle(const Unit *u, const Map *m, UserInterface *i) = 0;
 
-    virtual UnitController *clone() const = 0;
-
     bool isFast() const { return _fast; }
-
-protected:
-
-    static std::mt19937 generator;
 
 private:
 

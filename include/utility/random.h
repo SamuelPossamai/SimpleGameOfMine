@@ -26,6 +26,8 @@ public:
         return std::uniform_int_distribution<UIntegerType>(min, max)(_gen);
     }
 
+    static RealType realDistribution(RealType min, RealType max) { return std::uniform_real_distribution<RealType>(min, max)(_gen); }
+
 private:
 
     static std::mt19937 _gen;

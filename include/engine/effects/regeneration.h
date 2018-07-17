@@ -4,6 +4,8 @@
 
 #include <set>
 
+#include <utility/onecopymemorymanager.h>
+
 #include "uniteffect.h"
 
 namespace effect {
@@ -22,17 +24,7 @@ public:
     template <typename... Args>
     static const UnitEffect *getEffect(Args... args) {
 
-        Regeneration r(args...);
-
-        auto it = _effects.find(&r);
-
-        if(it != _effects.end()) return *it;
-
-        Regeneration *new_r = new Regeneration(args...);
-
-        _effects.insert(new_r);
-
-        return new_r;
+        return _effects.get(args...);
     }
 
 private:
@@ -42,16 +34,16 @@ private:
 
     struct RegCompare {
 
-        bool operator() (Regeneration * const & r1, Regeneration * const & r2) {
+        bool operator() (Regeneration& r1, Regeneration& r2) {
 
-            if(r1->_amount < r2->_amount) return true;
-            if(r1->_period < r2->_amount) return true;
+            if(r1._amount < r2._amount) return true;
+            if(r1._period < r2._amount) return true;
 
             return false;
         }
     };
 
-    static std::set<Regeneration *, RegCompare> _effects;
+    static utility::OneCopyMemoryManager<Regeneration, RegCompare> _effects;
 };
 
 } /* namespace effect */

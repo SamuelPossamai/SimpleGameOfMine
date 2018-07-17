@@ -5,12 +5,14 @@
 
 namespace skill {
 
+Evade *Evade::_skill = nullptr;
+
 UIntegerType Evade::action(Unit *u, Map *, const Info& info) {
 
     if(info.step < 10) {
 
-        UIntegerType dx = 10*cos(u->angle());
-        UIntegerType dy = 10*sin(u->angle());
+        Unit::PositionType dx = 10*cos(u->angle());
+        Unit::PositionType dy = 10*sin(u->angle());
 
         u->setAngle(u->angle() + 0.05);
 

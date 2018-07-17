@@ -8,14 +8,20 @@ namespace controller {
 
 class Human : public UnitController {
 
-public:
+protected:
 
     Human() : UnitController(false) {}
+
+public:
 
     virtual UIntegerType chooseSkill(const Unit *, const Map *, UserInterface *);
     virtual std::optional<AngleType> chooseAngle(const Unit *, const Map *, UserInterface *);
 
-    virtual UnitController *clone() const { return new Human(); }
+    static Human *getController() { if(!_controller) _controller = new Human; return _controller; }
+
+private:
+
+    static Human *_controller;
 };
 
 } /* namespace Controllers */

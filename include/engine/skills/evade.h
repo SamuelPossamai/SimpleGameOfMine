@@ -8,13 +8,25 @@ namespace skill {
 
 class Evade : public UnitSkill {
 
-public:
+protected:
 
     Evade() : UnitSkill(false) {}
 
+public:
+
+
     virtual UIntegerType action(Unit*, Map*, const Info&) override;
 
-    virtual UnitSkill *clone() const override { return new Evade; }
+    static Evade *getSkill() {
+
+        if(!_skill) _skill =  new Evade;
+
+        return _skill;
+    }
+
+private:
+
+    static Evade *_skill;
 };
 
 } /* namespace skill */
