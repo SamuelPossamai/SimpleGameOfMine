@@ -5,7 +5,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_CXXFLAGS += -std=c++17
 
-INCLUDEPATH += include include/animation include/config include/interface include/engine include/utils include/utility
+INCLUDEPATH += include include/animation include/config include/interface include/engine include/utils include/utility include/memory
 
 TARGET = SGOM
 TEMPLATE = app
@@ -43,7 +43,8 @@ SOURCES += src/main.cpp \
     src/engine/effects/regeneration.cpp \
     src/animation/unitanimationfactories/redslimeanimationfactory.cpp \
     src/engine/unitsinfo/rslime.cpp \
-    src/utility/random.cpp
+    src/utility/random.cpp \
+    src/memory/memorymanager.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -100,7 +101,10 @@ HEADERS += include/interface/mainwindow.h \
     include/animation/unitanimationfactories/redslimeanimationfactory.h \
     include/engine/unitsinfo/rslime.h \
     include/utility/random.h \
-    include/utility/onecopymemorymanager.h
+    include/memory/onecopymemorymanager.h \
+    include/engine/unitsinfo/unitclassinfo.h \
+    include/memory/memorymanager.h \
+    include/memory/onecopymemorymanagerbasic.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

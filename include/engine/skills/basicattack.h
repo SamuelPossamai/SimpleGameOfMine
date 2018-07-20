@@ -2,7 +2,7 @@
 #ifndef SKILLS_BASICATTACK_H
 #define SKILLS_BASICATTACK_H
 
-#include <utility/onecopymemorymanager.h>
+#include <memory/onecopymemorymanager.h>
 
 #include "unitskill.h"
 
@@ -10,7 +10,7 @@ namespace skill {
 
 class BasicAttack : public UnitSkill {
 
-    friend class utility::OneCopyMemoryManager<BasicAttack>;
+    friend class OneCopyMemoryManager<BasicAttack>;
 
 protected:
 
@@ -23,9 +23,9 @@ public:
 
     bool operator<(const BasicAttack& other) const {
 
-        if(_distance < other._distance) return true;
-        if(_damage < other._damage) return true;
-        return false;
+        if(_distance != other._distance) return _distance < other._distance;
+
+        return _damage < other._damage;
     }
 
     template<typename... Args>
@@ -36,7 +36,7 @@ private:
     UIntegerType _distance;
     UIntegerType _damage;
 
-    static utility::OneCopyMemoryManager<BasicAttack> _skills;
+    static OneCopyMemoryManager<BasicAttack> _skills;
 };
 
 }

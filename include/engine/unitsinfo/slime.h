@@ -12,6 +12,8 @@ public:
 
     static Slime *getInfo();
 
+    virtual ~Slime();
+
 private:
 
     static Slime *_info;

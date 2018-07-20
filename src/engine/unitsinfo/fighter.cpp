@@ -5,22 +5,22 @@
 
 namespace unitsinfo {
 
-Fighter *Fighter::_info = nullptr;
+Fighter::MemoryManager Fighter::_copies;
 
-Fighter *Fighter::getInfo() {
+Fighter::~Fighter() {
 
-    if(_info) return _info;
+    skill::Walk::MemoryInterface::noLongerDepend(10, 140);
+    skill::Walk::MemoryInterface::noLongerDepend(60, 0);
+}
 
-    _info = new Fighter;
+Fighter::Fighter(const Attributes& attr) : UnitClassInfo(attr, 20) {
 
-    _info->addSkill(skill::Walk::getSkill(10, 140), QPixmap(":/wing_boot.png").scaled(50, 50));
-    _info->addSkill(skill::Walk::getSkill(60, 0), QPixmap(":/x_simbol.png").scaled(50, 50));
+    addSkill(skill::Walk::MemoryInterface::dependentGet(10, 140), QPixmap(":/wing_boot.png").scaled(50, 50));
+    addSkill(skill::Walk::MemoryInterface::dependentGet(60, 0), QPixmap(":/x_simbol.png").scaled(50, 50));
 
-    _info->setSize(20);
-    _info->setHealth(20);
-    _info->setSpeed(100);
-
-    return _info;
+    setSize(20);
+    setHealth(20);
+    setSpeed(100);
 }
 
 } /* namespace creature */

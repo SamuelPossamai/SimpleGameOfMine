@@ -12,6 +12,8 @@ class UnitAnimationItemFactory {
 
 public:
 
+    virtual ~UnitAnimationItemFactory() {}
+
     /*!
      * \brief Create an UnitAnimationItem, the item cerated will depend on the derived implementation of this method
      * \param u Unit that will be observed by the UnitAnimationItem

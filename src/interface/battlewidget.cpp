@@ -8,6 +8,8 @@
 #include <QScrollBar>
 #include <QKeyEvent>
 
+#include <memory/memorymanager.h>
+
 #include "mainwindow.h"
 #include "battlewidget.h"
 #include "battleengine.h"
@@ -18,6 +20,8 @@
 BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
     QWidget(parent), _arrow_item(nullptr), _message(nullptr), _input_interface(std::make_shared<InputManager>(this)) {
 
+    MemoryManager::cleanAll(25);
+
     _gview_construct();
     _engine_construct();
     _arrow_construct();
@@ -25,7 +29,7 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
     _timer_construct();
     _cancel_button_construct();
 
-    qRegisterMetaType<UIntegerType>("UIntegerType");
+    setStyleSheet("background-color:lightGray;");
 
     _input_interface->enable();
 }
@@ -241,6 +245,12 @@ void BattleWidget::_gview_construct() {
     _gview = new GraphicsView(this, new QGraphicsScene(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height, this), this);
 
     _gview->setGeometry(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height);
+
+    QPixmap p(Traits<MainWindow>::width, Traits<MainWindow>::height);
+
+    p.fill(Qt::white);
+
+    _gview->scene()->addPixmap(p);
 
     _gview->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     _gview->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);

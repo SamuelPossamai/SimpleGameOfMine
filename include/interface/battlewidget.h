@@ -11,9 +11,10 @@
 #include <QLabel>
 #include <QPushButton>
 
-#include "interface_traits.h"
+#include <config/interface_traits.h>
+#include <engine/unitcontroller.h>
+
 #include "graphicsview.h"
-#include "unitcontroller.h"
 
 /*!
  * \brief Widget that manages the interface in a battle

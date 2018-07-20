@@ -14,7 +14,6 @@ protected:
 
 public:
 
-
     virtual UIntegerType action(Unit*, Map*, const Info&) override;
 
     static Evade *getSkill() {

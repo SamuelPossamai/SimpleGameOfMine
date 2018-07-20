@@ -22,7 +22,7 @@ public:
      * \sa Unit::attachHandler(Unit::Handler *)
      * \param u The unit that a base class object will observe and display
      */
-    UnitAnimationItem(Unit *u) : _scene(nullptr), _unit(u) { u->attachObserver(this); }
+    explicit UnitAnimationItem(Unit *u) : _scene(nullptr), _unit(u) { u->attachObserver(this); }
 
     /*!
      * \brief The destructor will detach the handler

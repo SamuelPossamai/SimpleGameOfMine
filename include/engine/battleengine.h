@@ -25,7 +25,7 @@ public:
      * \param interface interface used to get user's input.
      */
     explicit BattleEngine(BattleWidget *interface) : _map(800, 400), _interface(interface), _cur_unit(0),
-        _t(nullptr), _game_status(status::WORKING) {}
+        _max_speed(1), _t(nullptr), _game_status(status::WORKING) {}
 
     ~BattleEngine();
 

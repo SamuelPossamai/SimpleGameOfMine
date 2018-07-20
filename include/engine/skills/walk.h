@@ -2,7 +2,9 @@
 #ifndef SKILLS_WALK_H
 #define SKILLS_WALK_H
 
-#include <utility/onecopymemorymanager.h>
+#include <iostream>
+
+#include <memory/onecopymemorymanager.h>
 
 #include "unitskill.h"
 
@@ -10,11 +12,9 @@ namespace skill {
 
 class Walk : public UnitSkill {
 
-    friend class utility::OneCopyMemoryManager<Walk>;
-
 protected:
 
-    using MemoryManager = utility::OneCopyMemoryManager<Walk>;
+    using MemoryManager = OneCopyMemoryManager<Walk>;
 
     Walk(UIntegerType duration, UIntegerType distance) : Walk(true, duration, distance) {}
     Walk(const Walk& other) : Walk(true, other) {}
@@ -24,28 +24,51 @@ protected:
 
 public:
 
+    class MemoryInterface;
+
+    virtual ~Walk() {}
+
     virtual UIntegerType action(Unit*, Map*, const Info&) override;
 
     bool operator<(const Walk& other) const {
 
-        if(_dur < other._dur) return true;
-        if(_ds < other._ds) return true;
-        return false;
+        if(_dur != other._dur) return _dur < other._dur;
+
+        return _ds < other._ds;
     }
 
-    template<typename... Args>
-    static Walk *getSkill(Args... args) { return _skills.get(args...); }
-
 protected:
+
 
     UIntegerType doAction(Unit *, Map *, const Info&, RealType);
 
 private:
 
+    static Walk *_clone(const Walk& w) { return new Walk(w); }
+
     UIntegerType _dur;
     UIntegerType _ds;
 
     static MemoryManager _skills;
+};
+
+class Walk::MemoryInterface {
+
+public:
+
+    template <typename... Args>
+    static Walk *get(Args... args) { return Walk::_skills.get(_create(args...)); }
+
+    template <typename... Args>
+    static Walk *dependentGet(Args... args) { return Walk::_skills.dependentGet(_create(args...)); }
+
+    template <typename... Args>
+    static void noLongerDepend(Args... args) { Walk::_skills.noLongerDepend(_create(args...)); }
+
+private:
+
+    static Walk _create(const Walk& w) { return Walk(w); }
+    static Walk _create(UIntegerType duration, UIntegerType distance) { return Walk(duration, distance); }
 };
 
 } /* namespace skill */

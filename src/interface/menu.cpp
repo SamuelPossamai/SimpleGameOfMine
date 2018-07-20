@@ -40,7 +40,7 @@ void Menu::_player_vs_ai_start_button_clicked(){
 
     BattleWidget *bw = new BattleWidget;
 
-    bw->addUnit(unitsinfo::Fighter::getInfo(), controller::Human::getController(),
+    bw->addUnit(unitsinfo::Fighter::getInfo(unitsinfo::UnitClassInfo::Attributes{0, 0, 0, 0}), controller::Human::getController(),
                 unitanimationfactory::FighterAnimationFactory::getFactory(), 0);
     bw->addUnit(unitsinfo::Slime::getInfo(), controller::AI::Slime::getController(),
                 unitanimationfactory::SlimeAnimationFactory::getFactory(), 1);

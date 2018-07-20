@@ -10,6 +10,8 @@ class SlimeAnimationFactory : public UnitAnimationItemFactory {
 
 public:
 
+    virtual ~SlimeAnimationFactory() {}
+
     virtual UnitAnimationItem *create(Unit *) override;
 
     static SlimeAnimationFactory *getFactory();

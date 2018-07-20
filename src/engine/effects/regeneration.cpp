@@ -3,5 +3,5 @@
 
 using namespace effect;
 
-utility::OneCopyMemoryManager<Regeneration, Regeneration::RegCompare> Regeneration::_effects;
+OneCopyMemoryManager<Regeneration, Regeneration::RegCompare> Regeneration::_effects(_clone);
 

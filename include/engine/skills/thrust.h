@@ -5,13 +5,13 @@
 #include "unitskill.h"
 #include "walk.h"
 
-#include <utility/onecopymemorymanager.h>
+#include <memory/onecopymemorymanager.h>
 
 namespace skill {
 
 class Thrust : public Walk {
 
-    friend class utility::OneCopyMemoryManager<Thrust>;
+    friend class OneCopyMemoryManager<Thrust>;
 
 protected:
 
@@ -20,14 +20,27 @@ protected:
 
 public:
 
-    virtual UIntegerType action(Unit*, Map*, const Info&) override;
+    class MemoryInterface;
 
-    template <typename... Args>
-    static Thrust *getSkill(Args... args) { return _skills.get(args...); }
+    virtual UIntegerType action(Unit*, Map*, const Info&) override;
 
 private:
 
-    static utility::OneCopyMemoryManager<Thrust> _skills;
+    static OneCopyMemoryManager<Thrust> _skills;
+};
+
+class Thrust::MemoryInterface {
+
+public:
+
+    template <typename... Args>
+    static Thrust *get(Args... args) { return Thrust::_skills.get(Thrust(args...)); }
+
+    template <typename... Args>
+    static Thrust *dependentGet(Args... args) { return Thrust::_skills.dependentGet(Thrust(args...)); }
+
+    template <typename... Args>
+    static void noLongerDepend(Args... args) { Thrust::_skills.noLongerDepend(Thrust(args...)); }
 };
 
 } /* namespace skill */

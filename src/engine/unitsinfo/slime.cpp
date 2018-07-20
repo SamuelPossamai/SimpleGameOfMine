@@ -9,15 +9,21 @@ namespace unitsinfo {
 
 Slime *Slime::_info = nullptr;
 
+Slime::~Slime() {
+
+    skill::Walk::MemoryInterface::noLongerDepend(10, 100);
+    skill::Thrust::MemoryInterface::noLongerDepend(12, 90);
+}
+
 Slime *Slime::getInfo() {
 
     if(_info) return _info;
 
     _info = new Slime;
 
-    _info->addSkill(skill::Walk::getSkill(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
+    _info->addSkill(skill::Walk::MemoryInterface::dependentGet(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
     _info->addSkill(skill::Evade::getSkill(), QPixmap(":/wing_boot_blue.png").scaled(50, 50));
-    _info->addSkill(skill::Thrust::getSkill(12, 90), QPixmap(":/x_simbol.png").scaled(50, 50));
+    _info->addSkill(skill::Thrust::MemoryInterface::dependentGet(12, 90), QPixmap(":/x_simbol.png").scaled(50, 50));
 
     _info->setSize(22);
     _info->setHealth(10);

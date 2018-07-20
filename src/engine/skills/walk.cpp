@@ -7,7 +7,7 @@
 
 namespace skill {
 
-Walk::MemoryManager Walk::_skills;
+Walk::MemoryManager Walk::_skills(_clone);
 
 UIntegerType Walk::action(Unit *u, Map *m, const Info& info) {
 
