@@ -34,5 +34,4 @@ struct Traits <Unit> : public Traits<BattleEngine> {
     using SpeedType = UIntegerType;
 };
 
-
 #endif // ENGINE_TRAITS_H

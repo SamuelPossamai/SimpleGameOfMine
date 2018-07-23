@@ -26,7 +26,7 @@ Slime *Slime::getInfo() {
     _info->addSkill(skill::Thrust::MemoryInterface::dependentGet(12, 90), QPixmap(":/x_simbol.png").scaled(50, 50));
 
     _info->setSize(22);
-    _info->setHealth(10);
+    _info->setHealth(100);
     _info->setSpeed(100);
 
     return _info;

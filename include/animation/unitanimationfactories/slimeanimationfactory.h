@@ -2,6 +2,8 @@
 #ifndef SLIMEANIMATIONFACTORY_H
 #define SLIMEANIMATIONFACTORY_H
 
+#include <animation/animation.h>
+
 #include "unitanimationitemfactory.h"
 
 namespace unitanimationfactory {

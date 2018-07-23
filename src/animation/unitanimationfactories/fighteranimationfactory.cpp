@@ -28,9 +28,9 @@ FighterAnimationFactory::FighterAnimationFactory() :
     _walking_animation.addImage(walk_im5, 16);
 
     _attacking_animation.addImage(attack_im1, 0);
-    _attacking_animation.addImage(attack_im2, 20);
-    _attacking_animation.addImage(attack_im3, 40);
-    _attacking_animation.addImage(attack_im2, 60);
+    _attacking_animation.addImage(attack_im2, 10);
+    _attacking_animation.addImage(attack_im3, 20);
+    _attacking_animation.addImage(attack_im2, 30);
 
     _idle_animation.addImage(QPixmap(":/fighter_idle.png").scaledToWidth(70), 0);
 }

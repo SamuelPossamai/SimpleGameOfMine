@@ -6,7 +6,7 @@
 #include "interface_traits.h"
 #include "mainwindow.h"
 
-HelpWidget::HelpWidget(MainWindow *w) : QWidget(w) {
+HelpWidget::HelpWidget(MainWindow *w) : MainWidget(w) {
 
     QPalette pal = palette();
 
@@ -48,12 +48,7 @@ HelpWidget::HelpWidget(MainWindow *w) : QWidget(w) {
     ret_button->show();
 }
 
-void HelpWidget::setParent(MainWindow *parent){
-
-    QWidget::setParent(parent);
-}
-
 void HelpWidget::_return_button_pressed() {
 
-    static_cast<MainWindow *>(parent())->popWidget();
+    parent()->popWidget();
 }

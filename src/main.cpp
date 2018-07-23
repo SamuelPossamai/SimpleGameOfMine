@@ -2,7 +2,6 @@
 #include <QApplication>
 
 #include "mainwindow.h"
-#include "battlewidget.h"
 #include "menu.h"
 
 int main(int argc, char **argv) {

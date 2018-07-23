@@ -25,7 +25,7 @@ public:
      * \sa popWidget(), swapWidget(QWidget *)
      * \param w widget added to this object, it will be displayed in the screen.
      */
-    void pushWidget(QWidget *w);
+    void pushWidget(MainWidget *w);
 
     /*!
      * \brief Pop a widget from the widget's stack, the current widget will be destroyed and the previous one will be displayed.
@@ -39,11 +39,11 @@ public:
      * \param w widget that will replace the current widget.
      * \sa pushWidget(QWidget *), popWidget()
      */
-    void swapWidget(QWidget *w);
+    void swapWidget(MainWidget *w);
 
 private:
 
-    std::vector<QWidget *> _widgets;
+    std::vector<MainWidget *> _widgets;
 };
 
 #endif // MAINWINDOW_H

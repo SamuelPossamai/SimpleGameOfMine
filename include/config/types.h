@@ -4,6 +4,8 @@
 
 #include <cstddef>
 
+class SGOMFiles;
+
 class BattleEngine;
 
 class Unit;
@@ -17,6 +19,7 @@ class UnitEffect;
 class Map;
 
 class MainWindow;
+class MainWidget;
 class BattleWidget;
 class IdButton;
 class BattleView;

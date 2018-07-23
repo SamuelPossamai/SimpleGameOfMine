@@ -9,6 +9,7 @@
 #include <QKeyEvent>
 
 #include <memory/memorymanager.h>
+#include <unittypes/creatures.h>
 
 #include "mainwindow.h"
 #include "battlewidget.h"
@@ -17,8 +18,9 @@
 #include "unitanimationitem.h"
 #include "unitanimationitemfactory.h"
 
-BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
-    QWidget(parent), _arrow_item(nullptr), _message(nullptr), _input_interface(std::make_shared<InputManager>(this)) {
+BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */, UIntegerType *result /* = nullptr */) :
+    MainWidget(parent), _result(result), _arrow_item(nullptr), _message(nullptr),
+    _input_interface(std::make_shared<InputManager>(this)) {
 
     MemoryManager::cleanAll(25);
 
@@ -28,6 +30,11 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */) :
     _retbutton_construct();
     _timer_construct();
     _cancel_button_construct();
+
+    _cursor_label = new QLabel("0, 0", this);
+    _cursor_label->setGeometry(5, 3, 100, 20);
+    _cursor_label->setStyleSheet("background:transparent");
+    _cursor_label->show();
 
     setStyleSheet("background-color:lightGray;");
 
@@ -42,11 +49,6 @@ BattleWidget::~BattleWidget() {
 
         delete animation;
     }
-}
-
-void BattleWidget::setParent(MainWindow *p) {
-
-    QWidget::setParent(p);
 }
 
 void BattleWidget::showSkillButtons(const UnitInfo *info) {
@@ -137,15 +139,26 @@ void BattleWidget::graphicsViewMouseMoveEvent(QMouseEvent *event) {
 
     QPointF p = _gview->mapToScene(event->pos());
 
+    _cursor_label->setText(QString("%1, %2").arg(p.x()).arg(p.y()));
+
+    if(!_arrow_item->isVisible()) return;
+
     auto x = p.x() - _arrow_item->x();
     auto y = p.y() - _arrow_item->y();
 
     RealType angle = 180*atan2(y, x)/M_PI;
 
     _arrow_item->setRotation(angle);
+    _cursor_label->setText(_cursor_label->text() + QString(" (%1°)").arg(IntegerType(angle)));
 }
 
 void BattleWidget::graphicsViewMouseReleaseEvent(QMouseEvent *event) {
+
+    if(_message) {
+
+        delete _message;
+        _message = nullptr;
+    }
 
     _input_interface->interfaceMouseReleaseEvent(event);
 }
@@ -162,6 +175,17 @@ void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UnitAnimationItemFact
     _animations.push_back(f->create(_engine->addUnit(u, c, team)));
 
     _animations.back()->setScene(_gview->scene());
+}
+
+bool BattleWidget::addCreature(std::string name, UIntegerType level, UIntegerType team) {
+
+    auto opt = Creatures::get(name, level);
+    if(!opt.has_value()) return false;
+
+    Creatures::Info i = *opt;
+    addUnit(std::get<0>(i), std::get<2>(i), std::get<1>(i), team);
+
+    return true;
 }
 
 void BattleWidget::displayMessage(std::string message) {
@@ -186,9 +210,14 @@ void BattleWidget::displayMessage(std::string message) {
     _message->show();
 }
 
-void BattleWidget::_return_button_pressed(){
+void BattleWidget::_exit() {
 
     static_cast<MainWindow *>(parent())->popWidget();
+}
+
+void BattleWidget::_return_button_pressed(){
+
+    _exit();
 }
 
 void BattleWidget::_skill_button_clicked(UIntegerType id){
@@ -305,132 +334,4 @@ void BattleWidget::_cancel_button_construct() {
                                 0.1*Traits<MainWindow>::width, 0.1*Traits<MainWindow>::height);
 
     QObject::connect(_cancel_button, &QPushButton::clicked, this, &BattleWidget::_cancel_button_clicked);
-}
-
-void BattleWidget::InputManager::handleEvents() {
-
-    std::unique_lock<std::mutex> lock(_input_mut);
-
-    Q_UNUSED(lock);
-
-    while(!_events.empty()) {
-
-        auto event = _events.front();
-        _events.pop();
-
-        switch (event.first) {
-
-            case Event::AskSkillStart:
-                _interface->showSkillButtons(reinterpret_cast<const Unit *>(event.second)->unitInfo());
-                break;
-
-            case Event::AskSkillFinish:
-                _interface->hideSkillButtons();
-                break;
-
-            case Event::AskAngleStart:
-                {
-                    auto u = reinterpret_cast<const Unit *>(event.second);
-                    _interface->showArrow(u->x(), u->y());
-                    _interface->showCancelButton();
-                }
-                break;
-
-            case Event::AskAngleFinish:
-                _interface->hideArrow();
-                _interface->hideCancelButton();
-                break;
-        }
-    }
-}
-
-
-UIntegerType BattleWidget::InputManager::askSkill() {
-
-    std::unique_lock<std::mutex> lock(_input_mut);
-
-    if(!_interface->skillButtonsVisible()) return std::numeric_limits<UIntegerType>::max();
-
-    _last_skill_button_clicked = _interface->_skill_buttons.size();
-
-    while(_last_skill_button_clicked >= _interface->_skill_buttons.size() && _enable) _input_wait.wait(lock);
-
-    return _enable ? _last_skill_button_clicked : 0;
-}
-
-Vec2Type<IntegerType> BattleWidget::InputManager::askMouseClick() {
-
-    std::unique_lock<std::mutex> lock(_input_mut);
-
-    _mouse_clicked = false;
-
-    while(!_mouse_clicked && _enable && !_canceled) _input_wait.wait(lock);
-
-    return _last_clicked_point;
-}
-
-void BattleWidget::InputManager::interfaceMouseReleaseEvent(QMouseEvent *event) {
-
-    std::unique_lock<std::mutex> lock(_input_mut);
-
-    Q_UNUSED(lock);
-
-    _last_clicked_point.x = event->x();
-    _last_clicked_point.y = event->y();
-
-    _mouse_clicked = true;
-
-    _input_wait.notify_all();
-}
-
-
-UIntegerType BattleWidget::InputManager::controllerUserInterfaceAskSkillInput(const Unit *u) {
-
-    _events.push(std::make_pair(Event::AskSkillStart, reinterpret_cast<const void *>(u)));
-
-    UIntegerType input;
-    while((input = askSkill()) == std::numeric_limits<UIntegerType>::max());
-
-    _events.push(std::make_pair(Event::AskSkillFinish, nullptr));
-
-    return input;
-}
-
-std::optional<UnitController::AngleType> BattleWidget::InputManager::controllerUserInterfaceAskAngleInput(const Unit *u) {
-
-    _events.push(std::make_pair(Event::AskAngleStart, reinterpret_cast<const void *>(u)));
-
-    _canceled = false;
-    auto cursor = askMouseClick();
-
-    _events.push(std::make_pair(Event::AskAngleFinish, nullptr));
-
-    if(_canceled) return std::nullopt;
-
-    QPointF p = _interface->_gview->mapToScene(cursor.x, cursor.y);
-
-    return atan2(p.y() - u->y(), p.x() - u->x());
-}
-
-
-void BattleWidget::InputManager::interfaceSkillButtonClicked(UIntegerType id) {
-
-    std::unique_lock<std::mutex> lock(_input_mut);
-
-    Q_UNUSED(lock);
-
-    _last_skill_button_clicked = id;
-
-    _input_wait.notify_all();
-}
-
-void BattleWidget::InputManager::interfaceCancelButtonClicked() {
-
-    std::unique_lock<std::mutex> lock(_input_mut);
-
-    Q_UNUSED(lock);
-
-    _canceled = true;
-
-    _input_wait.notify_all();
 }

@@ -2,20 +2,15 @@
 #ifndef HELPWIDGET_H
 #define HELPWIDGET_H
 
-#include <QWidget>
+#include "mainwidget.h"
 
-#include "types.h"
-
-class HelpWidget : public QWidget {
+class HelpWidget : public MainWidget {
 
     Q_OBJECT
 
 public:
 
     HelpWidget(MainWindow * = nullptr);
-
-    void setParent(MainWindow *);
-    void setParent(QWidget *) = delete;
 
 private slots:
 

@@ -19,6 +19,7 @@ bool Unit::receiveDamage(AttackType damage, Unit *attacking /* = nullptr */) {
     if(attacking) for(auto p : attacking->_effects) damage = p.first->doAttackEffect(attacking, this, damage);
     for(auto p : _effects) damage = p.first->doDefenseEffect(this, attacking, damage);
 
+    if(damage > health()) damage = health();
     HealthType new_health_value = health() - damage;
 
     if(new_health_value >= health()) return true;

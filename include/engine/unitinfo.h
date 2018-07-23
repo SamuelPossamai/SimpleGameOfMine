@@ -24,7 +24,7 @@ public:
     virtual ~UnitInfo() {}
 
     HealthType health() const { return _max_health; }
-    AttackType baseAttack() { return _base_attack; }
+    AttackType baseAttack() const { return _base_attack; }
     SizeType size() const { return _size; }
     SpeedType speed() const { return _speed; }
 

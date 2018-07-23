@@ -1,9 +1,10 @@
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_CXXFLAGS += -std=c++17
+LIBS += -lstdc++fs
 
 INCLUDEPATH += include include/animation include/config include/interface include/engine include/utils include/utility include/memory
 
@@ -44,7 +45,13 @@ SOURCES += src/main.cpp \
     src/animation/unitanimationfactories/redslimeanimationfactory.cpp \
     src/engine/unitsinfo/rslime.cpp \
     src/utility/random.cpp \
-    src/memory/memorymanager.cpp
+    src/memory/memorymanager.cpp \
+    src/unittypes/creatures.cpp \
+    src/unittypes/jobs.cpp \
+    src/interface/battlewidget_inputmanager.cpp \
+    src/config/sgomfiles.cpp \
+    src/interface/selectuserinterface.cpp \
+    src/engine/character.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -104,7 +111,15 @@ HEADERS += include/interface/mainwindow.h \
     include/memory/onecopymemorymanager.h \
     include/engine/unitsinfo/unitclassinfo.h \
     include/memory/memorymanager.h \
-    include/memory/onecopymemorymanagerbasic.h
+    include/memory/onecopymemorymanagerbasic.h \
+    include/unittypes/creatures.h \
+    include/unittypes/jobs.h \
+    include/interface/mainwidget.h \
+    include/interface/battlewidget_inputmanager.h \
+    include/interface/gamedefaultscreen.h \
+    include/interface/selectuserinterface.h \
+    include/config/sgomfiles.h \
+    include/engine/character.h
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

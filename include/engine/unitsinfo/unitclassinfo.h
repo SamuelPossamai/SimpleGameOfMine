@@ -2,6 +2,8 @@
 #ifndef UNITCLASSINFO_H
 #define UNITCLASSINFO_H
 
+#include <engine/character.h>
+
 #include "unitinfo.h"
 
 namespace unitsinfo {
@@ -10,7 +12,7 @@ class UnitClassInfo : public UnitInfo {
 
 public:
 
-    struct Attributes;
+    using Attributes = typename Character::Attributes;
 
     UnitClassInfo(const Attributes& attr, SizeType size) : _attributes(attr) { setSize(size); }
 
@@ -35,23 +37,6 @@ public:
 
         return _attributes < other._attributes;
     }
-
-    struct Attributes {
-
-        bool operator<(const Attributes& other) const {
-
-            if(strength != other.strength) return strength < other.strength;
-            if(vitality != other.vitality) return vitality < other.vitality;
-            if(agility != other.agility) return agility < other.agility;
-
-            return dexterity < other.dexterity;
-        }
-
-        UIntegerType strength;
-        UIntegerType vitality;
-        UIntegerType agility;
-        UIntegerType dexterity;
-    };
 
 private:
 
