@@ -8,6 +8,7 @@
 #include <QInputDialog>
 
 #include "selectuserinterface.h"
+#include "gamedefaultscreen.h"
 
 SelectUserInterface::SelectUserInterface(MainWindow *parent /* = nullptr */) : MainWidget(parent) {
 
@@ -120,6 +121,8 @@ void SelectUserInterface::_select_button_clicked() {
     }
 
     std::vector characters = _get_selecteds();
+
+    parent()->swapWidget(new GameDefaultScreen(characters));
 }
 
 void SelectUserInterface::_delete_button_clicked() {
@@ -128,7 +131,7 @@ void SelectUserInterface::_delete_button_clicked() {
 
     for(const std::string& ch : characters) SGOMFiles::get()->removeChar(ch);
 
-    activate();
+    this->activate();
 }
 
 void SelectUserInterface::_new_button_clicked() {

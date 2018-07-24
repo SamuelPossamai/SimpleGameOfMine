@@ -10,6 +10,8 @@
 
 class MainWidget : public QWidget {
 
+    Q_OBJECT
+
 public:
 
     explicit MainWidget(MainWindow *parent = nullptr) : QWidget(parent) {}

@@ -212,7 +212,9 @@ void BattleWidget::displayMessage(std::string message) {
 
 void BattleWidget::_exit() {
 
-    static_cast<MainWindow *>(parent())->popWidget();
+    if(_engine->finished()) *_result = _engine->winningTeam();
+
+    parent()->popWidget();
 }
 
 void BattleWidget::_return_button_pressed(){

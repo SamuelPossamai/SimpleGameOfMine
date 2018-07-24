@@ -49,6 +49,10 @@ public:
      */
     void placeUnits() { _map.placeUnits(); }
 
+    bool finished() const { return _game_status == status::FINISHED; }
+
+    UIntegerType winningTeam() const { return _map.unitAccess(0)->team(); }
+
 private:
 
     void unitDeathEvent(Unit *u);

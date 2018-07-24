@@ -10,7 +10,7 @@ class HelpWidget : public MainWidget {
 
 public:
 
-    HelpWidget(MainWindow * = nullptr);
+    explicit HelpWidget(MainWindow * = nullptr);
 
 private slots:
 

@@ -51,7 +51,8 @@ SOURCES += src/main.cpp \
     src/interface/battlewidget_inputmanager.cpp \
     src/config/sgomfiles.cpp \
     src/interface/selectuserinterface.cpp \
-    src/engine/character.cpp
+    src/engine/character.cpp \
+    src/interface/gamedefaultscreen.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -127,3 +128,5 @@ run.commands = ./$$TARGET
 QMAKE_EXTRA_TARGETS = run
 
 RESOURCES += img/images.qrc
+
+FORMS += forms/gamedefaultscreen.ui

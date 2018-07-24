@@ -41,6 +41,10 @@ public:
      */
     void swapWidget(MainWidget *w);
 
+protected:
+
+    void resizeEvent(QResizeEvent* event);
+
 private:
 
     std::vector<MainWidget *> _widgets;

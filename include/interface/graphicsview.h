@@ -18,7 +18,7 @@ public:
      * \param handler object that will handle events from this object.
      * \param parent this object parent, this parameter will be passed to QGraphicsView.
      */
-    GraphicsView(Handler *handler, QWidget * parent = 0) : QGraphicsView(parent), _handler(handler) {}
+    explicit GraphicsView(Handler *handler, QWidget * parent = 0) : QGraphicsView(parent), _handler(handler) {}
 
     /*!
      * \brief Contructor for GraphicsView.

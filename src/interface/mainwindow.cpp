@@ -15,7 +15,7 @@ MainWindow::MainWindow() {
 void MainWindow::pushWidget(MainWidget *w) {
 
     w->setParent(this);
-    w->setGeometry(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height);
+    w->setGeometry(0, 0, width(), height());
 
     if(_widgets.size() > 0) {
 
@@ -35,6 +35,8 @@ void MainWindow::popWidget() {
     delete _widgets.back();
     _widgets.pop_back();
 
+    _widgets.back()->setGeometry(0, 0, width(), height());
+
     if(!_widgets.empty()){
 
         _widgets.back()->setFocus();
@@ -46,11 +48,17 @@ void MainWindow::popWidget() {
 void MainWindow::swapWidget(MainWidget *w) {
 
     w->setParent(this);
-    w->setGeometry(0, 0, Traits<MainWindow>::width, Traits<MainWindow>::height);
+    w->setGeometry(0, 0, width(), height());
 
     delete _widgets.back();
 
     w->activate();
     w->setFocus();
     (_widgets.back() = w)->show();
+}
+
+void MainWindow::resizeEvent(QResizeEvent* event) {
+
+    if(!_widgets.empty()) _widgets.back()->resize(width(), height());
+    QMainWindow::resizeEvent(event);
 }

@@ -21,10 +21,25 @@ public:
 
     const UIntegerType& level() const { return _level; }
 
+    const std::string& name() const { return _name; }
+
     const std::string& className() const { return _char_class; }
+
+    void receiveExperience(UIntegerType xp) { _experience += xp; _calculate_free_points_and_experience(); }
+
+    UIntegerType freePoints() const { return _free_points; }
 
     UIntegerType experienceNeeded() const { return (level()*level())*25; }
     UIntegerType experience() const { return _experience; }
+
+    void assignPoint(UIntegerType stat) {
+
+        if(stat < _attr.statsCount() && _free_points) {
+
+            _attr.stats[stat]++;
+            _free_points--;
+        }
+    }
 
     void save() const;
 

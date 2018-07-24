@@ -13,7 +13,7 @@ class BattleWidget::InputManager : public UnitController::UserInterface {
 
 public:
 
-    InputManager(BattleWidget *i) : _enable(false), _interface(i) {}
+    explicit InputManager(BattleWidget *i) : _enable(false), _interface(i) {}
 
     Vec2Type<IntegerType> askMouseClick();
 

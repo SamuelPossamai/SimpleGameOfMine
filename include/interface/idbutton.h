@@ -20,7 +20,7 @@ public:
      * \param id identification number, will be sent with the signal.
      * \param parent Widget where this button will be placed.
      */
-    IdButton(UIntegerType id, QWidget *parent = nullptr) : QPushButton(parent), _id(id) {
+    explicit IdButton(UIntegerType id, QWidget *parent = nullptr) : QPushButton(parent), _id(id) {
 
         QObject::connect(this, &IdButton::clicked, this, &IdButton::_button_signal_received);
     }
