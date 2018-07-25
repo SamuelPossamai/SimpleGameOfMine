@@ -4,13 +4,15 @@
 
 #include <vector>
 
-#include <QTableWidget>
-#include <QLabel>
-#include <QPushButton>
-
 #include "mainwidget.h"
 
+namespace Ui {
+class SelectUserInterface;
+} /* namespace Ui */
+
 class SelectUserInterface : public MainWidget {
+
+    Q_OBJECT
 
 public:
 
@@ -20,20 +22,20 @@ public:
 
 private slots:
 
-    void _return_button_clicked();
-    void _delete_button_clicked();
-    void _new_button_clicked();
-    void _select_button_clicked();
+    void on_returnButton_clicked();
+
+    void on_deleteButton_clicked();
+
+    void on_newButton_clicked();
+
+    void on_selectButton_clicked();
 
 private:
 
     UIntegerType _selected_count() const;
     std::vector<std::string> _get_selecteds() const;
 
-    QTableWidget *_list;
-    QLabel *_char_label;
-
-    std::vector<QPushButton *> _buttons;
+    Ui::SelectUserInterface *_ui;
 };
 
 #endif // SELECTUSERINTERFACE_H

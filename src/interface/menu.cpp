@@ -1,94 +1,36 @@
 
-#include <QPushButton>
+#include "ui_menu.h"
 
 #include "menu.h"
-#include "mainwindow.h"
-#include "battlewidget.h"
-#include "helpwidget.h"
 #include "selectuserinterface.h"
-#include "unitsinfo/slime.h"
-#include "unitsinfo/fighter.h"
-#include "unitsinfo/rslime.h"
-#include "controllers/human.h"
-#include "controllers/ai/slime.h"
-#include "unitanimationfactories/fighteranimationfactory.h"
-#include "unitanimationfactories/slimeanimationfactory.h"
-#include "unitanimationfactories/redslimeanimationfactory.h"
+#include "helpwidget.h"
 
-Menu::Menu(MainWindow *parent /* = nullptr */) : MainWidget(parent), _wating_battle_result(false) {
+Menu::Menu(MainWindow *parent /* = nullptr */) : MainWidget(parent), _ui(new Ui::Menu) {
 
-    _buttons.push_back(new QPushButton("Start", this));
-    QObject::connect(_buttons.back(), &QPushButton::clicked, this, &Menu::_start_button_clicked);
-
-    _buttons.push_back(new QPushButton("Player vs Ai", this));
-    QObject::connect(_buttons.back(), &QPushButton::clicked, this, &Menu::_player_vs_ai_start_button_clicked);
-
-    _buttons.push_back(new QPushButton("Challenge", this));
-    QObject::connect(_buttons.back(), &QPushButton::clicked, this, &Menu::_challenge_start_button_clicked);
-
-    _buttons.push_back(new QPushButton("help", this));
-    QObject::connect(_buttons.back(), &QPushButton::clicked, this, &Menu::_help_button_clicked);
-
-    _place_buttons();
+    _ui->setupUi(this);
 }
 
-void Menu::setParent(MainWindow *parent){
+void Menu::activate() {
 
-    QWidget::setParent(parent);
+    _ui->startButton->setFocus();
+    _ui->testButton->hide();
 }
 
-void Menu::_player_vs_ai_start_button_clicked(){
+Menu::~Menu() {
 
-    BattleWidget *bw = new BattleWidget;
-
-    bw->addUnit(unitsinfo::Fighter::getInfo(unitsinfo::UnitClassInfo::Attributes{0, 0, 0, 0}), controller::Human::getController(),
-                unitanimationfactory::FighterAnimationFactory::getFactory(), 0);
-    bw->addUnit(unitsinfo::Slime::getInfo(), controller::AI::Slime::getController(),
-                unitanimationfactory::SlimeAnimationFactory::getFactory(), 1);
-
-    bw->start();
-
-    parent()->pushWidget(bw);
+    delete _ui;
 }
 
-void Menu::_start_button_clicked() {
+void Menu::on_startButton_clicked() {
 
     parent()->pushWidget(new SelectUserInterface);
 }
 
-void Menu::_help_button_clicked() {
+void Menu::on_helpButton_clicked() {
 
-    HelpWidget *hw = new HelpWidget;
-
-    parent()->pushWidget(hw);
+    parent()->pushWidget(new HelpWidget);
 }
 
-void Menu::_challenge_start_button_clicked() {
+void Menu::on_testButton_clicked() {
 
-    BattleWidget *bw = new BattleWidget(parent(), &_result);
-
-    bw->addUnit(unitsinfo::Slime::getInfo(), controller::Human::getController(),
-                unitanimationfactory::SlimeAnimationFactory::getFactory(), 0);
-    for(UIntegerType i = 0; i < 5; i++) bw->addCreature("slime", 0, 1);
-
-    bw->start();
-
-    _wating_battle_result = false;
-    parent()->pushWidget(bw);
-}
-
-void Menu::_place_buttons() {
-
-    for(UIntegerType i = 0; i < _buttons.size(); i++){
-
-        auto& button = _buttons[i];
-
-        auto distance = Traits<Menu>::buttonsHeight + Traits<Menu>::buttonsDistance;
-
-        button->setFocusPolicy(Qt::NoFocus);
-        button->setGeometry(Traits<Menu>::buttonsX, Traits<Menu>::buttonsY + i*distance,
-                            Traits<Menu>::buttonsWidth, Traits<Menu>::buttonsHeight);
-
-        button->show();
-    }
 }

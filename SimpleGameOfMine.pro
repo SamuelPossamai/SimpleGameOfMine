@@ -129,4 +129,6 @@ QMAKE_EXTRA_TARGETS = run
 
 RESOURCES += img/images.qrc
 
-FORMS += forms/gamedefaultscreen.ui
+FORMS += forms/gamedefaultscreen.ui \
+    forms/menu.ui \
+    forms/selectuserinterface.ui
