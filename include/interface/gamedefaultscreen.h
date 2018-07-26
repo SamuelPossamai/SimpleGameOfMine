@@ -41,8 +41,11 @@ private slots:
 
     void on_agiAddButton_clicked();
 
+    void on_infoButton_clicked();
+
 private:
 
+    void _start_battle(CreatureMap *m);
     void _reselect() { _select_char_info(_selected); }
     void _select_char_info(UIntegerType id);
     void _assign_point(UIntegerType id);

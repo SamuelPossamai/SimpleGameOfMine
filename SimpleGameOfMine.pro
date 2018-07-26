@@ -42,8 +42,6 @@ SOURCES += src/main.cpp \
     src/animation/unitanimationfactories/slimeanimationfactory.cpp \
     src/animation/unitanimationfactories/fighteranimationfactory.cpp \
     src/engine/effects/regeneration.cpp \
-    src/animation/unitanimationfactories/redslimeanimationfactory.cpp \
-    src/engine/unitsinfo/rslime.cpp \
     src/utility/random.cpp \
     src/memory/memorymanager.cpp \
     src/unittypes/creatures.cpp \
@@ -52,7 +50,10 @@ SOURCES += src/main.cpp \
     src/config/sgomfiles.cpp \
     src/interface/selectuserinterface.cpp \
     src/engine/character.cpp \
-    src/interface/gamedefaultscreen.cpp
+    src/interface/gamedefaultscreen.cpp \
+    src/unittypes/maps/greenvalley.cpp \
+    src/animation/unitanimationfactories/coloredslimeanimationfactory.cpp \
+    src/interface/characterinfodialog.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -106,8 +107,6 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/effects/regeneration.h \
     include/utility/interval.h \
     include/utility/imagecolorchange.h \
-    include/animation/unitanimationfactories/redslimeanimationfactory.h \
-    include/engine/unitsinfo/rslime.h \
     include/utility/random.h \
     include/memory/onecopymemorymanager.h \
     include/engine/unitsinfo/unitclassinfo.h \
@@ -120,15 +119,21 @@ HEADERS += include/interface/mainwindow.h \
     include/interface/gamedefaultscreen.h \
     include/interface/selectuserinterface.h \
     include/config/sgomfiles.h \
-    include/engine/character.h
-
-run.depends = $$TARGET
-run.commands = ./$$TARGET
-
-QMAKE_EXTRA_TARGETS = run
+    include/engine/character.h \
+    include/unittypes/creaturemap.h \
+    include/utility/randomvalues.h \
+    include/unittypes/maps/greenvalley.h \
+    include/animation/unitanimationfactories/coloredslimeanimationfactory.h \
+    include/interface/characterinfodialog.h
 
 RESOURCES += img/images.qrc
 
 FORMS += forms/gamedefaultscreen.ui \
     forms/menu.ui \
-    forms/selectuserinterface.ui
+    forms/selectuserinterface.ui \
+    forms/characterinfodialog.ui
+
+run.depends = $$TARGET
+run.commands = ./$$TARGET
+
+QMAKE_EXTRA_TARGETS = run

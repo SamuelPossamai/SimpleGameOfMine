@@ -16,8 +16,8 @@ UIntegerType BasicAttack::action(Unit *u, Map *m, const Info& info) {
     Map::AngleType angle = u->angle();
 
     if(info.step < 10) return 10;
-    else if(info.step < 20) angle -= (30*M_PI)/180;
-    else if(info.step < 30) angle -= (15*M_PI)/180;
+    else if(info.step < 20) angle -= (20*M_PI)/180;
+    else if(info.step < 30) angle -= (10*M_PI)/180;
     else if(info.step < 40) angle -= (0*M_PI)/180;
     else return 0;
 
@@ -28,7 +28,7 @@ UIntegerType BasicAttack::action(Unit *u, Map *m, const Info& info) {
 
     m->unitsInRange(v, { x, y }, 0);
 
-    for(Unit *unit : v) if(unit->team() != u->team()) u->attack(unit, 2*u->unitInfo()->baseAttack());
+    for(Unit *unit : v) if(unit->team() != u->team()) u->attack(unit, u->unitInfo()->baseAttack());
 
-    return 10;
+    return 5;
 }

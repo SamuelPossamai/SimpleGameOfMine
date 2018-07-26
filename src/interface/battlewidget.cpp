@@ -10,6 +10,8 @@
 
 #include <memory/memorymanager.h>
 #include <unittypes/creatures.h>
+#include <unittypes/jobs.h>
+#include <engine/controllers/human.h>
 
 #include "mainwindow.h"
 #include "battlewidget.h"
@@ -184,6 +186,17 @@ bool BattleWidget::addCreature(std::string name, UIntegerType level, UIntegerTyp
 
     Creatures::Info i = *opt;
     addUnit(std::get<0>(i), std::get<2>(i), std::get<1>(i), team);
+
+    return true;
+}
+
+bool BattleWidget::addHero(std::string name, const Character::Attributes& attr, UIntegerType team) {
+
+    auto opt = Jobs::get(name, attr);
+    if(!opt.has_value()) return false;
+
+    Jobs::Info i = *opt;
+    addUnit(std::get<0>(i), controller::Human::getController(), std::get<1>(i), team);
 
     return true;
 }

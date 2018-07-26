@@ -1,16 +1,20 @@
 
+#include <cmath>
+
 #include <unittypes/creatures.h>
 
-#include "battlewidget.h"
-#include "gamedefaultscreen.h"
-#include "ui_gamedefaultscreen.h"
+#include <unittypes/maps/greenvalley.h>
 
 #include "unitsinfo/fighter.h"
 #include "unitanimationfactories/fighteranimationfactory.h"
 #include "controllers/human.h"
+#include "battlewidget.h"
+#include "characterinfodialog.h"
+#include "gamedefaultscreen.h"
+#include "ui_gamedefaultscreen.h"
 
 GameDefaultScreen::GameDefaultScreen(std::vector<std::string> players, MainWindow *parent /* = nullptr */) :
-    MainWidget(parent), _xp_for_victory(0), _ui(new Ui::GameDefaultScreen) {
+    MainWidget(parent), _xp_for_victory(0), _selected(0), _ui(new Ui::GameDefaultScreen) {
 
     setPalette(QPalette(Qt::white));
     setAutoFillBackground(true);
@@ -25,8 +29,6 @@ GameDefaultScreen::GameDefaultScreen(std::vector<std::string> players, MainWindo
         text.sprintf("Lv: %03lu %s %s", c.level(), c.className().c_str(), c.name().c_str());
         _ui->charactersList->addItem(text);
     }
-
-    _select_char_info(0);
 }
 
 GameDefaultScreen::~GameDefaultScreen() {
@@ -64,20 +66,7 @@ void GameDefaultScreen::on_charactersList_itemClicked(QListWidgetItem *item) {
 
 void GameDefaultScreen::on_exploreButton1_clicked() {
 
-    BattleWidget *bw = new BattleWidget(parent(), &_result);
-
-    _xp_for_victory = 30;
-    _result = 1;
-
-    for(const Character& c : _chars) {
-        bw->addUnit(unitsinfo::Fighter::getInfo(c.attributes()), controller::Human::getController(),
-                    unitanimationfactory::FighterAnimationFactory::getFactory(), 0);
-    }
-    bw->addCreature("slime", 0, 1);
-
-    bw->start();
-
-    parent()->pushWidget(bw);
+    _start_battle(map::GreenValley::getMap());
 }
 
 void GameDefaultScreen::on_strAddButton_clicked() {
@@ -98,6 +87,31 @@ void GameDefaultScreen::on_dexAddButton_clicked() {
 void GameDefaultScreen::on_agiAddButton_clicked() {
 
     _assign_point(3);
+}
+
+void GameDefaultScreen::on_infoButton_clicked() {
+
+    CharacterInfoDialog(_chars[_selected], this).exec();
+}
+
+void GameDefaultScreen::_start_battle(CreatureMap *m) {
+
+    BattleWidget *bw = new BattleWidget(parent(), &_result);
+
+    _result = 1;
+
+    for(const Character& c : _chars) bw->addHero(c.className(), c.attributes(), 0);
+
+    _xp_for_victory = 0;
+    for(const CreatureMap::CreaturesContainerContent& creature_info : m->getCreatures()) {
+
+        _xp_for_victory += std::ceil(std::pow(creature_info.creature_level, 1.5));
+        bw->addCreature(creature_info.creature_name, creature_info.creature_level, 1);
+    }
+
+    bw->start();
+
+    parent()->pushWidget(bw);
 }
 
 void GameDefaultScreen::_select_char_info(UIntegerType id) {

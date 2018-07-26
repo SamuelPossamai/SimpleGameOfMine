@@ -61,7 +61,7 @@ private:
 
         CompareFunctor(const Compare& comp) : _comp(comp) {}
 
-        bool operator()(const typename CopiesContainer::key_type& obj1, const typename CopiesContainer::key_type& obj2) {
+        bool operator()(const typename CopiesContainer::key_type& obj1, const typename CopiesContainer::key_type& obj2) const {
 
             return _comp(*obj1, *obj2);
         }

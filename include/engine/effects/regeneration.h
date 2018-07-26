@@ -31,7 +31,7 @@ private:
 
     struct RegCompare {
 
-        bool operator() (Regeneration& r1, Regeneration& r2) {
+        bool operator() (const Regeneration& r1, const Regeneration& r2) const {
 
             if(r1._amount != r2._amount) return r1._amount < r2._amount;
             return r1._period < r2._period;

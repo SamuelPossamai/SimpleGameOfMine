@@ -16,7 +16,7 @@ class Fighter : public UnitClassInfo {
 
     Fighter(const Attributes& attr);
 
-    virtual HealthType healthCalculate() const override { return 1000 + 10*attributes().vitality(); }
+    virtual HealthType healthCalculate() const override { return 200 + 20*attributes().vitality() + attributes().strength(); }
     virtual AttackType attackCalculate() const override { return 20 + attributes().strength() + attributes().dexterity()/3; }
     virtual SpeedType speedCalculate() const override { return 60 + attributes().agility() + 3*attributes().dexterity()/4; }
 

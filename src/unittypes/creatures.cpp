@@ -1,4 +1,5 @@
 
+#include <animation/unitanimationfactories/coloredslimeanimationfactory.h>
 #include <animation/unitanimationfactories/slimeanimationfactory.h>
 #include <engine/controllers/ai/slime.h>
 #include <engine/unitsinfo/slime.h>
@@ -17,14 +18,31 @@ std::optional<Creatures::Info> Creatures::get(std::string name, UIntegerType lev
     return (func_it->second)(level);
 }
 
-static Creatures::Info _get_slime_info(UIntegerType) {
+static Creatures::Info _get_slime_info(UIntegerType level) {
 
-    return Creatures::Info(unitsinfo::Slime::getInfo(),
+    return Creatures::Info(unitsinfo::Slime::getInfo(level),
                            unitanimationfactory::SlimeAnimationFactory::getFactory(),
                            controller::AI::Slime::getController());
 }
 
+static Creatures::Info _get_blue_slime_info(UIntegerType level) {
+
+    return Creatures::Info(unitsinfo::Slime::getInfo(level, unitsinfo::Slime::Type::Fast),
+                           unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(Qt::cyan),
+                           controller::AI::Slime::getController());
+}
+
+static Creatures::Info _get_purple_slime_info(UIntegerType level) {
+
+    return Creatures::Info(unitsinfo::Slime::getInfo(level, unitsinfo::Slime::Type::Immortal),
+                           unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(Qt::magenta),
+                           controller::AI::Slime::getController());
+}
+
+
 void Creatures::_init() {
 
     _creatures["slime"] = _get_slime_info;
+    _creatures["blue slime"] = _get_blue_slime_info;
+    _creatures["purple slime"] = _get_purple_slime_info;
 }

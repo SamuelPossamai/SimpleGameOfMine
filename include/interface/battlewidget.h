@@ -13,6 +13,7 @@
 
 #include <config/interface_traits.h>
 #include <engine/unitcontroller.h>
+#include <engine/character.h>
 
 #include "graphicsview.h"
 #include "mainwidget.h"
@@ -58,6 +59,7 @@ public:
 
     void addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory *, UIntegerType team);
     bool addCreature(std::string name, UIntegerType level, UIntegerType team);
+    bool addHero(std::string name, const Character::Attributes& attr, UIntegerType team);
 
     void displayMessage(std::string);
 

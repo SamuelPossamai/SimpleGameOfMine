@@ -18,6 +18,8 @@ class UnitEffect;
 
 class Map;
 
+class Character;
+
 class MainWindow;
 class MainWidget;
 class BattleWidget;
@@ -32,6 +34,10 @@ class AnimationHandler;
 class ProgressBarItem;
 class UnitAnimationItem;
 class UnitAnimationItemFactory;
+
+class Jobs;
+class Creatures;
+class CreatureMap;
 
 namespace utility {
 

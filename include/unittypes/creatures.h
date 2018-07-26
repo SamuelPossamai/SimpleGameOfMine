@@ -10,7 +10,6 @@
 
 class Creatures {
 
-
 public:
 
     using Info = std::tuple<UnitInfo *, UnitAnimationItemFactory *, UnitController *>;
