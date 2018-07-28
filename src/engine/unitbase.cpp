@@ -6,7 +6,7 @@
 
 #include "unitbase.h"
 
-UnitBase::UnitBase(const UnitInfo *info) : _info(info), _health(info->health()) {
+UnitBase::UnitBase(const UnitInfo *info) : _info(info), _health(info->health()), _energy(info->energy()) {
 
 }
 

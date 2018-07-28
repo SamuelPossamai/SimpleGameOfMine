@@ -14,6 +14,8 @@ class Fighter : public UnitClassInfo {
 
     using MemoryManager = OneCopyMemoryManager<Fighter>;
 
+protected:
+
     Fighter(const Attributes& attr);
 
     virtual HealthType healthCalculate() const override { return 200 + 20*attributes().vitality() + attributes().strength(); }
@@ -31,6 +33,6 @@ private:
     static MemoryManager _copies;
 };
 
-} /* namespace creature */
+} /* namespace unitsinfo */
 
 #endif // UNITSINFO_FIGHTER_H

@@ -10,6 +10,7 @@
 #include "controllers/human.h"
 #include "battlewidget.h"
 #include "characterinfodialog.h"
+#include "selectjobdialog.h"
 #include "gamedefaultscreen.h"
 #include "ui_gamedefaultscreen.h"
 
@@ -92,6 +93,12 @@ void GameDefaultScreen::on_agiAddButton_clicked() {
 void GameDefaultScreen::on_infoButton_clicked() {
 
     CharacterInfoDialog(_chars[_selected], this).exec();
+}
+
+void GameDefaultScreen::on_changeJobButton_clicked() {
+
+    SelectJobDialog(_chars[_selected], this).exec();
+    _reselect();
 }
 
 void GameDefaultScreen::_start_battle(CreatureMap *m) {

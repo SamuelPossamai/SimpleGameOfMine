@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>482</width>
-    <height>372</height>
+    <height>376</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -126,19 +126,39 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1" alignment="Qt::AlignRight">
-        <widget class="QLabel" name="jobLabel">
-         <property name="text">
-          <string>jobless</string>
-         </property>
-        </widget>
-       </item>
        <item row="2" column="1" alignment="Qt::AlignRight">
         <widget class="QLabel" name="expLabel">
          <property name="text">
           <string>0/0</string>
          </property>
         </widget>
+       </item>
+       <item row="0" column="1">
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item alignment="Qt::AlignRight">
+          <widget class="QLabel" name="jobLabel">
+           <property name="text">
+            <string>jobless</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="changeJobButton">
+           <property name="maximumSize">
+            <size>
+             <width>18</width>
+             <height>18</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
+           <property name="text">
+            <string>◊</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
@@ -287,21 +307,21 @@
      <item>
       <widget class="QPushButton" name="exploreButton2">
        <property name="text">
-        <string>Explore Map2 &lt;coming soon&gt;</string>
+        <string>&lt;coming soon&gt;</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="exploreButton3">
        <property name="text">
-        <string>Explore Map 3 &lt;coming soon&gt;</string>
+        <string>&lt;coming soon&gt;</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="exploreButton4">
        <property name="text">
-        <string>Explore Map 4&lt;coming soon&gt;</string>
+        <string>&lt;coming soon&gt;</string>
        </property>
       </widget>
      </item>

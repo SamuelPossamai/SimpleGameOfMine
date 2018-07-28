@@ -14,6 +14,7 @@ public:
     using PointType = Traits<Unit>::PointType;
 
     using HealthType = Traits<Unit>::HealthType;
+    using EnergyType = Traits<Unit>::EnergyType;
     using AttackType = Traits<Unit>::AttackType;
     using DefenseType = Traits<Unit>::DefenseType;
 
@@ -123,6 +124,12 @@ public:
      */
     HealthType maxHealth() const { return _info->health(); }
 
+    void setEnergy(EnergyType energy) { _energy = energy; }
+
+    EnergyType energy() const { return _energy; }
+
+    EnergyType maxEnergy() const { return _info->energy(); }
+
 private:
 
     static constexpr bool _using_radians();
@@ -131,6 +138,7 @@ private:
     SizeType _size;
 
     HealthType _health;
+    EnergyType _energy;
 
     PositionType _x, _y;
     AngleType _angle;

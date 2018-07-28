@@ -51,6 +51,17 @@ void Unit::healed(HealthType amount, Unit *healing /* = nullptr */) {
     _notifyAll(&Observer::unitHealed);
 }
 
+bool Unit::consumeEnergy(EnergyType energy) {
+
+    if(energy > this->energy()) return false;
+
+    this->setEnergy(this->energy() - energy);
+
+    _notifyAll(&Observer::unitEnergyConsumed);
+
+    return true;
+}
+
 bool Unit::attachObserver(Observer *h) {
 
     if(std::find(_observers.begin(), _observers.end(), h) == _observers.end()) {
@@ -171,6 +182,13 @@ void Unit::select() {
 void Unit::unselect() {
 
     _notifyAll(&Observer::unitUnselected);
+}
+
+Unit::PointType Unit::maxPosition() const {
+
+    if(_map->width() < size() || _map->height() < size()) return { 0, 0 };
+
+    return { _map->width() - size(), _map->height() - size()};
 }
 
 bool Unit::_choose_internal(BattleWidget::InputInterface& i) {

@@ -34,8 +34,19 @@ public:
 
 protected:
 
-    virtual void addToScene(QGraphicsScene *scene) override { scene->addItem(_health_bar); scene->addItem(_obj); }
-    virtual void removeFromScene() override { scene()->removeItem(_health_bar); scene()->removeItem(_obj); }
+    virtual void addToScene(QGraphicsScene *scene) override {
+
+        scene->addItem(_health_bar);
+        scene->addItem(_obj);
+        if(_energy_bar) scene->addItem(_energy_bar);
+    }
+
+    virtual void removeFromScene() override {
+
+        scene()->removeItem(_health_bar);
+        scene()->removeItem(_obj);
+        if(_energy_bar) scene()->removeItem(_energy_bar);
+    }
 
     virtual void unitDeathEvent(Unit *) override { _events.push(&BasicUnitGraphicItem::unitDeathEvent); }
     virtual void unitSelected(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSelected); }
@@ -47,6 +58,7 @@ protected:
     virtual void unitSkillAdvance(Unit *) override { _events.push(&BasicUnitGraphicItem::unitSkillAdvance); }
     virtual void unitReceivedDamage(Unit *) override { _events.push(&BasicUnitGraphicItem::unitHealthChanged); }
     virtual void unitHealed(Unit *) override { _events.push(&BasicUnitGraphicItem::unitHealthChanged); }
+    virtual void unitEnergyConsumed(Unit *) override { if(_energy_bar) _events.push(&BasicUnitGraphicItem::unitEnergyConsumed); }
 
     void unitDeathEvent() { hideAnimation(); }
     void unitSelected() { selectEffect(); }
@@ -57,9 +69,10 @@ protected:
     void unitSkillFinished();
     void unitSkillAdvance();
     void unitHealthChanged();
+    void unitEnergyConsumed();
 
-    void showAnimation() { _obj->show(); _health_bar->show(); }
-    void hideAnimation() { _obj->hide(); _health_bar->hide(); }
+    void showAnimation() { _obj->show(); _health_bar->show(); if(_energy_bar) _energy_bar->show(); }
+    void hideAnimation() { _obj->hide(); _health_bar->hide(); if(_energy_bar) _energy_bar->hide(); }
 
     void selectEffect();
     void removeSelectEffect();
@@ -74,11 +87,9 @@ private:
     AnimatedObject *_obj;
     QGraphicsEffect *_select_effect;
     ProgressBarItem *_health_bar;
+    ProgressBarItem *_energy_bar;
     EventQueue _events;
 };
-
-template <typename ...Animations>
-void setAnimations(const Animation& idle, Animations&&... skill_animations);
 
 } /* namespace unitanimation */
 

@@ -20,5 +20,15 @@
         <file>fighter_attack_2.png</file>
         <file>fighter_attack_1.png</file>
         <file>fighter_attack_3.png</file>
+        <file>ninja_attack_2.png</file>
+        <file>ninja_attack_3.png</file>
+        <file>ninja_idle.png</file>
+        <file>ninja_walking_1n3.png</file>
+        <file>ninja_walking_2.png</file>
+        <file>ninja_walking_4.png</file>
+        <file>ninja_walking_5.png</file>
+        <file>ninja_attack_1.png</file>
+        <file>sword_image.png</file>
+        <file>onofflastescape_icon.png</file>
     </qresource>
 </RCC>

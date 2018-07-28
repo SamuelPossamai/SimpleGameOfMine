@@ -96,6 +96,9 @@ public:
      */
     static RealType unitsDistance(const Unit *, const Unit *);
 
+    const PositionType& width() const { return _width; }
+    const PositionType& height() const { return _height; }
+
 private:
 
     static RealType _units_squared_distance(const Unit *, const Unit *);

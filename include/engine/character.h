@@ -23,6 +23,7 @@ public:
 
     const std::string& name() const { return _name; }
 
+    void setClass(const std::string& class_name) { _char_class = class_name; }
     const std::string& className() const { return _char_class; }
 
     void receiveExperience(UIntegerType xp) { _experience += xp; _calculate_free_points_and_experience(); }

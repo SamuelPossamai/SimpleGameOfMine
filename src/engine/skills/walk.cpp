@@ -11,12 +11,12 @@ Walk::MemoryManager Walk::_skills(_clone);
 
 UIntegerType Walk::action(Unit *u, Map *m, const Info& info) {
 
-    return doAction(u, m, info, info.angle);
+    if(info.step == 0) u->setAngle(info.angle);
+
+    return doAction(u, m, info, u->angle());
 }
 
 UIntegerType Walk::doAction(Unit *u, Map *, const Info& info, RealType angle){
-
-    if(info.step == 0) u->setAngle(angle);
 
     static const UIntegerType period = 3;
 

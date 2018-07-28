@@ -53,7 +53,13 @@ SOURCES += src/main.cpp \
     src/interface/gamedefaultscreen.cpp \
     src/unittypes/maps/greenvalley.cpp \
     src/animation/unitanimationfactories/coloredslimeanimationfactory.cpp \
-    src/interface/characterinfodialog.cpp
+    src/interface/characterinfodialog.cpp \
+    src/engine/skills/teleport.cpp \
+    src/animation/unitanimationfactories/ninjaanimationfactory.cpp \
+    src/engine/unitsinfo/ninja.cpp \
+    src/engine/effects/lastescape.cpp \
+    src/engine/skills/onofflastescape.cpp \
+    src/interface/selectjobdialog.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -124,14 +130,21 @@ HEADERS += include/interface/mainwindow.h \
     include/utility/randomvalues.h \
     include/unittypes/maps/greenvalley.h \
     include/animation/unitanimationfactories/coloredslimeanimationfactory.h \
-    include/interface/characterinfodialog.h
+    include/interface/characterinfodialog.h \
+    include/engine/skills/teleport.h \
+    include/animation/unitanimationfactories/ninjaanimationfactory.h \
+    include/engine/unitsinfo/ninja.h \
+    include/engine/effects/lastescape.h \
+    include/engine/skills/onofflastescape.h \
+    include/interface/selectjobdialog.h
 
 RESOURCES += img/images.qrc
 
 FORMS += forms/gamedefaultscreen.ui \
     forms/menu.ui \
     forms/selectuserinterface.ui \
-    forms/characterinfodialog.ui
+    forms/characterinfodialog.ui \
+    forms/selectjobdialog.ui
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

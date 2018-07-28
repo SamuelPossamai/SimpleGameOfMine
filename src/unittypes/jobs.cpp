@@ -2,7 +2,9 @@
 #include <unittypes/jobs.h>
 
 #include "unitsinfo/fighter.h"
+#include "unitsinfo/ninja.h"
 #include "unitanimationfactories/fighteranimationfactory.h"
+#include "unitanimationfactories/ninjaanimationfactory.h"
 
 std::map<std::string, Jobs::GetJobFunctionType> Jobs::_jobs;
 
@@ -23,7 +25,14 @@ static Jobs::Info _get_fighter_info(const Jobs::Attributes& attr) {
                       unitanimationfactory::FighterAnimationFactory::getFactory());
 }
 
+static Jobs::Info _get_ninja_info(const Jobs::Attributes& attr) {
+
+    return Jobs::Info(unitsinfo::Ninja::getInfo(attr),
+                      unitanimationfactory::NinjaAnimationFactory::getFactory());
+}
+
 void Jobs::_init() {
 
     _jobs["fighter"] = _get_fighter_info;
+    _jobs["ninja"] = _get_ninja_info;
 }

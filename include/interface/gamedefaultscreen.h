@@ -43,6 +43,8 @@ private slots:
 
     void on_infoButton_clicked();
 
+    void on_changeJobButton_clicked();
+
 private:
 
     void _start_battle(CreatureMap *m);

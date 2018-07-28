@@ -34,6 +34,8 @@ public:
     void heal(Unit *target, HealthType amount) { target->healed(amount, this); }
     void healed(HealthType amount, Unit *healing = nullptr);
 
+    bool consumeEnergy(EnergyType energy);
+
     bool isDead() const { return health() <= 0; }
 
     bool attachObserver(Observer *h);
@@ -66,6 +68,8 @@ public:
     UIntegerType skillId() const { return _skill; }
 
     const UnitController *controller() const { return _controller; }
+
+    PointType maxPosition() const;
 
     struct EffectInfo {
 
@@ -115,6 +119,7 @@ public:
     virtual void unitObjectDestroyed(Unit *) {}
     virtual void unitSelected(Unit *) {}
     virtual void unitUnselected(Unit *) {}
+    virtual void unitEnergyConsumed(Unit *) {}
 };
 
 #endif // UNIT_H
