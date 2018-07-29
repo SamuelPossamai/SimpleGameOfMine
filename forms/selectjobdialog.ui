@@ -66,6 +66,11 @@
        <string>Agi Required</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Wis Required</string>
+      </property>
+     </column>
      <item row="0" column="0">
       <property name="text">
        <string>fighter</string>
@@ -96,6 +101,14 @@
       </property>
      </item>
      <item row="0" column="4">
+      <property name="text">
+       <string>0</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignTrailing|AlignVCenter</set>
+      </property>
+     </item>
+     <item row="0" column="5">
       <property name="text">
        <string>0</string>
       </property>
@@ -135,6 +148,14 @@
      <item row="1" column="4">
       <property name="text">
        <string>10</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignTrailing|AlignVCenter</set>
+      </property>
+     </item>
+     <item row="1" column="5">
+      <property name="text">
+       <string>0</string>
       </property>
       <property name="textAlignment">
        <set>AlignTrailing|AlignVCenter</set>

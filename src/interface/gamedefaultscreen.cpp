@@ -90,6 +90,11 @@ void GameDefaultScreen::on_agiAddButton_clicked() {
     _assign_point(3);
 }
 
+void GameDefaultScreen::on_wisAddButton_clicked() {
+
+    _assign_point(4);
+}
+
 void GameDefaultScreen::on_infoButton_clicked() {
 
     CharacterInfoDialog(_chars[_selected], this).exec();
@@ -135,6 +140,7 @@ void GameDefaultScreen::_select_char_info(UIntegerType id) {
     _ui->vitLabel->setText(QString::number(c.attributes().vitality()));
     _ui->dexLabel->setText(QString::number(c.attributes().dexterity()));
     _ui->agiLabel->setText(QString::number(c.attributes().agility()));
+    _ui->wisLabel->setText(QString::number(c.attributes().wisdom()));
 
     _ui->expLabel->setText(QString("%1 / %2").arg(c.experience()).arg(c.experienceNeeded()));
 }
@@ -146,3 +152,4 @@ void GameDefaultScreen::_assign_point(UIntegerType id) {
     c.save();
     _reselect();
 }
+

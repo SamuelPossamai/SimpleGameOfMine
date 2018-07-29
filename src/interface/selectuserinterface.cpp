@@ -46,10 +46,11 @@ void SelectUserInterface::activate() {
         _ui->tableWidget->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(name)));
         _ui->tableWidget->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(ch.className())));
         _ui->tableWidget->setItem(i, 2, new QTableWidgetItem(QString::number(ch.level())));
-        _ui->tableWidget->setItem(i, 3, new QTableWidgetItem(QString::number(ch.attributes().strength())));
-        _ui->tableWidget->setItem(i, 4, new QTableWidgetItem(QString::number(ch.attributes().vitality())));
-        _ui->tableWidget->setItem(i, 5, new QTableWidgetItem(QString::number(ch.attributes().dexterity())));
-        _ui->tableWidget->setItem(i, 6, new QTableWidgetItem(QString::number(ch.attributes().agility())));
+
+        for(UIntegerType j = 0; j < Character::Attributes::statsCount(); j++) {
+
+            _ui->tableWidget->setItem(i, j + 3, new QTableWidgetItem(QString::number(ch.attributes().stats[j])));
+        }
     }
 }
 

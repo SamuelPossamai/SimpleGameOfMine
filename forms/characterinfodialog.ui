@@ -18,6 +18,13 @@
 border-color: rgb(0, 0, 0);</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="11" column="0">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
+      <string>Attack:</string>
+     </property>
+    </widget>
+   </item>
    <item row="7" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
@@ -25,8 +32,29 @@ border-color: rgb(0, 0, 0);</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="1" alignment="Qt::AlignRight">
-    <widget class="QLabel" name="healthLabel">
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>Level:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_6">
+     <property name="text">
+      <string>Strength:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>Health:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="1" alignment="Qt::AlignRight">
+    <widget class="QLabel" name="attackLabel">
      <property name="text">
       <string>0</string>
      </property>
@@ -39,24 +67,10 @@ border-color: rgb(0, 0, 0);</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_4">
+   <item row="9" column="1" alignment="Qt::AlignRight">
+    <widget class="QLabel" name="healthLabel">
      <property name="text">
-      <string>Level:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="label_5">
-     <property name="text">
-      <string>Speed:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_11">
-     <property name="text">
-      <string>Attack:</string>
+      <string>0</string>
      </property>
     </widget>
    </item>
@@ -67,31 +81,10 @@ border-color: rgb(0, 0, 0);</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
-    <widget class="QLabel" name="label_10">
-     <property name="text">
-      <string>Dexterity:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="9" column="1" alignment="Qt::AlignRight">
-    <widget class="QLabel" name="attackLabel">
+   <item row="8" column="1" alignment="Qt::AlignRight">
+    <widget class="QLabel" name="wisLabel">
      <property name="text">
       <string>0</string>
-     </property>
-    </widget>
-   </item>
-   <item row="8" column="0">
-    <widget class="QLabel" name="label_7">
-     <property name="text">
-      <string>Health:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0">
-    <widget class="QLabel" name="label_6">
-     <property name="text">
-      <string>Strength:</string>
      </property>
     </widget>
    </item>
@@ -102,6 +95,20 @@ border-color: rgb(0, 0, 0);</string>
      </property>
     </widget>
    </item>
+   <item row="12" column="0">
+    <widget class="QLabel" name="label_5">
+     <property name="text">
+      <string>Speed:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_10">
+     <property name="text">
+      <string>Dexterity:</string>
+     </property>
+    </widget>
+   </item>
    <item row="2" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
@@ -109,7 +116,7 @@ border-color: rgb(0, 0, 0);</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="1" alignment="Qt::AlignRight">
+   <item row="12" column="1" alignment="Qt::AlignRight">
     <widget class="QLabel" name="speedLabel">
      <property name="text">
       <string>0</string>
@@ -151,15 +158,36 @@ border-color: rgb(0, 0, 0);</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="0">
+   <item row="13" column="0">
     <widget class="QLabel" name="label_13">
      <property name="text">
       <string>Size:</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="1" alignment="Qt::AlignRight">
+   <item row="13" column="1" alignment="Qt::AlignRight">
     <widget class="QLabel" name="sizeLabel">
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Wisdom:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="label_9">
+     <property name="text">
+      <string>Energy:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1" alignment="Qt::AlignRight">
+    <widget class="QLabel" name="energyLabel">
      <property name="text">
       <string>0</string>
      </property>

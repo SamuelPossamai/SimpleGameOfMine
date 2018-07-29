@@ -2,6 +2,7 @@
 #include <animation/unitanimationfactories/coloredslimeanimationfactory.h>
 #include <animation/unitanimationfactories/slimeanimationfactory.h>
 #include <engine/controllers/ai/slime.h>
+#include <engine/controllers/ai/crazy.h>
 #include <engine/unitsinfo/slime.h>
 #include <unittypes/creatures.h>
 
@@ -39,10 +40,25 @@ static Creatures::Info _get_purple_slime_info(UIntegerType level) {
                            controller::AI::Slime::getController());
 }
 
+static Creatures::Info _get_orange_slime_info(UIntegerType level) {
+
+    return Creatures::Info(unitsinfo::Slime::getInfo(level, unitsinfo::Slime::Type::Crazy),
+                           unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(QColor(255, 150, 0)),
+                           controller::AI::Crazy::getController());
+}
+
+static Creatures::Info _get_white_slime_info(UIntegerType level) {
+
+    return Creatures::Info(unitsinfo::Slime::getInfo(level, unitsinfo::Slime::Type::Ghost),
+                           unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(Qt::white),
+                           controller::AI::Slime::getController());
+}
 
 void Creatures::_init() {
 
     _creatures["slime"] = _get_slime_info;
     _creatures["blue slime"] = _get_blue_slime_info;
     _creatures["purple slime"] = _get_purple_slime_info;
+    _creatures["orange slime"] = _get_orange_slime_info;
+    _creatures["white slime"] = _get_white_slime_info;
 }

@@ -16,6 +16,8 @@ public:
 
     struct Attributes;
 
+    static constexpr UIntegerType freePointsPerLevel() { return 4; }
+
     /*!
      * \brief Construct a Character object passing the character name
      * \param char_name Character name
@@ -76,7 +78,7 @@ public:
      * \brief Return the amount of experience needed to level up
      * \return The amount of experience needed to level up
      */
-    UIntegerType experienceNeeded() const { return (level()*level())*25; }
+    UIntegerType experienceNeeded() const { return (level()*level())*12; }
 
     /*!
      * \brief Return the current experience
@@ -137,17 +139,15 @@ public:
         UIntegerType& agility() { return stats[3]; }
         const UIntegerType& agility() const { return stats[3]; }
 
-        UIntegerType stats[4];
+        UIntegerType& wisdom() { return stats[4]; }
+        const UIntegerType& wisdom() const { return stats[4]; }
+
+        UIntegerType stats[5];
     };
 
 private:
 
     void _calculate_free_points_and_experience();
-
-    void _calculate_level() {
-
-        _level = _attr.strength() + _attr.vitality() + _attr.agility() + _attr.dexterity() + _free_points;
-    }
 
     std::string _name;
     std::string _char_class;

@@ -1,3 +1,4 @@
+
 #ifndef BATTLEWIDGET_H
 #define BATTLEWIDGET_H
 
@@ -17,6 +18,10 @@
 
 #include "graphicsview.h"
 #include "mainwidget.h"
+
+namespace Ui {
+class BattleWidget;
+} /* namespace Ui */
 
 /*!
  * \brief Widget that manages the interface in a battle
@@ -147,12 +152,12 @@ public:
     /*!
      * \brief Show the cancel button
      */
-    void showCancelButton() { _cancel_button->show(); }
+    void showCancelButton();
 
     /*!
      * \brief Hide the cancel button
      */
-    void hideCancelButton() { _cancel_button->hide(); }
+    void hideCancelButton();
 
 public slots:
 
@@ -163,6 +168,8 @@ public slots:
 
 protected:
 
+    virtual void resizeEvent(QResizeEvent *event) override;
+
     virtual void keyPressEvent(QKeyEvent *event) override;
 
     virtual void graphicsViewMouseMoveEvent(QMouseEvent *event) override;
@@ -171,14 +178,15 @@ protected:
 
 private slots:
 
-    void _return_button_pressed();
-
     void _skill_button_clicked(UIntegerType id);
 
-    void _cancel_button_clicked();
+    void on_cancelButton_clicked();
+
+    void on_returnButton_clicked();
 
 private:
 
+    void _update_buttons();
     void _exit();
 
     static void _step_internal(BattleWidget *);
@@ -200,16 +208,17 @@ private:
 
     BattleEngine *_engine;
 
+    UIntegerType _current_buttons;
     std::vector<IdButton *> _skill_buttons;
-    QPushButton *_cancel_button;
 
     QGraphicsPixmapItem *_arrow_item;
     QLabel *_message;
-    QLabel *_cursor_label;
 
     InputInterface _input_interface;
 
     std::vector<UnitAnimationItem *> _animations;
+
+    Ui::BattleWidget *_ui;
 };
 
 #include "battlewidget_inputmanager.h"

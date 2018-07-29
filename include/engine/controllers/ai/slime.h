@@ -30,6 +30,8 @@ public:
 
 private:
 
+    bool _angle_test(const Unit *u1, const Unit *u2) const;
+
     static Slime *_controller;
 };
 

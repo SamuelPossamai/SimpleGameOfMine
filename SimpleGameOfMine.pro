@@ -60,7 +60,8 @@ SOURCES += src/main.cpp \
     src/engine/effects/lastescape.cpp \
     src/engine/skills/onofflastescape.cpp \
     src/interface/selectjobdialog.cpp \
-    src/utility/imagecolorchange.cpp
+    src/utility/imagecolorchange.cpp \
+    src/engine/controllers/ai/crazy.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -137,7 +138,8 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/unitsinfo/ninja.h \
     include/engine/effects/lastescape.h \
     include/engine/skills/onofflastescape.h \
-    include/interface/selectjobdialog.h
+    include/interface/selectjobdialog.h \
+    include/engine/controllers/ai/crazy.h
 
 RESOURCES += img/images.qrc
 
@@ -145,7 +147,8 @@ FORMS += forms/gamedefaultscreen.ui \
     forms/menu.ui \
     forms/selectuserinterface.ui \
     forms/characterinfodialog.ui \
-    forms/selectjobdialog.ui
+    forms/selectjobdialog.ui \
+    forms/battlewidget.ui
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

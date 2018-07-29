@@ -16,9 +16,19 @@ class Ninja : public Fighter {
 
     Ninja(const Attributes& attr);
 
-    virtual HealthType healthCalculate() const override { return 150 + 5*attributes().vitality() + attributes().dexterity(); }
-    virtual AttackType attackCalculate() const override { return 12 + 0.75*attributes().strength() + attributes().dexterity()/2; }
-    virtual SpeedType speedCalculate() const override { return 80 + 1.25*attributes().agility() + 3*attributes().dexterity()/4; }
+    virtual HealthType healthCalculate() const override { return 150 + 8*attributes().vitality() + 0.2*attributes().dexterity(); }
+    virtual EnergyType energyCalculate() const override { return 100 + 5*attributes().wisdom() + attributes().dexterity(); }
+    virtual AttackType attackCalculate() const override {
+
+        return 12 + 0.75*attributes().strength() + 0.3*attributes().dexterity() +
+                0.1*attributes().agility() + 0.1*attributes().wisdom();
+    }
+    virtual SpeedType speedCalculate() const override { return 80 + 1.2*attributes().agility() + 0.4*attributes().dexterity(); }
+    virtual SizeType sizeCalculate() const override {
+
+        SizeType size = Fighter::sizeCalculate() - 0.01*(attributes().dexterity() + attributes().agility());
+        return size > 5 ? size : 5;
+    }
 
 public:
 

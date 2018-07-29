@@ -12,7 +12,7 @@ class Slime : public UnitInfo {
 
 public:
 
-    enum class Type : UIntegerType { Normal, Fast, Immortal };
+    enum class Type : UIntegerType { Normal, Fast, Immortal, Crazy, Ghost };
 
     virtual ~Slime();
 

@@ -12,6 +12,8 @@ UnitBase::UnitBase(const UnitInfo *info) : _info(info), _health(info->health()),
 
 void UnitBase::setAngle(AngleType angle) {
 
+    angle = fmod(angle, 2*M_PI);
+    if(angle < 0) angle += 2*M_PI;
     _angle = angle*(_using_radians() ? 180/M_PI : 1);
 }
 

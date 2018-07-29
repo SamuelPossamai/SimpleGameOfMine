@@ -37,6 +37,15 @@ Slime::Slime(UIntegerType level, const Type& type) : _type(type), _level(level) 
             setBaseAttack(0.5*baseAttack());
             setSpeed(0.5*speed());
             break;
+        case Type::Crazy:
+            setHealth(1.2*health());
+            setBaseAttack(1.1*baseAttack());
+            setSpeed(1.1*speed());
+            break;
+        case Type::Ghost:
+            setHealth(0.15*health());
+            setBaseAttack(0.2*baseAttack());
+            setSpeed(5*speed());
     }
 }
 

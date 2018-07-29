@@ -84,6 +84,11 @@
        <string>Agility</string>
       </property>
      </column>
+     <column>
+      <property name="text">
+       <string>Wisdom</string>
+      </property>
+     </column>
     </widget>
    </item>
    <item>

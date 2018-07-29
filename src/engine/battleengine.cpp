@@ -47,6 +47,16 @@ void BattleEngine::unitDeathEvent(Unit *u) {
     _map.removeUnit(u);
 
     if(_map.gameEndVerify()) _game_status = status::FINISHING;
+
+    if(u->unitInfo()->speed() == _max_speed) {
+
+        _max_speed = 1;
+        for(UIntegerType i = 0; i < _map.units(); i++) {
+
+            Unit::SpeedType speed = _map.unitAccess(i)->unitInfo()->speed();
+            if(speed > _max_speed) _max_speed = speed;
+        }
+    }
 }
 
 bool BattleEngine::_step_loop(){

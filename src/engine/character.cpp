@@ -5,12 +5,14 @@
 
 #include "character.h"
 
-Character::Character(std::string char_name) : _name(char_name), _char_class("jobless"), _free_points(0),
+Character::Character(std::string char_name) : _name(char_name), _char_class("jobless"), _level(0),
     _experience(0), _attr({}) {
 
     std::ifstream file(SGOMFiles::get()->charFilePath(char_name));
 
     std::getline(file, _char_class, '\n');
+
+    file >> _level;
 
     for(UIntegerType i = 0; i < Attributes::statsCount(); i++) {
 
@@ -19,9 +21,7 @@ Character::Character(std::string char_name) : _name(char_name), _char_class("job
     }
 
     file >> _experience;
-    file >> _free_points;
 
-    _calculate_level();
     _calculate_free_points_and_experience();
 }
 
@@ -40,11 +40,11 @@ void Character::save() const {
     std::ofstream file(SGOMFiles::get()->charFilePath(_name));
 
     file << _char_class << std::endl;
+    file << _level << std::endl;
 
     for(UIntegerType i = 0; i < Attributes::statsCount(); i++) file << _attr.stats[i] << std::endl;
 
     file << _experience << std::endl;
-    file << _free_points << std::endl;
 }
 
 void Character::_calculate_free_points_and_experience() {
@@ -54,8 +54,13 @@ void Character::_calculate_free_points_and_experience() {
     while((needed = experienceNeeded()) <= experience()) {
 
         _experience -= needed;
-        _free_points++;
         _level++;
     }
+
+    UIntegerType attr_count = 0;
+    for(UIntegerType i = 0; i < Attributes::statsCount(); i++) attr_count += _attr.stats[i];
+
+    UIntegerType total_points = _level*freePointsPerLevel();
+    _free_points = total_points >= attr_count ? total_points - attr_count : 0;
 }
 
