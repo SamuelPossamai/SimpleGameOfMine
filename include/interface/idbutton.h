@@ -6,7 +6,7 @@
 #include "types.h"
 
 /*!
- * \brief A simples pushn button, but with an id associated.
+ * \brief A simple push button, but with an id associated.
  */
 class IdButton : public QPushButton {
 

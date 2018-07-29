@@ -59,7 +59,8 @@ SOURCES += src/main.cpp \
     src/engine/unitsinfo/ninja.cpp \
     src/engine/effects/lastescape.cpp \
     src/engine/skills/onofflastescape.cpp \
-    src/interface/selectjobdialog.cpp
+    src/interface/selectjobdialog.cpp \
+    src/utility/imagecolorchange.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \

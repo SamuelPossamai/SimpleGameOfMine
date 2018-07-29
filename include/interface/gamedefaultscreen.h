@@ -12,12 +12,20 @@ class GameDefaultScreen;
 
 class QListWidgetItem;
 
+/*!
+ * \brief Basic screen to display basic information about characters and to explore maps
+ */
 class GameDefaultScreen : public MainWidget {
 
     Q_OBJECT
 
 public:
 
+    /*!
+     * \brief Construct a GameDefaultScreen, passing the players
+     * \param players Characters that are currently playing
+     * \param parent Parent of this QObject
+     */
     explicit GameDefaultScreen(std::vector<std::string> players, MainWindow *parent = nullptr);
     virtual ~GameDefaultScreen();
 

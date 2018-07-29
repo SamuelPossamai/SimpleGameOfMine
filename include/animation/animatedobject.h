@@ -58,6 +58,12 @@ public:
     UIntegerType animations() const { return _animations.size(); }
 
     /*!
+     * \brief Clear the container that contains the animations
+     * \sa addAnimation(const Animation&), animations()
+     */
+    void clearAnimations() { _cur_animation = _idle_animation = 0; _animations.clear(); }
+
+    /*!
      * \brief Select which animation run whenever an the current animation is over
      * \sa idleAnimation(), selectAnimation(UIntegerType), currentAnimation()
      * \param idle_animation the animation that will be the new idle animation

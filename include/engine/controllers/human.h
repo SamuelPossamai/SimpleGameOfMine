@@ -6,6 +6,9 @@
 
 namespace controller {
 
+/*!
+ * \brief Class that represents an human controller
+ */
 class Human : public UnitController {
 
 protected:
@@ -14,9 +17,20 @@ protected:
 
 public:
 
+    /*!
+     * \brief Ask the user to choose a skill
+     */
     virtual UIntegerType chooseSkill(const Unit *, const Map *, UserInterface *);
+
+    /*!
+     * \brief Ask the user to choose an angle
+     */
     virtual std::optional<AngleType> chooseAngle(const Unit *, const Map *, UserInterface *);
 
+    /*!
+     * \brief Return a dynamically allocated copy of this class instance, if it is yet not created, create it
+     * \return Object of this class
+     */
     static Human *getController() { if(!_controller) _controller = new Human; return _controller; }
 
 private:

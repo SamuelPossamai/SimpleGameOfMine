@@ -4,7 +4,6 @@
 #include <QGraphicsDropShadowEffect>
 
 #include "unitanimations/basicunitgraphicitem.h"
-#include "animatedobject.h"
 #include "progressbaritem.h"
 
 namespace unitanimation {

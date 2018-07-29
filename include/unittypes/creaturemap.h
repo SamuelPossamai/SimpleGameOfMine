@@ -7,6 +7,9 @@
 
 #include <config/types.h>
 
+/*!
+ * \brief Abstract class for creature maps, it's used to return the creatures that appeard when a region is explored
+ */
 class CreatureMap {
 
 public:
@@ -19,6 +22,10 @@ public:
 
     using CreaturesContainer = std::vector<CreaturesContainerContent>;
 
+    /*!
+     * \brief Return the creatures that were found exploring the map
+     * \return Creatures found in the map
+     */
     virtual CreaturesContainer getCreatures() const = 0;
 };
 

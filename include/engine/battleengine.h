@@ -49,8 +49,16 @@ public:
      */
     void placeUnits() { _map.placeUnits(); }
 
+    /*!
+     * \brief Return if the game has finished
+     * \return true if the game has finished, false otherwise
+     */
     bool finished() const { return _game_status == status::FINISHED; }
 
+    /*!
+     * \brief Return the team that won the battle, if the game hasn't finished the return will be one of the teams
+     * \return The number of the team that has won
+     */
     UIntegerType winningTeam() const { return _map.unitAccess(0)->team(); }
 
 private:

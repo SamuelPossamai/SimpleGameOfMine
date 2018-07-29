@@ -6,6 +6,9 @@
 
 namespace skill {
 
+/*!
+ * \brief This skills walks for a small duration backward
+ */
 class Evade : public UnitSkill {
 
 protected:
@@ -16,6 +19,10 @@ public:
 
     virtual UIntegerType action(Unit*, Map*, const Info&) override;
 
+    /*!
+     * \brief Return a dynamically allocated copy of this class instance, if it is yet not created, create it
+     * \return Object of this class
+     */
     static Evade *getSkill() {
 
         if(!_skill) _skill =  new Evade;

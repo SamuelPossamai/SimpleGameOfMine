@@ -6,9 +6,10 @@ UIntegerType UnitInfo::callSkill(UIntegerType n, Unit *u, Map *m, const UnitSkil
     return const_cast<UnitSkill *>(_skills[n].first)->action(u, m, info);
 }
 
-void UnitInfo::copyStatus(const UnitInfo *i) {
+void UnitInfo::copyStats(const UnitInfo *i) {
 
     _max_health = i->_max_health;
+    _max_energy = i->_max_energy;
     _base_attack = i->_base_attack;
     _base_defense = i->_base_defense;
     _size = i->_size;

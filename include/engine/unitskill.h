@@ -30,9 +30,9 @@ public:
     /*!
      * \brief This function is virtual pure and must be implemented in a derived class.
      * \brief This function is called several times, and it determine what the skill does.
-     * \param unit the unit that is performing thne skill.
-     * \param map object that contains all the units.
-     * \param info information about the skill being performed, including how many steps(timer cycle) has passed.
+     * \param unit The unit that is performing the skill.
+     * \param map Object that contains all the units.
+     * \param info Information about the skill being performed, including how many steps(timer cycle) has passed.
      * \return Number of steps until the next call to 'action', to stop the skill return 0.
      */
     virtual UIntegerType action(Unit *unit, Map *map, const Info& info) = 0;
@@ -40,9 +40,9 @@ public:
     /*!
      * \brief Same as a call to action.
      * \sa action(Unit *, Map *, const Info&)
-     * \param unit the unit that is performing thne skill.
-     * \param map object that contains all the units.
-     * \param info information about the skill being performed, including how many steps(timer cycle) has passed.
+     * \param unit The unit that is performing thne skill.
+     * \param map Object that contains all the units.
+     * \param info Information about the skill being performed, including how many steps(timer cycle) has passed.
      * \return Number of steps until the next call to 'action', to stop the skill return 0.
      */
     UIntegerType operator() (Unit *unit, Map *map, const Info& info) { return this->action(unit, map, info); }

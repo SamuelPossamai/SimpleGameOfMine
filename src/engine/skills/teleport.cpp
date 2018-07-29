@@ -26,7 +26,7 @@ UIntegerType Teleport::action(Unit *u, Map *, const Info& info) {
     return 10;
 }
 
-void Teleport::teleportUnit(Unit *u) {
+bool Teleport::teleportUnit(Unit *u) {
 
 
     Map::PointType p_max = u->maxPosition();
@@ -39,6 +39,8 @@ void Teleport::teleportUnit(Unit *u) {
         new_p.x = Random::realDistribution(u->size(), p_max.x);
         new_p.y = Random::realDistribution(u->size(), p_max.y);
 
-        if(u->setPos(new_p)) break;
+        if(u->setPos(new_p)) return true;
     }
+
+    return false;
 }

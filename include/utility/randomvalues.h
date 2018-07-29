@@ -10,6 +10,10 @@
 
 namespace utility {
 
+/*!
+ * \brief Class meant to select a group of itens from certain parameters
+ * \tparam T Type of the itens that are meant to be selected using this class
+ */
 template <typename T>
 class RandomValues {
 
@@ -23,13 +27,40 @@ public:
 
     using ValuesContainer = std::vector<T>;
 
+    /*!
+     * \brief Construct an object of this class passing the interval of values for the selected itens group size
+     * \param min Minimum amount of itens that this object will select
+     * \param max Maximum amount of itens that this object will select, max value included
+     */
     RandomValues(UIntegerType min, UIntegerType max) : _min(min), _max(max) {}
+
+    /*!
+     * \brief Construct an object of this class passing the maximum size for the selected itens group size
+     * \brief Same as RandomValue(0, max)
+     * \param max Maximim amount of itens that this object will select, amx value included
+     * \sa RandomValue(UIntegerType, UIntegerType)
+     */
     explicit RandomValues(UIntegerType max = 1) : RandomValues(0, max) {}
 
+    /*!
+     * \brief Generate an random group of itens based on their priority and return it
+     * \sa add(const T&, cosnt UIntegerType&), RandomValues(UIntegerType, UIntegerType)
+     * \return A group of itens randonly selecteds
+     */
     ValuesContainer getValues() const;
 
+    /*!
+     * \brief Add an item to the list of itens that can be selecteds
+     * \param value Item value
+     * \param priority Priority of the item, higher the priority higher the chances to be selected
+     * \sa getValue()
+     */
     void add(const T& value, const UIntegerType& priority) { _values.push_back({ value, priority }); }
 
+    /*!
+     * \brief Clear all the itens added to this object
+     * \sa add(const T&, const UIntegerType&)
+     */
     void clear() { _values.clear(); }
 
 private:

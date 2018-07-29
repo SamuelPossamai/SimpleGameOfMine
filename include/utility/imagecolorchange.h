@@ -6,13 +6,17 @@
 #include <array>
 
 #include <QColor>
-#include <QImage>
 
 #include <config/types.h>
 #include <utility/interval.h>
 
+class QImage;
+
 namespace utility {
 
+/*!
+ * \brief Class that is used to swap colors in a QImage
+ */
 class ImageColorChange {
 
 public:
@@ -20,36 +24,35 @@ public:
     using ColorInterval = Interval<UIntegerType>;
     using ColorChList = std::vector<std::pair<QColor, std::array<ColorInterval, 3>> >;
 
-    void changeImage(QImage& i) const {
+    /*!
+     * \brief Add a new swap interval to the ImageColorChange
+     * \param r Interval for the red component
+     * \param g Interval for the green component
+     * \param b Interval for the blue component
+     * \param new_color New color that will take the place when a pixel in the intervals is found
+     * \sa changeImage(QImage&), colorChangeList(), clear()
+     * \return true if it was added successfully, false otherwise
+     */
+    bool addChInterval(ColorInterval r, ColorInterval g, ColorInterval b, QColor new_color);
 
-        for(int y = 0; y < i.height(); y++){
+    /*!
+     * \brief Change an image using the color intervals in the color change list
+     * \param i The image that will be modified
+     * \sa addChInterval(ColorInterval, ColorInterval, ColorInterval, QColor), colorChangeList()
+     */
+    void changeImage(QImage& i) const;
 
-            for(int x= 0; x < i.width(); x++){
-
-                auto old_color = i.pixelColor(x, y);
-                auto p = _get_new_color(old_color);
-
-                if(!p.second) continue;
-
-                QColor new_color = p.first;
-
-                new_color.setAlpha(old_color.alpha());
-                i.setPixelColor(x,y,new_color);
-            }
-        }
-    }
-
-    bool addChInterval(ColorInterval r, ColorInterval g, ColorInterval b, QColor new_color) {
-
-        if(!r.isValid() || !g.isValid() || !b.isValid()) return false;
-
-        _clist.emplace_back(new_color, ColorChList::value_type::second_type{ r, g, b });
-
-        return true;
-    }
-
+    /*!
+     * \brief Clear all of the content of the color change list
+     * \sa addChInterval(ColorInterval, ColorInterval, ColorInterval, QColor), colorChangeList()
+     */
     void clear() { _clist.clear(); }
 
+    /*!
+     * \brief Return the list containing the colors change intervals
+     * \sa addChInterval(ColorInterval, ColorInterval, ColorInterval, QColor), clear(), changeImage(QImage&)
+     * \return A list with the colors intervals and new color values
+     */
     const ColorChList& colorChangeList() const { return _clist; }
 
 private:

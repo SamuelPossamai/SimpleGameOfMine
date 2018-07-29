@@ -30,7 +30,11 @@ public:
     }
 
     template <typename... Animations>
-    void setAnimations(const Animation& idle, Animations&&... skill_animations) { _add_animations(idle, skill_animations...); }
+    void setAnimations(const Animation& idle, Animations&&... skill_animations) {
+
+        _obj->clearAnimations();
+        _add_animations(idle, skill_animations...);
+    }
 
 protected:
 

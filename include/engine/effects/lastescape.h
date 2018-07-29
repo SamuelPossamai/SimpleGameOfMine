@@ -8,6 +8,9 @@
 
 namespace effect {
 
+/*!
+ * \brief UnitEffect LastEscape is an effect that consume energy when attacked to escape the attack and teleport to somewhere else
+ */
 class LastEscape : public UnitEffect {
 
     LastEscape() {}
@@ -16,6 +19,10 @@ public:
 
     virtual AttackType doDefenseEffect(Unit *def, Unit *att, AttackType a) const override;
 
+    /*!
+     * \brief Return a dynamically allocated copy of this class instance, if it is yet not created, create it
+     * \return Object of this class
+     */
     static LastEscape *getEffect() { if(!_copy) _copy = new LastEscape; return _copy; }
 
 private:

@@ -4,6 +4,9 @@
 
 #include "battlewidget.h"
 
+/*!
+ * \brief UserInterface for the UnitController
+ */
 class BattleWidget::InputManager : public UnitController::UserInterface {
 
     friend class BattleWidget;
@@ -13,21 +16,42 @@ class BattleWidget::InputManager : public UnitController::UserInterface {
 
 public:
 
+    /*!
+     * \brief Constructs an InputManager
+     * \param i BattleWidget from which the iputs will be receiveds
+     */
     explicit InputManager(BattleWidget *i) : _enable(false), _interface(i) {}
 
+    /*!
+     * \brief Ask for a mouse click
+     * \return The position that was clicked
+     */
     Vec2Type<IntegerType> askMouseClick();
 
+    /*!
+     * \brief Ask to select an skill
+     * \return The id of the selected skill
+     */
     UIntegerType askSkill();
 
 protected:
+
+    /*!
+     * \brief Overwritten virtual method from UnitController, this method is called when a controller ask for an skill
+     * \return Id of the selected skill
+     */
+    virtual UIntegerType controllerUserInterfaceAskSkillInput(const Unit *) override;
+
+    /*!
+     * \brief Overwritten virtual method from UnitController, this method is called when a controller ask for an angle
+     * \return if not canceled, the selected angle or else std::nullopt
+     */
+    virtual std::optional<UnitController::AngleType> controllerUserInterfaceAskAngleInput(const Unit *) override;
 
     void handleEvents();
 
     void enable() { _enable = true; }
     void disable() { _enable = false; }
-
-    virtual UIntegerType controllerUserInterfaceAskSkillInput(const Unit *) override;
-    virtual std::optional<UnitController::AngleType> controllerUserInterfaceAskAngleInput(const Unit *) override;
 
     void interfaceSkillButtonClicked(UIntegerType id);
     void interfaceMouseReleaseEvent(QMouseEvent *event);

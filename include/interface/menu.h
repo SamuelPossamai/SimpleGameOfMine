@@ -9,12 +9,19 @@ namespace Ui {
 class Menu;
 } /* namespace Ui */
 
+/*!
+ * \brief Class that represents the interface for the game menu
+ */
 class Menu : public MainWidget {
 
     Q_OBJECT
 
 public:
 
+    /*!
+     * \brief Create an menu
+     * \param parent Parent of this widget, by default nullptr
+     */
     Menu(MainWindow *parent = nullptr);
 
     virtual ~Menu();
