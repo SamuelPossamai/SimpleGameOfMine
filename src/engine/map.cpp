@@ -132,18 +132,18 @@ void Map::placeUnits(){
 
     if(units() == 0) return;
 
-    UIntegerType team_0 = 0, team_1 = 0;
+    UIntegerType nmax_teams[2] = {};
+    for(UIntegerType i = 0; i < units(); i++) nmax_teams[unitAccess(i)->team()]++;
 
+    UIntegerType n_teams[2] = {};
     for(UIntegerType i = 0; i < units(); i++) {
-
-        UIntegerType n = team_0;
 
         Unit *unit = unitAccess(i);
 
-        if(unit->team() == 1) n = team_1++;
-        else team_0++;
+        UIntegerType x = unit->team() ? _width - 50 : 50;
+        UIntegerType y = _height*RealType(++n_teams[unit->team()])/(nmax_teams[unit->team()] + 1);
 
-        unit->setPos((unit->team() ? _width - 50 : 50), (_height/4 + (_height/2)*(RealType(n + 1)/(units() + 1))));
+        unit->setPos(x, y);
         unit->setAngle(unit->team() ? M_PI : 0);
     }
 }

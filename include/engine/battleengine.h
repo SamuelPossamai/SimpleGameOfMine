@@ -24,8 +24,7 @@ public:
      * \brief Construct an BattleEngine object using a BattleWidget object.
      * \param interface interface used to get user's input.
      */
-    explicit BattleEngine(BattleWidget *interface) : _map(800, 400), _interface(interface), _cur_unit(0),
-        _max_speed(1), _t(nullptr), _game_status(status::WORKING) {}
+    explicit BattleEngine(BattleWidget *interface);
 
     ~BattleEngine();
 

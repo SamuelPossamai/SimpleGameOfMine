@@ -1,25 +1,22 @@
 
-#ifndef CONTROLLERS_AI_SLIME_H
-#define CONTROLLERS_AI_SLIME_H
+#ifndef CONTROLLERS_PACIFISTSLIME_H
+#define CONTROLLERS_PACIFISTSLIME_H
 
-#include "unitcontroller.h"
+#include "controllers/ai/slime.h"
 
 namespace controller {
 
 namespace AI {
 
-/*!
- * \brief Basic AI for slime creatures
- */
-class Slime : public UnitController {
+class PacifistSlime : public Slime {
 
 protected:
 
-    Slime() {}
+    PacifistSlime() {}
 
 public:
 
-    virtual ~Slime() {}
+    virtual ~PacifistSlime() {}
 
     virtual UIntegerType chooseSkill(const Unit *, const Map *, UserInterface *);
     virtual std::optional<AngleType> chooseAngle(const Unit *, const Map *, UserInterface *);
@@ -28,15 +25,15 @@ public:
      * \brief Return a dynamically allocated copy of this class instance, if it is yet not created, create it
      * \return Object of this class
      */
-    static Slime *getController() { if(!_controller) _controller = new Slime; return _controller; }
+    static PacifistSlime *getController() { if(!_controller) _controller = new PacifistSlime; return _controller; }
 
 private:
 
-    static Slime *_controller;
+    static PacifistSlime *_controller;
 };
 
 } /* namespace AI */
 
 } /* namespace controller */
 
-#endif // CONTROLLERS_AI_SLIME_H
+#endif // CONTROLLERS_PACIFISTSLIME_H

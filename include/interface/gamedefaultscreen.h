@@ -55,6 +55,8 @@ private slots:
 
     void on_wisAddButton_clicked();
 
+    void on_exploreButton2_clicked();
+
 private:
 
     void _start_battle(CreatureMap *m);

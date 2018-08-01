@@ -14,8 +14,9 @@ class BasicAttack : public UnitSkill {
 
 protected:
 
-    BasicAttack(UIntegerType distance) : UnitSkill(true), _distance(distance) {}
-    BasicAttack(const BasicAttack& other) : UnitSkill(true), _distance(other._distance) {}
+    BasicAttack(UIntegerType distance, bool attack_from_above) : UnitSkill(true), _distance(distance),
+        _att_from_above(attack_from_above) {}
+    BasicAttack(const BasicAttack& other) : UnitSkill(true), _distance(other._distance), _att_from_above(other._att_from_above) {}
 
 public:
 
@@ -23,7 +24,11 @@ public:
 
     virtual UIntegerType action(Unit*, Map*, const Info&) override;
 
-    bool operator<(const BasicAttack& other) const { return _distance < other._distance; }
+    bool operator<(const BasicAttack& other) const {
+
+        if(_distance != other._distance) return _distance < other._distance;
+        return _att_from_above < other._att_from_above;
+    }
 
     template<typename... Args>
     static BasicAttack *getSkill(Args... args) { return _skills.get(args...); }
@@ -31,6 +36,7 @@ public:
 private:
 
     UIntegerType _distance;
+    bool _att_from_above;
 
     static OneCopyMemoryManager<BasicAttack> _skills;
 };

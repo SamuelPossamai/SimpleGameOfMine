@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>516</width>
+    <width>616</width>
     <height>300</height>
    </rect>
   </property>
@@ -34,6 +34,11 @@
      <row>
       <property name="text">
        <string>Fighter</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Knight</string>
       </property>
      </row>
      <row>
@@ -118,7 +123,7 @@
      </item>
      <item row="1" column="0">
       <property name="text">
-       <string>ninja</string>
+       <string>knight</string>
       </property>
      </item>
      <item row="1" column="1">
@@ -131,7 +136,7 @@
      </item>
      <item row="1" column="2">
       <property name="text">
-       <string>0</string>
+       <string>2</string>
       </property>
       <property name="textAlignment">
        <set>AlignTrailing|AlignVCenter</set>
@@ -139,7 +144,7 @@
      </item>
      <item row="1" column="3">
       <property name="text">
-       <string>10</string>
+       <string>0</string>
       </property>
       <property name="textAlignment">
        <set>AlignTrailing|AlignVCenter</set>
@@ -147,13 +152,58 @@
      </item>
      <item row="1" column="4">
       <property name="text">
-       <string>10</string>
+       <string>0</string>
       </property>
       <property name="textAlignment">
        <set>AlignTrailing|AlignVCenter</set>
       </property>
      </item>
      <item row="1" column="5">
+      <property name="text">
+       <string>0</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignTrailing|AlignVCenter</set>
+      </property>
+     </item>
+     <item row="2" column="0">
+      <property name="text">
+       <string>ninja</string>
+      </property>
+     </item>
+     <item row="2" column="1">
+      <property name="text">
+       <string>0</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignTrailing|AlignVCenter</set>
+      </property>
+     </item>
+     <item row="2" column="2">
+      <property name="text">
+       <string>0</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignTrailing|AlignVCenter</set>
+      </property>
+     </item>
+     <item row="2" column="3">
+      <property name="text">
+       <string>10</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignTrailing|AlignVCenter</set>
+      </property>
+     </item>
+     <item row="2" column="4">
+      <property name="text">
+       <string>10</string>
+      </property>
+      <property name="textAlignment">
+       <set>AlignTrailing|AlignVCenter</set>
+      </property>
+     </item>
+     <item row="2" column="5">
       <property name="text">
        <string>0</string>
       </property>

@@ -61,7 +61,12 @@ SOURCES += src/main.cpp \
     src/engine/skills/onofflastescape.cpp \
     src/interface/selectjobdialog.cpp \
     src/utility/imagecolorchange.cpp \
-    src/engine/controllers/ai/crazy.cpp
+    src/engine/controllers/ai/crazy.cpp \
+    src/engine/controllers/ai/timidslime.cpp \
+    src/unittypes/maps/trainingground.cpp \
+    src/engine/controllers/ai/pacifistslime.cpp \
+    src/animation/unitanimationfactories/knightanimationfactory.cpp \
+    src/engine/unitsinfo/knight.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -139,7 +144,12 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/effects/lastescape.h \
     include/engine/skills/onofflastescape.h \
     include/interface/selectjobdialog.h \
-    include/engine/controllers/ai/crazy.h
+    include/engine/controllers/ai/crazy.h \
+    include/engine/controllers/ai/timidslime.h \
+    include/unittypes/maps/trainingground.h \
+    include/engine/controllers/ai/pacifistslime.h \
+    include/animation/unitanimationfactories/knightanimationfactory.h \
+    include/engine/unitsinfo/knight.h
 
 RESOURCES += img/images.qrc
 

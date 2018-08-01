@@ -22,6 +22,9 @@ struct Traits <BattleEngine> {
 template <>
 struct Traits <Map> : public Traits<BattleEngine> {
 
+    static const UIntegerType width = 1000;
+    static const UIntegerType height = 500;
+
     static const bool solid_border = true;
 };
 

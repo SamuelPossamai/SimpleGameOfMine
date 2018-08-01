@@ -3,8 +3,10 @@
 
 #include "unitsinfo/fighter.h"
 #include "unitsinfo/ninja.h"
+#include "unitsinfo/knight.h"
 #include "unitanimationfactories/fighteranimationfactory.h"
 #include "unitanimationfactories/ninjaanimationfactory.h"
+#include "unitanimationfactories/knightanimationfactory.h"
 
 std::map<std::string, Jobs::GetJobFunctionType> Jobs::_jobs;
 
@@ -31,8 +33,15 @@ static Jobs::Info _get_ninja_info(const Jobs::Attributes& attr) {
                       unitanimationfactory::NinjaAnimationFactory::getFactory());
 }
 
+static Jobs::Info _get_knight_info(const Jobs::Attributes& attr) {
+
+    return Jobs::Info(unitsinfo::Knight::getInfo(attr),
+                      unitanimationfactory::KnightAnimationFactory::getFactory());
+}
+
 void Jobs::_init() {
 
     _jobs["fighter"] = _get_fighter_info;
     _jobs["ninja"] = _get_ninja_info;
+    _jobs["knight"] = _get_knight_info;
 }

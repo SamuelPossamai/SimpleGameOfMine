@@ -4,6 +4,11 @@
 #include "battlewidget.h"
 #include "unit.h"
 
+BattleEngine::BattleEngine(BattleWidget *interface) : _map(Traits<Map>::width, Traits<Map>::height),
+    _interface(interface), _cur_unit(0), _max_speed(1), _t(nullptr), _game_status(status::WORKING) {
+
+}
+
 BattleEngine::~BattleEngine() {
 
     _delete_thread();

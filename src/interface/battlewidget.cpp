@@ -8,6 +8,7 @@
 #include <QScrollBar>
 #include <QKeyEvent>
 
+#include <config/engine_traits.h>
 #include <memory/memorymanager.h>
 #include <unittypes/creatures.h>
 #include <unittypes/jobs.h>
@@ -33,9 +34,13 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */, UIntegerType *res
     _timer_construct();
     _ui->setupUi(this);
 
+    _ui->cursorLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
+    hideCancelButton();
+
     setStyleSheet("background-color:lightGray;");
 
     _input_interface->enable();
+
 }
 
 BattleWidget::~BattleWidget() {
@@ -310,7 +315,7 @@ void BattleWidget::_gview_construct() {
 
     _gview->setGeometry(this->geometry());
 
-    QPixmap p(Traits<MainWindow>::width, Traits<MainWindow>::height);
+    QPixmap p(Traits<Map>::width, Traits<Map>::height);
 
     p.fill(Qt::white);
 

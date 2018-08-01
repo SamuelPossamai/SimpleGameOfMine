@@ -8,7 +8,7 @@
 #include "skills/evade.h"
 #include "skills/thrust.h"
 
-namespace unitsinfo {
+using namespace unitsinfo;
 
 OneCopyMemoryManager<Slime> Slime::_memmanager;
 
@@ -59,5 +59,3 @@ void Slime::init(Unit *u) const {
 
     if(_type == Type::Immortal) u->addEffect(effect::Regeneration::getEffect(0.1*health(), 100));
 }
-
-} /* namespace creature */

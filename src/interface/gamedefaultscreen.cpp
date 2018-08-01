@@ -4,6 +4,7 @@
 #include <unittypes/creatures.h>
 
 #include <unittypes/maps/greenvalley.h>
+#include <unittypes/maps/trainingground.h>
 
 #include "unitsinfo/fighter.h"
 #include "unitanimationfactories/fighteranimationfactory.h"
@@ -23,13 +24,6 @@ GameDefaultScreen::GameDefaultScreen(std::vector<std::string> players, MainWindo
     _ui->setupUi(this);
 
     for(const std::string& name : players) _chars.emplace_back(name);
-
-    for(const Character& c : _chars) {
-
-        QString text;
-        text.sprintf("Lv: %03lu %s %s", c.level(), c.className().c_str(), c.name().c_str());
-        _ui->charactersList->addItem(text);
-    }
 }
 
 GameDefaultScreen::~GameDefaultScreen() {
@@ -52,6 +46,15 @@ void GameDefaultScreen::activate() {
         _xp_for_victory = 0;
     }
 
+    _ui->charactersList->clear();
+
+    for(const Character& c : _chars) {
+
+        QString text;
+        text.sprintf("Lv: %03lu %s %s", c.level(), c.className().c_str(), c.name().c_str());
+        _ui->charactersList->addItem(text);
+    }
+
     _reselect();
 }
 
@@ -66,6 +69,11 @@ void GameDefaultScreen::on_charactersList_itemClicked(QListWidgetItem *item) {
 }
 
 void GameDefaultScreen::on_exploreButton1_clicked() {
+
+    _start_battle(map::TrainingGround::getMap());
+}
+
+void GameDefaultScreen::on_exploreButton2_clicked() {
 
     _start_battle(map::GreenValley::getMap());
 }

@@ -10,9 +10,9 @@ struct Traits <MainWindow> {
     static constexpr const char * name = "SGOM";
 
     static const UIntegerType x = 200;
-    static const UIntegerType y = 200;
-    static const UIntegerType width = 800;
-    static const UIntegerType height = 400;
+    static const UIntegerType y = 120;
+    static const UIntegerType width = 1000;
+    static const UIntegerType height = 500;
 };
 
 template<>

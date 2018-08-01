@@ -30,7 +30,7 @@ void SelectJobDialog::on_buttonBox_accepted() {
     for(auto selected : _ui->tableWidget->selectedItems()) {
 
         if(selected->column() == 0) new_job = selected->text().toStdString();
-        else req_stats[selected->column()] = selected->text().toULongLong();
+        else req_stats[selected->column() - 1] = selected->text().toULongLong();
     }
 
     bool can_change = true;
