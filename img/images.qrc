@@ -38,5 +38,16 @@
         <file>knight_walking_2.png</file>
         <file>knight_walking_4.png</file>
         <file>knight_walking_5.png</file>
+        <file>help_img1.png</file>
+        <file>help_img2.png</file>
+        <file>help_img3.png</file>
+        <file>help_img4.png</file>
+        <file>blue_slime_library_img.png</file>
+        <file>orange_slime_library_img.png</file>
+        <file>pink_slime_library_img.png</file>
+        <file>purple_slime_library_img.png</file>
+        <file>white_slime_library_img.png</file>
+        <file>yellow_slime_library_img.png</file>
+        <file>green_slime_library_img.png</file>
     </qresource>
 </RCC>

@@ -66,7 +66,8 @@ SOURCES += src/main.cpp \
     src/unittypes/maps/trainingground.cpp \
     src/engine/controllers/ai/pacifistslime.cpp \
     src/animation/unitanimationfactories/knightanimationfactory.cpp \
-    src/engine/unitsinfo/knight.cpp
+    src/engine/unitsinfo/knight.cpp \
+    src/interface/librarywidget.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -149,7 +150,8 @@ HEADERS += include/interface/mainwindow.h \
     include/unittypes/maps/trainingground.h \
     include/engine/controllers/ai/pacifistslime.h \
     include/animation/unitanimationfactories/knightanimationfactory.h \
-    include/engine/unitsinfo/knight.h
+    include/engine/unitsinfo/knight.h \
+    include/interface/librarywidget.h
 
 RESOURCES += img/images.qrc
 
@@ -158,7 +160,9 @@ FORMS += forms/gamedefaultscreen.ui \
     forms/selectuserinterface.ui \
     forms/characterinfodialog.ui \
     forms/selectjobdialog.ui \
-    forms/battlewidget.ui
+    forms/battlewidget.ui \
+    forms/helpwidget.ui \
+    forms/librarywidget.ui
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

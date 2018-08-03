@@ -4,6 +4,10 @@
 
 #include "mainwidget.h"
 
+namespace Ui {
+class HelpWidget;
+} /* namespace Ui */
+
 class HelpWidget : public MainWidget {
 
     Q_OBJECT
@@ -11,10 +15,17 @@ class HelpWidget : public MainWidget {
 public:
 
     explicit HelpWidget(MainWindow * = nullptr);
+    ~HelpWidget();
+
+    virtual void activate() override;
 
 private slots:
 
-    void _return_button_pressed();
+    void on_pushButton_clicked();
+
+private:
+
+    Ui::HelpWidget *_ui;
 };
 
 #endif // HELPWIDGET_H

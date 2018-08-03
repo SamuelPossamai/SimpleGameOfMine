@@ -4,6 +4,7 @@
 #include "menu.h"
 #include "selectuserinterface.h"
 #include "helpwidget.h"
+#include "librarywidget.h"
 
 Menu::Menu(MainWindow *parent /* = nullptr */) : MainWidget(parent), _ui(new Ui::Menu) {
 
@@ -33,4 +34,9 @@ void Menu::on_helpButton_clicked() {
 
 void Menu::on_testButton_clicked() {
 
+}
+
+void Menu::on_libraryButton_clicked() {
+
+    parent()->pushWidget(new LibraryWidget);
 }

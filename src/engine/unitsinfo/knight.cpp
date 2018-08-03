@@ -12,13 +12,13 @@ Knight::MemoryManager Knight::_copies;
 
 Knight::~Knight() {
 
-    skill::Walk::MemoryInterface::noLongerDepend(10, 140);
+    skill::Walk::MemoryInterface::noLongerDepend(10, 100);
     skill::BasicAttack::MemoryInterface::noLongerDepend(90, false);
 }
 
 Knight::Knight(const Attributes& attr) : UnitClassInfo(attr) {
 
-    addSkill(skill::Walk::MemoryInterface::dependentGet(10, 140), QPixmap(":/wing_boot.png").scaled(50, 50));
+    addSkill(skill::Walk::MemoryInterface::dependentGet(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
     addSkill(skill::BasicAttack::MemoryInterface::dependentGet(80, false), QPixmap(":/sword_image.png").scaled(50, 50));
 
     calculateInfo();
@@ -26,6 +26,6 @@ Knight::Knight(const Attributes& attr) : UnitClassInfo(attr) {
 
 Knight::SpeedType Knight::speedCalculate() const {
 
-    return 30 + 0.5*std::sqrt(attributes().agility()*attributes().strength()) +
+    return 45 + 0.5*std::sqrt(attributes().agility()*attributes().strength()) +
             0.1*(attributes().dexterity() + attributes().agility());
 }

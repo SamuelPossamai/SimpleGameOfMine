@@ -38,6 +38,8 @@ private slots:
 
     void on_testButton_clicked();
 
+    void on_libraryButton_clicked();
+
 private:
 
     Ui::Menu *_ui;
