@@ -14,10 +14,7 @@ class Regeneration : public UnitEffect {
 
 public:
 
-    virtual void doTurnEffect(Unit *u, UIntegerType duration_left) const override {
-
-        if(!(duration_left%_period)) u->heal(u, _amount);
-    }
+    virtual void doTurnEffect(Unit *u, UIntegerType duration_left) const override;
 
     template <typename... Args>
     static const UnitEffect *getEffect(Args... args) { return _effects.get(Regeneration(args...)); }

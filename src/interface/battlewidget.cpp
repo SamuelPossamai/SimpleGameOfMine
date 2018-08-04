@@ -1,12 +1,11 @@
 
-#include <limits>
 #include <cmath>
 
 #include <QGraphicsScene>
-#include <QGraphicsPixmapItem>
 #include <QTimer>
-#include <QScrollBar>
 #include <QKeyEvent>
+#include <QGraphicsPixmapItem>
+#include <QLabel>
 
 #include <config/engine_traits.h>
 #include <memory/memorymanager.h>
@@ -179,6 +178,16 @@ bool BattleWidget::addHero(std::string name, const Character::Attributes& attr, 
     addUnit(std::get<0>(i), controller::Human::getController(), std::get<1>(i), team);
 
     return true;
+}
+
+void BattleWidget::showArrow(UIntegerType x, UIntegerType y) {
+
+    _arrow_item->setPos(x, y); _arrow_item->show();
+}
+
+void BattleWidget::hideArrow() {
+
+    _arrow_item->hide();
 }
 
 void BattleWidget::displayMessage(std::string message) {

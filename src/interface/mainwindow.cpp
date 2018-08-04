@@ -1,6 +1,4 @@
 
-#include <QWidget>
-
 #include "mainwindow.h"
 #include "mainwidget.h"
 #include "interface_traits.h"

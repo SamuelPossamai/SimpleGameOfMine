@@ -1,10 +1,11 @@
+
 #ifndef Animation_H
 #define Animation_H
 
 #include <vector>
 #include <bitset>
 
-#include <QGraphicsItem>
+#include <QPixmap>
 
 #include "types.h"
 

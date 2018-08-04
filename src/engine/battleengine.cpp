@@ -1,8 +1,9 @@
 
-#include "traits.h"
+#include <thread>
+
 #include "battleengine.h"
 #include "battlewidget.h"
-#include "unit.h"
+#include "unitcontroller.h"
 
 BattleEngine::BattleEngine(BattleWidget *interface) : _map(Traits<Map>::width, Traits<Map>::height),
     _interface(interface), _cur_unit(0), _max_speed(1), _t(nullptr), _game_status(status::WORKING) {

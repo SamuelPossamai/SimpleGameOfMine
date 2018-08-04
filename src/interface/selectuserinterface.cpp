@@ -2,9 +2,6 @@
 #include <config/sgomfiles.h>
 #include <engine/character.h>
 
-#include <QTableWidget>
-#include <QHeaderView>
-#include <QPalette>
 #include <QMessageBox>
 #include <QInputDialog>
 

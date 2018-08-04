@@ -1,5 +1,4 @@
 
-#include <unittypes/creatures.h>
 #include <unittypes/maps/trainingground.h>
 
 using namespace map;

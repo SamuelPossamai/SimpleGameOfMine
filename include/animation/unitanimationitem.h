@@ -2,8 +2,6 @@
 #ifndef UNITANIMATIONITEM_H
 #define UNITANIMATIONITEM_H
 
-#include <QGraphicsScene>
-
 #include "config/types.h"
 #include "engine/unit.h"
 

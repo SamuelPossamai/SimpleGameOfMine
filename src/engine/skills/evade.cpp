@@ -1,4 +1,6 @@
 
+#include <cmath>
+
 #include "skills/evade.h"
 #include "unit.h"
 #include "map.h"
@@ -11,8 +13,8 @@ UIntegerType Evade::action(Unit *u, Map *, const Info& info) {
 
     if(info.step < 10) {
 
-        Unit::PositionType dx = 10*cos(u->angle());
-        Unit::PositionType dy = 10*sin(u->angle());
+        Unit::PositionType dx = 10*std::cos(u->angle());
+        Unit::PositionType dy = 10*std::sin(u->angle());
 
         u->setAngle(u->angle() + 0.05);
 

@@ -1,7 +1,4 @@
 
-#include <QPainter>
-#include <QGraphicsScene>
-
 #include <utility/imagecolorchange.h>
 
 #include "animation.h"

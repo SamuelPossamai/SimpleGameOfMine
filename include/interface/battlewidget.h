@@ -2,15 +2,7 @@
 #ifndef BATTLEWIDGET_H
 #define BATTLEWIDGET_H
 
-#include <mutex>
-#include <condition_variable>
 #include <memory>
-#include <queue>
-
-#include <QWidget>
-#include <QGraphicsPixmapItem>
-#include <QLabel>
-#include <QPushButton>
 
 #include <config/interface_traits.h>
 #include <engine/unitcontroller.h>
@@ -22,6 +14,9 @@
 namespace Ui {
 class BattleWidget;
 } /* namespace Ui */
+
+class QLabel;
+class QGraphicsPixmapItem;
 
 /*!
  * \brief Widget that manages the interface in a battle
@@ -76,13 +71,13 @@ public:
      * \param y Arrow's tail y position
      * \sa hideArrow()
      */
-    void showArrow(UIntegerType x, UIntegerType y) { _arrow_item->setPos(x, y); _arrow_item->show(); }
+    void showArrow(UIntegerType x, UIntegerType y);
 
     /*!
      * \brief Hide the arrow
      * \sa showArrow(UIntegerType, UIntegerType)
      */
-    void hideArrow() { _arrow_item->hide(); }
+    void hideArrow();
 
     /*!
      * \brief Verify if the skill buttons are visible

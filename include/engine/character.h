@@ -2,7 +2,6 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include <utility>
 #include <string>
 
 #include <config/types.h>

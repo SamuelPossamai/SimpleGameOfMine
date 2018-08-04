@@ -1,9 +1,8 @@
+
 #ifndef MAP_H
 #define MAP_H
 
 #include <vector>
-
-#include <QGraphicsScene>
 
 #include "engine_traits.h"
 

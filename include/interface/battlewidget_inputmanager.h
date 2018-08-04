@@ -2,6 +2,10 @@
 #ifndef BATTLEWIDGET_INPUTMANAGER_H
 #define BATTLEWIDGET_INPUTMANAGER_H
 
+#include <mutex>
+#include <condition_variable>
+#include <queue>
+
 #include "battlewidget.h"
 
 /*!

@@ -1,5 +1,5 @@
 
-QT       += core gui sql
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -14,6 +14,7 @@ TEMPLATE = app
 DEFINES += QT_DEPRECATED_WARNINGS
 
 CONFIG += object_parallel_to_source
+OBJECTS_DIR = .
 
 SOURCES += src/main.cpp \
     src/interface/mainwindow.cpp \
@@ -168,3 +169,8 @@ run.depends = $$TARGET
 run.commands = ./$$TARGET
 
 QMAKE_EXTRA_TARGETS = run
+
+target.path = /usr/bin
+
+INSTALLS += target
+

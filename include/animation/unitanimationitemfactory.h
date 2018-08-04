@@ -2,7 +2,7 @@
 #ifndef UNITANIMATIONITEMFACTORY_H
 #define UNITANIMATIONITEMFACTORY_H
 
-#include <types.h>
+#include <config/types.h>
 
 /*!
  * \brief Abstract class to create UnitAnimationItem objects

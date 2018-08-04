@@ -1,5 +1,4 @@
 
-
 #include <utility/random.h>
 
 #include "animationhandler.h"

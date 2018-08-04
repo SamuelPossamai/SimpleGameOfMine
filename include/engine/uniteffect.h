@@ -2,7 +2,9 @@
 #ifndef UNITEFFECT_H
 #define UNITEFFECT_H
 
-#include "unit.h"
+#include <QtGlobal>
+
+#include <config/engine_traits.h>
 
 /*!
  * \brief Class used to represent effects in units during a battle
@@ -11,8 +13,8 @@ class UnitEffect {
 
 public:
 
-    using HealthType = Unit::HealthType;
-    using AttackType = Unit::AttackType;
+    using HealthType = Traits<Unit>::HealthType;
+    using AttackType = Traits<Unit>::AttackType;
 
     virtual ~UnitEffect() {}
 

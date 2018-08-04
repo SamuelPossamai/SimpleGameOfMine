@@ -2,9 +2,6 @@
 #include <cmath>
 
 #include "controllers/human.h"
-#include "battlewidget.h"
-#include "battleengine.h"
-#include "unit.h"
 
 using namespace controller;
 

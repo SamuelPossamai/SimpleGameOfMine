@@ -1,4 +1,6 @@
 
+#include <cmath>
+
 #include <QMouseEvent>
 
 #include <engine/unit.h>
@@ -107,7 +109,7 @@ std::optional<UnitController::AngleType> BattleWidget::InputManager::controllerU
 
     QPointF p = _interface->_gview->mapToScene(cursor.x, cursor.y);
 
-    return atan2(p.y() - u->y(), p.x() - u->x());
+    return std::atan2(p.y() - u->y(), p.x() - u->x());
 }
 
 

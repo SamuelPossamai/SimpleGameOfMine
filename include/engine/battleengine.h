@@ -2,12 +2,14 @@
 #ifndef BATTLEENGINE_H
 #define BATTLEENGINE_H
 
-#include <thread>
 #include <mutex>
 
 #include "map.h"
 #include "unit.h"
-#include "unitcontroller.h"
+
+namespace std {
+class thread;
+} /* namespace std */
 
 /*!
  * \brief This class manage controller and skills calls and animation step.

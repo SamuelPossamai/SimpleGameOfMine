@@ -1,14 +1,9 @@
 
 #include <cmath>
 
-#include <unittypes/creatures.h>
-
 #include <unittypes/maps/greenvalley.h>
 #include <unittypes/maps/trainingground.h>
 
-#include "unitsinfo/fighter.h"
-#include "unitanimationfactories/fighteranimationfactory.h"
-#include "controllers/human.h"
 #include "battlewidget.h"
 #include "characterinfodialog.h"
 #include "selectjobdialog.h"
