@@ -17,6 +17,10 @@ public:
     explicit LibraryWidget(MainWindow *parent = 0);
     ~LibraryWidget();
 
+private slots:
+
+    void on_returnButton_clicked();
+
 private:
 
     Ui::LibraryWidget *_ui;

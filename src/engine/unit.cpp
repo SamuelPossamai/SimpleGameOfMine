@@ -90,7 +90,9 @@ bool Unit::detachObserver(Observer *h) {
 
 bool Unit::addEffect(const UnitEffect *effect, UIntegerType duration, bool renew /* = false */) {
 
-    _effects.emplace_back(effect, EffectInfo{ duration, renew ? duration : 0 });
+    _notifyAll(&Observer::unitEffectAdded, effect);
+
+    _effects.emplace_back(effect, EffectInfo{ duration, duration, renew });
 
     return true;
 }
@@ -101,6 +103,8 @@ bool Unit::removeEffect(const UnitEffect *effect) {
                            [effect](const EffectsList::value_type& p) { return p.first == effect; } );
 
     if(it != _effects.end()) {
+
+        _notifyAll(&Observer::unitEffectRemoved, it->first);
 
         *it = _effects.back();
         _effects.pop_back();
@@ -218,7 +222,7 @@ void Unit::_verify_effects() {
 
         auto& duration = it->second.duration;
         auto& starting_duration = it->second.starting_duration;
-        bool renew = starting_duration != 0;
+        bool renew = it->second.renew;
 
         if(--duration == 0) {
 
@@ -227,6 +231,8 @@ void Unit::_verify_effects() {
                 duration = starting_duration;
                 continue;
             }
+
+            _notifyAll(&Observer::unitEffectRemoved, it->first);
 
             bool is_last = ( it == _effects.end() - 1 );
 

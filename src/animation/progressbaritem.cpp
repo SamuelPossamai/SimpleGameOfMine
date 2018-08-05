@@ -11,5 +11,5 @@ void ProgressBarItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *,
     painter->drawRect(out_rect);
 
     painter->setBrush(QBrush(_fg_color));
-    painter->drawRect(x(), y(), value()*out_rect.width()/maxPercentage(), out_rect.height());
+    painter->drawRect(0, 0, value()*out_rect.width()/maxPercentage(), out_rect.height());
 }

@@ -32,6 +32,7 @@ class Animation;
 class AnimatedObject;
 class AnimationHandler;
 class ProgressBarItem;
+class PartialImageItem;
 class UnitAnimationItem;
 class UnitAnimationItemFactory;
 

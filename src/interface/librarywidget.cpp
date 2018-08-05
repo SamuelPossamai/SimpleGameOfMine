@@ -15,3 +15,8 @@ LibraryWidget::~LibraryWidget() {
 
     delete _ui;
 }
+
+void LibraryWidget::on_returnButton_clicked() {
+
+    parent()->popWidget();
+}

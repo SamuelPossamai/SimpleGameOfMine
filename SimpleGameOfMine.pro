@@ -68,7 +68,8 @@ SOURCES += src/main.cpp \
     src/engine/controllers/ai/pacifistslime.cpp \
     src/animation/unitanimationfactories/knightanimationfactory.cpp \
     src/engine/unitsinfo/knight.cpp \
-    src/interface/librarywidget.cpp
+    src/interface/librarywidget.cpp \
+    src/animation/partialimageitem.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -152,7 +153,8 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/controllers/ai/pacifistslime.h \
     include/animation/unitanimationfactories/knightanimationfactory.h \
     include/engine/unitsinfo/knight.h \
-    include/interface/librarywidget.h
+    include/interface/librarywidget.h \
+    include/animation/partialimageitem.h
 
 RESOURCES += img/images.qrc
 

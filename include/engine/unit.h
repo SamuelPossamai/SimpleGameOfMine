@@ -233,6 +233,7 @@ public:
 
         UIntegerType duration;
         UIntegerType starting_duration;
+        bool renew;
     };
 
 private:
@@ -278,6 +279,8 @@ public:
     virtual void unitSelected(Unit *) {}
     virtual void unitUnselected(Unit *) {}
     virtual void unitEnergyConsumed(Unit *) {}
+    virtual void unitEffectAdded(Unit *, const UnitEffect *) {}
+    virtual void unitEffectRemoved(Unit *, const UnitEffect *) {}
 };
 
 #endif // UNIT_H

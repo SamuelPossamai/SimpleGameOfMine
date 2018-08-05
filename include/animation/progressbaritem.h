@@ -96,7 +96,7 @@ public:
 
 protected:
 
-    QRectF boundingRect() const override { return QRectF(x(), y(), _w, _h); }
+    QRectF boundingRect() const override { return QRectF(0, 0, _w, _h); }
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) override;
 
 private:
