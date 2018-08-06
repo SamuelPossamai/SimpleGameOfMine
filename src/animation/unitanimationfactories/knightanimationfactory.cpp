@@ -39,7 +39,7 @@ UnitAnimationItem *KnightAnimationFactory::create(Unit *u) {
 
     auto *item = new unitanimation::BasicUnitGraphicItem(u);
 
-    item->setAnimations(_idle_animation, _walking_animation, _attacking_animation);
+    item->setAnimations(_idle_animation, _walking_animation, _attacking_animation, _idle_animation);
 
     return item;
 }

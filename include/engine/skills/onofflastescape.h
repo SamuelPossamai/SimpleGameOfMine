@@ -1,6 +1,6 @@
 
-#ifndef ONOFFLASTESCAPE_H
-#define ONOFFLASTESCAPE_H
+#ifndef SKILLS_ONOFFLASTESCAPE_H
+#define SKILLS_ONOFFLASTESCAPE_H
 
 #include "unitskill.h"
 
@@ -40,5 +40,4 @@ private:
 
 } /* namespace skill */
 
-
-#endif // ONOFFLASTESCAPE_H
+#endif // SKILLS_ONOFFLASTESCAPE_H

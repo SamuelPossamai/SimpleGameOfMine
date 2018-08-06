@@ -19,7 +19,7 @@ protected:
     Knight(const Attributes& attr);
 
     virtual HealthType healthCalculate() const override { return 300 + 20*attributes().vitality() + 0.1*attributes().strength(); }
-    virtual EnergyType energyCalculate() const override { return 0; }
+    virtual EnergyType energyCalculate() const override { return 10 + attributes().wisdom() + attributes().vitality(); }
     virtual AttackType attackCalculate() const override {
 
         return 16 + 0.85*attributes().strength() + 0.1*attributes().dexterity() + 0.2*attributes().wisdom();

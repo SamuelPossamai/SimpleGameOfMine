@@ -229,6 +229,9 @@ public:
      */
     PointType maxPosition() const;
 
+    SpeedType baseSpeed() const { return unitInfo()->speed(); }
+    SpeedType effectiveSpeed() const;
+
     struct EffectInfo {
 
         UIntegerType duration;

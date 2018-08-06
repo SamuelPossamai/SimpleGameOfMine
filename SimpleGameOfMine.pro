@@ -69,7 +69,9 @@ SOURCES += src/main.cpp \
     src/animation/unitanimationfactories/knightanimationfactory.cpp \
     src/engine/unitsinfo/knight.cpp \
     src/interface/librarywidget.cpp \
-    src/animation/partialimageitem.cpp
+    src/animation/partialimageitem.cpp \
+    src/engine/effects/adrenaline.cpp \
+    src/engine/skills/rage.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -154,7 +156,9 @@ HEADERS += include/interface/mainwindow.h \
     include/animation/unitanimationfactories/knightanimationfactory.h \
     include/engine/unitsinfo/knight.h \
     include/interface/librarywidget.h \
-    include/animation/partialimageitem.h
+    include/animation/partialimageitem.h \
+    include/engine/effects/adrenaline.h \
+    include/engine/skills/rage.h
 
 RESOURCES += img/images.qrc
 

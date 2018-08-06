@@ -195,6 +195,15 @@ Unit::PointType Unit::maxPosition() const {
     return { _map->width() - size(), _map->height() - size()};
 }
 
+Unit::SpeedType Unit::effectiveSpeed() const {
+
+    SpeedType s = baseSpeed();
+
+    for(auto p : _effects) s = p.first->doSpeedEffect(this, s);
+
+    return s;
+}
+
 bool Unit::_choose_internal(BattleWidget::InputInterface& i) {
 
     _skill = _controller->chooseSkill(this, _map, i.get());

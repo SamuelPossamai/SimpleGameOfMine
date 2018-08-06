@@ -7,6 +7,7 @@
 #include <utility/imagecolorchange.h>
 #include <engine/effects/lastescape.h>
 #include <engine/effects/regeneration.h>
+#include <engine/effects/adrenaline.h>
 
 #include "unitanimations/basicunitgraphicitem.h"
 #include "partialimageitem.h"
@@ -225,6 +226,15 @@ void BasicUnitGraphicItem::_init() {
     green_to_black.changeImage(black_circle);
 
     _effect_images[typeid(effect::LastEscape)] = black_circle;
+
+    utility::ImageColorChange green_to_red;
+
+    green_to_red.addChInterval({0, 50}, {150, 255}, {0, 50}, Qt::red);
+
+    QImage red_circle = green_circle;
+    green_to_red.changeImage(red_circle);
+
+    _effect_images[typeid(effect::Adrenaline)] = red_circle;
 }
 
 } /* namespace unitanimation */

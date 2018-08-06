@@ -15,6 +15,7 @@ public:
 
     using HealthType = Traits<Unit>::HealthType;
     using AttackType = Traits<Unit>::AttackType;
+    using SpeedType = Traits<Unit>::SpeedType;
 
     virtual ~UnitEffect() {}
 
@@ -42,6 +43,8 @@ public:
      * \return The damage amount after this effect is applied
      */
     virtual AttackType doDefenseEffect(Unit *def, Unit *att, AttackType a) const { Q_UNUSED(def); Q_UNUSED(att); return a; }
+
+    virtual SpeedType doSpeedEffect(const Unit *u, SpeedType speed) const { Q_UNUSED(u); return speed; }
 };
 
 #endif // UNITEFFECT_H

@@ -5,6 +5,7 @@
 #include "unitsinfo/knight.h"
 #include "skills/walk.h"
 #include "skills/basicattack.h"
+#include "skills/rage.h"
 
 using namespace unitsinfo;
 
@@ -20,6 +21,7 @@ Knight::Knight(const Attributes& attr) : UnitClassInfo(attr) {
 
     addSkill(skill::Walk::MemoryInterface::dependentGet(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
     addSkill(skill::BasicAttack::MemoryInterface::dependentGet(80, false), QPixmap(":/sword_image.png").scaled(50, 50));
+    addSkill(skill::Rage::getSkill(), QPixmap(":/rage_img.png"));
 
     calculateInfo();
 }

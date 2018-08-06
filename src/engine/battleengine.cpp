@@ -54,7 +54,7 @@ void BattleEngine::unitDeathEvent(Unit *u) {
 
     if(_map.gameEndVerify()) _game_status = status::FINISHING;
 
-    if(u->unitInfo()->speed() == _max_speed) {
+    if(u->baseSpeed() == _max_speed) {
 
         _max_speed = 1;
         for(UIntegerType i = 0; i < _map.units(); i++) {
@@ -79,7 +79,8 @@ bool BattleEngine::_step_loop(){
 
         if(unit->isPerformingSkill()) {
 
-            if((to_perform += (RealType(unit->unitInfo()->speed())/_max_speed)) >= 1){
+            to_perform += (RealType(unit->effectiveSpeed())/_max_speed);
+            while(to_perform >= 1 && unit->isPerformingSkill()){
 
                 to_perform -= 1;
                 unit->perform();
