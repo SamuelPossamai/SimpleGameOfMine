@@ -1,11 +1,14 @@
 
+#include <animation/unitanimationfactories/monsterfloweranimationfactory.h>
 #include <animation/unitanimationfactories/coloredslimeanimationfactory.h>
 #include <animation/unitanimationfactories/slimeanimationfactory.h>
 #include <engine/controllers/ai/slime.h>
 #include <engine/controllers/ai/crazy.h>
 #include <engine/controllers/ai/timidslime.h>
 #include <engine/controllers/ai/pacifistslime.h>
+#include <engine/controllers/ai/monsterplant.h>
 #include <engine/unitsinfo/slime.h>
+#include <engine/unitsinfo/monsterplant.h>
 #include <unittypes/creatures.h>
 
 std::map<std::string, Creatures::GetCreatureFunctionType> Creatures::_creatures;
@@ -70,6 +73,12 @@ static Creatures::Info _get_pink_slime_info(UIntegerType level) {
                            controller::AI::PacifistSlime::getController());
 }
 
+static Creatures::Info _get_monster_plant_info(UIntegerType level) {
+
+    return Creatures::Info(unitsinfo::MonsterPlant::getInfo(level),
+                           unitanimationfactory::MonsterFlowerAnimationFactory::getFactory(),
+                           controller::AI::MonsterPlant::getController());
+}
 
 void Creatures::_init() {
 
@@ -80,4 +89,5 @@ void Creatures::_init() {
     _creatures["white slime"] = _get_white_slime_info;
     _creatures["yellow slime"] = _get_yellow_slime_info;
     _creatures["pink slime"] = _get_pink_slime_info;
+    _creatures["monster plant"] = _get_monster_plant_info;
 }

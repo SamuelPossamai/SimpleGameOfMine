@@ -29,6 +29,8 @@ UIntegerType AnimatedObject::addAnimation(const Animation& animation) {
 
 void AnimatedObject::selectAnimation(UIntegerType n) {
 
+    if(n > _animations.size()) n = _idle_animation;
+
     _cur_animation = n;
 
     _update();

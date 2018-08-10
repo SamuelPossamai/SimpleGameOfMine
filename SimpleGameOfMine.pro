@@ -71,7 +71,11 @@ SOURCES += src/main.cpp \
     src/interface/librarywidget.cpp \
     src/animation/partialimageitem.cpp \
     src/engine/effects/adrenaline.cpp \
-    src/engine/skills/rage.cpp
+    src/engine/skills/rage.cpp \
+    src/animation/unitanimationfactories/monsterfloweranimationfactory.cpp \
+    src/engine/unitsinfo/monsterplant.cpp \
+    src/engine/skills/plantareaattack.cpp \
+    src/engine/controllers/ai/monsterplant.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -158,7 +162,11 @@ HEADERS += include/interface/mainwindow.h \
     include/interface/librarywidget.h \
     include/animation/partialimageitem.h \
     include/engine/effects/adrenaline.h \
-    include/engine/skills/rage.h
+    include/engine/skills/rage.h \
+    include/animation/unitanimationfactories/monsterfloweranimationfactory.h \
+    include/engine/unitsinfo/monsterplant.h \
+    include/engine/skills/plantareaattack.h \
+    include/engine/controllers/ai/monsterplant.h
 
 RESOURCES += img/images.qrc
 

@@ -28,6 +28,6 @@ Knight::Knight(const Attributes& attr) : UnitClassInfo(attr) {
 
 Knight::SpeedType Knight::speedCalculate() const {
 
-    return 45 + 0.5*std::sqrt(attributes().agility()*attributes().strength()) +
+    return 45 + 0.7*std::sqrt(attributes().agility()*attributes().strength()) +
             0.1*(attributes().dexterity() + attributes().agility());
 }
