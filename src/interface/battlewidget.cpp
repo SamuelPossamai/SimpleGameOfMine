@@ -113,6 +113,7 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
     else {
 
         if(event->key() >= Qt::Key_1 && event->key() <= Qt::Key_9) _skill_button_clicked(event->key() - Qt::Key_1);
+        else event->key();
     }
 }
 
@@ -276,7 +277,7 @@ void BattleWidget::_exit() {
 
 void BattleWidget::_skill_button_clicked(UIntegerType id){
 
-    _input_interface->interfaceSkillButtonClicked(id);
+    if(id < _current_buttons) _input_interface->interfaceSkillButtonClicked(id);
 }
 
 RealType BattleWidget::_button_pos_calculate_static(bool x_dir, UIntegerType mode) {

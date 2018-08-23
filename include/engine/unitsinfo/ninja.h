@@ -20,10 +20,10 @@ class Ninja : public Fighter {
     virtual EnergyType energyCalculate() const override { return 100 + 5*attributes().wisdom() + attributes().dexterity(); }
     virtual AttackType attackCalculate() const override {
 
-        return 12 + 0.75*attributes().strength() + 0.3*attributes().dexterity() +
+        return 12 + 0.8*attributes().strength() + 0.3*attributes().dexterity() +
                 0.1*attributes().agility() + 0.1*attributes().wisdom();
     }
-    virtual SpeedType speedCalculate() const override { return 80 + 1.2*attributes().agility() + 0.4*attributes().dexterity(); }
+    virtual SpeedType speedCalculate() const override { return 80 + 1*attributes().agility() + 0.4*attributes().dexterity(); }
     virtual SizeType sizeCalculate() const override {
 
         SizeType size = Fighter::sizeCalculate() - 0.01*(attributes().dexterity() + attributes().agility());

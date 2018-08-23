@@ -69,6 +69,9 @@
        <property name="text">
         <string>Library</string>
        </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
      <item>

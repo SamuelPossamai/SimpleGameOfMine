@@ -55,5 +55,6 @@
         <file>images.qrc</file>
         <file>monsterplant_img1.png</file>
         <file>monsterplant_img2.png</file>
+        <file>monsterplant_library_img.png</file>
     </qresource>
 </RCC>

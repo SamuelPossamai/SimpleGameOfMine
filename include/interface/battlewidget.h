@@ -211,6 +211,7 @@ private:
 
     InputInterface _input_interface;
 
+
     std::vector<UnitAnimationItem *> _animations;
 
     Ui::BattleWidget *_ui;
