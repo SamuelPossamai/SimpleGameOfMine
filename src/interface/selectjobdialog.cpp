@@ -24,13 +24,19 @@ SelectJobDialog::~SelectJobDialog() {
 
 void SelectJobDialog::on_buttonBox_accepted() {
 
-    std::string new_job = "jobless";
+    std::string new_job;
     UIntegerType req_stats[Character::Attributes::statsCount()] = {};
 
     for(auto selected : _ui->tableWidget->selectedItems()) {
 
         if(selected->column() == 0) new_job = selected->text().toStdString();
         else req_stats[selected->column() - 1] = selected->text().toULongLong();
+    }
+
+    if(new_job.empty()) {
+
+        QMessageBox::information(this, "SGOM Warning", "An option was not selected.");
+        return;
     }
 
     bool can_change = true;
