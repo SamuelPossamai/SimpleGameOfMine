@@ -38,6 +38,8 @@ public:
      */
     explicit OneCopyMemoryManager(bool add_man_list) : OneCopyMemoryManager(_copy, CompareType(), add_man_list) {}
 
+    ~OneCopyMemoryManager() { if(_basic) delete _basic; }
+    
     /*!
      * \brief Get the copy of an object that is managed by the memory manager
      * \param args Arguments to create an object that will be searched in the memory manager

@@ -17,7 +17,7 @@ public:
     using AttackType = Traits<Unit>::AttackType;
     using SpeedType = Traits<Unit>::SpeedType;
 
-    virtual ~UnitEffect() {}
+    virtual ~UnitEffect();
 
     /*!
      * \brief Virtual method that is called each time a unit turn ends

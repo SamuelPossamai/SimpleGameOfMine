@@ -24,7 +24,7 @@ public:
      */
     explicit UnitController(bool fast = true) : _fast(fast) {}
 
-    virtual ~UnitController() {}
+    virtual ~UnitController();
 
     /*!
      * \brief This method is called when this controller needs to choose an skill in a game's battle.

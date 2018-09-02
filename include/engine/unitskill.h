@@ -25,7 +25,7 @@ public:
      */
     explicit UnitSkill(bool need_angle = true) : _need_angle(need_angle) {}
 
-    virtual ~UnitSkill() {}
+    virtual ~UnitSkill();
 
     /*!
      * \brief This function is virtual pure and must be implemented in a derived class.

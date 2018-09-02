@@ -75,7 +75,11 @@ SOURCES += src/main.cpp \
     src/animation/unitanimationfactories/monsterfloweranimationfactory.cpp \
     src/engine/unitsinfo/monsterplant.cpp \
     src/engine/skills/plantareaattack.cpp \
-    src/engine/controllers/ai/monsterplant.cpp
+    src/engine/controllers/ai/monsterplant.cpp \
+    src/engine/unitskill.cpp \
+    src/engine/uniteffect.cpp \
+    src/engine/unitcontroller.cpp \
+    src/memory/genericmemorymanager.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -166,7 +170,10 @@ HEADERS += include/interface/mainwindow.h \
     include/animation/unitanimationfactories/monsterfloweranimationfactory.h \
     include/engine/unitsinfo/monsterplant.h \
     include/engine/skills/plantareaattack.h \
-    include/engine/controllers/ai/monsterplant.h
+    include/engine/controllers/ai/monsterplant.h \
+    include/memory/singleobject.h \
+    include/memory/genericmemorymanager.h \
+    include/memory/simplememorymanager.h
 
 RESOURCES += img/images.qrc
 

@@ -28,7 +28,7 @@ public:
      */
     UnitInfo() : _max_health(0), _max_energy(0), _base_attack(0), _speed(0), _size(0) {}
 
-    virtual ~UnitInfo() {}
+    virtual ~UnitInfo();
 
     /*!
      * \brief Return the maximum health of the unit
