@@ -1,30 +1,32 @@
 # SimpleGameOfMine
 
-This README was created for release v0.1.0-alpha
+This README was created for release v0.1.0.
 
-This is a simple RPG game made using Qt, with C++17
+This is a simple RPG game made using Qt, with C++17.
 
-This game was not tested using Windows or Mac OS, and probably will need some adaptations to work
+This game was not tested using Windows or Mac OS, and probably will need some adaptations to work.
 
-This game was tested using g++-7 and g++-8, it do not work for gcc-6 or below but may work with a higher version
+## Requirements
+
+This game was tested using g++-7 and g++-8, it does not work for gcc-6 or below but may work with a higher version
 
 This game also need Qt5, worked with Qt5.11
 
-For Ubuntu 18.04 the following installing Qt5-default should be enough
+For Ubuntu 18.04 the installing Qt5-default should be enough
 
-$ sudo apt update
-$ sudo apt qt5-default
+    sudo apt update
+    sudo apt qt5-default
 
-To run this game without installing
+## How to run without installing for linux
 
-$ qmake
-$ make run
+    qmake
+    make run
 
-To install this game
+## How to install for linux
 
-$ qmake
-$ sudo make install
+    qmake
+    sudo make install
 
-To run after installed
+## How to run after installing
 
-$ SGOM
+    SGOM

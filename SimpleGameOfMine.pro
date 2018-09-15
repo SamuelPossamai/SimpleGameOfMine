@@ -191,7 +191,13 @@ run.commands = ./$$TARGET
 
 QMAKE_EXTRA_TARGETS = run
 
-target.path = /usr/bin
+target.path = /usr/local/bin
 
-INSTALLS += target
+desktop.path = /usr/share/applications
+desktop.files += SGOM.desktop
+
+desktopicon.path = /usr/share/icons/
+desktopicon.files += SGOM-icon.png
+
+INSTALLS += target desktop desktopicon
 
