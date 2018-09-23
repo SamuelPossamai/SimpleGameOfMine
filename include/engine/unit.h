@@ -252,7 +252,6 @@ private:
     UIntegerType _team;
     ObserversList _observers;
     UnitController * const _controller;
-    Map * const _map;
 
     UIntegerType _skill_step;
     AngleType _skill_angle;

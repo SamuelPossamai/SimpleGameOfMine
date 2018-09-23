@@ -4,8 +4,7 @@
 #include "uniteffect.h"
 
 Unit::Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i) :
-    Base(info), _team(team), _controller(controller), _map(m),
-    _skill(info->skills()), _interface(i) {
+    Base(info, m), _team(team), _controller(controller), _skill(info->skills()), _interface(i) {
 
 }
 
@@ -117,22 +116,20 @@ bool Unit::removeEffect(const UnitEffect *effect) {
 
 bool Unit::setPos(PointType p) {
 
-    if(!_map->unitMoveVerify(this, p)) return false;
-
-    Base::setPos(p);
+    bool v = Base::setPos(p);
 
     _notifyAll(&Observer::unitMoved);
 
-    return true;
+    return v;
 }
 
 bool Unit::setAngle(AngleType angle){
 
-    Base::setAngle(angle);
+    bool v = Base::setAngle(angle);
 
     _notifyAll(&Observer::unitRotated);
 
-    return true;
+    return v;
 }
 
 bool Unit::choose() {
@@ -157,7 +154,7 @@ bool Unit::perform() {
 
     if(_skill_next_call == _skill_step){
 
-        _skill_next_call = _skill_step + unitInfo()->callSkill(_skill, this, _map, { _skill_step, _skill_angle });
+        _skill_next_call = _skill_step + unitInfo()->callSkill(_skill, this, map(), { _skill_step, _skill_angle });
 
         if(_skill_next_call <= _skill_step) {
 
@@ -190,9 +187,9 @@ void Unit::unselect() {
 
 Unit::PointType Unit::maxPosition() const {
 
-    if(_map->width() < size() || _map->height() < size()) return { 0, 0 };
+    if(map()->width() < size() || map()->height() < size()) return { 0, 0 };
 
-    return { _map->width() - size(), _map->height() - size()};
+    return { map()->width() - size(), map()->height() - size()};
 }
 
 Unit::SpeedType Unit::effectiveSpeed() const {
@@ -206,14 +203,14 @@ Unit::SpeedType Unit::effectiveSpeed() const {
 
 bool Unit::_choose_internal(BattleWidget::InputInterface& i) {
 
-    _skill = _controller->chooseSkill(this, _map, i.get());
+    _skill = _controller->chooseSkill(this, map(), i.get());
     if(!isPerformingSkill()) return false;
 
     _skill_angle = 0;
 
     if(unitInfo()->skillNeedAngle(_skill)) {
 
-        auto opt = _controller->chooseAngle(this, _map, i.get());
+        auto opt = _controller->chooseAngle(this, map(), i.get());
         if(!opt) return false;
 
         _skill_angle = *opt;

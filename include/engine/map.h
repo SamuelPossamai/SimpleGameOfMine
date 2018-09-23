@@ -78,11 +78,11 @@ public:
 
     /*!
      * \brief This method verify if 'p' is a valid position for an unit 'u'
-     * \param u Unit that want to move
+     * \param obj Engine object that want to move
      * \param p Position where the unit want to move to
      * \return true if it's a valid position, false otherwise
      */
-    bool unitMoveVerify(Unit *u, const PointType& p);
+    bool engineObjectMoveVerify(EngineObject *obj, const PointType& p);
 
     /*!
      * \brief Change the position of all the units so it will start in valid places that can be basedon the team

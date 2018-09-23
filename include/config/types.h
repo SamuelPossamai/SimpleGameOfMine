@@ -8,6 +8,9 @@ class SGOMFiles;
 
 class BattleEngine;
 
+class EngineObject;
+class EngineObjectBase;
+
 class Unit;
 class UnitBase;
 class UnitInfo;

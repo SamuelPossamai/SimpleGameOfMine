@@ -3,6 +3,7 @@
 
 #include "map.h"
 #include "unit.h"
+#include "engineobject.h"
 
 template<typename T>
 constexpr T square(T x) { return x * x; }
@@ -118,12 +119,12 @@ void Map::removeUnit(Unit *unit) {
     _units.pop_back();
 }
 
-bool Map::unitMoveVerify(Unit *u, const PointType& p) {
+bool Map::engineObjectMoveVerify(EngineObject *obj, const PointType& p) {
 
-    if(Traits<Map>::solid_border && (p.x < PointType::CoordType(u->size()) ||
-                                     p.x + PointType::CoordType(u->size()) > _width ||
-                                     p.y < PointType::CoordType(u->size()) ||
-                                     p.y + PointType::CoordType(u->size()) > _height)) return false;
+    if(Traits<Map>::solid_border && (p.x < PointType::CoordType(obj->size()) ||
+                                     p.x + PointType::CoordType(obj->size()) > _width ||
+                                     p.y < PointType::CoordType(obj->size()) ||
+                                     p.y + PointType::CoordType(obj->size()) > _height)) return false;
 
     return true;
 }

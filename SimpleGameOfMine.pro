@@ -79,7 +79,9 @@ SOURCES += src/main.cpp \
     src/engine/unitskill.cpp \
     src/engine/uniteffect.cpp \
     src/engine/unitcontroller.cpp \
-    src/memory/genericmemorymanager.cpp
+    src/memory/genericmemorymanager.cpp \
+    src/engine/engineobjectbase.cpp \
+    src/engine/engineobject.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -173,7 +175,9 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/controllers/ai/monsterplant.h \
     include/memory/singleobject.h \
     include/memory/genericmemorymanager.h \
-    include/memory/simplememorymanager.h
+    include/memory/simplememorymanager.h \
+    include/engine/engineobjectbase.h \
+    include/engine/engineobject.h
 
 RESOURCES += img/images.qrc
 
