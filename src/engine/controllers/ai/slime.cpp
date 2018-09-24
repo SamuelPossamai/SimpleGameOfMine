@@ -17,7 +17,7 @@ UIntegerType Slime::chooseSkill(const Unit *u, const Map *m, UserInterface *) {
 
     if(closer_enemy == nullptr) return 1;
 
-    Map::PositionType dist = m->unitsDistance(u, closer_enemy);
+    Map::PositionType dist = m->objectsDistance(u, closer_enemy);
     if(dist < 230) {
 
         if(dist < 30) return 2;
@@ -38,7 +38,7 @@ std::optional<Slime::AngleType> Slime::chooseAngle(const Unit *u, const Map *m, 
 
     AngleType base_angle = atan2(closer_enemy->y() - u->y(), closer_enemy->x() - u->x());
 
-    if(m->unitsDistance(u, closer_enemy) < 50) base_angle += M_PI;
+    if(m->objectsDistance(u, closer_enemy) < 50) base_angle += M_PI;
 
     return utility::Random::realDistribution(-0.1, 0.1)*M_PI + base_angle;
 }

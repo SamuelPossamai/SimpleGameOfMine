@@ -57,7 +57,7 @@ void BattleEngine::unitDeathEvent(Unit *u) {
     if(u->baseSpeed() == _max_speed) {
 
         _max_speed = 1;
-        for(UIntegerType i = 0; i < _map.units(); i++) {
+        for(UIntegerType i = 0; i < _map.unitsNumber(); i++) {
 
             Unit::SpeedType speed = _map.unitAccess(i)->unitInfo()->speed();
             if(speed > _max_speed) _max_speed = speed;

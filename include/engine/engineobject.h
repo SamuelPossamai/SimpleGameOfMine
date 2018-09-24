@@ -54,6 +54,7 @@ public:
 protected:
 
     Map *map() const { return _map; }
+
 private:
 
     Map * const _map;

@@ -81,7 +81,8 @@ SOURCES += src/main.cpp \
     src/engine/unitcontroller.cpp \
     src/memory/genericmemorymanager.cpp \
     src/engine/engineobjectbase.cpp \
-    src/engine/engineobject.cpp
+    src/engine/engineobject.cpp \
+    src/engine/projectile.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -177,7 +178,8 @@ HEADERS += include/interface/mainwindow.h \
     include/memory/genericmemorymanager.h \
     include/memory/simplememorymanager.h \
     include/engine/engineobjectbase.h \
-    include/engine/engineobject.h
+    include/engine/engineobject.h \
+    include/engine/projectile.h
 
 RESOURCES += img/images.qrc
 

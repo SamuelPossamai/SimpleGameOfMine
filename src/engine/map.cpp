@@ -11,6 +11,15 @@ constexpr T square(T x) { return x * x; }
 template<typename T>
 constexpr T abs(T x) { return (x >= 0) ? x : -x; }
 
+Map::EngineObjectsVector Map::objectsInRange(PointType p, PositionType range) {
+
+    EngineObjectsVector v;
+
+    objectsInRange(v, p, range);
+
+    return v;
+}
+
 Map::UnitsVector Map::unitsInRange(PointType p, PositionType range) {
 
     UnitsVector v;
@@ -20,54 +29,49 @@ Map::UnitsVector Map::unitsInRange(PointType p, PositionType range) {
     return v;
 }
 
-Map::UnitsVector Map::unitsInRange(PointType p, PositionType range, AngleType angle, AngleType region_angle) {
+Map::EngineObjectsVector Map::objectsInRange(PointType p, PositionType range, AngleType angle, AngleType region_angle) {
 
-    UnitsVector v;
+    EngineObjectsVector v;
 
-    unitsInRange(v, p, range, angle, region_angle);
+    objectsInRange(v, p, range, angle, region_angle);
 
     return v;
 }
 
-void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range) {
+void Map::objectsInRange(EngineObjectsVector& vector, PointType p, PositionType range) {
 
-    range *= range;
-
-    for(auto unit : _units) {
-
-        auto x_dis = square(RealType(unit->x()) - p.x);
-        auto y_dis = square(RealType(unit->y()) - p.y);
-
-        if((x_dis + y_dis) <= RealType(range + square(unit->size()))) vector.push_back(unit);
-    }
+    _in_range_base(_objects, vector, p, range);
 }
 
-void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range, AngleType angle, AngleType region_angle) {
+void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range) {
 
-    if(region_angle >= _using_radians() ? 2*M_PI : 360) return unitsInRange(vector, p, range);
-    if(region_angle == 0) return unitsInLine(vector, p, range, angle);
+    _in_range_base(_units, vector, p, range);
+}
+
+void Map::objectsInRange(EngineObjectsVector& vector, PointType p, PositionType range, AngleType angle, AngleType region_angle) {
+
+    if(region_angle >= 2*M_PI) return objectsInRange(vector, p, range);
+    if(region_angle == 0) return objectsInLine(vector, p, range, angle);
 
     range *= range;
 
-    for(auto unit : _units) {
+    for(auto object : _objects) {
 
-        auto vet_x = RealType(unit->x()) - p.x;
-        auto vet_y = RealType(unit->y()) - p.y;
+        auto vet_x = RealType(object->x()) - p.x;
+        auto vet_y = RealType(object->y()) - p.y;
         auto squared_distance = square(vet_x) + square(vet_y);
 
-        if(squared_distance <= PositionType(range + square(unit->size()))) {
+        if(squared_distance <= PositionType(range + square(object->size()))) {
 
-            const RealType angle_conversion = _using_radians() ? 1 : 180/M_PI;
+            AngleType object_angle = std::atan2(vet_y, vet_x);
+            AngleType object_region = std::atan2(object->size(), std::sqrt(squared_distance));
 
-            AngleType unit_angle = std::atan2(vet_y, vet_x)*angle_conversion;
-            AngleType unit_region = std::atan2(unit->size(), std::sqrt(squared_distance))*angle_conversion;
-
-            if(_inside_region(angle, region_angle, unit_angle, unit_region)) vector.push_back(unit);
+            if(_inside_region(angle, region_angle, object_angle, object_region)) vector.push_back(object);
         }
     }
 }
 
-void Map::unitsInLine(UnitsVector& vector, PointType p, PositionType range, AngleType angle) {
+void Map::objectsInLine(EngineObjectsVector& vector, PointType p, PositionType range, AngleType angle) {
 
     (void) vector;
     (void) p;
@@ -82,9 +86,11 @@ Unit *Map::closerEnemy(const Unit *u) {
 
     for(auto unit : _units) {
 
+        if(unit == nullptr) continue;
+
         if(unit->team() == u->team()) continue;
 
-        auto cur_squared_distance = _units_squared_distance(unit, u);
+        auto cur_squared_distance = _objects_squared_distance(unit, u);
 
         if(closer == nullptr || closer_sqr_dist > cur_squared_distance) {
 
@@ -107,16 +113,41 @@ bool Map::gameEndVerify() const {
     return true;
 }
 
+
+void Map::addObject(EngineObject *object) {
+
+    Unit *unit = dynamic_cast<Unit *>(object);
+
+    if(unit) addUnit(unit);
+    else addObjectNotUnit(object);
+}
+
 void Map::addUnit(Unit *unit) {
 
+    addObjectNotUnit(unit);
     _units.push_back(unit);
+}
+
+void Map::removeObject(EngineObject *object) {
+
+    Unit *unit = dynamic_cast<Unit *>(object);
+
+    if(unit) removeUnit(unit);
+    else removeObjectNotUnit(object);
+}
+
+void Map::removeObjectNotUnit(EngineObject *object) {
+
+    *std::find(_objects.begin(), _objects.end(), object) = _objects.back();
+
+   _objects.pop_back();
 }
 
 void Map::removeUnit(Unit *unit) {
 
-     *std::find(_units.begin(), _units.end(), unit) = _units.back();
+    *std::find(_units.begin(), _units.end(), unit) = _units.back();
 
-    _units.pop_back();
+   _units.pop_back();
 }
 
 bool Map::engineObjectMoveVerify(EngineObject *obj, const PointType& p) {
@@ -131,13 +162,13 @@ bool Map::engineObjectMoveVerify(EngineObject *obj, const PointType& p) {
 
 void Map::placeUnits(){
 
-    if(units() == 0) return;
+    if(unitsNumber() == 0) return;
 
     UIntegerType nmax_teams[2] = {};
-    for(UIntegerType i = 0; i < units(); i++) nmax_teams[unitAccess(i)->team()]++;
+    for(UIntegerType i = 0; i < unitsNumber(); i++) nmax_teams[unitAccess(i)->team()]++;
 
     UIntegerType n_teams[2] = {};
-    for(UIntegerType i = 0; i < units(); i++) {
+    for(UIntegerType i = 0; i < unitsNumber(); i++) {
 
         Unit *unit = unitAccess(i);
 
@@ -149,12 +180,12 @@ void Map::placeUnits(){
     }
 }
 
-RealType Map::unitsDistance(const Unit *u1, const Unit *u2) {
+RealType Map::objectsDistance(const EngineObject *u1, const EngineObject *u2) {
 
-    return std::sqrt(_units_squared_distance(u1, u2));
+    return std::sqrt(_objects_squared_distance(u1, u2));
 }
 
-RealType Map::_units_squared_distance(const Unit *u1, const Unit *u2) {
+RealType Map::_objects_squared_distance(const EngineObject *u1, const EngineObject *u2) {
 
     auto vet_x = RealType(u1->x()) - u2->x();
     auto vet_y = RealType(u1->y()) - u2->y();
@@ -168,4 +199,18 @@ bool Map::_inside_region(AngleType a1, AngleType r1, AngleType a2, AngleType r2)
     if(360 - abs(a1 - a2) < (r1 + r2)) return true;
 
     return false;
+}
+
+template<typename T>
+void Map::_in_range_base(std::vector<T *>& src, std::vector<T *>& dest, PointType p, PositionType range) {
+
+    range *= range;
+
+    for(auto obj : src) {
+
+        auto x_dis = square(RealType(obj->x()) - p.x);
+        auto y_dis = square(RealType(obj->y()) - p.y);
+
+        if((x_dis + y_dis) <= RealType(range + square(obj->size()))) dest.push_back(obj);
+    }
 }
