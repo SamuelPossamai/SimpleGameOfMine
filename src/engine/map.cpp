@@ -130,24 +130,8 @@ void Map::addUnit(Unit *unit) {
 
 void Map::removeObject(EngineObject *object) {
 
-    Unit *unit = dynamic_cast<Unit *>(object);
-
-    if(unit) removeUnit(unit);
-    else removeObjectNotUnit(object);
-}
-
-void Map::removeObjectNotUnit(EngineObject *object) {
-
-    *std::find(_objects.begin(), _objects.end(), object) = _objects.back();
-
-   _objects.pop_back();
-}
-
-void Map::removeUnit(Unit *unit) {
-
-    *std::find(_units.begin(), _units.end(), unit) = _units.back();
-
-   _units.pop_back();
+    _remove_from_vector(_objects, object);
+    _remove_from_vector(_units, static_cast<Unit *>(object));
 }
 
 bool Map::engineObjectMoveVerify(EngineObject *obj, const PointType& p) {
@@ -213,4 +197,17 @@ void Map::_in_range_base(std::vector<T *>& src, std::vector<T *>& dest, PointTyp
 
         if((x_dis + y_dis) <= RealType(range + square(obj->size()))) dest.push_back(obj);
     }
+}
+
+template<typename T>
+bool Map::_remove_from_vector(std::vector<T *>& v, T *obj) {
+
+    auto it = std::find(v.begin(), v.end(), obj);
+
+    if(it == v.end()) return false;
+
+    *it = v.back();
+    v.pop_back();
+
+    return true;
 }

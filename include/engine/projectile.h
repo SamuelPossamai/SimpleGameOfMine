@@ -15,9 +15,9 @@ public:
     Projectile(Map *m, AngleType dir, UIntegerType dur, SizeType s, SpeedType sp, PointType pos = {0, 0}, AngleType angle = 0) :
         EngineObject(m, s, sp, pos, angle), _to_next_action(1), _dir(dir), _durability(dur) {}
 
-    virtual ~Projectile() {}
+    virtual ~Projectile() override {}
 
-    bool act();
+    bool act() final;
 
     bool decreaseDurability(UIntegerType v) {
 

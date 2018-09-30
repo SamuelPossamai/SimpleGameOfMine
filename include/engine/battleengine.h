@@ -48,7 +48,7 @@ public:
     /*!
      * \brief Choose an initial position for every unit in the battle.
      */
-    void placeUnits() { _map.placeUnits(); }
+    void placeUnits() { _map.resolvePendings(); _map.placeUnits(); }
 
     /*!
      * \brief Return if the game has finished
@@ -67,19 +67,19 @@ private:
     void unitDeathEvent(Unit *u);
 
     bool _step_loop();
-    void _ask_controller(Unit * const &, const Controller *);
 
-    static void _ask_controller_internal(Unit *, BattleEngine *);
+    static void _perform_internal(EngineObject *, BattleEngine *);
 
     void _delete_thread();
 
     Map _map;
     BattleWidget *_interface;
 
-    UIntegerType _cur_unit;
+    UIntegerType _cur_obj;
 
-    struct ContainerContent { Unit *unit; RealType to_perform; };
-    std::vector<ContainerContent> _units;
+    struct ContainerContent { EngineObject *object; RealType to_perform; };
+    std::vector<ContainerContent> _objects;
+    std::vector<ContainerContent> _destroyed_objects;
 
     Unit::SpeedType _max_speed;
 

@@ -26,7 +26,7 @@ public:
      * \param width Width of the region where the objects can be
      * \param height Height of the region where the objects can be
      */
-    Map(PositionType width, PositionType height) : _width(width), _height(height) {}
+    Map(PositionType width, PositionType height) : _width(width), _height(height), _pending(nullptr) {}
 
     /*!
      * \brief Verify if there is only objects from one team, if so this team won
@@ -40,6 +40,17 @@ public:
      * \sa removeObject(EngineObject *), objectsNumber(), objectAccess(UIntegerType)
      */
     void addObject(EngineObject *object);
+
+    void addObjectPending(EngineObject *object) { _pending = object; }
+
+    void resolvePendings() {
+
+        if(_pending) {
+
+            addObject(_pending);
+            _pending = nullptr;
+        }
+    }
 
     /*!
      * \brief Add an object to the map
@@ -56,26 +67,11 @@ public:
     void addUnit(Unit *unit);
 
     /*!
-     * \brief Remove an object from the map and it's id will be taken by the last object in the map, <!--
-     * --> if it's an Unit it will call addUnit(Unit *)
+     * \brief Remove an object from the map
      * \param object EngineObject that will be removed from the map
      * \sa addObject(EngineObject *), objectsNumber(), unitAccess(UIntegerType)
      */
     void removeObject(EngineObject *object);
-
-    /*!
-     * \brief Remove an object from the map and it's id will be taken by the last object in the map
-     * \param object EngineObject that will be removed from the map
-     * \sa removeObject(EngineObject *), addObject(EngineObject *), objectsNumber(), unitAccess(UIntegerType)
-     */
-    void removeObjectNotUnit(EngineObject *object);
-
-    /*!
-     * \brief Remove an unit from the map and it's id will be taken by the last unit in the map
-     * \param unit Unit that will be removed from the map
-     * \sa addUnit(EngineObject *), objectsNumber(), objectAccess(UIntegerType)
-     */
-    void removeUnit(Unit *unit);
 
     EngineObjectsVector objectsInRange(PointType p, PositionType range);
     UnitsVector unitsInRange(PointType p, PositionType range);
@@ -160,10 +156,14 @@ private:
     static bool _inside_region(AngleType a1, AngleType r1, AngleType a2, AngleType r2);
 
     template<typename T>
-    static void _in_range_base(std::vector<T *>& src, std::vector<T *>& dest, PointType p, PositionType range);
+    void _in_range_base(std::vector<T *>& src, std::vector<T *>& dest, PointType p, PositionType range);
+
+    template<typename T>
+    static bool _remove_from_vector(std::vector<T *>& v, T *obj);
 
     PositionType _width, _height;
 
+    EngineObject *_pending;
     EngineObjectsVector _objects;
     UnitsVector _units;
 };

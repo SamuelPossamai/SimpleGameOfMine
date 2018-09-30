@@ -90,6 +90,8 @@ public:
      */
     SizeType size() const { return _size; }
 
+    SpeedType speed() const { return _speed; }
+
 protected:
 
     void setSize(SizeType size) { _size = size; }

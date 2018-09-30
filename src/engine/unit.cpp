@@ -145,9 +145,12 @@ bool Unit::choose() {
 
 bool Unit::act() {
 
-    if(isPerformingSkill()) return perform();
+    if(isDead()) return false;
 
-    return choose();
+    if(isPerformingSkill()) perform();
+    else choose();
+
+    return true;
 }
 
 bool Unit::perform() {

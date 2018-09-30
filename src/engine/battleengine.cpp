@@ -6,7 +6,7 @@
 #include "unitcontroller.h"
 
 BattleEngine::BattleEngine(BattleWidget *interface) : _map(Traits<Map>::width, Traits<Map>::height),
-    _interface(interface), _cur_unit(0), _max_speed(1), _t(nullptr), _game_status(status::WORKING) {
+    _interface(interface), _cur_obj(0), _max_speed(1), _t(nullptr), _game_status(status::WORKING) {
 
 }
 
@@ -14,20 +14,22 @@ BattleEngine::~BattleEngine() {
 
     _delete_thread();
 
-    for(auto& v : _units) delete v.unit;
+    for(auto& v : _objects) delete v.object;
 }
 
 Unit *BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team) {
 
-    _units.push_back(ContainerContent{ new Unit(unit_info, controller, &_map, team, _interface), 0 });
-    _map.addUnit(_units.back().unit);
+    Unit *u = new Unit(unit_info, controller, &_map, team, _interface);
+    _map.resolvePendings();
 
-    _units.back().unit->attachObserver(this);
-    unit_info->init(_units.back().unit);
+    _objects.push_back(ContainerContent{ u, 0 });
 
-    if(unit_info->speed() > _max_speed) _max_speed = unit_info->speed();
+    u->attachObserver(this);
+    unit_info->init(u);
 
-    return _units.back().unit;
+    if(u->baseSpeed() > _max_speed) _max_speed = u->baseSpeed();
+
+    return u;
 }
 
 void BattleEngine::step(){
@@ -50,7 +52,7 @@ void BattleEngine::step(){
 
 void BattleEngine::unitDeathEvent(Unit *u) {
 
-    _map.removeUnit(u);
+    _map.removeObject(u);
 
     if(_map.gameEndVerify()) _game_status = status::FINISHING;
 
@@ -67,42 +69,28 @@ void BattleEngine::unitDeathEvent(Unit *u) {
 
 bool BattleEngine::_step_loop(){
 
-    if(_cur_unit >= _units.size()) _cur_unit = 0;
+    if(_cur_obj >= _objects.size()) _cur_obj = 0;
 
-    for(; _cur_unit < _units.size(); _cur_unit++) {
+    for(; _cur_obj < _objects.size(); _cur_obj++) {
 
-        auto &unit = _units[_cur_unit].unit;
-        auto &to_perform = _units[_cur_unit].to_perform;
-        auto controller = unit->controller();
+        auto &object = _objects[_cur_obj].object;
+        auto &to_perform = _objects[_cur_obj].to_perform;
 
-        if(unit->isDead()) continue;
+        to_perform += (RealType(object->effectiveSpeed())/_max_speed);
+        while(to_perform >= 1){
 
-        if(unit->isPerformingSkill()) {
+            to_perform -= 1;
 
-            to_perform += (RealType(unit->effectiveSpeed())/_max_speed);
-            while(to_perform >= 1 && unit->isPerformingSkill()){
+            if(object->needThreadToAct()) {
 
-                to_perform -= 1;
-                unit->perform();
+                _t = new std::thread(_perform_internal, object, this);
+                return false;
             }
-        }
-        else {
-
-            _ask_controller(unit, controller);
-
-            return false;
+            else object->act();
         }
     }
 
     return true;
-}
-
-void BattleEngine::_ask_controller(Unit * const & unit, const Controller * controller){
-
-    _delete_thread();
-
-    if(controller->isFast()) _ask_controller_internal(unit, this);
-    else _t = new std::thread(_ask_controller_internal, unit, this);
 }
 
 void BattleEngine::_delete_thread() {
@@ -116,13 +104,9 @@ void BattleEngine::_delete_thread() {
     }
 }
 
-void BattleEngine::_ask_controller_internal(Unit *u, BattleEngine *e) {
+void BattleEngine::_perform_internal(EngineObject *o, BattleEngine *e) {
 
-    u->select();
-    u->choose();
-    u->unselect();
-
-    e->_cur_unit++;
+    o->act();
 
     e->_step_mut.unlock();
 }

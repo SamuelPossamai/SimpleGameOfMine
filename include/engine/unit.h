@@ -9,7 +9,7 @@
  * \brief Class that represents an unit in the engine
  * \sa BattleEngine, UnitBase, UnitInfo, UnitAnimationItem
  */
-class Unit : public UnitBase {
+class Unit final : public UnitBase {
 
     using Base = UnitBase;
 
@@ -32,7 +32,14 @@ public:
      */
     Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i);
 
-    ~Unit();
+    ~Unit() final;
+
+    bool needThreadToAct() final {
+
+        if(isDead() || isPerformingSkill()) return false;
+
+        return !controller()->isFast();
+    }
 
     /*!
      * \brief Return the team of the unit
@@ -177,11 +184,11 @@ public:
     bool setAngle(AngleType angle);
 
     /*!
-     * \brief If it's performing a skill, perform, if it's not choose
+     * \brief If it's performing a skill, perform, if it's not, choose
      * \sa choose(), perform()
-     * \return choose() return if it's not performing a skill, perform() return otherwise
+     * \return false if it was unable to act, true otherwise
      */
-    bool act();
+    bool act() final;
 
     /*!
      * \brief Ask the controller to choose a skill and if needed, an angle
@@ -229,8 +236,7 @@ public:
      */
     PointType maxPosition() const;
 
-    SpeedType baseSpeed() const { return unitInfo()->speed(); }
-    SpeedType effectiveSpeed() const;
+    SpeedType effectiveSpeed() const override;
 
     struct EffectInfo {
 

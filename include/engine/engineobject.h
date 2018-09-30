@@ -2,6 +2,7 @@
 #ifndef ENGINEOBJECT_H
 #define ENGINEOBJECT_H
 
+#include "map.h"
 #include "engineobjectbase.h"
 
 class EngineObject : public EngineObjectBase {
@@ -10,10 +11,15 @@ class EngineObject : public EngineObjectBase {
 
 public:
 
-    EngineObject(Map *m, SizeType s, SpeedType sp, PointType pos = {0, 0}, AngleType angle = 0) :
-        EngineObjectBase(s, sp, pos, angle), _map(m) {}
+    EngineObject(const EngineObject&) = delete;
 
-    virtual ~EngineObject() {}
+    EngineObject& operator=(const EngineObject&) = delete;
+
+    virtual ~EngineObject() override { _map->removeObject(this); }
+
+    virtual bool act() = 0;
+
+    virtual bool needThreadToAct() { return false; }
 
     /*!
      * \brief Set the x position of the object if it's possible
@@ -51,7 +57,17 @@ public:
      */
     bool setAngle(AngleType angle);
 
+    SpeedType speed() const = delete;
+    SpeedType baseSpeed() const { return Base::speed(); }
+    virtual SpeedType effectiveSpeed() const { return Base::speed(); }
+
 protected:
+
+    EngineObject(Map *m, SizeType s, SpeedType sp, PointType pos = {0, 0}, AngleType angle = 0) :
+        EngineObjectBase(s, sp, pos, angle), _map(m) {
+
+        m->addObjectPending(this);
+    }
 
     Map *map() const { return _map; }
 
