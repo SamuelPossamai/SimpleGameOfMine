@@ -3,7 +3,7 @@
 
 #include "unitbase.h"
 
-UnitBase::UnitBase(const UnitInfo *info, Map *m) :
+UnitBase::UnitBase(const UnitInfo *info, EngineMap *m) :
     EngineObject(m, info->size(), info->speed()), _info(info), _health(info->health()), _energy(info->energy()) {
 
 }

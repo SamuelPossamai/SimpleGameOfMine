@@ -82,7 +82,8 @@ SOURCES += src/main.cpp \
     src/memory/genericmemorymanager.cpp \
     src/engine/engineobjectbase.cpp \
     src/engine/engineobject.cpp \
-    src/engine/projectile.cpp
+    src/engine/projectile.cpp \
+    src/engine/projectiles/basicprojectile.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -179,7 +180,12 @@ HEADERS += include/interface/mainwindow.h \
     include/memory/simplememorymanager.h \
     include/engine/engineobjectbase.h \
     include/engine/engineobject.h \
-    include/engine/projectile.h
+    include/engine/projectile.h \
+    include/engine/projectilefactory.h \
+    include/engine/projectiles/basicprojectile.h \
+    include/animation/projectileanimationitem.h \
+    include/animation/animationitembase.h \
+    include/animation/projectileanimationitemfactory.h
 
 RESOURCES += img/images.qrc
 

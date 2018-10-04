@@ -9,15 +9,17 @@
 /*!
  * \brief This class is used to manage the position of the objects in the engine
  */
-class Map {
+class EngineMap {
 
 public:
 
-    using PointType = Traits<Map>::PointType;
-    using PositionType = Traits<Map>::PositionType;
-    using AngleType = Traits<Map>::AngleType;
+    using PointType = Traits<EngineMap>::PointType;
+    using PositionType = Traits<EngineMap>::PositionType;
+    using AngleType = Traits<EngineMap>::AngleType;
     using UnitsVector = std::vector<Unit *>;
     using ConstUnitsVector = std::vector<const Unit *>;
+    using ProjectilesVector = std::vector<Projectile *>;
+    using ConstProjectilesVector = std::vector<const Projectile *>;
     using EngineObjectsVector = std::vector<EngineObject *>;
     using ConstEngineObjectsVector = std::vector<const EngineObject *>;
 
@@ -26,7 +28,7 @@ public:
      * \param width Width of the region where the objects can be
      * \param height Height of the region where the objects can be
      */
-    Map(PositionType width, PositionType height) : _width(width), _height(height), _pending(nullptr) {}
+    EngineMap(PositionType width, PositionType height) : _width(width), _height(height), _pending(nullptr) {}
 
     /*!
      * \brief Verify if there is only objects from one team, if so this team won
@@ -53,18 +55,18 @@ public:
     }
 
     /*!
-     * \brief Add an object to the map
-     * \param object object that will be added to the map
-     * \sa addObject(EngineObject *), removeObject(EngineObject *), objectsNumber(), objectAccess(UIntegerType)
-     */
-    void addObjectNotUnit(EngineObject *object) { _objects.push_back(object); }
-
-    /*!
      * \brief Add an unit to the map
      * \param unit unit that will be added to the map
      * \sa removeObject(Unit *), objectsNumber(), objectAccess(UIntegerType)
      */
     void addUnit(Unit *unit);
+
+    /*!
+     * \brief Add an projectile to the map
+     * \param projectile projectile that will be added to the map
+     * \sa removeObject(Unit *), objectsNumber(), objectAccess(UIntegerType)
+     */
+    void addProjectile(Projectile *projectile);
 
     /*!
      * \brief Remove an object from the map
@@ -103,14 +105,14 @@ public:
      * \sa removeObject(EngineObject *), addObject(EngineObject *), objectsNumber()
      * \return EngineObject with the id 'n'
      */
-    EngineObject *objectAccess(UIntegerType n) { return _objects[n]; }
-    const EngineObject *objectAccess(UIntegerType n) const { return _objects[n]; }
+    EngineObject *objectAccess(UIntegerType n) { return _search_object(n, _objects, _units, _projectiles); }
+    const EngineObject *objectAccess(UIntegerType n) const { return const_cast<Map *>(this)->objectAccess(n); }
 
     /*!
      * \brief Returns how many number of objects there are in the map
      * \return The number of objects in the map
      */
-    UIntegerType objectsNumber() const { return _objects.size(); }
+    UIntegerType objectsNumber() const { return _count_size(_objects, _units, _projectiles); }
 
     /*!
      * \brief Access an unit with the id 'n', the id is not fixed, it can be changed by a removal
@@ -161,11 +163,22 @@ private:
     template<typename T>
     static bool _remove_from_vector(std::vector<T *>& v, T *obj);
 
+    template<typename T, typename... Args>
+    static EngineObject *_search_object(UIntegerType i, T v, Args... args);
+
+    static constexpr nullptr_t _search_object(UIntegerType) { return nullptr; }
+
+    template<typename T, typename... Args>
+    static UIntegerType _count_size(T v, Args... args) { return v.size() + _count_size(args...); }
+
+    static UIntegerType _count_size() { return 0; }
+
     PositionType _width, _height;
 
     EngineObject *_pending;
     EngineObjectsVector _objects;
     UnitsVector _units;
+    ProjectilesVector _projectiles;
 };
 
 #endif // MAP_H

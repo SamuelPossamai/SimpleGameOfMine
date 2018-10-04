@@ -3,7 +3,7 @@
 #include "map.h"
 #include "uniteffect.h"
 
-Unit::Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i) :
+Unit::Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, UIntegerType team, BattleWidget *i) :
     Base(info, m), _team(team), _controller(controller), _skill(info->skills()), _interface(i) {
 
 }
@@ -27,6 +27,7 @@ bool Unit::receiveDamage(AttackType damage, Unit *attacking /* = nullptr */) {
 
     if(isDead()) {
 
+        map()->removeObject(this);
         _notifyAll(&Observer::unitDeathEvent);
 
         return false;

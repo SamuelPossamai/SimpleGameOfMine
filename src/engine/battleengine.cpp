@@ -5,7 +5,7 @@
 #include "battlewidget.h"
 #include "unitcontroller.h"
 
-BattleEngine::BattleEngine(BattleWidget *interface) : _map(Traits<Map>::width, Traits<Map>::height),
+BattleEngine::BattleEngine(BattleWidget *interface) : _map(Traits<EngineMap>::width, Traits<EngineMap>::height),
     _interface(interface), _cur_obj(0), _max_speed(1), _t(nullptr), _game_status(status::WORKING) {
 
 }
@@ -51,8 +51,6 @@ void BattleEngine::step(){
 }
 
 void BattleEngine::unitDeathEvent(Unit *u) {
-
-    _map.removeObject(u);
 
     if(_map.gameEndVerify()) _game_status = status::FINISHING;
 

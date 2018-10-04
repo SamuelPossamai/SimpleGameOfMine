@@ -26,11 +26,11 @@ public:
      * \brief Construct an Unit object
      * \param info UnitInfo with the information about this unit type
      * \param controller Controller that will be used to select skills to perform
-     * \param m Map where the unit is
+     * \param m EngineMap where the unit is
      * \param team Team of the unit
      * \param i BattleWidget object, it's used to receive user input when the controller asks for
      */
-    Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i);
+    Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, UIntegerType team, BattleWidget *i);
 
     ~Unit() final;
 

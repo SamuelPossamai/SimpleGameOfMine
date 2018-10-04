@@ -3,6 +3,7 @@
 
 #include "map.h"
 #include "unit.h"
+#include "projectile.h"
 #include "engineobject.h"
 
 template<typename T>
@@ -11,7 +12,7 @@ constexpr T square(T x) { return x * x; }
 template<typename T>
 constexpr T abs(T x) { return (x >= 0) ? x : -x; }
 
-Map::EngineObjectsVector Map::objectsInRange(PointType p, PositionType range) {
+EngineMap::EngineObjectsVector EngineMap::objectsInRange(PointType p, PositionType range) {
 
     EngineObjectsVector v;
 
@@ -20,7 +21,7 @@ Map::EngineObjectsVector Map::objectsInRange(PointType p, PositionType range) {
     return v;
 }
 
-Map::UnitsVector Map::unitsInRange(PointType p, PositionType range) {
+EngineMap::UnitsVector EngineMap::unitsInRange(PointType p, PositionType range) {
 
     UnitsVector v;
 
@@ -29,7 +30,7 @@ Map::UnitsVector Map::unitsInRange(PointType p, PositionType range) {
     return v;
 }
 
-Map::EngineObjectsVector Map::objectsInRange(PointType p, PositionType range, AngleType angle, AngleType region_angle) {
+EngineMap::EngineObjectsVector EngineMap::objectsInRange(PointType p, PositionType range, AngleType angle, AngleType region_angle) {
 
     EngineObjectsVector v;
 
@@ -38,17 +39,17 @@ Map::EngineObjectsVector Map::objectsInRange(PointType p, PositionType range, An
     return v;
 }
 
-void Map::objectsInRange(EngineObjectsVector& vector, PointType p, PositionType range) {
+void EngineMap::objectsInRange(EngineObjectsVector& vector, PointType p, PositionType range) {
 
     _in_range_base(_objects, vector, p, range);
 }
 
-void Map::unitsInRange(UnitsVector& vector, PointType p, PositionType range) {
+void EngineMap::unitsInRange(UnitsVector& vector, PointType p, PositionType range) {
 
     _in_range_base(_units, vector, p, range);
 }
 
-void Map::objectsInRange(EngineObjectsVector& vector, PointType p, PositionType range, AngleType angle, AngleType region_angle) {
+void EngineMap::objectsInRange(EngineObjectsVector& vector, PointType p, PositionType range, AngleType angle, AngleType region_angle) {
 
     if(region_angle >= 2*M_PI) return objectsInRange(vector, p, range);
     if(region_angle == 0) return objectsInLine(vector, p, range, angle);
@@ -71,7 +72,7 @@ void Map::objectsInRange(EngineObjectsVector& vector, PointType p, PositionType 
     }
 }
 
-void Map::objectsInLine(EngineObjectsVector& vector, PointType p, PositionType range, AngleType angle) {
+void EngineMap::objectsInLine(EngineObjectsVector& vector, PointType p, PositionType range, AngleType angle) {
 
     (void) vector;
     (void) p;
@@ -79,7 +80,7 @@ void Map::objectsInLine(EngineObjectsVector& vector, PointType p, PositionType r
     (void) angle;
 }
 
-Unit *Map::closerEnemy(const Unit *u) {
+Unit *EngineMap::closerEnemy(const Unit *u) {
 
     Unit *closer = nullptr;
     RealType closer_sqr_dist = 0;
@@ -102,7 +103,7 @@ Unit *Map::closerEnemy(const Unit *u) {
     return closer;
 }
 
-bool Map::gameEndVerify() const {
+bool EngineMap::gameEndVerify() const {
 
     if(_units.empty()) return true;
 
@@ -113,30 +114,41 @@ bool Map::gameEndVerify() const {
     return true;
 }
 
-
-void Map::addObject(EngineObject *object) {
+void EngineMap::addObject(EngineObject *object) {
 
     Unit *unit = dynamic_cast<Unit *>(object);
 
-    if(unit) addUnit(unit);
-    else addObjectNotUnit(object);
+    if(unit) return addUnit(unit);
+
+    Projectile *projectile = dynamic_cast<Projectile *>(object);
+
+    if(projectile) return addProjectile(projectile);
+
+    removeObject(object);
+    _objects.push_back(object);
 }
 
-void Map::addUnit(Unit *unit) {
+void EngineMap::addUnit(Unit *unit) {
 
-    addObjectNotUnit(unit);
+    removeObject(unit);
     _units.push_back(unit);
 }
 
-void Map::removeObject(EngineObject *object) {
+void EngineMap::addProjectile(Projectile *projectile) {
+
+    removeObject(projectile);
+    _projectiles.push_back(projectile);
+}
+
+void EngineMap::removeObject(EngineObject *object) {
 
     _remove_from_vector(_objects, object);
     _remove_from_vector(_units, static_cast<Unit *>(object));
 }
 
-bool Map::engineObjectMoveVerify(EngineObject *obj, const PointType& p) {
+bool EngineMap::engineObjectMoveVerify(EngineObject *obj, const PointType& p) {
 
-    if(Traits<Map>::solid_border && (p.x < PointType::CoordType(obj->size()) ||
+    if(Traits<EngineMap>::solid_border && (p.x < PointType::CoordType(obj->size()) ||
                                      p.x + PointType::CoordType(obj->size()) > _width ||
                                      p.y < PointType::CoordType(obj->size()) ||
                                      p.y + PointType::CoordType(obj->size()) > _height)) return false;
@@ -144,7 +156,7 @@ bool Map::engineObjectMoveVerify(EngineObject *obj, const PointType& p) {
     return true;
 }
 
-void Map::placeUnits(){
+void EngineMap::placeUnits(){
 
     if(unitsNumber() == 0) return;
 
@@ -164,12 +176,12 @@ void Map::placeUnits(){
     }
 }
 
-RealType Map::objectsDistance(const EngineObject *u1, const EngineObject *u2) {
+RealType EngineMap::objectsDistance(const EngineObject *u1, const EngineObject *u2) {
 
     return std::sqrt(_objects_squared_distance(u1, u2));
 }
 
-RealType Map::_objects_squared_distance(const EngineObject *u1, const EngineObject *u2) {
+RealType EngineMap::_objects_squared_distance(const EngineObject *u1, const EngineObject *u2) {
 
     auto vet_x = RealType(u1->x()) - u2->x();
     auto vet_y = RealType(u1->y()) - u2->y();
@@ -177,7 +189,7 @@ RealType Map::_objects_squared_distance(const EngineObject *u1, const EngineObje
     return square(vet_x) + square(vet_y);
 }
 
-bool Map::_inside_region(AngleType a1, AngleType r1, AngleType a2, AngleType r2) {
+bool EngineMap::_inside_region(AngleType a1, AngleType r1, AngleType a2, AngleType r2) {
 
     if(abs(a1 - a2) < r1 + r2) return true;
     if(360 - abs(a1 - a2) < (r1 + r2)) return true;
@@ -186,7 +198,7 @@ bool Map::_inside_region(AngleType a1, AngleType r1, AngleType a2, AngleType r2)
 }
 
 template<typename T>
-void Map::_in_range_base(std::vector<T *>& src, std::vector<T *>& dest, PointType p, PositionType range) {
+void EngineMap::_in_range_base(std::vector<T *>& src, std::vector<T *>& dest, PointType p, PositionType range) {
 
     range *= range;
 
@@ -200,7 +212,7 @@ void Map::_in_range_base(std::vector<T *>& src, std::vector<T *>& dest, PointTyp
 }
 
 template<typename T>
-bool Map::_remove_from_vector(std::vector<T *>& v, T *obj) {
+bool EngineMap::_remove_from_vector(std::vector<T *>& v, T *obj) {
 
     auto it = std::find(v.begin(), v.end(), obj);
 
@@ -210,4 +222,12 @@ bool Map::_remove_from_vector(std::vector<T *>& v, T *obj) {
     v.pop_back();
 
     return true;
+}
+
+template<typename T, typename... Args>
+EngineObject *EngineMap::_search_object(UIntegerType i, T v, Args... args) {
+
+    if(i < v.size()) return static_cast<EngineObject *>(v[i]);
+
+    return _search_object(i - v.size(), args...);
 }

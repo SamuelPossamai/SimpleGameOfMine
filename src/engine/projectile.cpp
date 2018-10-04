@@ -22,7 +22,7 @@ bool Projectile::act() {
 
         this->collideAction(map(), nullptr);
 
-        return true;
+        return _durability != 0;
     }
 
     auto v = map()->objectsInRange(pos(), 0);

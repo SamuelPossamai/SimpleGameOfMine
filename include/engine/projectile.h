@@ -19,11 +19,13 @@ public:
 
     bool act() final;
 
+    void destroy() { _durability = 0; map()->removeObject(this); }
+
     bool decreaseDurability(UIntegerType v) {
 
         if(v >= _durability){
 
-            _durability = 0;
+            destroy();
             return false;
         }
 
@@ -35,8 +37,6 @@ public:
 
     virtual UIntegerType stepAction() { return std::numeric_limits<UIntegerType>::max(); }
     virtual void collideAction(Map *m, EngineObject *obj) { Q_UNUSED(m); Q_UNUSED(obj); }
-
-
 
 private:
 

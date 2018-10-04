@@ -14,7 +14,7 @@ class thread;
 /*!
  * \brief This class manage controller and skills calls and animation step.
  * \brief Each time 'step' is called, the battle and animation progress a quantum.
- * \sa Map, BattleWidget, BattleEngine::step()
+ * \sa EngineMap, BattleWidget, BattleEngine::step()
  */
 class BattleEngine : Unit::Observer {
 
@@ -72,7 +72,7 @@ private:
 
     void _delete_thread();
 
-    Map _map;
+    EngineMap _map;
     BattleWidget *_interface;
 
     UIntegerType _cur_obj;

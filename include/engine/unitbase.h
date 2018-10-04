@@ -23,7 +23,7 @@ public:
      * \param info UnitInfo with the basic information of the type of this unit
      * \param m Map where the unit is
      */
-    UnitBase(const UnitInfo *info, Map *m);
+    UnitBase(const UnitInfo *info, EngineMap *m);
 
     virtual ~UnitBase() {}
 

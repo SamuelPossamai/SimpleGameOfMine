@@ -15,11 +15,14 @@ class Unit;
 class UnitBase;
 class UnitInfo;
 
+class Projectile;
+
 class UnitController;
 class UnitSkill;
 class UnitEffect;
 
-class Map;
+class EngineMap;
+using Map = EngineMap;
 
 class Character;
 
@@ -38,6 +41,8 @@ class ProgressBarItem;
 class PartialImageItem;
 class UnitAnimationItem;
 class UnitAnimationItemFactory;
+class ProjectileAnimationItem;
+class ProjectileAnimationItemFactory;
 
 class Jobs;
 class Creatures;

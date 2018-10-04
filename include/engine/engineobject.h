@@ -63,17 +63,17 @@ public:
 
 protected:
 
-    EngineObject(Map *m, SizeType s, SpeedType sp, PointType pos = {0, 0}, AngleType angle = 0) :
+    EngineObject(EngineMap *m, SizeType s, SpeedType sp, PointType pos = {0, 0}, AngleType angle = 0) :
         EngineObjectBase(s, sp, pos, angle), _map(m) {
 
         m->addObjectPending(this);
     }
 
-    Map *map() const { return _map; }
+    EngineMap *map() const { return _map; }
 
 private:
 
-    Map * const _map;
+    EngineMap * const _map;
 };
 
 #endif // ENGINEOBJECT_H
