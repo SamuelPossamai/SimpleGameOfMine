@@ -6,6 +6,7 @@
 #include <QKeyEvent>
 #include <QGraphicsPixmapItem>
 #include <QLabel>
+#include <QMessageBox>
 
 #include <config/engine_traits.h>
 #include <memory/memorymanager.h>
@@ -90,6 +91,8 @@ bool BattleWidget::skillButtonsVisible() const {
 
 void BattleWidget::step(){
 
+    if(!_message && _engine->finished()) return _exit();
+
     _input_interface->handleEvents();
     for(auto *animation : _animations) animation->redraw();
 
@@ -105,7 +108,8 @@ void BattleWidget::resizeEvent(QResizeEvent *event) {
 
 void BattleWidget::keyPressEvent(QKeyEvent *event) {
 
-    if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier){
+    if(_engine->finished()) _exit();
+    else if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier){
 
         if(event->key() == Qt::Key_Plus || event->key() == Qt::Key_Equal) zoomIn();
         else if(event->key() == Qt::Key_Minus) zoomOut();
@@ -230,7 +234,8 @@ void BattleWidget::on_cancelButton_clicked() {
 
 void BattleWidget::on_returnButton_clicked() {
 
-    _exit();
+    if(QMessageBox::question(this, "SGOM Dialog", "Are you sure that you want to exit from battle?")
+            == QMessageBox::Yes) _exit();
 }
 
 void BattleWidget::_update_buttons() {

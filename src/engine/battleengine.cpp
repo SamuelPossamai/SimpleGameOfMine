@@ -37,7 +37,7 @@ void BattleEngine::step(){
     if(_game_status == status::FINISHED) return;
     if(_game_status == status::FINISHING) {
 
-        _interface->displayMessage("Team " + std::to_string(_map.unitAccess(0)->team()) + " Won");
+        _interface->displayMessage(_map.unitAccess(0)->team() ? "You Lost" : "You Won");
 
         _game_status = status::FINISHED;
 
