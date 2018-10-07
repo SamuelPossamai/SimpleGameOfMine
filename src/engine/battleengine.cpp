@@ -1,6 +1,7 @@
 
 #include <thread>
 
+#include "projectilefactory.h"
 #include "battleengine.h"
 #include "battlewidget.h"
 #include "unitcontroller.h"
@@ -30,6 +31,17 @@ Unit *BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, U
     if(u->baseSpeed() > _max_speed) _max_speed = u->baseSpeed();
 
     return u;
+}
+
+Projectile *BattleEngine::addProjectile(ProjectileFactory *factory, Projectile::AngleType dir,
+                                        Projectile::PointType pos, Projectile::AngleType angle) {
+
+    Projectile *p = factory->create(&_map, dir, pos, angle);
+    _map.resolvePendings();
+
+    _objects.push_back(ContainerContent{ p, 0 });
+
+    return p;
 }
 
 void BattleEngine::step(){

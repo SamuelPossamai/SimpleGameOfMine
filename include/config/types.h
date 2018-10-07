@@ -16,6 +16,7 @@ class UnitBase;
 class UnitInfo;
 
 class Projectile;
+class ProjectileFactory;
 
 class UnitController;
 class UnitSkill;
@@ -39,6 +40,7 @@ class AnimatedObject;
 class AnimationHandler;
 class ProgressBarItem;
 class PartialImageItem;
+class AnimationItemBase;
 class UnitAnimationItem;
 class UnitAnimationItemFactory;
 class ProjectileAnimationItem;

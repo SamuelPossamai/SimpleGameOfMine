@@ -9,7 +9,7 @@
 #include <engine/effects/regeneration.h>
 #include <engine/effects/adrenaline.h>
 
-#include "unitanimations/basicunitgraphicitem.h"
+#include "animationitens/unit/basicunitgraphicitem.h"
 #include "partialimageitem.h"
 #include "progressbaritem.h"
 

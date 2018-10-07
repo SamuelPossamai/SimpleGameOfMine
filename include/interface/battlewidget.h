@@ -7,6 +7,7 @@
 #include <config/interface_traits.h>
 #include <engine/unitcontroller.h>
 #include <engine/character.h>
+#include <engine/projectile.h>
 
 #include "graphicsview.h"
 #include "mainwidget.h"
@@ -133,6 +134,9 @@ public:
      */
     bool addHero(const Character& c, UIntegerType team) { return addHero(c.className(), c.attributes(), team); }
 
+    void addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
+                       Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);
+
     /*!
      * \brief Display a message on the screen, it will stay there until a click is performed
      */
@@ -211,8 +215,7 @@ private:
 
     InputInterface _input_interface;
 
-
-    std::vector<UnitAnimationItem *> _animations;
+    std::vector<AnimationItemBase *> _animations;
 
     Ui::BattleWidget *_ui;
 };

@@ -4,9 +4,9 @@
 #include "unitsinfo/fighter.h"
 #include "unitsinfo/ninja.h"
 #include "unitsinfo/knight.h"
-#include "unitanimationfactories/fighteranimationfactory.h"
-#include "unitanimationfactories/ninjaanimationfactory.h"
-#include "unitanimationfactories/knightanimationfactory.h"
+#include "animationfactories/unit/fighteranimationfactory.h"
+#include "animationfactories/unit/ninjaanimationfactory.h"
+#include "animationfactories/unit/knightanimationfactory.h"
 
 std::map<std::string, Jobs::GetJobFunctionType> Jobs::_jobs;
 

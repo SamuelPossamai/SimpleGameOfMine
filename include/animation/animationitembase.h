@@ -13,6 +13,8 @@ public:
      */
     AnimationItemBase() : _scene(nullptr) {}
 
+    virtual ~AnimationItemBase() {}
+
     /*!
      * \brief This method should be called in a loop, all changes in the graphics display must be done here
      */

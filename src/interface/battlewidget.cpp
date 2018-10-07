@@ -8,6 +8,8 @@
 #include <QLabel>
 #include <QMessageBox>
 
+#include <animation/projectileanimationitemfactory.h>
+#include <animation/projectileanimationitem.h>
 #include <config/engine_traits.h>
 #include <memory/memorymanager.h>
 #include <unittypes/creatures.h>
@@ -183,6 +185,14 @@ bool BattleWidget::addHero(std::string name, const Character::Attributes& attr, 
     addUnit(std::get<0>(i), controller::Human::getController(), std::get<1>(i), team);
 
     return true;
+}
+
+void BattleWidget::addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
+                                 Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle) {
+
+    _animations.push_back(itemFactory->create(_engine->addProjectile(projFactory, dir, pos, angle)));
+
+    _animations.back()->setScene(_gview->scene());
 }
 
 void BattleWidget::showArrow(UIntegerType x, UIntegerType y) {

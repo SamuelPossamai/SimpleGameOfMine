@@ -1,6 +1,6 @@
 
-#include "unitanimations/basicunitgraphicitem.h"
-#include "unitanimationfactories/monsterfloweranimationfactory.h"
+#include "animationfactories/unit/monsterfloweranimationfactory.h"
+#include "animationitens/unit/basicunitgraphicitem.h"
 
 using namespace unitanimationfactory;
 

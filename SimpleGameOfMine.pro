@@ -38,10 +38,7 @@ SOURCES += src/main.cpp \
     src/engine/unitsinfo/fighter.cpp \
     src/engine/skills/basicattack.cpp \
     src/animation/progressbaritem.cpp \
-    src/animation/unitanimations/basicunitgraphicitem.cpp \
     src/interface/graphicsview.cpp \
-    src/animation/unitanimationfactories/slimeanimationfactory.cpp \
-    src/animation/unitanimationfactories/fighteranimationfactory.cpp \
     src/engine/effects/regeneration.cpp \
     src/utility/random.cpp \
     src/memory/memorymanager.cpp \
@@ -53,10 +50,8 @@ SOURCES += src/main.cpp \
     src/engine/character.cpp \
     src/interface/gamedefaultscreen.cpp \
     src/unittypes/maps/greenvalley.cpp \
-    src/animation/unitanimationfactories/coloredslimeanimationfactory.cpp \
     src/interface/characterinfodialog.cpp \
     src/engine/skills/teleport.cpp \
-    src/animation/unitanimationfactories/ninjaanimationfactory.cpp \
     src/engine/unitsinfo/ninja.cpp \
     src/engine/effects/lastescape.cpp \
     src/engine/skills/onofflastescape.cpp \
@@ -66,13 +61,11 @@ SOURCES += src/main.cpp \
     src/engine/controllers/ai/timidslime.cpp \
     src/unittypes/maps/trainingground.cpp \
     src/engine/controllers/ai/pacifistslime.cpp \
-    src/animation/unitanimationfactories/knightanimationfactory.cpp \
     src/engine/unitsinfo/knight.cpp \
     src/interface/librarywidget.cpp \
     src/animation/partialimageitem.cpp \
     src/engine/effects/adrenaline.cpp \
     src/engine/skills/rage.cpp \
-    src/animation/unitanimationfactories/monsterfloweranimationfactory.cpp \
     src/engine/unitsinfo/monsterplant.cpp \
     src/engine/skills/plantareaattack.cpp \
     src/engine/controllers/ai/monsterplant.cpp \
@@ -83,7 +76,14 @@ SOURCES += src/main.cpp \
     src/engine/engineobjectbase.cpp \
     src/engine/engineobject.cpp \
     src/engine/projectile.cpp \
-    src/engine/projectiles/basicprojectile.cpp
+    src/engine/projectiles/basicprojectile.cpp \
+    src/animation/animationfactories/unit/coloredslimeanimationfactory.cpp \
+    src/animation/animationfactories/unit/fighteranimationfactory.cpp \
+    src/animation/animationfactories/unit/knightanimationfactory.cpp \
+    src/animation/animationfactories/unit/monsterfloweranimationfactory.cpp \
+    src/animation/animationfactories/unit/ninjaanimationfactory.cpp \
+    src/animation/animationfactories/unit/slimeanimationfactory.cpp \
+    src/animation/animationitens/unit/basicunitgraphicitem.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -114,25 +114,20 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/basicattack.h \
     include/animation/unitanimationitem.h \
     include/animation/progressbaritem.h \
-    include/animation/unitanimations/basicunitgraphicitem.h \
     include/interface/graphicsview.h \
     include/animation/unitanimationitemfactory.h \
-    include/animation/unitanimations/basicunitgraphicitem.h \
     include/animation/animatedobject.h \
     include/animation/animation.h \
     include/animation/animationhandler.h \
     include/animation/progressbaritem.h \
     include/animation/unitanimationitem.h \
     include/animation/unitanimationitemfactory.h \
-    include/animation/unitanimations/basicunitgraphicitem.h \
     include/animation/animatedobject.h \
     include/animation/animation.h \
     include/animation/animationhandler.h \
     include/animation/progressbaritem.h \
     include/animation/unitanimationitem.h \
     include/animation/unitanimationitemfactory.h \
-    include/animation/unitanimationfactories/slimeanimationfactory.h \
-    include/animation/unitanimationfactories/fighteranimationfactory.h \
     include/engine/uniteffect.h \
     include/engine/effects/regeneration.h \
     include/utility/interval.h \
@@ -153,10 +148,8 @@ HEADERS += include/interface/mainwindow.h \
     include/unittypes/creaturemap.h \
     include/utility/randomvalues.h \
     include/unittypes/maps/greenvalley.h \
-    include/animation/unitanimationfactories/coloredslimeanimationfactory.h \
     include/interface/characterinfodialog.h \
     include/engine/skills/teleport.h \
-    include/animation/unitanimationfactories/ninjaanimationfactory.h \
     include/engine/unitsinfo/ninja.h \
     include/engine/effects/lastescape.h \
     include/engine/skills/onofflastescape.h \
@@ -165,13 +158,11 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/controllers/ai/timidslime.h \
     include/unittypes/maps/trainingground.h \
     include/engine/controllers/ai/pacifistslime.h \
-    include/animation/unitanimationfactories/knightanimationfactory.h \
     include/engine/unitsinfo/knight.h \
     include/interface/librarywidget.h \
     include/animation/partialimageitem.h \
     include/engine/effects/adrenaline.h \
     include/engine/skills/rage.h \
-    include/animation/unitanimationfactories/monsterfloweranimationfactory.h \
     include/engine/unitsinfo/monsterplant.h \
     include/engine/skills/plantareaattack.h \
     include/engine/controllers/ai/monsterplant.h \
@@ -185,7 +176,15 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/projectiles/basicprojectile.h \
     include/animation/projectileanimationitem.h \
     include/animation/animationitembase.h \
-    include/animation/projectileanimationitemfactory.h
+    include/animation/projectileanimationitemfactory.h \
+    include/animation/animationfactories/unit/fighteranimationfactory.h \
+    include/animation/animationfactories/unit/coloredslimeanimationfactory.h \
+    include/animation/animationfactories/unit/knightanimationfactory.h \
+    include/animation/animationfactories/unit/monsterfloweranimationfactory.h \
+    include/animation/animationfactories/unit/slimeanimationfactory.h \
+    include/animation/animationfactories/unit/ninjaanimationfactory.h \
+    include/animation/animationitens/unit/basicunitgraphicitem.h \
+    include/animation/animationitens/projectile/basicprojectilegraphicitem.h
 
 RESOURCES += img/images.qrc
 

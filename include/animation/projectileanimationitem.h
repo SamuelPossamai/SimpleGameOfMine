@@ -12,6 +12,8 @@ public:
 
     ProjectileAnimationItem(Projectile *p) : _projectile(p) {}
 
+    virtual ~ProjectileAnimationItem() override {}
+
 protected:
 
     const Projectile *projectile() const { return _projectile; }

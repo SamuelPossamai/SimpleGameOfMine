@@ -4,7 +4,7 @@
 
 #include <memory/onecopymemorymanager.h>
 
-#include "unitanimationfactories/slimeanimationfactory.h"
+#include "slimeanimationfactory.h"
 
 namespace unitanimationfactory {
 

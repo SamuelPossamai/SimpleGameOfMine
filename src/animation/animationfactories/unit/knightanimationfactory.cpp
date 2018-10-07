@@ -1,7 +1,7 @@
 
 #include "animation.h"
-#include "unitanimationfactories/knightanimationfactory.h"
-#include "unitanimations/basicunitgraphicitem.h"
+#include "animationfactories/unit/knightanimationfactory.h"
+#include "animationitens/unit/basicunitgraphicitem.h"
 
 using namespace unitanimationfactory;
 

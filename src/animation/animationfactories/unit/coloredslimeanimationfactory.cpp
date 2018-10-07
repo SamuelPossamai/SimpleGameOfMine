@@ -2,8 +2,8 @@
 #include <utility/imagecolorchange.h>
 
 #include "animation.h"
-#include "unitanimationfactories/coloredslimeanimationfactory.h"
-#include "unitanimations/basicunitgraphicitem.h"
+#include "animationfactories/unit/coloredslimeanimationfactory.h"
+#include "animationitens/unit/basicunitgraphicitem.h"
 
 using namespace unitanimationfactory;
 

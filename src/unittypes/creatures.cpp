@@ -1,7 +1,7 @@
 
-#include <animation/unitanimationfactories/monsterfloweranimationfactory.h>
-#include <animation/unitanimationfactories/coloredslimeanimationfactory.h>
-#include <animation/unitanimationfactories/slimeanimationfactory.h>
+#include <animation/animationfactories/unit/monsterfloweranimationfactory.h>
+#include <animation/animationfactories/unit/coloredslimeanimationfactory.h>
+#include <animation/animationfactories/unit/slimeanimationfactory.h>
 #include <engine/controllers/ai/slime.h>
 #include <engine/controllers/ai/crazy.h>
 #include <engine/controllers/ai/timidslime.h>

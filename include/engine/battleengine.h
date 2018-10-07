@@ -6,6 +6,7 @@
 
 #include "map.h"
 #include "unit.h"
+#include "projectile.h"
 
 namespace std {
 class thread;
@@ -39,6 +40,9 @@ public:
      * \return Return the unit that was just created
      */
     Unit *addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team);
+
+    Projectile *addProjectile(ProjectileFactory *factory, Projectile::AngleType dir,
+                              Projectile::PointType pos, Projectile::AngleType angle);
 
     /*!
      * \brief Progress the battle by a quantum, it will do nothing if the game's waiting input.
