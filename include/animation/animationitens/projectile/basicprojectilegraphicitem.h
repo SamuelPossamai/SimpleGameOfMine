@@ -24,9 +24,15 @@ public:
 
     virtual void redraw() override {
 
-        _obj->setPos(projectile()->x(), projectile()->y());
-        _obj->setRotation(projectile()->angle()*180/M_PI);
-        _obj->next();
+        if(projectile()->durability() == 0) {
+
+            _obj->hide();
+        }
+        else {
+            _obj->setPos(projectile()->x(), projectile()->y());
+            _obj->setRotation(projectile()->angle()*180/M_PI);
+            _obj->next();
+        }
     }
 
     void setAnimations(const Animation& animation) {
@@ -34,6 +40,13 @@ public:
         _obj->clearAnimations();
         _obj->addAnimation(animation);
     }
+
+protected:
+
+
+    virtual void addToScene(QGraphicsScene *scene) override { scene->addItem(_obj); }
+
+    virtual void removeFromScene() override { scene()->removeItem(_obj); }
 
 private:
 

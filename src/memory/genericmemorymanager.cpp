@@ -13,12 +13,10 @@ bool GenericMemoryManagerCompareFunctor::operator()(const GenericMemoryManagerMa
     const std::type_info& id1 = typeid(*mo1);
     const std::type_info& id2 = typeid(*mo2);
     if(id1 != id2) {
-        
-        std::cout << "dentro" << std::endl;
+
         return std::type_index(id1) < std::type_index(id2);
     }
-    
-    std::cout << "fora" << std::endl;
+
     return mo1->manObjLessCompare(mo2);
 }
 

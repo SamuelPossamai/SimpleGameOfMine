@@ -18,16 +18,16 @@ bool Projectile::act() {
 
     PointType new_pos(x() + dx, y() + dy);
 
-    if(map()->engineObjectMoveVerify(this, new_pos)) {
+    if(!map()->engineObjectMoveVerify(this, new_pos)) {
 
         this->collideAction(map(), nullptr);
 
         return _durability != 0;
     }
 
-    auto v = map()->objectsInRange(pos(), 0);
+    auto v = map()->objectsInRange(pos(), size());
 
-    for(auto obj : v) this->collideAction(map(), obj);
+    for(auto obj : v) if(obj != this) this->collideAction(map(), obj);
 
     if(_durability == 0) return false;
 

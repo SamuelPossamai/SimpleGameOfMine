@@ -109,6 +109,10 @@ void GameDefaultScreen::on_changeJobButton_clicked() {
     _reselect();
 }
 
+#include <animation/animationfactories/projectile/arrowanimationfactory.h>
+#include <engine/projectiles/basicprojectile.h>
+#include <engine/projectilefactories/basicprojectilefactory.h>
+
 void GameDefaultScreen::_start_battle(CreatureMap *m) {
 
     BattleWidget *bw = new BattleWidget(parent(), &_result);
@@ -123,6 +127,9 @@ void GameDefaultScreen::_start_battle(CreatureMap *m) {
         _xp_for_victory += std::ceil(std::pow(creature_info.creature_level + 3, 1.5));
         bw->addCreature(creature_info.creature_name, creature_info.creature_level, 1);
     }
+
+    bw->addProjectile(projectilefactory::BasicProjectileFactory::getFactory(100, 15, 40, 30),
+                      projectileanimationfactory::ArrowAnimationFactory::getFactory(), 3.2, { 350, 350 }, 3.2);
 
     bw->start();
 

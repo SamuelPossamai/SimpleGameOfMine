@@ -5,11 +5,18 @@ using namespace projectile;
 
 void BasicProjectile::collideAction(Map *, EngineObject *obj) {
 
+    if(obj == nullptr) {
+
+        this->decreaseDurability(this->durability());
+        return;
+    }
+
     Unit *u = dynamic_cast<Unit *>(obj);
 
     if(u) {
 
         u->receiveDamage(_damage);
+        this->decreaseDurability(this->durability());
         return;
     }
 

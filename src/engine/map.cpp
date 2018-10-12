@@ -42,6 +42,8 @@ EngineMap::EngineObjectsVector EngineMap::objectsInRange(PointType p, PositionTy
 void EngineMap::objectsInRange(EngineObjectsVector& vector, PointType p, PositionType range) {
 
     _in_range_base(_objects, vector, p, range);
+    _in_range_base(_units, vector, p, range);
+    _in_range_base(_projectiles, vector, p, range);
 }
 
 void EngineMap::unitsInRange(UnitsVector& vector, PointType p, PositionType range) {
@@ -197,8 +199,8 @@ bool EngineMap::_inside_region(AngleType a1, AngleType r1, AngleType a2, AngleTy
     return false;
 }
 
-template<typename T>
-void EngineMap::_in_range_base(std::vector<T *>& src, std::vector<T *>& dest, PointType p, PositionType range) {
+template<typename T, typename Container>
+void EngineMap::_in_range_base(std::vector<T *>& src, Container& dest, PointType p, PositionType range) {
 
     range *= range;
 

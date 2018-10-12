@@ -85,7 +85,8 @@ SOURCES += src/main.cpp \
     src/animation/animationfactories/unit/slimeanimationfactory.cpp \
     src/animation/animationitens/unit/basicunitgraphicitem.cpp \
     src/interface/characterselectionscreen.cpp \
-    src/interface/imagewidget.cpp
+    src/interface/imagewidget.cpp \
+    src/animation/animationfactories/projectile/arrowanimationfactory.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -189,7 +190,9 @@ HEADERS += include/interface/mainwindow.h \
     include/animation/animationitens/projectile/basicprojectilegraphicitem.h \
     include/interface/selectuserinterfacebase.h \
     include/interface/characterselectionscreen.h \
-    include/interface/imagewidget.h
+    include/interface/imagewidget.h \
+    include/animation/animationfactories/projectile/arrowanimationfactory.h \
+    include/engine/projectilefactories/basicprojectilefactory.h
 
 RESOURCES += img/images.qrc
 

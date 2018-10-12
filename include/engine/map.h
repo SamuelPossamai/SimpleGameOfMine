@@ -157,8 +157,8 @@ private:
 
     static bool _inside_region(AngleType a1, AngleType r1, AngleType a2, AngleType r2);
 
-    template<typename T>
-    void _in_range_base(std::vector<T *>& src, std::vector<T *>& dest, PointType p, PositionType range);
+    template<typename T, typename Container>
+    void _in_range_base(std::vector<T *>& src, Container& dest, PointType p, PositionType range);
 
     template<typename T>
     static bool _remove_from_vector(std::vector<T *>& v, T *obj);

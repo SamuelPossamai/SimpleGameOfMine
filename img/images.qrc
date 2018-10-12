@@ -59,5 +59,6 @@
         <file>icons/fighter.png</file>
         <file>icons/ninja.png</file>
         <file>icons/unknown_icon.png</file>
+        <file>arrow_projectile_image.png</file>
     </qresource>
 </RCC>

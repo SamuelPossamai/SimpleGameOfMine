@@ -11,8 +11,9 @@ class BasicProjectile : public Projectile {
 
 public:
 
-    BasicProjectile(Map *m, AngleType dir, UIntegerType dur, SizeType s, SpeedType sp, PointType pos = {0, 0}, AngleType angle = 0) :
-        Projectile(m, dir, dur, s, sp, pos, angle) {}
+    BasicProjectile(Map *m, AngleType dir, UIntegerType dur, SizeType s,SpeedType sp, Unit::AttackType damage,
+                    PointType pos = {0, 0}, AngleType angle = 0) :
+        Projectile(m, dir, dur, s, sp, pos, angle), _damage(damage) {}
 
     virtual ~BasicProjectile() override {}
 
