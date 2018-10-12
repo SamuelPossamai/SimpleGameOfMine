@@ -7,10 +7,10 @@
 
 #include "ui_selectuserinterface.h"
 #include "selectuserinterface.h"
-#include "gamedefaultscreen.h"
 
-SelectUserInterface::SelectUserInterface(MainWindow *parent /* = nullptr */) :
-    MainWidget(parent), _ui(new Ui::SelectUserInterface) {
+SelectUserInterface::SelectUserInterface(const utility::Interval<UIntegerType>& n_characters /* = {1, 3} */,
+                                         MainWindow *parent /* = nullptr */) :
+    SelectUserInterfaceBase(n_characters, parent), _ui(new Ui::SelectUserInterface) {
 
     this->setPalette(QPalette(Qt::white));
     this->setAutoFillBackground(true);
@@ -53,25 +53,12 @@ void SelectUserInterface::activate() {
 
 void SelectUserInterface::on_selectButton_clicked() {
 
-    const UIntegerType selected_count = _selected_count();
-
-    static const char *info_title = "SGOM Warning";
-
-    const char *fail_message = nullptr;
-
-    if(selected_count == 0) fail_message = "You need to select at least one.";
-    else if(selected_count > 3) fail_message = "You can select three characters at most.";
-
-    if(fail_message) {
-
-        QMessageBox::information(this, info_title, fail_message);
-
-        return;
-    }
-
     std::vector characters = _get_selecteds();
 
-    parent()->swapWidget(new GameDefaultScreen(characters));
+    if(finalize(characters)) return;
+
+    QMessageBox::information(this, "SGOM Warning",
+                             QString("You must select between %0 and %1 characters").arg(minCharacters()).arg(maxCharacters()));
 }
 
 void SelectUserInterface::on_deleteButton_clicked() {

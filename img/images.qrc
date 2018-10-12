@@ -56,5 +56,8 @@
         <file>monsterplant_img1.png</file>
         <file>monsterplant_img2.png</file>
         <file>monsterplant_library_img.png</file>
+        <file>icons/fighter.png</file>
+        <file>icons/ninja.png</file>
+        <file>icons/unknown_icon.png</file>
     </qresource>
 </RCC>

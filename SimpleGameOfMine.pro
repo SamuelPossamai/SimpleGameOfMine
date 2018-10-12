@@ -83,7 +83,9 @@ SOURCES += src/main.cpp \
     src/animation/animationfactories/unit/monsterfloweranimationfactory.cpp \
     src/animation/animationfactories/unit/ninjaanimationfactory.cpp \
     src/animation/animationfactories/unit/slimeanimationfactory.cpp \
-    src/animation/animationitens/unit/basicunitgraphicitem.cpp
+    src/animation/animationitens/unit/basicunitgraphicitem.cpp \
+    src/interface/characterselectionscreen.cpp \
+    src/interface/imagewidget.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -184,7 +186,10 @@ HEADERS += include/interface/mainwindow.h \
     include/animation/animationfactories/unit/slimeanimationfactory.h \
     include/animation/animationfactories/unit/ninjaanimationfactory.h \
     include/animation/animationitens/unit/basicunitgraphicitem.h \
-    include/animation/animationitens/projectile/basicprojectilegraphicitem.h
+    include/animation/animationitens/projectile/basicprojectilegraphicitem.h \
+    include/interface/selectuserinterfacebase.h \
+    include/interface/characterselectionscreen.h \
+    include/interface/imagewidget.h
 
 RESOURCES += img/images.qrc
 
@@ -195,7 +200,8 @@ FORMS += forms/gamedefaultscreen.ui \
     forms/selectjobdialog.ui \
     forms/battlewidget.ui \
     forms/helpwidget.ui \
-    forms/librarywidget.ui
+    forms/librarywidget.ui \
+    forms/characterselectionscreen.ui
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

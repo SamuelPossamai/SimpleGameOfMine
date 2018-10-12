@@ -3,6 +3,7 @@
 
 #include "menu.h"
 #include "selectuserinterface.h"
+#include "characterselectionscreen.h"
 #include "helpwidget.h"
 #include "librarywidget.h"
 
@@ -24,7 +25,8 @@ Menu::~Menu() {
 
 void Menu::on_startButton_clicked() {
 
-    parent()->pushWidget(new SelectUserInterface);
+    //parent()->pushWidget(new SelectUserInterface);
+    parent()->pushWidget(new CharacterSelectionScreen({1, 3}));
 }
 
 void Menu::on_helpButton_clicked() {

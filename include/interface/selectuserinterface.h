@@ -4,19 +4,19 @@
 
 #include <vector>
 
-#include "mainwidget.h"
+#include "selectuserinterfacebase.h"
 
 namespace Ui {
 class SelectUserInterface;
 } /* namespace Ui */
 
-class SelectUserInterface : public MainWidget {
+class SelectUserInterface : public SelectUserInterfaceBase {
 
     Q_OBJECT
 
 public:
 
-    SelectUserInterface(MainWindow *parent = nullptr);
+    SelectUserInterface(const utility::Interval<UIntegerType>& n_characters = {1, 3}, MainWindow *parent = nullptr);
 
     virtual void activate() override;
 
