@@ -1,4 +1,5 @@
 
+#include "unit.h"
 #include "projectiles/basicprojectile.h"
 
 using namespace projectile;

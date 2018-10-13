@@ -1,7 +1,7 @@
 
 #include <engine/unitinfo.h>
 #include <engine/character.h>
-#include <unittypes/jobs.h>
+#include <gameinfo/jobs.h>
 
 #include "characterinfodialog.h"
 #include "ui_characterinfodialog.h"
@@ -30,7 +30,7 @@ void CharacterInfoDialog::_init(const Character& c) {
     _ui->agiLabel->setText(QString::number(c.attributes().agility()));
     _ui->wisLabel->setText(QString::number(c.attributes().wisdom()));
 
-    std::optional opt = Jobs::get(c.className(), c.attributes());
+    std::optional opt = gameinfo::Jobs::get(c.className(), c.attributes());
     if(!opt.has_value()) return;
 
     UnitInfo *info = std::get<0>(*opt);

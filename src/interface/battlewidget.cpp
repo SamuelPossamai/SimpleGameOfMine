@@ -12,8 +12,8 @@
 #include <animation/projectileanimationitem.h>
 #include <config/engine_traits.h>
 #include <memory/memorymanager.h>
-#include <unittypes/creatures.h>
-#include <unittypes/jobs.h>
+#include <gameinfo/creatures.h>
+#include <gameinfo/jobs.h>
 #include <engine/controllers/human.h>
 
 #include "ui_battlewidget.h"
@@ -167,10 +167,10 @@ void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UnitAnimationItemFact
 
 bool BattleWidget::addCreature(std::string name, UIntegerType level, UIntegerType team) {
 
-    auto opt = Creatures::get(name, level);
+    auto opt = gameinfo::Creatures::get(name, level);
     if(!opt.has_value()) return false;
 
-    Creatures::Info i = *opt;
+    gameinfo::Creatures::Info i = *opt;
     addUnit(std::get<0>(i), std::get<2>(i), std::get<1>(i), team);
 
     return true;
@@ -178,10 +178,10 @@ bool BattleWidget::addCreature(std::string name, UIntegerType level, UIntegerTyp
 
 bool BattleWidget::addHero(std::string name, const Character::Attributes& attr, UIntegerType team) {
 
-    auto opt = Jobs::get(name, attr);
+    auto opt = gameinfo::Jobs::get(name, attr);
     if(!opt.has_value()) return false;
 
-    Jobs::Info i = *opt;
+    gameinfo::Jobs::Info i = *opt;
     addUnit(std::get<0>(i), controller::Human::getController(), std::get<1>(i), team);
 
     return true;
@@ -193,6 +193,20 @@ void BattleWidget::addProjectile(ProjectileFactory *projFactory, ProjectileAnima
     _animations.push_back(itemFactory->create(_engine->addProjectile(projFactory, dir, pos, angle)));
 
     _animations.back()->setScene(_gview->scene());
+}
+
+bool BattleWidget::addProjectile(const std::string& projectile_type, const gameinfo::Projectiles::ProjectileInfo& p_info,
+                                 Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle) {
+
+    std::optional<gameinfo::Projectiles::Info> opt = gameinfo::Projectiles::get(projectile_type, p_info);
+
+    if(!opt.has_value()) return false;
+
+    gameinfo::Projectiles::Info i = *opt;
+
+    addProjectile(std::get<0>(i), std::get<1>(i), dir, pos, angle);
+
+    return true;
 }
 
 void BattleWidget::showArrow(UIntegerType x, UIntegerType y) {

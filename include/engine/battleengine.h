@@ -72,6 +72,8 @@ private:
 
     bool _step_loop();
 
+    void _object_act(EngineObject *obj) { if(!obj->act()) _map.removeObject(obj); }
+
     static void _perform_internal(EngineObject *, BattleEngine *);
 
     void _delete_thread();

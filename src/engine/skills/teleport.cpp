@@ -12,7 +12,7 @@ using namespace utility;
 
 Teleport *Teleport::_skill;
 
-UIntegerType Teleport::action(Unit *u, Map *, const Info& info) {
+UIntegerType Teleport::action(Unit *u, EngineMap *, ProjectileCreationInterface&, const Info& info) {
 
     if(info.step == 0) {
 
@@ -28,14 +28,13 @@ UIntegerType Teleport::action(Unit *u, Map *, const Info& info) {
 
 bool Teleport::teleportUnit(Unit *u) {
 
-
-    Map::PointType p_max = u->maxPosition();
+    EngineMap::PointType p_max = u->maxPosition();
 
     u->setAngle(Random::realDistribution(0, 2*M_PI));
 
     for(UIntegerType i = 0; i < 10; i++) {
 
-        Map::PointType new_p;
+        EngineMap::PointType new_p;
         new_p.x = Random::realDistribution(u->size(), p_max.x);
         new_p.y = Random::realDistribution(u->size(), p_max.y);
 

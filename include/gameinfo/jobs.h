@@ -1,11 +1,13 @@
 
-#ifndef JOBS_H
-#define JOBS_H
+#ifndef GAMEINFO_JOBS_H
+#define GAMEINFO_JOBS_H
 
 #include <optional>
 #include <tuple>
 
 #include <engine/unitsinfo/unitclassinfo.h>
+
+namespace gameinfo {
 
 class Jobs {
 
@@ -25,4 +27,6 @@ private:
     static std::map<std::string, GetJobFunctionType> _jobs;
 };
 
-#endif // JOBS_H
+} /* namespace gameinfo */
+
+#endif // GAMEINFO_JOBS_H

@@ -1,12 +1,14 @@
 
-#ifndef CREATURES_H
-#define CREATURES_H
+#ifndef GAMEINFO_CREATURES_H
+#define GAMEINFO_CREATURES_H
 
 #include <map>
 #include <tuple>
 #include <optional>
 
 #include <config/types.h>
+
+namespace gameinfo {
 
 class Creatures {
 
@@ -25,4 +27,6 @@ private:
     static std::map<std::string, GetCreatureFunctionType> _creatures;
 };
 
-#endif // CREATURES_H
+} /* namespace gameinfo */
+
+#endif // GAMEINFO_CREATURES_H

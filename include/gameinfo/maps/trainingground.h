@@ -3,7 +3,9 @@
 #define TRAININGGROUND_H
 
 #include <utility/randomvalues.h>
-#include <unittypes/creaturemap.h>
+#include <gameinfo/creaturemap.h>
+
+namespace gameinfo {
 
 namespace map {
 
@@ -25,5 +27,7 @@ private:
 };
 
 } /* namespace map */
+
+} /* namespace gameinfo */
 
 #endif // TRAININGGROUND_H

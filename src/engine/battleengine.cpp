@@ -96,7 +96,7 @@ bool BattleEngine::_step_loop(){
                 _t = new std::thread(_perform_internal, object, this);
                 return false;
             }
-            else object->act();
+            else _object_act(object);
         }
     }
 
@@ -114,9 +114,10 @@ void BattleEngine::_delete_thread() {
     }
 }
 
+
 void BattleEngine::_perform_internal(EngineObject *o, BattleEngine *e) {
 
-    o->act();
+    e->_object_act(o);
 
     e->_step_mut.unlock();
 }

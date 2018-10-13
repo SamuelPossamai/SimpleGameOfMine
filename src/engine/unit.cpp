@@ -156,9 +156,11 @@ bool Unit::act() {
 
 bool Unit::perform() {
 
+    UnitSkill::ProjectileCreationInterface pci(_interface);
+
     if(_skill_next_call == _skill_step){
 
-        _skill_next_call = _skill_step + unitInfo()->callSkill(_skill, this, map(), { _skill_step, _skill_angle });
+        _skill_next_call = _skill_step + unitInfo()->callSkill(_skill, this, map(), pci, { _skill_step, _skill_angle });
 
         if(_skill_next_call <= _skill_step) {
 

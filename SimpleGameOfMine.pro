@@ -42,14 +42,14 @@ SOURCES += src/main.cpp \
     src/engine/effects/regeneration.cpp \
     src/utility/random.cpp \
     src/memory/memorymanager.cpp \
-    src/unittypes/creatures.cpp \
-    src/unittypes/jobs.cpp \
+    src/gameinfo/creatures.cpp \
+    src/gameinfo/jobs.cpp \
     src/interface/battlewidget_inputmanager.cpp \
     src/config/sgomfiles.cpp \
     src/interface/selectuserinterface.cpp \
     src/engine/character.cpp \
     src/interface/gamedefaultscreen.cpp \
-    src/unittypes/maps/greenvalley.cpp \
+    src/gameinfo/maps/greenvalley.cpp \
     src/interface/characterinfodialog.cpp \
     src/engine/skills/teleport.cpp \
     src/engine/unitsinfo/ninja.cpp \
@@ -59,7 +59,7 @@ SOURCES += src/main.cpp \
     src/utility/imagecolorchange.cpp \
     src/engine/controllers/ai/crazy.cpp \
     src/engine/controllers/ai/timidslime.cpp \
-    src/unittypes/maps/trainingground.cpp \
+    src/gameinfo/maps/trainingground.cpp \
     src/engine/controllers/ai/pacifistslime.cpp \
     src/engine/unitsinfo/knight.cpp \
     src/interface/librarywidget.cpp \
@@ -86,7 +86,10 @@ SOURCES += src/main.cpp \
     src/animation/animationitens/unit/basicunitgraphicitem.cpp \
     src/interface/characterselectionscreen.cpp \
     src/interface/imagewidget.cpp \
-    src/animation/animationfactories/projectile/arrowanimationfactory.cpp
+    src/animation/animationfactories/projectile/arrowanimationfactory.cpp \
+    src/gameinfo/projectiles.cpp \
+    src/animation/animationfactories/unit/archeranimationfactory.cpp \
+    src/engine/skills/shoot.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -140,17 +143,17 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/unitsinfo/unitclassinfo.h \
     include/memory/memorymanager.h \
     include/memory/onecopymemorymanagerbasic.h \
-    include/unittypes/creatures.h \
-    include/unittypes/jobs.h \
+    include/gameinfo/creatures.h \
+    include/gameinfo/jobs.h \
     include/interface/mainwidget.h \
     include/interface/battlewidget_inputmanager.h \
     include/interface/gamedefaultscreen.h \
     include/interface/selectuserinterface.h \
     include/config/sgomfiles.h \
     include/engine/character.h \
-    include/unittypes/creaturemap.h \
+    include/gameinfo/creaturemap.h \
     include/utility/randomvalues.h \
-    include/unittypes/maps/greenvalley.h \
+    include/gameinfo/maps/greenvalley.h \
     include/interface/characterinfodialog.h \
     include/engine/skills/teleport.h \
     include/engine/unitsinfo/ninja.h \
@@ -159,7 +162,7 @@ HEADERS += include/interface/mainwindow.h \
     include/interface/selectjobdialog.h \
     include/engine/controllers/ai/crazy.h \
     include/engine/controllers/ai/timidslime.h \
-    include/unittypes/maps/trainingground.h \
+    include/gameinfo/maps/trainingground.h \
     include/engine/controllers/ai/pacifistslime.h \
     include/engine/unitsinfo/knight.h \
     include/interface/librarywidget.h \
@@ -192,7 +195,11 @@ HEADERS += include/interface/mainwindow.h \
     include/interface/characterselectionscreen.h \
     include/interface/imagewidget.h \
     include/animation/animationfactories/projectile/arrowanimationfactory.h \
-    include/engine/projectilefactories/basicprojectilefactory.h
+    include/engine/projectilefactories/basicprojectilefactory.h \
+    include/gameinfo/projectiles.h \
+    include/engine/unitsinfo/archer.h \
+    include/animation/animationfactories/unit/archeranimationfactory.h \
+    include/engine/skills/shoot.h
 
 RESOURCES += img/images.qrc
 

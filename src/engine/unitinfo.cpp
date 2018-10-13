@@ -4,9 +4,10 @@
 UnitInfo::~UnitInfo() {
 }
 
-UIntegerType UnitInfo::callSkill(UIntegerType n, Unit *u, Map *m, const UnitSkill::Info& info) const {
+UIntegerType UnitInfo::callSkill(UIntegerType n, Unit *u, Map *m,
+                                 UnitSkill::ProjectileCreationInterface& pci, const UnitSkill::Info& info) const {
 
-    return const_cast<UnitSkill *>(_skills[n].first)->action(u, m, info);
+    return const_cast<UnitSkill *>(_skills[n].first)->action(u, m, pci, info);
 }
 
 void UnitInfo::copyStats(const UnitInfo *i) {

@@ -1,11 +1,13 @@
 
-#ifndef CREATUREMAP_H
-#define CREATUREMAP_H
+#ifndef GAMEINFO_CREATUREMAP_H
+#define GAMEINFO_CREATUREMAP_H
 
 #include <vector>
 #include <string>
 
 #include <config/types.h>
+
+namespace gameinfo {
 
 /*!
  * \brief Abstract class for creature maps, it's used to return the creatures that appeard when a region is explored
@@ -29,4 +31,6 @@ public:
     virtual CreaturesContainer getCreatures() const = 0;
 };
 
-#endif // CREATUREMAP_H
+} /* namespace gameinfo */
+
+#endif // GAMEINFO_CREATUREMAP_H

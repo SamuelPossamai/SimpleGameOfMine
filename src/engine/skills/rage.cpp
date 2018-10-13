@@ -8,7 +8,7 @@ using namespace skill;
 
 Rage *Rage::_skill = nullptr;
 
-UIntegerType Rage::action(Unit *u, Map *, const Info& i) {
+UIntegerType Rage::action(Unit *u, EngineMap *, ProjectileCreationInterface&, const Info& i) {
 
     if(i.step >= 10) return 0;
 

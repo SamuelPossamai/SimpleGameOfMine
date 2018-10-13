@@ -60,5 +60,18 @@
         <file>icons/ninja.png</file>
         <file>icons/unknown_icon.png</file>
         <file>arrow_projectile_image.png</file>
+        <file>archer_attack_1.png</file>
+        <file>archer_attack_2.png</file>
+        <file>archer_attack_3.png</file>
+        <file>archer_idle.png</file>
+        <file>archer_walking_1n3.png</file>
+        <file>archer_walking_2.png</file>
+        <file>archer_walking_4.png</file>
+        <file>archer_walking_5.png</file>
+        <file>icons/archer.png</file>
+        <file>archer_shoot_1.png</file>
+        <file>archer_shoot_2.png</file>
+        <file>archer_shoot_3.png</file>
+        <file>archer_shoot_4.png</file>
     </qresource>
 </RCC>

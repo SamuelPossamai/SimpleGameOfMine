@@ -1,7 +1,7 @@
 
-#include <unittypes/maps/trainingground.h>
+#include <gameinfo/maps/trainingground.h>
 
-using namespace map;
+using namespace gameinfo::map;
 
 TrainingGround *TrainingGround::_map;
 

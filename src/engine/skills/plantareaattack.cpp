@@ -10,7 +10,7 @@ using namespace skill;
 
 PlantAreaAttack *PlantAreaAttack::_skill = nullptr;
 
-UIntegerType PlantAreaAttack::action(Unit *u, Map *m, const Info& i) {
+UIntegerType PlantAreaAttack::action(Unit *u, EngineMap *m, ProjectileCreationInterface&, const Info& i) {
 
     if(i.step > 50) return 0;
 

@@ -1,8 +1,8 @@
 
 #include <cmath>
 
-#include <unittypes/maps/greenvalley.h>
-#include <unittypes/maps/trainingground.h>
+#include <gameinfo/maps/greenvalley.h>
+#include <gameinfo/maps/trainingground.h>
 
 #include "battlewidget.h"
 #include "characterinfodialog.h"
@@ -65,12 +65,12 @@ void GameDefaultScreen::on_charactersList_itemClicked(QListWidgetItem *item) {
 
 void GameDefaultScreen::on_exploreButton1_clicked() {
 
-    _start_battle(map::TrainingGround::getMap());
+    _start_battle(gameinfo::map::TrainingGround::getMap());
 }
 
 void GameDefaultScreen::on_exploreButton2_clicked() {
 
-    _start_battle(map::GreenValley::getMap());
+    _start_battle(gameinfo::map::GreenValley::getMap());
 }
 
 void GameDefaultScreen::on_strAddButton_clicked() {
@@ -106,14 +106,10 @@ void GameDefaultScreen::on_infoButton_clicked() {
 void GameDefaultScreen::on_changeJobButton_clicked() {
 
     SelectJobDialog(_chars[_selected], this).exec();
-    _reselect();
+    activate();
 }
 
-#include <animation/animationfactories/projectile/arrowanimationfactory.h>
-#include <engine/projectiles/basicprojectile.h>
-#include <engine/projectilefactories/basicprojectilefactory.h>
-
-void GameDefaultScreen::_start_battle(CreatureMap *m) {
+void GameDefaultScreen::_start_battle(gameinfo::CreatureMap *m) {
 
     BattleWidget *bw = new BattleWidget(parent(), &_result);
 
@@ -122,14 +118,11 @@ void GameDefaultScreen::_start_battle(CreatureMap *m) {
     for(const Character& c : _chars) bw->addHero(c.className(), c.attributes(), 0);
 
     _xp_for_victory = 0;
-    for(const CreatureMap::CreaturesContainerContent& creature_info : m->getCreatures()) {
+    for(const gameinfo::CreatureMap::CreaturesContainerContent& creature_info : m->getCreatures()) {
 
         _xp_for_victory += std::ceil(std::pow(creature_info.creature_level + 3, 1.5));
         bw->addCreature(creature_info.creature_name, creature_info.creature_level, 1);
     }
-
-    bw->addProjectile(projectilefactory::BasicProjectileFactory::getFactory(100, 15, 40, 30),
-                      projectileanimationfactory::ArrowAnimationFactory::getFactory(), 3.2, { 350, 350 }, 3.2);
 
     bw->start();
 

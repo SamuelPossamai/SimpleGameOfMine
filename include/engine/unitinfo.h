@@ -72,11 +72,13 @@ public:
      * \param n The skill's id, if it's invalid it will have undefined behavior
      * \param u The unit that is performing the skill
      * \param m Map containing the units in the battle
+     * \param pci Interface to create projectiles.
      * \param info Basic information about the call
      * \sa UnitSkill
      * \return After how many steps the skill should be performed again
      */
-    UIntegerType callSkill(UIntegerType n, Unit *u, Map *m, const UnitSkill::Info& info) const;
+    UIntegerType callSkill(UIntegerType n, Unit *u, Map *m,
+                           UnitSkill::ProjectileCreationInterface& pci, const UnitSkill::Info& info) const;
 
     /*!
      * \brief Verify if a skill needs angle

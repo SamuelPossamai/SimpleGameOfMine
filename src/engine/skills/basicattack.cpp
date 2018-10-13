@@ -9,13 +9,13 @@ using namespace skill;
 
 OneCopyMemoryManager<BasicAttack> BasicAttack::_skills;
 
-UIntegerType BasicAttack::action(Unit *u, Map *m, const Info& info) {
+UIntegerType BasicAttack::action(Unit *u, EngineMap *m, ProjectileCreationInterface&, const Info& info) {
 
     u->setAngle(info.angle);
 
-    Map::AngleType angle = u->angle();
+    EngineMap::AngleType angle = u->angle();
 
-    Map::AngleType angle_dif = 0;
+    EngineMap::AngleType angle_dif = 0;
     if(info.step < 10) return 10;
     if(info.step < 20) angle_dif = (20*M_PI)/180;
     else if(info.step < 30) angle_dif = (10*M_PI)/180;
@@ -26,10 +26,10 @@ UIntegerType BasicAttack::action(Unit *u, Map *m, const Info& info) {
 
     angle += angle_dif;
 
-    Map::UnitsVector v;
+    EngineMap::UnitsVector v;
 
-    Map::PositionType x = u->x() + _distance*std::cos(angle);
-    Map::PositionType y = u->y() + _distance*std::sin(angle);
+    EngineMap::PositionType x = u->x() + _distance*std::cos(angle);
+    EngineMap::PositionType y = u->y() + _distance*std::sin(angle);
 
     m->unitsInRange(v, { x, y }, _distance/5);
 

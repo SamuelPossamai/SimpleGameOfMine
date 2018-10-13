@@ -9,14 +9,14 @@ namespace skill {
 
 Walk::MemoryManager Walk::_skills(_clone);
 
-UIntegerType Walk::action(Unit *u, Map *m, const Info& info) {
+UIntegerType Walk::action(Unit *u, EngineMap *m, ProjectileCreationInterface&, const Info& info) {
 
     if(info.step == 0) u->setAngle(info.angle);
 
     return doAction(u, m, info, u->angle());
 }
 
-UIntegerType Walk::doAction(Unit *u, Map *, const Info& info, RealType angle){
+UIntegerType Walk::doAction(Unit *u, EngineMap *, const Info& info, RealType angle){
 
     static const UIntegerType period = 3;
 

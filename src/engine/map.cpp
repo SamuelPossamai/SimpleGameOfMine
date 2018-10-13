@@ -146,6 +146,7 @@ void EngineMap::removeObject(EngineObject *object) {
 
     _remove_from_vector(_objects, object);
     _remove_from_vector(_units, static_cast<Unit *>(object));
+    _remove_from_vector(_projectiles, static_cast<Projectile *>(object));
 }
 
 bool EngineMap::engineObjectMoveVerify(EngineObject *obj, const PointType& p) {

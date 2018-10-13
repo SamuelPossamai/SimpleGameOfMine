@@ -2,8 +2,10 @@
 #ifndef GREENVALLEY_H
 #define GREENVALLEY_H
 
-#include <unittypes/creaturemap.h>
+#include <gameinfo/creaturemap.h>
 #include <utility/randomvalues.h>
+
+namespace gameinfo {
 
 namespace map {
 
@@ -25,5 +27,7 @@ private:
 };
 
 } /* namespace map */
+
+} /* namespace gameinfo */
 
 #endif // GREENVALLEY_H

@@ -9,7 +9,9 @@
 #include <engine/controllers/ai/monsterplant.h>
 #include <engine/unitsinfo/slime.h>
 #include <engine/unitsinfo/monsterplant.h>
-#include <unittypes/creatures.h>
+#include <gameinfo/creatures.h>
+
+using namespace gameinfo;
 
 std::map<std::string, Creatures::GetCreatureFunctionType> Creatures::_creatures;
 

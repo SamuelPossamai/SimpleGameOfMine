@@ -46,9 +46,14 @@ class UnitAnimationItemFactory;
 class ProjectileAnimationItem;
 class ProjectileAnimationItemFactory;
 
-class Jobs;
+namespace gameinfo {
+
 class Creatures;
+class Jobs;
+class Projectiles;
 class CreatureMap;
+
+} /* namespace gameinfo */
 
 namespace utility {
 

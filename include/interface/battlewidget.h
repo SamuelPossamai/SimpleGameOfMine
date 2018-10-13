@@ -9,6 +9,7 @@
 #include <engine/character.h>
 #include <engine/projectile.h>
 
+#include "gameinfo/projectiles.h"
 #include "graphicsview.h"
 #include "mainwidget.h"
 
@@ -30,6 +31,8 @@ public:
 
     class InputManager;
     using InputInterface = std::shared_ptr<InputManager>;
+
+    class ProjectileCreationInterface;
 
     /*!
      * \brief Creates a BattleWidget passing it's parent
@@ -137,6 +140,9 @@ public:
     void addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
                        Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);
 
+    bool addProjectile(const std::string& projectile_type, const gameinfo::Projectiles::ProjectileInfo& p_info,
+                       Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);
+
     /*!
      * \brief Display a message on the screen, it will stay there until a click is performed
      */
@@ -218,6 +224,23 @@ private:
     std::vector<AnimationItemBase *> _animations;
 
     Ui::BattleWidget *_ui;
+};
+
+class BattleWidget::ProjectileCreationInterface {
+
+public:
+
+    ProjectileCreationInterface(BattleWidget *bw) : _bw(bw) {}
+
+    bool create(const std::string& projectile_type, const gameinfo::Projectiles::ProjectileInfo& p_info,
+                Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle) {
+
+        return _bw->addProjectile(projectile_type, p_info, dir, pos, angle);
+    }
+
+private:
+
+    BattleWidget *_bw;
 };
 
 #include "battlewidget_inputmanager.h"

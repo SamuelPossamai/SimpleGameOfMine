@@ -1,7 +1,7 @@
 
-#include <unittypes/maps/greenvalley.h>
+#include <gameinfo/maps/greenvalley.h>
 
-using namespace map;
+using namespace gameinfo::map;
 
 GreenValley *GreenValley::_map;
 

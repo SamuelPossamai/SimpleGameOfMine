@@ -59,7 +59,7 @@ private slots:
 
 private:
 
-    void _start_battle(CreatureMap *m);
+    void _start_battle(gameinfo::CreatureMap *m);
     void _reselect() { _select_char_info(_selected); }
     void _select_char_info(UIntegerType id);
     void _assign_point(UIntegerType id);

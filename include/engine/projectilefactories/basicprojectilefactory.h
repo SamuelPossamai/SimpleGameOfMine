@@ -11,13 +11,13 @@ namespace projectilefactory {
 
 class BasicProjectileFactory : public ProjectileFactory, public GenericMemoryManager::ManagedObject {
 
-    BasicProjectileFactory(UIntegerType dur, Projectile::SizeType size, Projectile::SpeedType speed, Unit::AttackType damage) :
-        _dur(dur), _size(size), _speed(speed), _damage(damage) {}
+    BasicProjectileFactory(UIntegerType dur, Projectile::SizeType size, Projectile::SpeedType speed,
+                           Projectile::DamageType damage) : _dur(dur), _size(size), _speed(speed), _damage(damage) {}
 
 public:
 
     static BasicProjectileFactory *getFactory(UIntegerType dur, Projectile::SizeType size,
-                                              Projectile::SpeedType speed, Unit::AttackType damage) {
+                                              Projectile::SpeedType speed, Projectile::DamageType damage) {
 
         return static_cast<BasicProjectileFactory *>(getObjCopy(BasicProjectileFactory(dur, size, speed, damage)));
     }
@@ -52,7 +52,7 @@ private:
     UIntegerType _dur;
     Projectile::SizeType _size;
     Projectile::SpeedType _speed;
-    Unit::AttackType _damage;
+    Projectile::DamageType _damage;
 };
 
 } /* namespace projectilefactory */
