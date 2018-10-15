@@ -73,5 +73,15 @@
         <file>archer_shoot_2.png</file>
         <file>archer_shoot_3.png</file>
         <file>archer_shoot_4.png</file>
+        <file>magic_missile_1.png</file>
+        <file>magic_missile_2.png</file>
+        <file>magic_missile_3.png</file>
+        <file>magic_missile_4.png</file>
+        <file>mage_idle.png</file>
+        <file>mage_walking_1n3.png</file>
+        <file>mage_walking_2.png</file>
+        <file>mage_walking_4.png</file>
+        <file>mage_walking_5.png</file>
+        <file>teleport_mage_icon.png</file>
     </qresource>
 </RCC>

@@ -1,5 +1,9 @@
 
+#include <iostream>
+
 #include "animation/animationfactories/projectile/arrowanimationfactory.h"
+#include "animation/animationfactories/projectile/magicmissilefactory.h"
+#include "engine/projectilefactories/missilefactory.h"
 #include "engine/projectilefactories/basicprojectilefactory.h"
 #include "gameinfo/projectiles.h"
 
@@ -25,7 +29,24 @@ static Projectiles::Info _get_arrow(const Projectiles::ProjectileInfo& p_info) {
                              projectileanimationfactory::ArrowAnimationFactory::getFactory());
 }
 
+static Projectiles::Info _get_magic_missile(const Projectiles::ProjectileInfo& p_info_generic) {
+
+    auto p_info = dynamic_cast<const projectilefactory::MissileFactory::MissileInfo *>(&p_info_generic);
+
+    if(p_info == nullptr) {
+
+        std::cout << "Error: Tried to create 'missile' unsuccessfully" << std::endl;
+
+        return { nullptr, nullptr };
+    }
+
+    return Projectiles::Info(projectilefactory::MissileFactory::getFactory(
+                                 p_info->durability, p_info->size, p_info->speed, p_info->damage, p_info->angular_speed),
+                             projectileanimationfactory::MagicMissileFactory::getFactory());
+}
+
 void Projectiles::_init() {
 
     _projectiles["arrow"] = _get_arrow;
+    _projectiles["magic missile"] = _get_magic_missile;
 }

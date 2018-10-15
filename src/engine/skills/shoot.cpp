@@ -5,7 +5,7 @@
 #include "unitsinfo/unitclassinfo.h"
 #include "skills/shoot.h"
 #include "unit.h"
-#include "map.h"
+#include "enginemap.h"
 
 namespace skill {
 
@@ -33,11 +33,11 @@ UIntegerType Shoot::action(Unit *u, EngineMap *, ProjectileCreationInterface& pc
     p_info.durability = 10;
     p_info.size = 15;
     p_info.speed = 40 + u_info->attributes().strength()/3 + u_info->speed()/5;
-    p_info.damage = 10 + ( u_info->attributes().strength() + u_info->attributes().dexterity() )/10;
+    p_info.damage = 10 + ( 3*u_info->attributes().strength() + 2*u_info->attributes().dexterity() )/15;
 
     Unit::AngleType arrow_angle = u->angle() + utility::Random::realDistribution(-accuracy, accuracy);
 
-    pci.create("arrow", p_info, arrow_angle, { u->x() + dx, u->y() + dy }, arrow_angle);
+    pci.create("arrow", u, p_info, arrow_angle, { u->x() + dx, u->y() + dy }, arrow_angle);
 
     return 20;
 }

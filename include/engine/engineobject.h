@@ -2,7 +2,7 @@
 #ifndef ENGINEOBJECT_H
 #define ENGINEOBJECT_H
 
-#include "map.h"
+#include "enginemap.h"
 #include "engineobjectbase.h"
 
 class EngineObject : public EngineObjectBase {

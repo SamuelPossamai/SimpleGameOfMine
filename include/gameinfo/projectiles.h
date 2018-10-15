@@ -19,6 +19,8 @@ public:
 
     struct ProjectileInfo  {
 
+        virtual ~ProjectileInfo() = default;
+
         UIntegerType durability;
         Projectile::SizeType size;
         Projectile::SpeedType speed;

@@ -1,6 +1,6 @@
 
-#ifndef BASICPROJECTILE_H
-#define BASICPROJECTILE_H
+#ifndef PROJECTILE_BASICPROJECTILE_H
+#define PROJECTILE_BASICPROJECTILE_H
 
 #include "projectile.h"
 
@@ -10,11 +10,11 @@ class BasicProjectile : public Projectile {
 
 public:
 
-    BasicProjectile(Map *m, AngleType dir, UIntegerType dur, SizeType s, SpeedType sp, DamageType damage,
-                    PointType pos = {0, 0}, AngleType angle = 0) :
-        Projectile(m, dir, dur, s, sp, pos, angle), _damage(damage) {}
+    BasicProjectile(EngineMap *m, const Unit *creator, AngleType dir, UIntegerType dur,
+                    SizeType s, SpeedType sp, DamageType damage, PointType pos = {0, 0}, AngleType angle = 0) :
+        Projectile(m, creator, dir, dur, s, sp, pos, angle), _damage(damage) {}
 
-    virtual ~BasicProjectile() override {}
+    virtual ~BasicProjectile() override = default;
 
     virtual void collideAction(Map *m, EngineObject *obj) override;
 
@@ -25,4 +25,4 @@ private:
 
 } /* projectile */
 
-#endif // BASICPROJECTILE_H
+#endif // PROJECTILE_BASICPROJECTILE_H

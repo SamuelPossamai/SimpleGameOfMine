@@ -33,10 +33,10 @@ Unit *BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, U
     return u;
 }
 
-Projectile *BattleEngine::addProjectile(ProjectileFactory *factory, Projectile::AngleType dir,
-                                        Projectile::PointType pos, Projectile::AngleType angle) {
+Projectile *BattleEngine::addProjectile(ProjectileFactory *factory, const Unit *creator,
+                                        Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle) {
 
-    Projectile *p = factory->create(&_map, dir, pos, angle);
+    Projectile *p = factory->create(&_map, creator, dir, pos, angle);
     _map.resolvePendings();
 
     _objects.push_back(ContainerContent{ p, 0 });

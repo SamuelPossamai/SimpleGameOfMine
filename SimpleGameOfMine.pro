@@ -22,7 +22,6 @@ SOURCES += src/main.cpp \
     src/animation/animation.cpp \
     src/interface/battlewidget.cpp \
     src/animation/animatedobject.cpp \
-    src/engine/map.cpp \
     src/engine/battleengine.cpp \
     src/engine/unitinfo.cpp \
     src/engine/controllers/human.cpp \
@@ -89,7 +88,11 @@ SOURCES += src/main.cpp \
     src/animation/animationfactories/projectile/arrowanimationfactory.cpp \
     src/gameinfo/projectiles.cpp \
     src/animation/animationfactories/unit/archeranimationfactory.cpp \
-    src/engine/skills/shoot.cpp
+    src/engine/skills/shoot.cpp \
+    src/engine/enginemap.cpp \
+    src/animation/animationfactories/projectile/magicmissilefactory.cpp \
+    src/animation/animationfactories/unit/mageanimationfactory.cpp \
+    src/engine/skills/magicmissile.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -100,7 +103,6 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/unit.h \
     include/interface/battlewidget.h \
     include/animation/animatedobject.h \
-    include/engine/map.h \
     include/engine/battleengine.h \
     include/engine/unitskill.h \
     include/engine/unitcontroller.h \
@@ -199,7 +201,14 @@ HEADERS += include/interface/mainwindow.h \
     include/gameinfo/projectiles.h \
     include/engine/unitsinfo/archer.h \
     include/animation/animationfactories/unit/archeranimationfactory.h \
-    include/engine/skills/shoot.h
+    include/engine/skills/shoot.h \
+    include/engine/projectiles/missile.h \
+    include/engine/enginemap.h \
+    include/engine/projectilefactories/missilefactory.h \
+    include/animation/animationfactories/projectile/magicmissilefactory.h \
+    include/engine/unitsinfo/mage.h \
+    include/animation/animationfactories/unit/mageanimationfactory.h \
+    include/engine/skills/magicmissile.h
 
 RESOURCES += img/images.qrc
 

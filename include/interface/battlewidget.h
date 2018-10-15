@@ -138,9 +138,11 @@ public:
     bool addHero(const Character& c, UIntegerType team) { return addHero(c.className(), c.attributes(), team); }
 
     void addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
-                       Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);
+                       const Unit *creator, Projectile::AngleType dir, Projectile::PointType pos,
+                       Projectile::AngleType angle);
 
-    bool addProjectile(const std::string& projectile_type, const gameinfo::Projectiles::ProjectileInfo& p_info,
+    bool addProjectile(const std::string& projectile_type, const Unit *creator,
+                       const gameinfo::Projectiles::ProjectileInfo& p_info,
                        Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);
 
     /*!
@@ -232,10 +234,11 @@ public:
 
     ProjectileCreationInterface(BattleWidget *bw) : _bw(bw) {}
 
-    bool create(const std::string& projectile_type, const gameinfo::Projectiles::ProjectileInfo& p_info,
+    bool create(const std::string& projectile_type, const Unit *creator,
+                const gameinfo::Projectiles::ProjectileInfo& p_info,
                 Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle) {
 
-        return _bw->addProjectile(projectile_type, p_info, dir, pos, angle);
+        return _bw->addProjectile(projectile_type, creator, p_info, dir, pos, angle);
     }
 
 private:

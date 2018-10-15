@@ -116,11 +116,7 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
         if(event->key() == Qt::Key_Plus || event->key() == Qt::Key_Equal) zoomIn();
         else if(event->key() == Qt::Key_Minus) zoomOut();
     }
-    else {
-
-        if(event->key() >= Qt::Key_1 && event->key() <= Qt::Key_9) _skill_button_clicked(event->key() - Qt::Key_1);
-        else event->key();
-    }
+    else if(event->key() >= Qt::Key_1 && event->key() <= Qt::Key_9) _skill_button_clicked(event->key() - Qt::Key_1);
 }
 
 void BattleWidget::graphicsViewMouseMoveEvent(QMouseEvent *event) {
@@ -129,14 +125,15 @@ void BattleWidget::graphicsViewMouseMoveEvent(QMouseEvent *event) {
 
     _ui->cursorLabel->setText(QString("%1, %2").arg(p.x()).arg(p.y()));
 
-    if(!_arrow_item->isVisible()) return;
-
     auto x = p.x() - _arrow_item->x();
     auto y = p.y() - _arrow_item->y();
 
     RealType angle = 180*atan2(y, x)/M_PI;
 
     _arrow_item->setRotation(angle);
+
+    if(!_arrow_item->isVisible()) return;
+
     _ui->cursorLabel->setText(_ui->cursorLabel->text() + QString(" (%1°)").arg(IntegerType(angle)));
 }
 
@@ -188,14 +185,16 @@ bool BattleWidget::addHero(std::string name, const Character::Attributes& attr, 
 }
 
 void BattleWidget::addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
-                                 Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle) {
+                                 const Unit *creator, Projectile::AngleType dir,
+                                 Projectile::PointType pos, Projectile::AngleType angle) {
 
-    _animations.push_back(itemFactory->create(_engine->addProjectile(projFactory, dir, pos, angle)));
+    _animations.push_back(itemFactory->create(_engine->addProjectile(projFactory, creator, dir, pos, angle)));
 
     _animations.back()->setScene(_gview->scene());
 }
 
-bool BattleWidget::addProjectile(const std::string& projectile_type, const gameinfo::Projectiles::ProjectileInfo& p_info,
+bool BattleWidget::addProjectile(const std::string& projectile_type, const Unit *creator,
+                                 const gameinfo::Projectiles::ProjectileInfo& p_info,
                                  Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle) {
 
     std::optional<gameinfo::Projectiles::Info> opt = gameinfo::Projectiles::get(projectile_type, p_info);
@@ -204,7 +203,7 @@ bool BattleWidget::addProjectile(const std::string& projectile_type, const gamei
 
     gameinfo::Projectiles::Info i = *opt;
 
-    addProjectile(std::get<0>(i), std::get<1>(i), dir, pos, angle);
+    addProjectile(std::get<0>(i), std::get<1>(i), creator, dir, pos, angle);
 
     return true;
 }

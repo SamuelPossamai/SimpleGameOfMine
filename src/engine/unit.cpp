@@ -1,6 +1,6 @@
 
 #include "unit.h"
-#include "map.h"
+#include "enginemap.h"
 #include "uniteffect.h"
 
 Unit::Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, UIntegerType team, BattleWidget *i) :

@@ -1,7 +1,7 @@
 
 #include <cmath>
 
-#include "map.h"
+#include "enginemap.h"
 #include "unit.h"
 #include "skills/basicattack.h"
 

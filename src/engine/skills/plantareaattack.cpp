@@ -2,7 +2,7 @@
 #include <cmath>
 
 #include <engine/unit.h>
-#include <engine/map.h>
+#include <engine/enginemap.h>
 
 #include "skills/plantareaattack.h"
 

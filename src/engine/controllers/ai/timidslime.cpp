@@ -4,7 +4,7 @@
 #include <utility/random.h>
 
 #include "controllers/ai/timidslime.h"
-#include "map.h"
+#include "enginemap.h"
 #include "unit.h"
 
 using namespace controller::AI;

@@ -1,7 +1,8 @@
 
-#ifndef MAP_H
-#define MAP_H
+#ifndef ENGINEMAP_H
+#define ENGINEMAP_H
 
+#include <cmath>
 #include <vector>
 
 #include "engine_traits.h"
@@ -99,6 +100,9 @@ public:
     Unit *closerEnemy(const Unit *u);
     const Unit *closerEnemy(const Unit *u) const { return const_cast<Map *>(this)->closerEnemy(u); }
 
+    Unit *closerEnemy(const PointType& p, UIntegerType team) ;
+    const Unit *closerEnemy(const PointType& p, UIntegerType team) const { return const_cast<Map *>(this)->closerEnemy(p, team); }
+
     /*!
      * \brief Access an object with the id 'n', the id is not fixed, it can be changed by a removal
      * \param n Number of the object that will be accessed
@@ -148,12 +152,42 @@ public:
      */
     static RealType objectsDistance(const EngineObject *, const EngineObject *);
 
+    static AngleType angleMod(AngleType angle) {
+
+        angle = std::fmod(angle, 2*M_PI);
+        if(angle < 0) angle += 2*M_PI;
+
+        return angle;
+    }
+
+    static AngleType angleDiff(AngleType a1, AngleType a2) { return angleDiffAndDir(a1, a2).first; }
+
+    static std::pair<AngleType, bool> angleDiffAndDir(AngleType a1, AngleType a2) {
+
+        a1 = angleMod(a1);
+        a2 = angleMod(a2);
+
+        auto a3 = a2 + 2*M_PI;
+        auto a4 = a1 + 2*M_PI;
+
+        auto diff1 = std::abs(a1 - a2);
+        auto diff2 = std::abs(a3 - a1);
+        auto diff3 = std::abs(a4 - a2);
+
+        if(diff1 < diff2 && diff1 < diff3) return { diff1, a1 > a2 };
+        if(diff2 < diff3) return { diff2, a1 > a3 };
+
+        return { diff3, a4 > a2 };
+    }
+
     const PositionType& width() const { return _width; }
     const PositionType& height() const { return _height; }
 
 private:
 
-    static RealType _objects_squared_distance(const EngineObject *, const EngineObject *);
+    static RealType _objects_squared_distance(const EngineObject *o1, const EngineObject *o2);
+
+    static RealType _squared_distance(const PointType& p1, const PointType& p2);
 
     static bool _inside_region(AngleType a1, AngleType r1, AngleType a2, AngleType r2);
 
@@ -181,4 +215,4 @@ private:
     ProjectilesVector _projectiles;
 };
 
-#endif // MAP_H
+#endif // ENGINEMAP_H

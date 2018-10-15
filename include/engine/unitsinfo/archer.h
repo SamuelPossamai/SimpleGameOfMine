@@ -22,7 +22,7 @@ public:
 
     static Archer *getInfo(Attributes attr) { return static_cast<Archer *>(getObjCopy(Archer(attr))); }
 
-    virtual ~Archer() = default;
+    virtual ~Archer() override = default;
 
 protected:
 

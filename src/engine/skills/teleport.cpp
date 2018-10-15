@@ -2,7 +2,7 @@
 #include <cmath>
 
 #include <utility/random.h>
-#include <engine/map.h>
+#include <engine/enginemap.h>
 #include <engine/unit.h>
 
 #include "skills/teleport.h"
@@ -16,7 +16,7 @@ UIntegerType Teleport::action(Unit *u, EngineMap *, ProjectileCreationInterface&
 
     if(info.step == 0) {
 
-        if(u->consumeEnergy(1)) return 10;
+        if(u->consumeEnergy(3)) return 10;
         else return 0;
     }
     if(info.step > 10) return 0;

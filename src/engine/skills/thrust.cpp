@@ -3,7 +3,7 @@
 
 #include "skills/thrust.h"
 #include "unit.h"
-#include "map.h"
+#include "enginemap.h"
 
 namespace skill {
 

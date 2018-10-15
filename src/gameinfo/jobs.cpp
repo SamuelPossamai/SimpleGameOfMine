@@ -5,10 +5,12 @@
 #include "unitsinfo/ninja.h"
 #include "unitsinfo/knight.h"
 #include "unitsinfo/archer.h"
+#include "unitsinfo/mage.h"
 #include "animationfactories/unit/archeranimationfactory.h"
 #include "animationfactories/unit/fighteranimationfactory.h"
 #include "animationfactories/unit/ninjaanimationfactory.h"
 #include "animationfactories/unit/knightanimationfactory.h"
+#include "animationfactories/unit/mageanimationfactory.h"
 
 using namespace gameinfo;
 
@@ -49,10 +51,17 @@ static Jobs::Info _get_archer_info(const Jobs::Attributes& attr) {
                       unitanimationfactory::ArcherAnimationFactory::getFactory());
 }
 
+static Jobs::Info _get_mage_info(const Jobs::Attributes& attr) {
+
+    return Jobs::Info(unitsinfo::Mage::getInfo(attr),
+                      unitanimationfactory::MageAnimationFactory::getFactory());
+}
+
 void Jobs::_init() {
 
     _jobs["fighter"] = _get_fighter_info;
     _jobs["ninja"] = _get_ninja_info;
     _jobs["knight"] = _get_knight_info;
     _jobs["archer"] = _get_archer_info;
+    _jobs["mage"] = _get_mage_info;
 }

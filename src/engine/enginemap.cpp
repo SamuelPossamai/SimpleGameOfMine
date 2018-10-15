@@ -1,7 +1,7 @@
 
 #include <cmath>
 
-#include "map.h"
+#include "enginemap.h"
 #include "unit.h"
 #include "projectile.h"
 #include "engineobject.h"
@@ -84,6 +84,11 @@ void EngineMap::objectsInLine(EngineObjectsVector& vector, PointType p, Position
 
 Unit *EngineMap::closerEnemy(const Unit *u) {
 
+    return closerEnemy(u->pos(), u->team());
+}
+
+Unit *EngineMap::closerEnemy(const PointType& p, UIntegerType team) {
+
     Unit *closer = nullptr;
     RealType closer_sqr_dist = 0;
 
@@ -91,9 +96,9 @@ Unit *EngineMap::closerEnemy(const Unit *u) {
 
         if(unit == nullptr) continue;
 
-        if(unit->team() == u->team()) continue;
+        if(unit->team() == team) continue;
 
-        auto cur_squared_distance = _objects_squared_distance(unit, u);
+        auto cur_squared_distance = _squared_distance(unit->pos(), p);
 
         if(closer == nullptr || closer_sqr_dist > cur_squared_distance) {
 
@@ -184,10 +189,15 @@ RealType EngineMap::objectsDistance(const EngineObject *u1, const EngineObject *
     return std::sqrt(_objects_squared_distance(u1, u2));
 }
 
-RealType EngineMap::_objects_squared_distance(const EngineObject *u1, const EngineObject *u2) {
+RealType EngineMap::_objects_squared_distance(const EngineObject *o1, const EngineObject *o2) {
 
-    auto vet_x = RealType(u1->x()) - u2->x();
-    auto vet_y = RealType(u1->y()) - u2->y();
+    return _squared_distance(o1->pos(), o2->pos());
+}
+
+RealType EngineMap::_squared_distance(const PointType& p1, const PointType& p2) {
+
+    auto vet_x = RealType(p1.x) - p2.x;
+    auto vet_y = RealType(p1.y) - p2.y;
 
     return square(vet_x) + square(vet_y);
 }

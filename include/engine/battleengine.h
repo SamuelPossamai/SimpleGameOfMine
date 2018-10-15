@@ -4,7 +4,7 @@
 
 #include <mutex>
 
-#include "map.h"
+#include "enginemap.h"
 #include "unit.h"
 #include "projectile.h"
 
@@ -41,8 +41,8 @@ public:
      */
     Unit *addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team);
 
-    Projectile *addProjectile(ProjectileFactory *factory, Projectile::AngleType dir,
-                              Projectile::PointType pos, Projectile::AngleType angle);
+    Projectile *addProjectile(ProjectileFactory *factory, const Unit *creator,
+                              Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);
 
     /*!
      * \brief Progress the battle by a quantum, it will do nothing if the game's waiting input.

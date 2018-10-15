@@ -1,7 +1,7 @@
 
 #include <cmath>
 
-#include "map.h"
+#include "enginemap.h"
 #include "projectile.h"
 
 bool Projectile::act() {
@@ -27,9 +27,11 @@ bool Projectile::act() {
 
     auto v = map()->objectsInRange(pos(), size());
 
-    for(auto obj : v) if(obj != this) this->collideAction(map(), obj);
+    for(auto obj : v) if(obj != this) {
 
-    if(_durability == 0) return false;
+        this->collideAction(map(), obj);
+        if(_durability == 0) return false;
+    }
 
     EngineObjectBase::setPos(new_pos);
 

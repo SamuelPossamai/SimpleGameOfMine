@@ -1,5 +1,5 @@
 
-#include "map.h"
+#include "enginemap.h"
 #include "engineobject.h"
 
 bool EngineObject::setPos(PointType p) {

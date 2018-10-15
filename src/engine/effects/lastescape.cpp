@@ -10,7 +10,7 @@ LastEscape *LastEscape::_copy = nullptr;
 
 LastEscape::AttackType LastEscape::doDefenseEffect(Unit *def, Unit *, AttackType a) const {
 
-    if(def->consumeEnergy(10)) {
+    if(def->consumeEnergy(20)) {
 
         skill::Teleport::teleportUnit(def);
         return 0;
