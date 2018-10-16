@@ -92,7 +92,11 @@ SOURCES += src/main.cpp \
     src/engine/enginemap.cpp \
     src/animation/animationfactories/projectile/magicmissilefactory.cpp \
     src/animation/animationfactories/unit/mageanimationfactory.cpp \
-    src/engine/skills/magicmissile.cpp
+    src/engine/skills/magicmissile.cpp \
+    src/animation/animationfactories/projectile/fireballanimationfactory.cpp \
+    src/engine/skills/fireball.cpp \
+    src/engine/skills/explosion.cpp \
+    src/engine/skills/mageonoffmagicshield.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -208,7 +212,12 @@ HEADERS += include/interface/mainwindow.h \
     include/animation/animationfactories/projectile/magicmissilefactory.h \
     include/engine/unitsinfo/mage.h \
     include/animation/animationfactories/unit/mageanimationfactory.h \
-    include/engine/skills/magicmissile.h
+    include/engine/skills/magicmissile.h \
+    include/animation/animationfactories/projectile/fireballanimationfactory.h \
+    include/engine/skills/fireball.h \
+    include/engine/skills/explosion.h \
+    include/engine/effects/magicshield.h \
+    include/engine/skills/mageonoffmagicshield.h
 
 RESOURCES += img/images.qrc
 

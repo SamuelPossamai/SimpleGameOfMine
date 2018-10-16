@@ -8,6 +8,7 @@
 #include <engine/effects/lastescape.h>
 #include <engine/effects/regeneration.h>
 #include <engine/effects/adrenaline.h>
+#include <engine/effects/magicshield.h>
 
 #include "animationitens/unit/basicunitgraphicitem.h"
 #include "partialimageitem.h"
@@ -217,6 +218,7 @@ void BasicUnitGraphicItem::_init() {
     QImage green_circle = QImage(":/green_circle.png").scaled(10, 10);
     _effect_images[typeid(void)] = green_circle;
     _effect_images[typeid(effect::Regeneration)] = QImage(":/red_cross.png").scaled(10, 12);
+    _effect_images[typeid(effect::MagicShield)] = QImage(":/magic_shield.png").scaled(13, 13);
 
     utility::ImageColorChange green_to_black;
 

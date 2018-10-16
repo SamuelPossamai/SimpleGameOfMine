@@ -3,6 +3,7 @@
 
 #include "animation/animationfactories/projectile/arrowanimationfactory.h"
 #include "animation/animationfactories/projectile/magicmissilefactory.h"
+#include "animation/animationfactories/projectile/fireballanimationfactory.h"
 #include "engine/projectilefactories/missilefactory.h"
 #include "engine/projectilefactories/basicprojectilefactory.h"
 #include "gameinfo/projectiles.h"
@@ -45,8 +46,16 @@ static Projectiles::Info _get_magic_missile(const Projectiles::ProjectileInfo& p
                              projectileanimationfactory::MagicMissileFactory::getFactory());
 }
 
+static Projectiles::Info _get_fireball(const Projectiles::ProjectileInfo& p_info) {
+
+    return Projectiles::Info(projectilefactory::BasicProjectileFactory::getFactory(
+                                 p_info.durability, p_info.size, p_info.speed, p_info.damage),
+                             projectileanimationfactory::FireballAnimationFactory::getFactory());
+}
+
 void Projectiles::_init() {
 
     _projectiles["arrow"] = _get_arrow;
     _projectiles["magic missile"] = _get_magic_missile;
+    _projectiles["fireball"] = _get_fireball;
 }

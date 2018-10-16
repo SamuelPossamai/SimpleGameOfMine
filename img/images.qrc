@@ -83,5 +83,8 @@
         <file>mage_walking_4.png</file>
         <file>mage_walking_5.png</file>
         <file>teleport_mage_icon.png</file>
+        <file>fireball_image.png</file>
+        <file>explosion_icon.png</file>
+        <file>magic_shield.png</file>
     </qresource>
 </RCC>

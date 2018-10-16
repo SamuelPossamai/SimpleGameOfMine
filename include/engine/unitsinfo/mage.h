@@ -6,9 +6,12 @@
 
 #include <memory/genericmemorymanager.h>
 
+#include "skills/mageonoffmagicshield.h"
 #include "skills/walk.h"
 #include "skills/magicmissile.h"
 #include "skills/teleport.h"
+#include "skills/fireball.h"
+#include "skills/explosion.h"
 #include "unitsinfo/unitclassinfo.h"
 
 namespace unitsinfo {
@@ -20,6 +23,9 @@ class Mage : public UnitClassInfo, public GenericMemoryManager::ManagedObject {
         addSkill(skill::Walk::MemoryInterface::dependentGet(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
         addSkill(skill::MagicMissile::getSkill(), QPixmap(":/magic_missile_3.png").scaled(50, 50));
         addSkill(skill::Teleport::getSkill(), QPixmap(":/teleport_mage_icon.png").scaled(50, 50));
+        addSkill(skill::Fireball::getSkill(), QPixmap(":/fireball_image.png").scaled(50, 50));
+        addSkill(skill::Explosion::getSkill(), QPixmap(":/explosion_icon.png").scaled(50, 50));
+        addSkill(skill::MageOnOffMagicShield::getSkill(), QPixmap(":/magic_shield.png").scaled(50, 50));
 
         calculateInfo();
     }

@@ -16,7 +16,7 @@ UIntegerType MagicMissile::action(Unit *u, EngineMap *, ProjectileCreationInterf
 
     const unitsinfo::UnitClassInfo *u_info = static_cast<const unitsinfo::UnitClassInfo *>(u->unitInfo());
 
-    if(!u->consumeEnergy(5)) return 0;
+    if(info.step == 0) if(!u->consumeEnergy(10)) return 0;
 
     if(info.step < 30) {
 
