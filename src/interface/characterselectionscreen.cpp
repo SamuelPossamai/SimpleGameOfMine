@@ -33,9 +33,18 @@ void CharacterSelectionScreen::_update_image() {
 
     ui->goButton->setEnabled(is_valid);
 
+    bool valid_char = _cur < _char_names.size();
+
+    ui->selectButton->setEnabled(valid_char);
+    ui->deleteButton->setEnabled(valid_char);
+    ui->nextButton->setVisible(_char_names.size() > 1);
+    ui->prevButton->setVisible(_char_names.size() > 1);
+
     if(_char_names.empty()) {
 
         ui->classNameLabel->setText("-");
+
+        ui->iconWidget->setImage(QImage(":/icons/unknown_icon.png"));
 
         return;
     }
@@ -94,6 +103,10 @@ void CharacterSelectionScreen::on_deleteButton_clicked() {
 
     if(QMessageBox::question(this, "SGOM Dialog", "Are you sure that you want to delete this character?") == QMessageBox::Yes) {
 
+        auto sel_it = std::find(_selecteds.begin(), _selecteds.end(), _char_names[_cur]);
+
+        if(sel_it != _selecteds.end()) _selecteds.erase(sel_it);
+
         SGOMFiles::get()->removeChar(_char_names[_cur]);
 
         _char_names = SGOMFiles::get()->characters();
@@ -122,9 +135,14 @@ void CharacterSelectionScreen::on_newButton_clicked() {
 
     Character::newChar(name, "fighter");
 
-    std::string cur_name = _char_names[_cur];
+    std::string cur_name;
+
+    if(_cur < _char_names.size()) cur_name = _char_names[_cur];
 
     _char_names = SGOMFiles::get()->characters();
 
-    _cur = std::distance(_char_names.begin(), std::find(_char_names.begin(), _char_names.end(), cur_name));
+    if(cur_name.empty()) _cur = 0;
+    else _cur = std::distance(_char_names.begin(), std::find(_char_names.begin(), _char_names.end(), cur_name));
+
+    _update_image();
 }
