@@ -24,6 +24,8 @@ public:
 
     virtual void redraw() override {
 
+        if(projectile() == nullptr) return;
+
         if(projectile()->durability() == 0) {
 
             _obj->hide();

@@ -4,16 +4,18 @@
 
 #include <QGraphicsScene>
 
-class AnimationItemBase {
+#include "engineobject.h"
+
+class AnimationItemBase : virtual public EngineObject::Observer {
 
 public:
 
     /*!
      * \brief Creates an AnimationItemBase
      */
-    AnimationItemBase() : _scene(nullptr) {}
+    AnimationItemBase(EngineObject *obj) : _scene(nullptr), _obj(obj) { obj->attachObserver(this); }
 
-    virtual ~AnimationItemBase() {}
+    virtual ~AnimationItemBase() { if(_obj) _obj->detachObserver(this); }
 
     /*!
      * \brief This method should be called in a loop, all changes in the graphics display must be done here
@@ -37,7 +39,11 @@ public:
      */
     void clearScene() { setScene(nullptr); }
 
+    const EngineObject *object() const { return _obj; }
+
 protected:
+
+    EngineObject *accessObject() { return _obj; }
 
     /*!
      * \brief Return the scene the image should be displayed
@@ -56,9 +62,12 @@ protected:
      */
     virtual void removeFromScene() = 0;
 
+    virtual void engineObjectDestroyed(EngineObject *) override { _obj = nullptr; }
+
 private:
 
     QGraphicsScene *_scene;
+    EngineObject *_obj;
 };
 
 #endif // ANIMATIONITEMBASE_H

@@ -30,7 +30,7 @@ UIntegerType Shoot::action(Unit *u, EngineMap *, ProjectileCreationInterface& pc
 
     gameinfo::Projectiles::ProjectileInfo p_info;
 
-    p_info.durability = 10;
+    p_info.durability = 13;
     p_info.size = 15;
     p_info.speed = 40 + u_info->attributes().strength()/3 + u_info->speed()/5;
     p_info.damage = 10 + ( 3*u_info->attributes().strength() + 2*u_info->attributes().dexterity() )/15;

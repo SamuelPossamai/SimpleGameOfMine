@@ -32,7 +32,7 @@ public:
      */
     Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, UIntegerType team, BattleWidget *i);
 
-    ~Unit() final;
+    ~Unit() final = default;
 
     bool needThreadToAct() final {
 
@@ -110,13 +110,13 @@ public:
     /*!
      * \brief Detach all of the observers of the unit
      */
-    void detachAllObservers() { _observers.clear(); }
+    void detachAllObservers() { EngineObject::detachAllObservers(); _observers.clear(); }
 
     /*!
      * \brief Return the list of all the observers of the unit
      * \return List with all the observers
      */
-    const ObserversList& observers() const { return _observers; }
+    const ObserversList& unitObservers() const { return _observers; }
 
     /*!
      * \brief Add a permanent effect to this unit
@@ -146,42 +146,6 @@ public:
      * \return A list with all the effects
      */
     const EffectsList& effects() const { return _effects; }
-
-    /*!
-     * \brief Set the x position of the unit if it's possible
-     * \param x The new value for x position
-     * \return true if it was able to change the position, false otherwise
-     */
-    bool setX(PositionType x) { return setPos(x, Base::y()); }
-
-    /*!
-     * \brief Set the y position of the unit if it's possible
-     * \param y The new value for y position
-     * \return true if it was able to change the position, false otherwise
-     */
-    bool setY(PositionType y) { return setPos(Base::x(), y); }
-
-    /*!
-     * \brief Set the position of the unit if it's possible
-     * \param x The new value for x position
-     * \param y The new value for y position
-     * \return true if it was able to change the position, false otherwise
-     */
-    bool setPos(PositionType x, PositionType y) { return setPos({x, y}); }
-
-    /*!
-     * \brief Set the position of the unit if it's possible
-     * \param p The new position of the unit
-     * \return true if it was able to change the position, false otherwise
-     */
-    bool setPos(PointType p);
-
-    /*!
-     * \brief Set the unit's angle
-     * \param angle New angle value, in radians
-     * \return Always true
-     */
-    bool setAngle(AngleType angle);
 
     /*!
      * \brief If it's performing a skill, perform, if it's not, choose
@@ -271,7 +235,7 @@ private:
     BattleWidget *_interface;
 };
 
-class Unit::Observer {
+class Unit::Observer : virtual public EngineObject::Observer {
 
 public:
 
@@ -280,10 +244,7 @@ public:
     virtual void unitSkillFinished(Unit *) {}
     virtual void unitReceivedDamage(Unit *) {}
     virtual void unitHealed(Unit *) {}
-    virtual void unitMoved(Unit *) {}
-    virtual void unitRotated(Unit *) {}
     virtual void unitDeathEvent(Unit *) {}
-    virtual void unitObjectDestroyed(Unit *) {}
     virtual void unitSelected(Unit *) {}
     virtual void unitUnselected(Unit *) {}
     virtual void unitEnergyConsumed(Unit *) {}

@@ -46,8 +46,8 @@ protected:
     virtual void unitDeathEvent(Unit *) override { _events.push({ &BasicUnitGraphicItem::uDeathEvent, nullptr }); }
     virtual void unitSelected(Unit *) override { _events.push({ &BasicUnitGraphicItem::uSelected, nullptr }); }
     virtual void unitUnselected(Unit *) override { _events.push({ &BasicUnitGraphicItem::uUnselected, nullptr }); }
-    virtual void unitMoved(Unit *) override { _events.push({ &BasicUnitGraphicItem::uMoved, nullptr }); }
-    virtual void unitRotated(Unit *) override { _events.push({ &BasicUnitGraphicItem::uRotated, nullptr }); }
+    virtual void engineObjectMoved(EngineObject *) override { _events.push({ &BasicUnitGraphicItem::uMoved, nullptr }); }
+    virtual void engineObjectRotated(EngineObject *) override { _events.push({ &BasicUnitGraphicItem::uRotated, nullptr }); }
     virtual void unitSkillStarted(Unit *) override { _events.push({ &BasicUnitGraphicItem::uSkillStarted, nullptr }); }
     virtual void unitSkillFinished(Unit *) override { _events.push({ &BasicUnitGraphicItem::uSkillFinished, nullptr }); }
     virtual void unitSkillAdvance(Unit *) override { _events.push({ &BasicUnitGraphicItem::uSkillAdvance, nullptr }); }

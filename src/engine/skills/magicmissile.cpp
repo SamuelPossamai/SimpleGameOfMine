@@ -35,7 +35,7 @@ UIntegerType MagicMissile::action(Unit *u, EngineMap *, ProjectileCreationInterf
 
     projectilefactory::MissileFactory::MissileInfo p_info;
 
-    p_info.durability = 10;
+    p_info.durability = 10 + u_info->attributes().wisdom()/10;
     p_info.size = 20;
     p_info.speed = 30 + u_info->attributes().wisdom()/4;
     p_info.damage = 13 + ( 5*u_info->attributes().wisdom() + u_info->attributes().dexterity() )/15;

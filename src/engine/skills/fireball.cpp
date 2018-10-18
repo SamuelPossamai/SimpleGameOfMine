@@ -37,7 +37,7 @@ void Fireball::shoot(Unit *u, ProjectileCreationInterface& pci, Unit::AngleType 
 
     gameinfo::Projectiles::ProjectileInfo p_info;
 
-    p_info.durability = 40;
+    p_info.durability = 40 + u_info->attributes().wisdom();
     p_info.size = 17;
     p_info.speed = 35 + u_info->attributes().wisdom()/3;
     p_info.damage = 15 + ( 6*u_info->attributes().wisdom() + u_info->attributes().dexterity() )/15;

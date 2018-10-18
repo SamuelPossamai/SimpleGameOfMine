@@ -25,7 +25,7 @@ void BasicProjectile::collideAction(Map *, EngineObject *obj) {
 
     if(p) {
 
-        UIntegerType dec = this->durability() > p->durability() ? this->durability() : p->durability();
+        UIntegerType dec = this->durability() < p->durability() ? this->durability() : p->durability();
 
         p->decreaseDurability(dec);
         this->decreaseDurability(dec);

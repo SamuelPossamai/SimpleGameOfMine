@@ -21,30 +21,19 @@ public:
      * \sa Unit::attachHandler(Unit::Handler *)
      * \param u The unit that a base class object will observe and display
      */
-    explicit UnitAnimationItem(Unit *u) : _unit(u) { u->attachObserver(this); }
+    explicit UnitAnimationItem(Unit *u) : AnimationItemBase(u) { u->attachObserver(this); }
 
     /*!
      * \brief The destructor will detach the handler
      * \sa Unit::detachHandler(Unit::Handler *)
      */
-    virtual ~UnitAnimationItem() { if(_unit) _unit->detachObserver(this); }
+    virtual ~UnitAnimationItem() override { static_cast<Unit *>(accessObject())->detachObserver(this); }
 
     /*!
      * \brief Return the unit it is observing
      * \return The unit this object is observing
      */
-    const Unit *unit() const { return _unit; }
-
-protected:
-
-    /*!
-     * \brief This method handle the destruction of the unit it is observing, so it will not try to detach later
-     */
-    virtual void unitObjectDestroyed(Unit *) { _unit = nullptr; }
-
-private:
-
-    Unit *_unit;
+    const Unit *unit() const { return static_cast<const Unit *>(object()); }
 };
 
 #endif // UNITANIMATIONITEM_H

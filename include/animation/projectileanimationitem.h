@@ -4,23 +4,20 @@
 
 #include "config/types.h"
 
+#include "projectile.h"
 #include "animationitembase.h"
 
 class ProjectileAnimationItem : public AnimationItemBase {
 
 public:
 
-    ProjectileAnimationItem(Projectile *p) : _projectile(p) {}
+    ProjectileAnimationItem(Projectile *p) : AnimationItemBase(p) {}
 
     virtual ~ProjectileAnimationItem() override {}
 
 protected:
 
-    const Projectile *projectile() const { return _projectile; }
-
-private:
-
-    Projectile *_projectile;
+    const Projectile *projectile() const { return static_cast<const Projectile *>(object()); }
 };
 
 #endif // PROJECTILEANIMATIONITEM_H

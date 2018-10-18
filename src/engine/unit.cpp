@@ -8,11 +8,6 @@ Unit::Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, UInte
 
 }
 
-Unit::~Unit() {
-
-    _notifyAll(&Observer::unitObjectDestroyed);
-}
-
 bool Unit::receiveDamage(AttackType damage, Unit *attacking /* = nullptr */) {
 
     if(attacking) for(auto p : attacking->_effects) damage = p.first->doAttackEffect(attacking, this, damage);
@@ -64,6 +59,8 @@ bool Unit::consumeEnergy(EnergyType energy) {
 
 bool Unit::attachObserver(Observer *h) {
 
+    EngineObject::attachObserver(h);
+
     if(std::find(_observers.begin(), _observers.end(), h) == _observers.end()) {
 
         _observers.push_back(h);
@@ -75,6 +72,8 @@ bool Unit::attachObserver(Observer *h) {
 }
 
 bool Unit::detachObserver(Observer *h) {
+
+    EngineObject::detachObserver(h);
 
     auto it = std::find(_observers.begin(), _observers.end(), h);
     if(it != _observers.end()) {
@@ -113,24 +112,6 @@ bool Unit::removeEffect(const UnitEffect *effect) {
     }
 
     return false;
-}
-
-bool Unit::setPos(PointType p) {
-
-    bool v = Base::setPos(p);
-
-    _notifyAll(&Observer::unitMoved);
-
-    return v;
-}
-
-bool Unit::setAngle(AngleType angle){
-
-    bool v = Base::setAngle(angle);
-
-    _notifyAll(&Observer::unitRotated);
-
-    return v;
 }
 
 bool Unit::choose() {

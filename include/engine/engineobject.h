@@ -11,15 +11,44 @@ class EngineObject : public EngineObjectBase {
 
 public:
 
+    class Observer;
+
+    using ObserversList = std::vector<Observer *>;
+
     EngineObject(const EngineObject&) = delete;
 
     EngineObject& operator=(const EngineObject&) = delete;
 
-    virtual ~EngineObject() override { _map->removeObject(this); }
+    virtual ~EngineObject() override;
 
     virtual bool act() = 0;
 
     virtual bool needThreadToAct() { return false; }
+
+    /*!
+     * \brief Attach an observer to this object, it will be notified for some events
+     * \param ob Observer that will be attached
+     * \return true if 'ob' was added successfully, false if it is already observing this object
+     */
+    bool attachObserver(Observer *ob);
+
+    /*!
+     * \brief Detach an observer of this object
+     * \param ob Observer that will be detached
+     * \return true if it was detached, false if it was not an observer of the object
+     */
+    bool detachObserver(Observer *ob);
+
+    /*!
+     * \brief Detach all of the observers of the object
+     */
+    void detachAllObservers() { _observers.clear(); }
+
+    /*!
+     * \brief Return the list of all the observers of the object
+     * \return List with all the observers
+     */
+    const ObserversList& engineObjectObservers() const { return _observers; }
 
     /*!
      * \brief Set the x position of the object if it's possible
@@ -73,7 +102,23 @@ protected:
 
 private:
 
+    template <typename... Args>
+    void _notifyAll(void (Observer::*ObserverMethod)(EngineObject *, Args...), Args... args) {
+        for(Observer *observer : _observers) (observer->*ObserverMethod)(this, args...);
+    }
+
     EngineMap * const _map;
+
+    ObserversList _observers;
+};
+
+class EngineObject::Observer {
+
+public:
+
+    virtual void engineObjectDestroyed(EngineObject *) {}
+    virtual void engineObjectMoved(EngineObject *) {}
+    virtual void engineObjectRotated(EngineObject *) {}
 };
 
 #endif // ENGINEOBJECT_H
