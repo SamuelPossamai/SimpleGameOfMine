@@ -8,7 +8,7 @@ using namespace unitanimationfactory;
 KnightAnimationFactory *KnightAnimationFactory::_factory = nullptr;
 
 KnightAnimationFactory::KnightAnimationFactory() :
-    _walking_animation(20, true), _idle_animation(1000, true), _attacking_animation(80, false) {
+    _walking_animation(20, true), _idle_animation(1000, true), _attacking_animation(80, false), _blocking_animation(20, true) {
 
 
     QPixmap walk_im1 = QPixmap(":/knight_walking_1n3.png").scaledToWidth(80);
@@ -32,6 +32,8 @@ KnightAnimationFactory::KnightAnimationFactory() :
     _attacking_animation.addImage(attack_im3, 20);
     _attacking_animation.addImage(attack_im2, 30);
 
+    _blocking_animation.addImage(QPixmap(":/knight_block.png").scaledToWidth(91), 0);
+
     _idle_animation.addImage(QPixmap(":/knight_idle.png").scaledToWidth(80), 0);
 }
 
@@ -39,7 +41,7 @@ UnitAnimationItem *KnightAnimationFactory::create(Unit *u) {
 
     auto *item = new unitanimation::BasicUnitGraphicItem(u);
 
-    item->setAnimations(_idle_animation, _walking_animation, _attacking_animation, _idle_animation);
+    item->setAnimations(_idle_animation, _walking_animation, _attacking_animation, _idle_animation, _blocking_animation);
 
     return item;
 }

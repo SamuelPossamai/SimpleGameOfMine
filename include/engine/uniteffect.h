@@ -38,11 +38,14 @@ public:
     /*!
      * \brief Virtual method taht is called each time the unit with the effect is attacked
      * \param def The unit defending(The one with the effect)
-     * \param att The unit attacking
+     * \param att The object attacking
      * \param a The damage amount
      * \return The damage amount after this effect is applied
      */
-    virtual AttackType doDefenseEffect(Unit *def, Unit *att, AttackType a) const { Q_UNUSED(def); Q_UNUSED(att); return a; }
+    virtual AttackType doDefenseEffect(Unit *def, EngineObject *att, AttackType a) const {
+
+        Q_UNUSED(def); Q_UNUSED(att); return a;
+    }
 
     virtual SpeedType doSpeedEffect(const Unit *u, SpeedType speed) const { Q_UNUSED(u); return speed; }
 };

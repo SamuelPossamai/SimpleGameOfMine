@@ -23,7 +23,7 @@ class Ninja : public Fighter {
         return 12 + 0.8*attributes().strength() + 0.3*attributes().dexterity() +
                 0.1*attributes().agility() + 0.1*attributes().wisdom();
     }
-    virtual SpeedType speedCalculate() const override { return 80 + 1*attributes().agility() + 0.4*attributes().dexterity(); }
+    virtual SpeedType speedCalculate() const override { return 65 + 0.9*attributes().agility() + 0.4*attributes().dexterity(); }
     virtual SizeType sizeCalculate() const override {
 
         SizeType size = Fighter::sizeCalculate() - 0.01*(attributes().dexterity() + attributes().agility());

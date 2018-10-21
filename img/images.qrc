@@ -85,5 +85,9 @@
         <file>fireball_image.png</file>
         <file>explosion_icon.png</file>
         <file>magic_shield.png</file>
+        <file>icons/knight.png</file>
+        <file>icons/mage.png</file>
+        <file>knight_block.png</file>
+        <file>shield_icon.png</file>
     </qresource>
 </RCC>

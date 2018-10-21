@@ -8,7 +8,7 @@ using namespace effect;
 
 LastEscape *LastEscape::_copy = nullptr;
 
-LastEscape::AttackType LastEscape::doDefenseEffect(Unit *def, Unit *, AttackType a) const {
+LastEscape::AttackType LastEscape::doDefenseEffect(Unit *def, EngineObject *, AttackType a) const {
 
     if(def->consumeEnergy(20)) {
 

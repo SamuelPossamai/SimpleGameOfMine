@@ -60,10 +60,12 @@ public:
     /*!
      * \brief The unit received damage
      * \param damage Damage amount(effects can modify it)
-     * \param attacking The unit that is attacking, nullptr the damage was not caused by other unit, by default nullptr
+     * \param attacking The unit that is attacking, nullptr the damage was not caused by other unit
      * \return true if the unit remains alive, false otherwise
      */
-    bool receiveDamage(AttackType damage, Unit *attacking = nullptr);
+    bool receiveDamage(AttackType damage, Unit *attacking);
+
+    bool receiveDamage(AttackType damage, EngineObject *attacking = nullptr);
 
     /*!
      * \brief The unit calling this method will heal 'target'

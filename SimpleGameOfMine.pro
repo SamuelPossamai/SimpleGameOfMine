@@ -100,7 +100,9 @@ SOURCES += src/main.cpp \
     src/engine/skills/mageonoffmagicshield.cpp \
     src/interface/librarywidgetinfotab.cpp \
     src/interface/configurationscreen.cpp \
-    src/interface/selectuserinterfacebase.cpp
+    src/interface/selectuserinterfacebase.cpp \
+    src/engine/projectiles/missile.cpp \
+    src/engine/skills/knightblock.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -223,7 +225,9 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/effects/magicshield.h \
     include/engine/skills/mageonoffmagicshield.h \
     include/interface/librarywidgetinfotab.h \
-    include/interface/configurationscreen.h
+    include/interface/configurationscreen.h \
+    include/engine/effects/shield.h \
+    include/engine/skills/knightblock.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc

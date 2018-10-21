@@ -1,14 +1,10 @@
 
-#ifndef MISSILE_H
-#define MISSILE_H
-
-#include <iostream>
+#ifndef PROJECTILE_MISSILE_H
+#define PROJECTILE_MISSILE_H
 
 #include "unit.h"
 #include "enginemap.h"
 #include "basicprojectile.h"
-
-#include <iostream>
 
 namespace projectile {
 
@@ -22,30 +18,7 @@ public:
 
     virtual ~Missile() override = default;
 
-    virtual UIntegerType stepAction() override {
-
-        auto target = map()->closerEnemy(pos(), creator()->team());
-
-        AngleType t_angle = std::atan2(target->y() - y(), target->x() - x());
-
-        AngleType new_value = t_angle;
-
-        std::pair<AngleType, bool> diff_and_dir = EngineMap::angleDiffAndDir(t_angle, angle());
-
-        AngleType diff = diff_and_dir.first;
-
-        if(diff > _ang_speed) {
-
-            new_value = angle();
-            if(diff > 3*M_PI/4 || diff_and_dir.second) new_value += _ang_speed;
-            else new_value -= _ang_speed;
-        }
-
-        setAngle(new_value);
-        setDirection(new_value);
-
-        return 3;
-    }
+    virtual UIntegerType stepAction() override;
 
 private:
 
@@ -54,4 +27,4 @@ private:
 
 } /* projectile */
 
-#endif // MISSILE_H
+#endif // PROJECTILE_MISSILE_H

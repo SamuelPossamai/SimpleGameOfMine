@@ -15,7 +15,7 @@ class MagicShield : public UnitEffect, public GenericMemoryManager::ManagedObjec
 
 public:
 
-    virtual AttackType doDefenseEffect(Unit *def, Unit *, AttackType a) const override {
+    virtual AttackType doDefenseEffect(Unit *def, EngineObject *, AttackType a) const override {
 
         AttackType att_blocked;
 

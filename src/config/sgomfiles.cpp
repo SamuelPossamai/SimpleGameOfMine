@@ -56,7 +56,7 @@ std::vector<std::string> SGOMFiles::characters() const {
     return chars;
 }
 
-std::optional<std::map<std::string, std::vector<std::string> > > SGOMFiles::readSGOMEntryFile(const std::string& filename) {
+std::optional<SGOMFiles::DataEntryFileInfo> SGOMFiles::readSGOMDataEntryFile(const std::string& filename) {
 
     QFile f(filename.c_str());
 
@@ -64,14 +64,29 @@ std::optional<std::map<std::string, std::vector<std::string> > > SGOMFiles::read
 
     QTextStream in(&f);
 
-    std::map<std::string, std::vector<std::string> > result;
+    SGOMFiles::DataEntryFileInfo result;
 
-    std::string section = "Global";
+    std::string section = "__global__";
 
     while(!in.atEnd()) {
 
-        if(!read_SGOM_entry_file_loop(filename, result, section, in)) return std::nullopt;
+        if(!read_SGOM_data_entry_file_loop(filename, result, section, in)) return std::nullopt;
     }
+
+    return result;
+}
+
+std::optional<SGOMFiles::EntryFileInfo> SGOMFiles::readSGOMEntryFile(const std::string& filename) {
+
+    auto opt = readSGOMDataEntryFile(filename);
+
+    if(!opt) return std::nullopt;
+
+    auto vec = *opt;
+
+    EntryFileInfo result;
+
+    for(auto& p : vec) result[p.first] = p.second;
 
     return result;
 }
@@ -92,14 +107,34 @@ std::optional<SGOMFiles::ConfigFileInfo> SGOMFiles::readSGOMConfigFile(const std
 
         for(auto&& v : p.second) {
 
-            auto eq_it = std::find(v.begin(), v.end(), '=');
+            auto p = _split_equal_sign(v);
 
-            std::string first_str(v.begin(), eq_it);
-            std::string second_str;
+            content_out[p.first] = p.second;
+        }
+    }
 
-            if(eq_it != v.end()) second_str.assign(eq_it+1, v.end());
+    return ret;
+}
 
-            content_out[first_str] = second_str;
+std::optional<SGOMFiles::DataFileInfo> SGOMFiles::readSGOMDataFile(const std::string& filename) {
+
+    auto opt = readSGOMDataEntryFile(filename);
+
+    if(!opt) return std::nullopt;
+
+    auto f_info = *opt;
+
+    DataFileInfo ret;
+
+    for(auto&& p : f_info) {
+
+        ret.push_back({ p.first,  DataFileInfo::value_type::second_type() });
+
+        for(auto&& v : p.second) {
+
+            auto p = _split_equal_sign(v);
+
+            ret.back().second[p.first] = p.second;
         }
     }
 
@@ -157,8 +192,8 @@ void SGOMFiles::writeSGOMConfigFile(const ConfigFileInfo& info) {
     writeSGOMConfigFile(_base_path + "/config/sgom.conf", info);
 }
 
-bool SGOMFiles::read_SGOM_entry_file_loop(const std::string& filename,
-                                          std::map<std::string, std::vector<std::string> >& result,
+bool SGOMFiles::read_SGOM_data_entry_file_loop(const std::string& filename,
+                                          SGOMFiles::DataEntryFileInfo& result,
                                           std::string& section, QTextStream& in) {
 
 
@@ -180,24 +215,19 @@ bool SGOMFiles::read_SGOM_entry_file_loop(const std::string& filename,
 
     if(start_brac_count == 1) {
 
-        if(!read_SGOM_entry_file_brackets(filename, s, section)) return false;
+        if(!read_SGOM_data_entry_file_brackets(filename, s, section)) return false;
     }
     else {
 
-        auto& v = result[section];
+        _create_section_data_entry(result, section);
 
-        if(v.size() && v.back().back() == '\\') {
-
-            v.back().pop_back();
-            v.back() += s;
-        }
-        else v.push_back(s);
+        if(!_append_data_entry(result, section, s)) result.back().second.push_back(s);
     }
 
     return true;
 }
 
-bool SGOMFiles::read_SGOM_entry_file_brackets(const std::string& filename, const std::string& s, std::string& section) {
+bool SGOMFiles::read_SGOM_data_entry_file_brackets(const std::string& filename, const std::string& s, std::string& section) {
 
     auto st_it = std::find(s.begin(), s.end(), '[');
     auto end_it = std::find(s.begin(), s.end(), ']');
@@ -248,4 +278,46 @@ bool SGOMFiles::_create_dir_if_missing(const std::string& dir_name) {
     return true;
 }
 
+bool SGOMFiles::_append_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section, const std::string& s) {
 
+    if(result.empty()) return false;
+
+    auto & v = result.back();
+
+    if(v.first != section) return false;
+
+    auto & v_sec = v.second;
+
+    if(v_sec.empty()) return false;
+
+    auto & last_s = v_sec.back();
+
+    if(last_s.empty()) return false;
+    if(last_s.back() != '\\') return false;
+
+    last_s.pop_back();
+    last_s += s;
+
+    return true;
+}
+
+bool SGOMFiles::_create_section_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section) {
+
+    if(!result.empty()) if(result.back().first == section) return false;
+
+    result.push_back({ section, DataEntryFileInfo::value_type::second_type() });
+
+    return true;
+}
+
+std::pair<std::string, std::string> SGOMFiles::_split_equal_sign(const std::string& s) {
+
+    auto eq_it = std::find(s.begin(), s.end(), '=');
+
+    std::string first_str(s.begin(), eq_it);
+    std::string second_str;
+
+    if(eq_it != s.end()) second_str.assign(eq_it+1, s.end());
+
+    return { first_str, second_str };
+}

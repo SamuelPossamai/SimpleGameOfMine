@@ -16,7 +16,7 @@ void BasicProjectile::collideAction(Map *, EngineObject *obj) {
 
     if(u) {
 
-        u->receiveDamage(_damage);
+        u->receiveDamage(_damage, this);
         this->decreaseDurability(this->durability());
         return;
     }

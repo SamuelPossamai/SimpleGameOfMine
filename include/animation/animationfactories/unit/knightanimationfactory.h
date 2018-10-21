@@ -22,6 +22,7 @@ private:
     Animation _walking_animation;
     Animation _idle_animation;
     Animation _attacking_animation;
+    Animation _blocking_animation;
     static KnightAnimationFactory *_factory;
 };
 

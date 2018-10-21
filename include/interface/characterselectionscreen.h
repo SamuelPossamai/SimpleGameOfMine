@@ -17,6 +17,8 @@ public:
     explicit CharacterSelectionScreen(const utility::Interval<UIntegerType>& n_characters, MainWindow *parent = nullptr);
     ~CharacterSelectionScreen();
 
+    void activate() final;
+
 private slots:
 
     void on_prevButton_clicked();

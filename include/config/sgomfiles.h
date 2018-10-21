@@ -21,6 +21,11 @@ class SGOMFiles {
 
 public:
 
+    using DataEntryFileInfo = std::vector<std::pair<std::string, std::vector<std::string> > >;
+    using EntryFileInfo = std::map<std::string, std::vector<std::string> >;
+    using ConfigFileInfo = std::map<std::string, std::map<std::string, std::string> >;
+    using DataFileInfo = std::vector<std::pair<std::string, std::map<std::string, std::string> > >;
+
     /*!
      * \brief Return the path to the base directory for all the game's files and directories
      * \return The path to the base directory where this game information is saved
@@ -73,11 +78,13 @@ public:
     static std::vector<std::string> findDataFiles(const std::string& dir);
     static std::vector<std::string> findDataFiles(const std::string& dir, const std::string& extension);
 
-    static std::optional<std::map<std::string, std::vector<std::string> > > readSGOMEntryFile(const std::string& filename);
+    static std::optional<DataEntryFileInfo> readSGOMDataEntryFile(const std::string& filename);
 
-    using ConfigFileInfo = std::map<std::string, std::map<std::string, std::string> >;
+    static std::optional<EntryFileInfo> readSGOMEntryFile(const std::string& filename);
 
     static std::optional<ConfigFileInfo> readSGOMConfigFile(const std::string& filename);
+
+    static std::optional<DataFileInfo> readSGOMDataFile(const std::string& filename);
 
     ConfigFileInfo readSGOMConfigFile();
 
@@ -89,13 +96,17 @@ public:
 
 private:
 
-    static bool read_SGOM_entry_file_loop(const std::string& filename,
-                                          std::map<std::string, std::vector<std::string> >& result,
+    static bool read_SGOM_data_entry_file_loop(const std::string& filename,
+                                          DataEntryFileInfo& result,
                                           std::string& section, QTextStream& in);
 
-    static bool read_SGOM_entry_file_brackets(const std::string& filename, const std::string& s, std::string& section);
+    static bool read_SGOM_data_entry_file_brackets(const std::string& filename, const std::string& s, std::string& section);
 
     bool _create_dir_if_missing(const std::string& dir_name);
+
+    static bool _append_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section, const std::string& s);
+    static bool _create_section_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section);
+    static std::pair<std::string, std::string> _split_equal_sign(const std::string& s);
 
     std::string _base_path;
     std::string _char_path;

@@ -8,9 +8,15 @@ Unit::Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, UInte
 
 }
 
-bool Unit::receiveDamage(AttackType damage, Unit *attacking /* = nullptr */) {
+bool Unit::receiveDamage(AttackType damage, Unit *attacking) {
 
-    if(attacking) for(auto p : attacking->_effects) damage = p.first->doAttackEffect(attacking, this, damage);
+    for(auto p : attacking->_effects) damage = p.first->doAttackEffect(attacking, this, damage);
+
+    return receiveDamage(damage, static_cast<EngineObject *>(attacking));
+}
+
+bool Unit::receiveDamage(AttackType damage, EngineObject *attacking /* = nullptr */) {
+
     for(auto p : _effects) damage = p.first->doDefenseEffect(this, attacking, damage);
 
     if(damage > health()) damage = health();

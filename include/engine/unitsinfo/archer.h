@@ -16,6 +16,8 @@ class Archer : public Fighter, public GenericMemoryManager::ManagedObject {
     Archer(const Attributes& attr) : Fighter(attr) {
 
         addSkill(skill::Shoot::getSkill(), QPixmap(":/arrow_projectile_image.png"));
+
+        calculateInfo();
     }
 
 public:

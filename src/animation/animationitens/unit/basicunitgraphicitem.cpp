@@ -9,6 +9,7 @@
 #include <engine/effects/regeneration.h>
 #include <engine/effects/adrenaline.h>
 #include <engine/effects/magicshield.h>
+#include <engine/effects/shield.h>
 
 #include "animationitens/unit/basicunitgraphicitem.h"
 #include "partialimageitem.h"
@@ -237,6 +238,8 @@ void BasicUnitGraphicItem::_init() {
     green_to_red.changeImage(red_circle);
 
     _effect_images[typeid(effect::Adrenaline)] = red_circle;
+
+    _effect_images[typeid(effect::Shield)] = QImage(":/shield_icon.png").scaled(13, 13);
 }
 
 } /* namespace unitanimation */
