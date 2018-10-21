@@ -16,7 +16,7 @@ UIntegerType Teleport::action(Unit *u, EngineMap *, ProjectileCreationInterface&
 
     if(info.step == 0) {
 
-        if(u->consumeEnergy(3)) return 10;
+        if(u->consumeEnergy(5)) return 10;
         else return 0;
     }
     if(info.step > 10) return 0;

@@ -4,6 +4,10 @@
 
 #include <vector>
 #include <string>
+#include <optional>
+#include <map>
+
+#include <QTextStream>
 
 /*!
  * \brief The SGOMFiles class is meant help with the localization of files for the game
@@ -66,7 +70,18 @@ public:
      */
     static SGOMFiles *get() { if(!_f) _f = new SGOMFiles; return _f; }
 
+    static std::vector<std::string> findDataFiles(const std::string& dir);
+    static std::vector<std::string> findDataFiles(const std::string& dir, const std::string& extension);
+
+    static std::optional<std::map<std::string, std::vector<std::string> > > readSGOMEntryFile(const std::string& filename);
+
 private:
+
+    static bool read_SGOM_entry_file_loop(const std::string& filename,
+                                          std::map<std::string, std::vector<std::string> >& result,
+                                          std::string& section, QTextStream& in);
+
+    static bool read_SGOM_entry_file_brackets(const std::string& filename, const std::string& s, std::string& section);
 
     bool _create_dir_if_missing(const std::string& dir_name);
 

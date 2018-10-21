@@ -6,14 +6,15 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 QMAKE_CXXFLAGS += -std=c++17
 LIBS += -lstdc++fs
 
-INCLUDEPATH += include include/animation include/config include/interface include/engine include/utils include/utility include/memory
+INCLUDEPATH += include include/animation include/config include/interface \
+    include/engine include/utils include/utility include/memory include/gameinfo
 
 TARGET = SGOM
 TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
-CONFIG += object_parallel_to_source
+CONFIG += object_parallel_to_source c++1z
 OBJECTS_DIR = .
 
 SOURCES += src/main.cpp \
@@ -96,7 +97,8 @@ SOURCES += src/main.cpp \
     src/animation/animationfactories/projectile/fireballanimationfactory.cpp \
     src/engine/skills/fireball.cpp \
     src/engine/skills/explosion.cpp \
-    src/engine/skills/mageonoffmagicshield.cpp
+    src/engine/skills/mageonoffmagicshield.cpp \
+    src/interface/librarywidgetinfotab.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -217,9 +219,11 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/fireball.h \
     include/engine/skills/explosion.h \
     include/engine/effects/magicshield.h \
-    include/engine/skills/mageonoffmagicshield.h
+    include/engine/skills/mageonoffmagicshield.h \
+    include/interface/librarywidgetinfotab.h
 
-RESOURCES += img/images.qrc
+RESOURCES += img/images.qrc \
+    data/data.qrc
 
 FORMS += forms/gamedefaultscreen.ui \
     forms/menu.ui \
@@ -229,7 +233,8 @@ FORMS += forms/gamedefaultscreen.ui \
     forms/battlewidget.ui \
     forms/helpwidget.ui \
     forms/librarywidget.ui \
-    forms/characterselectionscreen.ui
+    forms/characterselectionscreen.ui \
+    forms/librarywidgetinfotab.ui
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET
