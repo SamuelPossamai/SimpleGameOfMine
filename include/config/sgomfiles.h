@@ -75,6 +75,18 @@ public:
 
     static std::optional<std::map<std::string, std::vector<std::string> > > readSGOMEntryFile(const std::string& filename);
 
+    using ConfigFileInfo = std::map<std::string, std::map<std::string, std::string> >;
+
+    static std::optional<ConfigFileInfo> readSGOMConfigFile(const std::string& filename);
+
+    ConfigFileInfo readSGOMConfigFile();
+
+    static ConfigFileInfo readSGOMDefaultConfigFile();
+
+    static void writeSGOMConfigFile(const std::string& filename, const ConfigFileInfo& info);
+
+    void writeSGOMConfigFile(const ConfigFileInfo& info);
+
 private:
 
     static bool read_SGOM_entry_file_loop(const std::string& filename,

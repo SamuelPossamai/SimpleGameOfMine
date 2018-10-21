@@ -98,7 +98,9 @@ SOURCES += src/main.cpp \
     src/engine/skills/fireball.cpp \
     src/engine/skills/explosion.cpp \
     src/engine/skills/mageonoffmagicshield.cpp \
-    src/interface/librarywidgetinfotab.cpp
+    src/interface/librarywidgetinfotab.cpp \
+    src/interface/configurationscreen.cpp \
+    src/interface/selectuserinterfacebase.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -220,7 +222,8 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/explosion.h \
     include/engine/effects/magicshield.h \
     include/engine/skills/mageonoffmagicshield.h \
-    include/interface/librarywidgetinfotab.h
+    include/interface/librarywidgetinfotab.h \
+    include/interface/configurationscreen.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc
@@ -234,7 +237,8 @@ FORMS += forms/gamedefaultscreen.ui \
     forms/helpwidget.ui \
     forms/librarywidget.ui \
     forms/characterselectionscreen.ui \
-    forms/librarywidgetinfotab.ui
+    forms/librarywidgetinfotab.ui \
+    forms/configurationscreen.ui
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

@@ -36,9 +36,9 @@ private slots:
 
     void on_helpButton_clicked();
 
-    void on_testButton_clicked();
-
     void on_libraryButton_clicked();
+
+    void on_configButton_clicked();
 
 private:
 

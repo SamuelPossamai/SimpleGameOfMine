@@ -1,5 +1,6 @@
 
 #include <iostream>
+#include <fstream>
 #include <experimental/filesystem>
 
 #include <QDir>
@@ -21,6 +22,8 @@ SGOMFiles::SGOMFiles() {
     _char_path += _base_path + "/chars";
 
     _create_dir_if_missing(_char_path);
+
+    _create_dir_if_missing(_base_path + "/config");
 }
 
 bool SGOMFiles::charExists(std::string char_name) const {
@@ -73,6 +76,86 @@ std::optional<std::map<std::string, std::vector<std::string> > > SGOMFiles::read
     return result;
 }
 
+std::optional<SGOMFiles::ConfigFileInfo> SGOMFiles::readSGOMConfigFile(const std::string& filename) {
+
+    auto opt = readSGOMEntryFile(filename);
+
+    if(!opt) return std::nullopt;
+
+    auto f_info = *opt;
+
+    ConfigFileInfo ret;
+
+    for(auto&& p : f_info) {
+
+        auto & content_out = ret[p.first];
+
+        for(auto&& v : p.second) {
+
+            auto eq_it = std::find(v.begin(), v.end(), '=');
+
+            std::string first_str(v.begin(), eq_it);
+            std::string second_str;
+
+            if(eq_it != v.end()) second_str.assign(eq_it+1, v.end());
+
+            content_out[first_str] = second_str;
+        }
+    }
+
+    return ret;
+}
+
+SGOMFiles::ConfigFileInfo SGOMFiles::readSGOMConfigFile() {
+
+    static const char *default_file = ":/data/config/default.conf";
+
+    QString config_file = QString::fromStdString(_base_path + "/config/sgom.conf");
+
+    if(!QFile(config_file).exists()) {
+
+        QFile::copy(default_file, config_file);
+        QFile(config_file).setPermissions(QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::ReadOther);
+    }
+
+    auto opt = readSGOMConfigFile(config_file.toStdString());
+
+    if(!opt) {
+
+        std::cerr << "An error ocurred reading the configuration file, default configuration will be adopted" << std::endl;
+
+        return readSGOMDefaultConfigFile();
+    }
+
+    return *opt;
+}
+
+SGOMFiles::ConfigFileInfo SGOMFiles::readSGOMDefaultConfigFile() {
+
+    static const char *default_file = ":/data/config/default.conf";
+
+    return *readSGOMConfigFile(default_file);
+}
+
+void SGOMFiles::writeSGOMConfigFile(const std::string& filename, const ConfigFileInfo& info) {
+
+    std::ofstream file(filename);
+
+    for(auto&& section_pair : info) {
+
+        file << '[' << section_pair.first << ']' << std::endl;
+
+        for(auto&& p : section_pair.second) {
+
+            file << p.first << '=' << p.second << std::endl;
+        }
+    }
+}
+
+void SGOMFiles::writeSGOMConfigFile(const ConfigFileInfo& info) {
+
+    writeSGOMConfigFile(_base_path + "/config/sgom.conf", info);
+}
 
 bool SGOMFiles::read_SGOM_entry_file_loop(const std::string& filename,
                                           std::map<std::string, std::vector<std::string> >& result,

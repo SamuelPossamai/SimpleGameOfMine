@@ -45,6 +45,7 @@ public:
 
 protected:
 
+    void restoreProperties();
     void resizeEvent(QResizeEvent* event);
 
 private:

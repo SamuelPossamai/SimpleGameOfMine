@@ -23,7 +23,11 @@ public:
 
     const utility::Interval<UIntegerType>& charactersNumber() const { return _n_chars; }
 
+    static SelectUserInterfaceBase *create(const utility::Interval<UIntegerType>& n_characters);
+
 protected:
+
+    static SelectUserInterfaceBase *_create(const utility::Interval<UIntegerType>& n_characters, const std::string& mode);
 
     template <typename ITER>
     bool finalize(const ITER& begin, const ITER& end) {

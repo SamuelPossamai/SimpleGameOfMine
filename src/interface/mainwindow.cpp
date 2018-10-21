@@ -7,10 +7,12 @@ MainWindow::MainWindow() {
 
     setGeometry(Traits<MainWindow>::x, Traits<MainWindow>::y, Traits<MainWindow>::width, Traits<MainWindow>::height);
 
-    setWindowTitle(Traits<MainWindow>::name);
+    restoreProperties();
 }
 
 void MainWindow::pushWidget(MainWidget *w) {
+
+    restoreProperties();
 
     w->setParent(this);
     w->setGeometry(0, 0, width(), height());
@@ -30,6 +32,8 @@ void MainWindow::pushWidget(MainWidget *w) {
 
 void MainWindow::popWidget() {
 
+    restoreProperties();
+
     delete _widgets.back();
     _widgets.pop_back();
 
@@ -45,6 +49,8 @@ void MainWindow::popWidget() {
 
 void MainWindow::swapWidget(MainWidget *w) {
 
+    restoreProperties();
+
     w->setParent(this);
     w->setGeometry(0, 0, width(), height());
 
@@ -59,4 +65,12 @@ void MainWindow::resizeEvent(QResizeEvent* event) {
 
     if(!_widgets.empty()) _widgets.back()->resize(width(), height());
     QMainWindow::resizeEvent(event);
+}
+
+void MainWindow::restoreProperties() {
+
+    setAutoFillBackground(true);
+    setWindowTitle(Traits<MainWindow>::name);
+    setStyleSheet("background-color: rgb(245, 245, 245);"
+                  "color: rgb(20, 20, 20);");
 }
