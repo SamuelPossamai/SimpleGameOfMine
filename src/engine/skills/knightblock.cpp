@@ -1,6 +1,5 @@
 
 #include "effects/shield.h"
-#include "unitsinfo/unitclassinfo.h"
 #include "unit.h"
 #include "skills/knightblock.h"
 
@@ -16,10 +15,8 @@ UIntegerType KnightBlock::action(Unit *u, EngineMap *, ProjectileCreationInterfa
 
     static const UIntegerType dur = 30;
 
-    auto u_info = static_cast<const unitsinfo::UnitClassInfo *>(u->unitInfo());
-
     UnitEffect *effect = effect::Shield::getEffect(
-                20 + (u_info->attributes().strength() + u_info->attributes().vitality())/4);
+                20 + (u->attributes().strength() + u->attributes().vitality())/4);
 
     u->removeEffect(effect);
     u->addEffect(effect, dur);

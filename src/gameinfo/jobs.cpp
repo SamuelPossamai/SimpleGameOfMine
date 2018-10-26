@@ -16,7 +16,7 @@ using namespace gameinfo;
 
 std::map<std::string, Jobs::GetJobFunctionType> Jobs::_jobs;
 
-std::optional<Jobs::Info> Jobs::get(std::string name, const Attributes& attr) {
+std::optional<Jobs::Info> Jobs::get(std::string name) {
 
     if(_jobs.empty()) _init();
 
@@ -24,36 +24,36 @@ std::optional<Jobs::Info> Jobs::get(std::string name, const Attributes& attr) {
 
     if(func_it == _jobs.end()) return std::nullopt;
 
-    return (func_it->second)(attr);
+    return (func_it->second)();
 }
 
-static Jobs::Info _get_fighter_info(const Jobs::Attributes& attr) {
+static Jobs::Info _get_fighter_info() {
 
-    return Jobs::Info(unitsinfo::Fighter::getInfo(attr),
+    return Jobs::Info(unitsinfo::Fighter::getInfo(),
                       unitanimationfactory::FighterAnimationFactory::getFactory());
 }
 
-static Jobs::Info _get_ninja_info(const Jobs::Attributes& attr) {
+static Jobs::Info _get_ninja_info() {
 
-    return Jobs::Info(unitsinfo::Ninja::getInfo(attr),
+    return Jobs::Info(unitsinfo::Ninja::getInfo(),
                       unitanimationfactory::NinjaAnimationFactory::getFactory());
 }
 
-static Jobs::Info _get_knight_info(const Jobs::Attributes& attr) {
+static Jobs::Info _get_knight_info() {
 
-    return Jobs::Info(unitsinfo::Knight::getInfo(attr),
+    return Jobs::Info(unitsinfo::Knight::getInfo(),
                       unitanimationfactory::KnightAnimationFactory::getFactory());
 }
 
-static Jobs::Info _get_archer_info(const Jobs::Attributes& attr) {
+static Jobs::Info _get_archer_info() {
 
-    return Jobs::Info(unitsinfo::Archer::getInfo(attr),
+    return Jobs::Info(unitsinfo::Archer::getInfo(),
                       unitanimationfactory::ArcherAnimationFactory::getFactory());
 }
 
-static Jobs::Info _get_mage_info(const Jobs::Attributes& attr) {
+static Jobs::Info _get_mage_info() {
 
-    return Jobs::Info(unitsinfo::Mage::getInfo(attr),
+    return Jobs::Info(unitsinfo::Mage::getInfo(),
                       unitanimationfactory::MageAnimationFactory::getFactory());
 }
 

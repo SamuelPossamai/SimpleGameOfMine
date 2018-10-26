@@ -2,7 +2,6 @@
 #include <cmath>
 
 #include "utility/random.h"
-#include "unitsinfo/unitclassinfo.h"
 #include "skills/fireball.h"
 #include "unit.h"
 #include "enginemap.h"
@@ -30,19 +29,17 @@ UIntegerType Fireball::action(Unit *u, EngineMap *, ProjectileCreationInterface&
 
 void Fireball::shoot(Unit *u, ProjectileCreationInterface& pci, Unit::AngleType angle) {
 
-    const unitsinfo::UnitClassInfo *u_info = static_cast<const unitsinfo::UnitClassInfo *>(u->unitInfo());
-
     Unit::PositionType dx = 55*std::cos(angle);
     Unit::PositionType dy = 55*std::sin(angle);
 
     gameinfo::Projectiles::ProjectileInfo p_info;
 
-    p_info.durability = 40 + u_info->attributes().wisdom();
+    p_info.durability = 40 + u->attributes().wisdom();
     p_info.size = 17;
-    p_info.speed = 35 + u_info->attributes().wisdom()/3;
-    p_info.damage = 15 + ( 6*u_info->attributes().wisdom() + u_info->attributes().dexterity() )/15;
+    p_info.speed = 35 + u->attributes().wisdom()/3;
+    p_info.damage = 15 + ( 6*u->attributes().wisdom() + u->attributes().dexterity() )/15;
 
-    Unit::AngleType accuracy = M_PI/(2+(4*u_info->attributes().dexterity() + u_info->attributes().wisdom())/20);
+    Unit::AngleType accuracy = M_PI/(2+(4*u->attributes().dexterity() + u->attributes().wisdom())/20);
 
     Unit::AngleType arrow_angle = angle + utility::Random::realDistribution(-accuracy, accuracy);
 

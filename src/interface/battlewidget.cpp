@@ -155,31 +155,32 @@ void BattleWidget::start(){
     _timer->start();
 }
 
-void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UnitAnimationItemFactory *f, UIntegerType team) {
+void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UnitAnimationItemFactory *f,
+                           const UnitAttributes& attr, UIntegerType level, UIntegerType team) {
 
-    _animations.push_back(f->create(_engine->addUnit(u, c, team)));
+    _animations.push_back(f->create(_engine->addUnit(u, c, attr, level, team)));
 
     _animations.back()->setScene(_gview->scene());
 }
 
-bool BattleWidget::addCreature(std::string name, UIntegerType level, UIntegerType team) {
+bool BattleWidget::addCreature(std::string name, const UnitAttributes& attr, UIntegerType level, UIntegerType team) {
 
-    auto opt = gameinfo::Creatures::get(name, level);
+    auto opt = gameinfo::Creatures::get(name);
     if(!opt.has_value()) return false;
 
     gameinfo::Creatures::Info i = *opt;
-    addUnit(std::get<0>(i), std::get<2>(i), std::get<1>(i), team);
+    addUnit(std::get<0>(i), std::get<2>(i), std::get<1>(i), attr, level, team);
 
     return true;
 }
 
-bool BattleWidget::addHero(std::string name, const Character::Attributes& attr, UIntegerType team) {
+bool BattleWidget::addHero(std::string name, const Character::Attributes& attr, UIntegerType level, UIntegerType team) {
 
-    auto opt = gameinfo::Jobs::get(name, attr);
+    auto opt = gameinfo::Jobs::get(name);
     if(!opt.has_value()) return false;
 
     gameinfo::Jobs::Info i = *opt;
-    addUnit(std::get<0>(i), controller::Human::getController(), std::get<1>(i), team);
+    addUnit(std::get<0>(i), controller::Human::getController(), std::get<1>(i), attr, level, team);
 
     return true;
 }

@@ -19,7 +19,7 @@ UIntegerType PlantAreaAttack::action(Unit *u, EngineMap *m, ProjectileCreationIn
 
     auto v = m->unitsInRange(u->pos(), 100);
 
-    for(Unit *other_unit : v) if(other_unit->team() != u->team()) u->attack(other_unit, u->unitInfo()->baseAttack()/2);
+    for(Unit *other_unit : v) if(other_unit->team() != u->team()) u->attack(other_unit, u->baseDamage()/2);
 
     return 5;
 }

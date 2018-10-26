@@ -6,17 +6,12 @@
 
 using namespace unitsinfo;
 
-OneCopyMemoryManager<MonsterPlant> MonsterPlant::_memmanager;
+MonsterPlant *MonsterPlant::_info = nullptr;
 
-MonsterPlant::MonsterPlant(UIntegerType level) : _level(level) {
+MonsterPlant::MonsterPlant() {
 
     addSkill(skill::Walk::MemoryInterface::dependentGet(15, 80), QPixmap(":/wing_boot.png").scaled(50, 50));
     addSkill(skill::PlantAreaAttack::getSkill());
-
-    setSize(30);
-    setHealth(400 + 35*level);
-    setBaseAttack(15 + 1.2*level);
-    setSpeed(60 + level);
 }
 
 MonsterPlant::~MonsterPlant() {

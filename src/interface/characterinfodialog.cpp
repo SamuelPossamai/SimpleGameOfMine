@@ -30,14 +30,14 @@ void CharacterInfoDialog::_init(const Character& c) {
     _ui->agiLabel->setText(QString::number(c.attributes().agility()));
     _ui->wisLabel->setText(QString::number(c.attributes().wisdom()));
 
-    std::optional opt = gameinfo::Jobs::get(c.className(), c.attributes());
+    std::optional opt = gameinfo::Jobs::get(c.className());
     if(!opt.has_value()) return;
 
     UnitInfo *info = std::get<0>(*opt);
 
-    _ui->healthLabel->setText(QString::number(info->health()));
-    _ui->energyLabel->setText(QString::number(info->energy()));
-    _ui->attackLabel->setText(QString::number(info->baseAttack()));
-    _ui->speedLabel->setText(QString::number(info->speed()));
-    _ui->sizeLabel->setText(QString::number(info->size()));
+    _ui->healthLabel->setText(QString::number(info->health(c.attributes(), c.level())));
+    _ui->energyLabel->setText(QString::number(info->energy(c.attributes(), c.level())));
+    _ui->attackLabel->setText(QString::number(info->baseAttack(c.attributes(), c.level())));
+    _ui->speedLabel->setText(QString::number(info->speed(c.attributes(), c.level())));
+    _ui->sizeLabel->setText(QString::number(info->size(c.attributes(), c.level())));
 }

@@ -2,40 +2,47 @@
 #ifndef UNITSINFO_KNIGHT_H
 #define UNITSINFO_KNIGHT_H
 
-#include <memory/onecopymemorymanager.h>
-
-#include "unitsinfo/unitclassinfo.h"
+#include "unitinfo.h"
 
 namespace unitsinfo {
 
-class Knight : public UnitClassInfo {
-
-    friend class OneCopyMemoryManager<Knight>;
-
-    using MemoryManager = OneCopyMemoryManager<Knight>;
+class Knight : public UnitInfo {
 
 protected:
 
-    Knight(const Attributes& attr);
+    Knight();
 
-    virtual HealthType healthCalculate() const override { return 300 + 20*attributes().vitality() + 0.1*attributes().strength(); }
-    virtual EnergyType energyCalculate() const override { return 10 + attributes().wisdom() + attributes().vitality(); }
-    virtual AttackType attackCalculate() const override {
+    virtual HealthType healthCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 16 + 0.85*attributes().strength() + 0.1*attributes().dexterity() + 0.2*attributes().wisdom();
+        return 300 + 20*attr.vitality() + 0.1*attr.strength();
     }
-    virtual SpeedType speedCalculate() const override;
-    virtual SizeType sizeCalculate() const override { return 28; }
+    virtual EnergyType energyCalculate(const Attributes& attr, UIntegerType) const override {
+
+        return 10 + attr.wisdom() + attr.vitality();
+    }
+    virtual AttackType attackCalculate(const Attributes& attr, UIntegerType) const override {
+
+        return 16 + 0.85*attr.strength() + 0.1*attr.dexterity() + 0.2*attr.wisdom();
+    }
+    virtual SpeedType speedCalculate(const Attributes& attr, UIntegerType) const override;
+    virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const override { return 28; }
 
 public:
 
     virtual ~Knight();
 
-    static Knight *getInfo(Attributes attr) { return _copies.get(attr); }
+    static Knight *getInfo() {
+
+        if(_info) return _info;
+
+        _info = new Knight;
+
+        return _info;
+    }
 
 private:
 
-    static MemoryManager _copies;
+    static Knight *_info;
 };
 
 } /* namespace unitsinfo */

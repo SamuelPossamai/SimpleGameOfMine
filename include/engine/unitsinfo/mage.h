@@ -12,13 +12,13 @@
 #include "skills/teleport.h"
 #include "skills/fireball.h"
 #include "skills/explosion.h"
-#include "unitsinfo/unitclassinfo.h"
+#include "unitinfo.h"
 
 namespace unitsinfo {
 
-class Mage : public UnitClassInfo, public GenericMemoryManager::ManagedObject {
+class Mage : public UnitInfo, public GenericMemoryManager::ManagedObject {
 
-    Mage(const Attributes& attr) : UnitClassInfo(attr) {
+    Mage() {
 
         addSkill(skill::Walk::MemoryInterface::dependentGet(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
         addSkill(skill::MagicMissile::getSkill(), QPixmap(":/magic_missile_3.png").scaled(50, 50));
@@ -26,30 +26,26 @@ class Mage : public UnitClassInfo, public GenericMemoryManager::ManagedObject {
         addSkill(skill::Fireball::getSkill(), QPixmap(":/fireball_image.png").scaled(50, 50));
         addSkill(skill::Explosion::getSkill(), QPixmap(":/explosion_icon.png").scaled(50, 50));
         addSkill(skill::MageOnOffMagicShield::getSkill(), QPixmap(":/magic_shield.png").scaled(50, 50));
-
-        calculateInfo();
     }
 
 public:
 
-    static Mage *getInfo(Attributes attr) { return static_cast<Mage *>(getObjCopy(Mage(attr))); }
+    static Mage *getInfo() { return static_cast<Mage *>(getObjCopy(Mage())); }
 
     virtual ~Mage() override { skill::Walk::MemoryInterface::noLongerDepend(10, 100); }
 
 protected:
 
-    virtual HealthType healthCalculate() const override { return 100 + 6*attributes().vitality(); }
-    virtual EnergyType energyCalculate() const override { return 200 + 12*attributes().wisdom(); }
-    virtual AttackType attackCalculate() const override { return 2 + 0.2*attributes().strength(); }
-    virtual SpeedType speedCalculate() const override { return 55 + 0.5*attributes().agility() + 0.2*attributes().dexterity(); }
-    virtual SizeType sizeCalculate() const override { return 24; }
+    virtual HealthType healthCalculate(const Attributes& attr, UIntegerType) const override { return 100 + 6*attr.vitality(); }
+    virtual EnergyType energyCalculate(const Attributes& attr, UIntegerType) const override { return 200 + 12*attr.wisdom(); }
+    virtual AttackType attackCalculate(const Attributes& attr, UIntegerType) const override { return 2 + 0.2*attr.strength(); }
+    virtual SpeedType speedCalculate(const Attributes& attr, UIntegerType) const override {
 
-    virtual bool manObjLessCompare(const GenericMemoryManager::ManagedObject *obj) const override {
-
-        return *this < *static_cast<const Mage *>(obj);
+        return 55 + 0.5*attr.agility() + 0.2*attr.dexterity();
     }
+    virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const override { return 24; }
 
-    virtual GenericMemoryManager::ManagedObject *manObjClone() const override { return new Mage(attributes()); }
+    virtual GenericMemoryManager::ManagedObject *manObjClone() const override { return new Mage; }
 };
 
 } /* namespace unitsinfo */

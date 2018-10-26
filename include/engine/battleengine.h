@@ -39,7 +39,8 @@ public:
      * \param team Unit team, it determines if other units are allies or enemies
      * \return Return the unit that was just created
      */
-    Unit *addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team);
+    Unit *addUnit(const UnitInfo *unit_info, Controller *controller,
+                  const UnitAttributes& attr, UIntegerType level, UIntegerType team);
 
     Projectile *addProjectile(ProjectileFactory *factory, const Unit *creator,
                               Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);

@@ -30,7 +30,8 @@ public:
      * \param team Team of the unit
      * \param i BattleWidget object, it's used to receive user input when the controller asks for
      */
-    Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, UIntegerType team, BattleWidget *i);
+    Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, BattleWidget *i,
+         const Attributes& attr, UIntegerType level, UIntegerType team);
 
     ~Unit() final = default;
 

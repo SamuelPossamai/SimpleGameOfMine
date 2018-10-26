@@ -33,7 +33,7 @@ UIntegerType BasicAttack::action(Unit *u, EngineMap *m, ProjectileCreationInterf
 
     m->unitsInRange(v, { x, y }, _distance/5);
 
-    for(Unit *unit : v) if(unit->team() != u->team()) u->attack(unit, u->unitInfo()->baseAttack());
+    for(Unit *unit : v) if(unit->team() != u->team()) u->attack(unit, u->baseDamage());
 
     return 5;
 }

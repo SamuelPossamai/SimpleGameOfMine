@@ -16,11 +16,11 @@ public:
 
     using Info = std::tuple<UnitInfo *, UnitAnimationItemFactory *, UnitController *>;
 
-    static std::optional<Info> get(std::string name, UIntegerType level);
+    static std::optional<Info> get(std::string name);
 
 private:
 
-    using GetCreatureFunctionType = Info (*)(UIntegerType);
+    using GetCreatureFunctionType = Info (*)();
 
     static void _init();
 

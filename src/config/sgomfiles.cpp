@@ -70,7 +70,7 @@ std::optional<SGOMFiles::DataEntryFileInfo> SGOMFiles::readSGOMDataEntryFile(con
 
     while(!in.atEnd()) {
 
-        if(!read_SGOM_data_entry_file_loop(filename, result, section, in)) return std::nullopt;
+        if(!_read_SGOM_data_entry_file_loop(filename, result, section, in)) return std::nullopt;
     }
 
     return result;
@@ -192,15 +192,30 @@ void SGOMFiles::writeSGOMConfigFile(const ConfigFileInfo& info) {
     writeSGOMConfigFile(_base_path + "/config/sgom.conf", info);
 }
 
-bool SGOMFiles::read_SGOM_data_entry_file_loop(const std::string& filename,
-                                          SGOMFiles::DataEntryFileInfo& result,
-                                          std::string& section, QTextStream& in) {
+void SGOMFiles::writeSGOMDataFile(const std::string& filename, const DataFileInfo& info) {
+
+    std::ofstream file(filename);
+
+    for(auto&& section_pair : info) {
+
+        file << '[' << section_pair.first << ']' << std::endl;
+
+        for(auto&& p : section_pair.second) {
+
+            file << p.first << '=' << p.second << std::endl;
+        }
+    }
+}
+
+bool SGOMFiles::_read_SGOM_data_entry_file_loop(const std::string& filename,
+                                                SGOMFiles::DataEntryFileInfo& result,
+                                                std::string& section, QTextStream& in) {
 
 
     QString in_s = in.readLine();
 
     if(in_s.size() == 0) return true;
-    if(in_s.front() == ';') return true;
+    if(in_s[0] == ';') return true;
 
     int start_brac_count = in_s.count('[');
     int end_brac_count = in_s.count(']');
@@ -215,7 +230,7 @@ bool SGOMFiles::read_SGOM_data_entry_file_loop(const std::string& filename,
 
     if(start_brac_count == 1) {
 
-        if(!read_SGOM_data_entry_file_brackets(filename, s, section)) return false;
+        if(!_read_SGOM_data_entry_file_brackets(filename, s, section)) return false;
     }
     else {
 
@@ -227,7 +242,7 @@ bool SGOMFiles::read_SGOM_data_entry_file_loop(const std::string& filename,
     return true;
 }
 
-bool SGOMFiles::read_SGOM_data_entry_file_brackets(const std::string& filename, const std::string& s, std::string& section) {
+bool SGOMFiles::_read_SGOM_data_entry_file_brackets(const std::string& filename, const std::string& s, std::string& section) {
 
     auto st_it = std::find(s.begin(), s.end(), '[');
     auto end_it = std::find(s.begin(), s.end(), ']');
@@ -320,4 +335,22 @@ std::pair<std::string, std::string> SGOMFiles::_split_equal_sign(const std::stri
     if(eq_it != s.end()) second_str.assign(eq_it+1, s.end());
 
     return { first_str, second_str };
+}
+
+template <typename T>
+bool SGOMFiles::_write_SGOM_data_file(const std::string& filename, const T& info) {
+
+    std::ofstream file(filename);
+
+    for(auto&& section_pair : info) {
+
+        file << '[' << section_pair.first << ']' << std::endl;
+
+        for(auto&& p : section_pair.second) {
+
+            file << p.first << '=' << p.second << std::endl;
+        }
+    }
+
+    return true;
 }

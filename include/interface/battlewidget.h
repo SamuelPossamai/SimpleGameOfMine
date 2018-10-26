@@ -107,7 +107,8 @@ public:
      * \param f Factory to create the unit animation
      * \param team Team of the unit that will be added
      */
-    void addUnit(UnitInfo *i, UnitController *c, UnitAnimationItemFactory *f, UIntegerType team);
+    void addUnit(UnitInfo *i, UnitController *c, UnitAnimationItemFactory *f,
+                 const UnitAttributes& attr, UIntegerType level, UIntegerType team);
 
     /*!
      * \brief Add a creature to the graphics scene and to the battle engine
@@ -117,7 +118,7 @@ public:
      * \sa addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory, UIntegerType)
      * \return true if it succeds, false otherwise(It can fail if the creature type is invalid)
      */
-    bool addCreature(std::string name, UIntegerType level, UIntegerType team);
+    bool addCreature(std::string name, const UnitAttributes& attr, UIntegerType level, UIntegerType team);
 
     /*!
      * \brief Add a hero to the graphics scene and to the battle engine
@@ -127,7 +128,7 @@ public:
      * \sa addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory, UIntegerType)
      * \return true if it succeds, false otherwise(It can fail if the job/class is invalid)
      */
-    bool addHero(std::string name, const Character::Attributes& attr, UIntegerType team);
+    bool addHero(std::string name, const Character::Attributes& attr, UIntegerType level, UIntegerType team);
 
     /*!
      * \brief Add a hero to the graphics scene and to the battle engine
@@ -135,7 +136,7 @@ public:
      * \param team Hero's team
      * \return true if it succeds, false otherwise(It can fail if the hero has an invalid job/class)
      */
-    bool addHero(const Character& c, UIntegerType team) { return addHero(c.className(), c.attributes(), team); }
+    bool addHero(const Character& c, UIntegerType team) { return addHero(c.className(), c.attributes(), c.level(), team); }
 
     void addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
                        const Unit *creator, Projectile::AngleType dir, Projectile::PointType pos,

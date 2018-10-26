@@ -89,5 +89,7 @@
         <file>icons/mage.png</file>
         <file>knight_block.png</file>
         <file>shield_icon.png</file>
+        <file>zu_walking_1.png</file>
+        <file>zu_walking_2.png</file>
     </qresource>
 </RCC>

@@ -94,13 +94,18 @@ public:
 
     void writeSGOMConfigFile(const ConfigFileInfo& info);
 
+    static void writeSGOMDataFile(const std::string& filename, const DataFileInfo& info);
+
 private:
 
-    static bool read_SGOM_data_entry_file_loop(const std::string& filename,
-                                          DataEntryFileInfo& result,
-                                          std::string& section, QTextStream& in);
+    static bool _read_SGOM_data_entry_file_loop(const std::string& filename,
+                                                DataEntryFileInfo& result,
+                                                std::string& section, QTextStream& in);
 
-    static bool read_SGOM_data_entry_file_brackets(const std::string& filename, const std::string& s, std::string& section);
+    static bool _read_SGOM_data_entry_file_brackets(const std::string& filename, const std::string& s, std::string& section);
+
+    template <typename T>
+    static bool _write_SGOM_data_file(const std::string& filename, const T& info);
 
     bool _create_dir_if_missing(const std::string& dir_name);
 

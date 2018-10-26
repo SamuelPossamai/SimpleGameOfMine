@@ -10,7 +10,7 @@
 
 using namespace unitsinfo;
 
-Knight::MemoryManager Knight::_copies;
+Knight *Knight::_info = nullptr;
 
 Knight::~Knight() {
 
@@ -18,7 +18,7 @@ Knight::~Knight() {
     skill::BasicAttack::MemoryInterface::noLongerDepend(90, false);
 }
 
-Knight::Knight(const Attributes& attr) : UnitClassInfo(attr) {
+Knight::Knight() {
 
     addSkill(skill::Walk::MemoryInterface::dependentGet(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
     addSkill(skill::BasicAttack::MemoryInterface::dependentGet(80, false), QPixmap(":/sword_image.png").scaled(50, 50));
@@ -34,12 +34,9 @@ Knight::Knight(const Attributes& attr) : UnitClassInfo(attr) {
     icch.changeImage(im);
 
     addSkill(skill::KnightBlock::getSkill(), QPixmap::fromImage(im));
-
-    calculateInfo();
 }
 
-Knight::SpeedType Knight::speedCalculate() const {
+Knight::SpeedType Knight::speedCalculate(const Attributes& attr, UIntegerType) const {
 
-    return 45 + 0.7*std::sqrt(attributes().agility()*attributes().strength()) +
-            0.1*(attributes().dexterity() + attributes().agility());
+    return 45 + 0.7*std::sqrt(attr.agility()*attr.strength()) + 0.1*(attr.dexterity() + attr.agility());
 }

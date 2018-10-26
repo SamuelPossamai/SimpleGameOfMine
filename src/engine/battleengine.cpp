@@ -18,9 +18,10 @@ BattleEngine::~BattleEngine() {
     for(auto& v : _objects) delete v.object;
 }
 
-Unit *BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team) {
+Unit *BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller,
+                            const UnitAttributes& attr, UIntegerType level, UIntegerType team) {
 
-    Unit *u = new Unit(unit_info, controller, &_map, team, _interface);
+    Unit *u = new Unit(unit_info, controller, &_map, _interface, attr, level, team);
     _map.resolvePendings();
 
     _objects.push_back(ContainerContent{ u, 0 });
@@ -71,7 +72,7 @@ void BattleEngine::unitDeathEvent(Unit *u) {
         _max_speed = 1;
         for(UIntegerType i = 0; i < _map.unitsNumber(); i++) {
 
-            Unit::SpeedType speed = _map.unitAccess(i)->unitInfo()->speed();
+            Unit::SpeedType speed = _map.unitAccess(i)->baseSpeed();
             if(speed > _max_speed) _max_speed = speed;
         }
     }

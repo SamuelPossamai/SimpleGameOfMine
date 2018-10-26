@@ -3,8 +3,9 @@
 #include "enginemap.h"
 #include "uniteffect.h"
 
-Unit::Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, UIntegerType team, BattleWidget *i) :
-    Base(info, m), _team(team), _controller(controller), _skill(info->skills()), _interface(i) {
+Unit::Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, BattleWidget *i,
+           const Attributes& attr, UIntegerType level, UIntegerType team) :
+    Base(info, m, attr, level), _team(team), _controller(controller), _skill(info->skills()), _interface(i) {
 
 }
 

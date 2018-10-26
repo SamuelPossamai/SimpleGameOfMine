@@ -5,7 +5,7 @@
 #include <optional>
 #include <tuple>
 
-#include <engine/unitsinfo/unitclassinfo.h>
+#include "unitinfo.h"
 
 namespace gameinfo {
 
@@ -13,14 +13,13 @@ class Jobs {
 
 public:
 
-    using Info = std::tuple<unitsinfo::UnitClassInfo *, UnitAnimationItemFactory *>;
-    using Attributes = unitsinfo::UnitClassInfo::Attributes;
+    using Info = std::tuple<UnitInfo *, UnitAnimationItemFactory *>;
 
-    static std::optional<Info> get(std::string name, const Attributes& attr);
+    static std::optional<Info> get(std::string name);
 
 private:
 
-    using GetJobFunctionType = Info (*)(const Attributes&);
+    using GetJobFunctionType = Info (*)();
 
     static void _init();
 

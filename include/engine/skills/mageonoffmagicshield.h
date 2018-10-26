@@ -3,7 +3,6 @@
 #define SKILLS_MAGEONOFFMAGICSHIELD_H
 
 #include "effects/magicshield.h"
-#include "unitsinfo/unitclassinfo.h"
 #include "unitskill.h"
 
 namespace skill {

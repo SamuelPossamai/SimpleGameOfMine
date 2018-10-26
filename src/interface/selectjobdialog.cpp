@@ -42,7 +42,7 @@ void SelectJobDialog::on_buttonBox_accepted() {
     bool can_change = true;
     for(UIntegerType i = 0; i < Character::Attributes::statsCount(); i++) {
 
-        if(_char.attributes().stats[i] < req_stats[i]) {
+        if(_char.attributes().getAttributeValue(i) < req_stats[i]) {
 
             can_change = false;
             break;

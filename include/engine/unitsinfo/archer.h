@@ -13,29 +13,22 @@ namespace unitsinfo {
 
 class Archer : public Fighter, public GenericMemoryManager::ManagedObject {
 
-    Archer(const Attributes& attr) : Fighter(attr) {
+    Archer() {
 
         addSkill(skill::Shoot::getSkill(), QPixmap(":/arrow_projectile_image.png"));
-
-        calculateInfo();
     }
 
 public:
 
-    static Archer *getInfo(Attributes attr) { return static_cast<Archer *>(getObjCopy(Archer(attr))); }
+    static Archer *getInfo() { return static_cast<Archer *>(getObjCopy(Archer())); }
 
     virtual ~Archer() override = default;
 
 protected:
 
-    virtual HealthType healthCalculate() const override { return 150 + 11*attributes().vitality(); }
+    virtual HealthType healthCalculate(const Attributes& attr, UIntegerType) const override { return 150 + 11*attr.vitality(); }
 
-    virtual bool manObjLessCompare(const GenericMemoryManager::ManagedObject *obj) const override {
-
-        return *this < *static_cast<const Archer *>(obj);
-    }
-
-    virtual GenericMemoryManager::ManagedObject *manObjClone() const override { return new Archer(attributes()); }
+    virtual GenericMemoryManager::ManagedObject *manObjClone() const override { return new Archer(); }
 };
 
 } /* namespace unitsinfo */

@@ -46,7 +46,7 @@ void SelectUserInterface::activate() {
 
         for(UIntegerType j = 0; j < Character::Attributes::statsCount(); j++) {
 
-            _ui->tableWidget->setItem(i, j + 3, new QTableWidgetItem(QString::number(ch.attributes().stats[j])));
+            _ui->tableWidget->setItem(i, j + 3, new QTableWidgetItem(QString::number(ch.attributes().getAttributeValue(j))));
         }
     }
 }

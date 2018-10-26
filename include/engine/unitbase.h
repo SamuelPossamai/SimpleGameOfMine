@@ -17,13 +17,14 @@ public:
     using EnergyType = Traits<Unit>::EnergyType;
     using AttackType = Traits<Unit>::AttackType;
     using DefenseType = Traits<Unit>::DefenseType;
+    using Attributes = UnitAttributes;
 
     /*!
      * \brief Construct an UnitBase passing UnitInfo, UnitInfo must be valid
      * \param info UnitInfo with the basic information of the type of this unit
      * \param m Map where the unit is
      */
-    UnitBase(const UnitInfo *info, EngineMap *m);
+    UnitBase(const UnitInfo *info, EngineMap *m, const Attributes& attr, UIntegerType level);
 
     virtual ~UnitBase() {}
 
@@ -50,13 +51,19 @@ public:
      * \brief Return the max amount of healht the unit can have
      * \return The max value for health this unit can have
      */
-    HealthType maxHealth() const { return _info->health(); }
+    HealthType maxHealth() const { return _info->health(attributes(), level()); }
 
     void setEnergy(EnergyType energy) { _energy = energy; }
 
     EnergyType energy() const { return _energy; }
 
-    EnergyType maxEnergy() const { return _info->energy(); }
+    EnergyType maxEnergy() const { return _info->energy(attributes(), level()); }
+
+    AttackType baseDamage() const { return _info->baseAttack(attributes(), level()); }
+
+    UIntegerType level() const { return _level; }
+
+    const Attributes& attributes() const { return _attr; }
 
 private:
 
@@ -64,6 +71,8 @@ private:
 
     HealthType _health;
     EnergyType _energy;
+    UIntegerType _level;
+    UnitAttributes _attr;
 };
 
 #endif // UNITBASE_H

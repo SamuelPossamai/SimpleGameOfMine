@@ -115,13 +115,13 @@ void GameDefaultScreen::_start_battle(gameinfo::CreatureMap *m) {
 
     _result = 1;
 
-    for(const Character& c : _chars) bw->addHero(c.className(), c.attributes(), 0);
+    for(const Character& c : _chars) bw->addHero(c, 0);
 
     _xp_for_victory = 0;
     for(const gameinfo::CreatureMap::CreaturesContainerContent& creature_info : m->getCreatures()) {
 
         _xp_for_victory += std::ceil(std::pow(creature_info.creature_level + 3, 1.5));
-        bw->addCreature(creature_info.creature_name, creature_info.creature_level, 1);
+        bw->addCreature(creature_info.creature_name, UnitAttributes(), creature_info.creature_level, 1);
     }
 
     bw->start();

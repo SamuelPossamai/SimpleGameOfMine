@@ -102,7 +102,8 @@ SOURCES += src/main.cpp \
     src/interface/configurationscreen.cpp \
     src/interface/selectuserinterfacebase.cpp \
     src/engine/projectiles/missile.cpp \
-    src/engine/skills/knightblock.cpp
+    src/engine/skills/knightblock.cpp \
+    src/animation/animationfactories/unit/zuanimationfactory.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -152,7 +153,6 @@ HEADERS += include/interface/mainwindow.h \
     include/utility/imagecolorchange.h \
     include/utility/random.h \
     include/memory/onecopymemorymanager.h \
-    include/engine/unitsinfo/unitclassinfo.h \
     include/memory/memorymanager.h \
     include/memory/onecopymemorymanagerbasic.h \
     include/gameinfo/creatures.h \
@@ -227,7 +227,10 @@ HEADERS += include/interface/mainwindow.h \
     include/interface/librarywidgetinfotab.h \
     include/interface/configurationscreen.h \
     include/engine/effects/shield.h \
-    include/engine/skills/knightblock.h
+    include/engine/skills/knightblock.h \
+    include/animation/animationfactories/unit/zuanimationfactory.h \
+    include/engine/unitsinfo/zu.h \
+    include/engine/unitattributes.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc

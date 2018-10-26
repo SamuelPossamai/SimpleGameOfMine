@@ -18,7 +18,7 @@ UIntegerType Thrust::action(Unit *u, EngineMap *m, ProjectileCreationInterface&,
 
     m->unitsInRange(v, { x, y }, 0.1*u->size());
 
-    if(v.size() > 1) for(Unit *unit : v) if(unit->team() != u->team()) u->attack(unit, u->unitInfo()->baseAttack());
+    if(v.size() > 1) for(Unit *unit : v) if(unit->team() != u->team()) u->attack(unit, u->baseDamage());
 
     return Walk::doAction(u, m, info, u->angle());
 }

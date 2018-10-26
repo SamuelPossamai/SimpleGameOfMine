@@ -8,14 +8,11 @@
 
 using namespace unitsinfo;
 
-Ninja::MemoryManager Ninja::_copies;
+Ninja *Ninja::_info = nullptr;
 
-Ninja::Ninja(const Attributes& attr) : Fighter(attr) {
+Ninja::Ninja() {
 
     addSkill(skill::Teleport::getSkill(), QPixmap(":/wing_boot_blue.png").scaled(50, 50));
     addSkill(skill::OnOffLastEscape::getSkill(), QPixmap(":/onofflastescape_icon.png").scaled(50, 50));
-
-    setEnergy(100);
-    calculateInfo();
 }
 

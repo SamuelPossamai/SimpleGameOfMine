@@ -23,6 +23,8 @@ public:
 
     virtual void redraw() override {
 
+        if(object() == nullptr) return;
+
         while(!_events.empty()) {
 
             (this->*(_events.front().first))(_events.front().second);

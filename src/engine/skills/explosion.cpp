@@ -2,7 +2,6 @@
 #include <cmath>
 
 #include "utility/random.h"
-#include "unitsinfo/unitclassinfo.h"
 #include "skills/fireball.h"
 #include "skills/explosion.h"
 #include "unit.h"

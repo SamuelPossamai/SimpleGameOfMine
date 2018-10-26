@@ -11,11 +11,13 @@
 #include <engine/unitsinfo/monsterplant.h>
 #include <gameinfo/creatures.h>
 
+#include "animationfactories/unit/zuanimationfactory.h"
+
 using namespace gameinfo;
 
 std::map<std::string, Creatures::GetCreatureFunctionType> Creatures::_creatures;
 
-std::optional<Creatures::Info> Creatures::get(std::string name, UIntegerType level) {
+std::optional<Creatures::Info> Creatures::get(std::string name) {
 
     if(_creatures.empty()) _init();
 
@@ -23,61 +25,61 @@ std::optional<Creatures::Info> Creatures::get(std::string name, UIntegerType lev
 
     if(func_it == _creatures.end()) return std::nullopt;
 
-    return (func_it->second)(level);
+    return (func_it->second)();
 }
 
-static Creatures::Info _get_slime_info(UIntegerType level) {
+static Creatures::Info _get_slime_info() {
 
-    return Creatures::Info(unitsinfo::Slime::getInfo(level),
+    return Creatures::Info(unitsinfo::Slime::getInfo(),
                            unitanimationfactory::SlimeAnimationFactory::getFactory(),
                            controller::AI::Slime::getController());
 }
 
-static Creatures::Info _get_blue_slime_info(UIntegerType level) {
+static Creatures::Info _get_blue_slime_info() {
 
-    return Creatures::Info(unitsinfo::Slime::getInfo(level, unitsinfo::Slime::Type::Fast),
+    return Creatures::Info(unitsinfo::Slime::getInfo(unitsinfo::Slime::Type::Fast),
                            unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(Qt::cyan),
                            controller::AI::Slime::getController());
 }
 
-static Creatures::Info _get_purple_slime_info(UIntegerType level) {
+static Creatures::Info _get_purple_slime_info() {
 
-    return Creatures::Info(unitsinfo::Slime::getInfo(level, unitsinfo::Slime::Type::Immortal),
+    return Creatures::Info(unitsinfo::Slime::getInfo(unitsinfo::Slime::Type::Immortal),
                            unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(Qt::magenta),
                            controller::AI::Slime::getController());
 }
 
-static Creatures::Info _get_orange_slime_info(UIntegerType level) {
+static Creatures::Info _get_orange_slime_info() {
 
-    return Creatures::Info(unitsinfo::Slime::getInfo(level, unitsinfo::Slime::Type::Crazy),
+    return Creatures::Info(unitsinfo::Slime::getInfo(unitsinfo::Slime::Type::Crazy),
                            unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(QColor(255, 150, 0)),
                            controller::AI::Crazy::getController());
 }
 
-static Creatures::Info _get_white_slime_info(UIntegerType level) {
+static Creatures::Info _get_white_slime_info() {
 
-    return Creatures::Info(unitsinfo::Slime::getInfo(level, unitsinfo::Slime::Type::Ghost),
+    return Creatures::Info(unitsinfo::Slime::getInfo(unitsinfo::Slime::Type::Ghost),
                            unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(Qt::white),
                            controller::AI::Slime::getController());
 }
 
-static Creatures::Info _get_yellow_slime_info(UIntegerType level) {
+static Creatures::Info _get_yellow_slime_info() {
 
-    return Creatures::Info(unitsinfo::Slime::getInfo(level, unitsinfo::Slime::Type::Normal),
+    return Creatures::Info(unitsinfo::Slime::getInfo(unitsinfo::Slime::Type::Normal),
                            unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(Qt::yellow),
                            controller::AI::TimidSlime::getController());
 }
 
-static Creatures::Info _get_pink_slime_info(UIntegerType level) {
+static Creatures::Info _get_pink_slime_info() {
 
-    return Creatures::Info(unitsinfo::Slime::getInfo(level, unitsinfo::Slime::Type::Normal),
+    return Creatures::Info(unitsinfo::Slime::getInfo(unitsinfo::Slime::Type::Normal),
                            unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(QColor(255, 153, 255)),
                            controller::AI::PacifistSlime::getController());
 }
 
-static Creatures::Info _get_monster_plant_info(UIntegerType level) {
+static Creatures::Info _get_monster_plant_info() {
 
-    return Creatures::Info(unitsinfo::MonsterPlant::getInfo(level),
+    return Creatures::Info(unitsinfo::MonsterPlant::getInfo(),
                            unitanimationfactory::MonsterFlowerAnimationFactory::getFactory(),
                            controller::AI::MonsterPlant::getController());
 }
