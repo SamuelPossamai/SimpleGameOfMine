@@ -25,10 +25,25 @@ public:
 
 protected:
 
-    virtual HealthType healthCalculate(const Attributes&, UIntegerType level) const override { return 400 + 35*level; }
+    virtual HealthType healthCalculate(const Attributes& attr, UIntegerType level) const override {
+
+        return 400 + 35*attr.vitality() + attr.strength() + 2*level;
+    }
     virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const override { return 0; }
-    virtual AttackType attackCalculate(const Attributes&, UIntegerType level) const override { return 15 + 1.2*level; }
-    virtual SpeedType speedCalculate(const Attributes&, UIntegerType level) const override { return 60 + level; }
+    virtual AttackType attackCalculate(const Attributes& attr, UIntegerType) const override {
+
+        return 15 + 1.1*attr.strength() + 0.1*attr.dexterity();
+    }
+    virtual AccuracyType accuracyCalculate(const Attributes& attr, UIntegerType) const override {
+
+        return 5 + 0.3*attr.dexterity();
+    }
+    virtual MagicPowerType magicPowerCalculate(const Attributes&, UIntegerType) const override { return 0; }
+    virtual MagicControlType magicControlCalculate(const Attributes&, UIntegerType) const override { return 0; }
+    virtual SpeedType speedCalculate(const Attributes& attr, UIntegerType) const override {
+
+        return 60 + attr.agility() + 0.1*attr.dexterity();
+    }
     virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const override { return 30; }
 
 private:

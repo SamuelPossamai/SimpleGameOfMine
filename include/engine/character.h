@@ -18,7 +18,7 @@ public:
 
     using Attributes = UnitAttributes;
 
-    static constexpr UIntegerType freePointsPerLevel() { return 4; }
+    static constexpr UIntegerType freePointsPerLevel() { return UnitAttributes::freePointsPerLevel(); }
 
     /*!
      * \brief Construct a Character object passing the character name

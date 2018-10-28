@@ -10,9 +10,9 @@ class Zu : public UnitInfo {
 
     Zu();
 
-public:
+    virtual ~Zu() override;
 
-    virtual ~Zu();
+public:
 
     static Zu *getInfo() {
 
@@ -25,11 +25,29 @@ public:
 
 protected:
 
-    virtual HealthType healthCalculate(const Attributes&, UIntegerType level) const override { return 100 + 10*level; }
-    virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const override { return 0; }
-    virtual AttackType attackCalculate(const Attributes&, UIntegerType level) const override { return 5 + 1*level; }
-    virtual SpeedType speedCalculate(const Attributes&, UIntegerType level) const override { return 60 + level; }
-    virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const override { return 22; }
+    virtual HealthType healthCalculate(const Attributes& attr, UIntegerType level) const override {
+
+        return 80 + 5*attr.vitality() + level;
+    }
+    virtual EnergyType energyCalculate(const Attributes& attr, UIntegerType level) const override {
+
+        return 80 + 5*attr.wisdom() + level;
+    }
+    virtual AttackType attackCalculate(const Attributes& attr, UIntegerType level) const override {
+
+        return 5 + attr.strength() + level/4;
+    }
+    virtual AccuracyType accuracyCalculate(const Attributes& attr, UIntegerType) const override {
+
+        return 15 + attr.dexterity();
+    }
+    virtual MagicPowerType magicPowerCalculate(const Attributes&, UIntegerType) const override { return 0; }
+    virtual MagicControlType magicControlCalculate(const Attributes&, UIntegerType) const override { return 0; }
+    virtual SpeedType speedCalculate(const Attributes& attr, UIntegerType level) const override {
+
+        return 60 + attr.agility() + level/4;
+    }
+    virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const override { return 18; }
 
 private:
 

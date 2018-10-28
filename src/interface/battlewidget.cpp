@@ -42,7 +42,7 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */, UIntegerType *res
     setStyleSheet("background-color:lightGray;");
 
     _input_interface->enable();
-
+    _gview->setFocus();
 }
 
 BattleWidget::~BattleWidget() {
@@ -56,6 +56,12 @@ BattleWidget::~BattleWidget() {
 }
 
 void BattleWidget::showSkillButtons(const UnitInfo *info) {
+
+    if(info->skills() == 0) {
+
+        _current_buttons = 0;
+        return;
+    }
 
     static const auto button_size = Traits<BattleWidget>::skillButtonSize;
 
@@ -72,10 +78,14 @@ void BattleWidget::showSkillButtons(const UnitInfo *info) {
 
     _current_buttons = info->skills();
 
+    _skill_buttons.front()->show();
+
     _update_buttons();
 
     for(UIntegerType i = 0; i < _current_buttons; i++) _skill_buttons[i]->setIcon(QIcon(info->skillIcon(i)));
     for(UIntegerType i = _current_buttons; i < _skill_buttons.size(); i++) _skill_buttons[i]->hide();
+
+    _gview->setFocus();
 }
 
 void BattleWidget::hideSkillButtons() {
@@ -117,6 +127,7 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
         else if(event->key() == Qt::Key_Minus) zoomOut();
     }
     else if(event->key() >= Qt::Key_1 && event->key() <= Qt::Key_9) _skill_button_clicked(event->key() - Qt::Key_1);
+    else MainWidget::keyPressEvent(event);
 }
 
 void BattleWidget::graphicsViewMouseMoveEvent(QMouseEvent *event) {
@@ -263,6 +274,9 @@ void BattleWidget::on_returnButton_clicked() {
 }
 
 void BattleWidget::_update_buttons() {
+
+    if(_skill_buttons.empty()) return;
+    if(_skill_buttons.front()->isHidden()) return;
 
     static const auto button_size = Traits<BattleWidget>::skillButtonSize;
 

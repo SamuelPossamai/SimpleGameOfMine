@@ -23,6 +23,8 @@ ConfigurationScreen::ConfigurationScreen(MainWindow *parent) : MainWidget(parent
     }
     else ui->characterSelectionScreenComboBox->setCurrentIndex(mode_id);
 
+    ui->windowFullscreenCheckBox->setChecked(map["Game Start"]["fullscreen"] == "yes");
+
     _saved = true;
 }
 
@@ -54,6 +56,7 @@ void ConfigurationScreen::on_saveButton_clicked() {
     SGOMFiles::ConfigFileInfo cfi;
 
     cfi["Character Selection Screen"]["mode"] = ui->characterSelectionScreenComboBox->currentText().toStdString();
+    cfi["Game Start"]["fullscreen"] = ui->windowFullscreenCheckBox->isChecked() ? "yes" : "no";
 
     SGOMFiles::get()->writeSGOMConfigFile(cfi);
 }

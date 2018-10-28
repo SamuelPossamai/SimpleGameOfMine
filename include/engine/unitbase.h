@@ -17,6 +17,9 @@ public:
     using EnergyType = Traits<Unit>::EnergyType;
     using AttackType = Traits<Unit>::AttackType;
     using DefenseType = Traits<Unit>::DefenseType;
+    using AccuracyType = UnitInfo::AccuracyType;
+    using MagicPowerType = UnitInfo::MagicPowerType;
+    using MagicControlType = UnitInfo::MagicControlType;
     using Attributes = UnitAttributes;
 
     /*!
@@ -60,6 +63,12 @@ public:
     EnergyType maxEnergy() const { return _info->energy(attributes(), level()); }
 
     AttackType baseDamage() const { return _info->baseAttack(attributes(), level()); }
+
+    AccuracyType accuracy() const { return _info->accuracy(attributes(), level()); }
+
+    MagicPowerType magicPower() const { return _info->magicPower(attributes(), level()); }
+
+    MagicControlType magicControl() const { return _info->magicControl(attributes(), level()); }
 
     UIntegerType level() const { return _level; }
 

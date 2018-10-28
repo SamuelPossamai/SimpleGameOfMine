@@ -8,11 +8,9 @@
 
 namespace skill {
 
-Shoot *Shoot::_skill = nullptr;
-
 UIntegerType Shoot::action(Unit *u, EngineMap *, ProjectileCreationInterface& pci, const Info& info) {
 
-    Unit::AngleType accuracy = M_PI/(2+u->attributes().dexterity()/5);
+    Unit::AngleType accuracy = 15*M_PI/u->accuracy();
 
     if(info.step < 25) {
 
@@ -29,12 +27,12 @@ UIntegerType Shoot::action(Unit *u, EngineMap *, ProjectileCreationInterface& pc
 
     p_info.durability = 13;
     p_info.size = 15;
-    p_info.speed = 40 + u->attributes().strength()/3 + u->baseSpeed()/5;
-    p_info.damage = 10 + ( 3*u->attributes().strength() + 2*u->attributes().dexterity() )/15;
+    p_info.speed = 30 + u->baseDamage()/3 + u->baseSpeed()/5;
+    p_info.damage = u->baseDamage()/3 + u->accuracy()/10;
 
     Unit::AngleType arrow_angle = u->angle() + utility::Random::realDistribution(-accuracy, accuracy);
 
-    pci.create("arrow", u, p_info, arrow_angle, { u->x() + dx, u->y() + dy }, arrow_angle);
+    pci.create(_projectile_type, u, p_info, arrow_angle, { u->x() + dx, u->y() + dy }, arrow_angle);
 
     return 20;
 }

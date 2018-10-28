@@ -30,9 +30,9 @@ void Slime::init(Unit *u) const {
     if(_type == Type::Immortal) u->addEffect(effect::Regeneration::getEffect(0.1*u->maxHealth(), 100));
 }
 
-Slime::HealthType Slime::healthCalculate(const Attributes&, UIntegerType level) const {
+Slime::HealthType Slime::healthCalculate(const Attributes& attr, UIntegerType level) const {
 
-    UIntegerType value = 100 + 10*level;
+    UIntegerType value = 100 + 10*attr.vitality() + 0.5*attr.strength() + level;
 
     switch(_type) {
 
@@ -55,9 +55,9 @@ Slime::HealthType Slime::healthCalculate(const Attributes&, UIntegerType level) 
     return value;
 }
 
-Slime::AttackType Slime::attackCalculate(const Attributes&, UIntegerType level) const  {
+Slime::AttackType Slime::attackCalculate(const Attributes& attr, UIntegerType) const  {
 
-    UIntegerType value = 5 + level;
+    UIntegerType value = 5 + 0.9*attr.strength() + 0.2*attr.dexterity();
 
     switch(_type) {
 
@@ -80,9 +80,9 @@ Slime::AttackType Slime::attackCalculate(const Attributes&, UIntegerType level) 
     return value;
 }
 
-Slime::SpeedType Slime::speedCalculate(const Attributes&, UIntegerType level) const {
+Slime::SpeedType Slime::speedCalculate(const Attributes& attr, UIntegerType) const {
 
-    UIntegerType value = 100 + 2*level;
+    UIntegerType value = 100 + 1.6*attr.agility() + 0.4*attr.dexterity();
 
     switch(_type) {
 

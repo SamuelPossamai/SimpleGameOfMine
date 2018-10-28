@@ -20,6 +20,9 @@ public:
     using EnergyType = Traits<Unit>::EnergyType;
     using AttackType = Traits<Unit>::AttackType;
     using DefenseType = Traits<Unit>::DefenseType;
+    using AccuracyType = AttackType;
+    using MagicPowerType = AttackType;
+    using MagicControlType = MagicPowerType;
     using SizeType = Traits<Unit>::SizeType;
     using SpeedType = Traits<Unit>::SpeedType;
     using Attributes = UnitAttributes;
@@ -48,6 +51,12 @@ public:
      * \return The unit's base attack
      */
     AttackType baseAttack(const Attributes& attr, UIntegerType level) const { return attackCalculate(attr, level); }
+
+    AccuracyType accuracy(const Attributes& attr, UIntegerType level) const { return accuracyCalculate(attr, level); }
+
+    MagicPowerType magicPower(const Attributes& attr, UIntegerType level) const { return magicPowerCalculate(attr, level); }
+
+    MagicControlType magicControl(const Attributes& attr, UIntegerType level) const { return magicControlCalculate(attr, level); }
 
     /*!
      * \brief Return the size of the unit, the unit is represented by a circle in the engine
@@ -112,6 +121,9 @@ protected:
     virtual HealthType healthCalculate(const Attributes&, UIntegerType) const = 0;
     virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const = 0;
     virtual AttackType attackCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual AccuracyType accuracyCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual MagicPowerType magicPowerCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual MagicControlType magicControlCalculate(const Attributes&, UIntegerType) const = 0;
     virtual SpeedType speedCalculate(const Attributes&, UIntegerType) const = 0;
     virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const = 0;
 

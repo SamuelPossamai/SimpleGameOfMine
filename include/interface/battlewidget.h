@@ -247,6 +247,6 @@ private:
     BattleWidget *_bw;
 };
 
-#include "battlewidget_inputmanager.h"
-
 #endif // BATTLEWIDGET_H
+
+#include "battlewidget_inputmanager.h"

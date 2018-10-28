@@ -103,7 +103,12 @@ SOURCES += src/main.cpp \
     src/interface/selectuserinterfacebase.cpp \
     src/engine/projectiles/missile.cpp \
     src/engine/skills/knightblock.cpp \
-    src/animation/animationfactories/unit/zuanimationfactory.cpp
+    src/animation/animationfactories/unit/zuanimationfactory.cpp \
+    src/engine/unitattributes.cpp \
+    src/engine/unitsinfo/zu.cpp \
+    src/engine/controllers/ai/zucontroller.cpp \
+    src/gameinfo/maps/cave.cpp \
+    src/animation/animationfactories/projectile/shurikenanimationfactory.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -230,7 +235,10 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/knightblock.h \
     include/animation/animationfactories/unit/zuanimationfactory.h \
     include/engine/unitsinfo/zu.h \
-    include/engine/unitattributes.h
+    include/engine/unitattributes.h \
+    include/engine/controllers/ai/zucontroller.h \
+    include/gameinfo/maps/cave.h \
+    include/animation/animationfactories/projectile/shurikenanimationfactory.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc

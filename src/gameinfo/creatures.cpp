@@ -12,6 +12,8 @@
 #include <gameinfo/creatures.h>
 
 #include "animationfactories/unit/zuanimationfactory.h"
+#include "engine/controllers/ai/zucontroller.h"
+#include "engine/unitsinfo/zu.h"
 
 using namespace gameinfo;
 
@@ -84,6 +86,13 @@ static Creatures::Info _get_monster_plant_info() {
                            controller::AI::MonsterPlant::getController());
 }
 
+static Creatures::Info _get_zu_info() {
+
+    return Creatures::Info(unitsinfo::Zu::getInfo(),
+                           unitanimationfactory::ZuAnimationFactory::getFactory(),
+                           controller::AI::ZuController::getController());
+}
+
 void Creatures::_init() {
 
     _creatures["slime"] = _get_slime_info;
@@ -94,4 +103,5 @@ void Creatures::_init() {
     _creatures["yellow slime"] = _get_yellow_slime_info;
     _creatures["pink slime"] = _get_pink_slime_info;
     _creatures["monster plant"] = _get_monster_plant_info;
+    _creatures["zu"] = _get_zu_info;
 }

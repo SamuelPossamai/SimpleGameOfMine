@@ -1,4 +1,7 @@
 
+#include <QKeyEvent>
+
+#include "config/sgomfiles.h"
 #include "mainwindow.h"
 #include "mainwidget.h"
 #include "interface_traits.h"
@@ -6,6 +9,7 @@
 MainWindow::MainWindow() {
 
     setGeometry(Traits<MainWindow>::x, Traits<MainWindow>::y, Traits<MainWindow>::width, Traits<MainWindow>::height);
+    if(SGOMFiles::get()->readSGOMConfigFile()["Game Start"]["fullscreen"] == "yes") this->showFullScreen();
 
     restoreProperties();
 }
@@ -44,6 +48,18 @@ void MainWindow::popWidget() {
         _widgets.back()->setFocus();
         _widgets.back()->show();
         _widgets.back()->activate();
+    }
+}
+
+void MainWindow::keyPressEvent(QKeyEvent* event) {
+
+    if(event->key() == Qt::Key_F12) {
+
+        this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
+    }
+    if(event->key() == Qt::Key_F11) {
+
+        this->setWindowState(this->windowState() ^ Qt::WindowMaximized);
     }
 }
 

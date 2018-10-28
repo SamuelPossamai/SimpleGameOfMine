@@ -36,6 +36,24 @@
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>&lt;h2&gt;&lt;b&gt;Game Start:&lt;/b&gt;&lt;/h2&gt;</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <widget class="QCheckBox" name="windowFullscreenCheckBox">
+           <property name="text">
+            <string>Fullscreen</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QLabel" name="label">
          <property name="text">
           <string>&lt;h2&gt;&lt;b&gt;Character Selection Screen:&lt;/b&gt;&lt;/h2&gt;</string>

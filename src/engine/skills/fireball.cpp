@@ -34,12 +34,12 @@ void Fireball::shoot(Unit *u, ProjectileCreationInterface& pci, Unit::AngleType 
 
     gameinfo::Projectiles::ProjectileInfo p_info;
 
-    p_info.durability = 40 + u->attributes().wisdom();
+    p_info.durability = u->magicPower();
     p_info.size = 17;
-    p_info.speed = 35 + u->attributes().wisdom()/3;
-    p_info.damage = 15 + ( 6*u->attributes().wisdom() + u->attributes().dexterity() )/15;
+    p_info.speed = 35 + u->magicPower()/3;
+    p_info.damage = u->magicPower();
 
-    Unit::AngleType accuracy = M_PI/(2+(4*u->attributes().dexterity() + u->attributes().wisdom())/20);
+    Unit::AngleType accuracy = 15*M_PI/(u->accuracy() + 0.8*u->magicControl());
 
     Unit::AngleType arrow_angle = angle + utility::Random::realDistribution(-accuracy, accuracy);
 

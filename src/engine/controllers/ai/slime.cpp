@@ -25,7 +25,7 @@ UIntegerType Slime::chooseSkill(const Unit *u, const EngineMap *m, UserInterface
         auto angle1 = atan2(RealType(closer_enemy->y()) - u->y(), RealType(closer_enemy->x()) - u->x());
         auto angle2 = u->angle();
 
-        if(EngineMap::angleDiff(angle1, angle2) < M_PI/2) return 2;
+        if(EngineMap::angleDiff(angle1, angle2) < M_PI/4) return 2;
     }
 
     return 0;

@@ -8,24 +8,15 @@ namespace skill {
 
 class Shoot : public UnitSkill {
 
-protected:
-
-    Shoot() : UnitSkill(true) {}
-
 public:
+
+    Shoot(const std::string& projectile_type) : UnitSkill(true), _projectile_type(projectile_type) {}
 
     virtual UIntegerType action(Unit*, EngineMap*, ProjectileCreationInterface&, const Info&) override;
 
-    static Shoot *getSkill() {
-
-        if(!_skill) _skill =  new Shoot;
-
-        return _skill;
-    }
-
 private:
 
-    static Shoot *_skill;
+    std::string _projectile_type;
 };
 
 } /* namespace skill */

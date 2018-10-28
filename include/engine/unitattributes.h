@@ -8,18 +8,20 @@ class UnitAttributes {
 
 public:
 
-    UnitAttributes() { for(UIntegerType i = 0; i < statsCount(); i++) _stats[i] = 0; }
-    UnitAttributes(const UnitAttributes&) = default;
-
-    ~UnitAttributes() = default;
-
-    UnitAttributes& operator=(const UnitAttributes&) = default;
+    static constexpr UIntegerType freePointsPerLevel() { return 4; }
 
     /*!
      * \brief Return the quantity of _stats
      * \return The quantity of _stats
      */
     static constexpr UIntegerType statsCount() { return sizeof(_stats)/sizeof(_stats[0]); }
+
+    UnitAttributes() { for(UIntegerType i = 0; i < statsCount(); i++) _stats[i] = 0; }
+    UnitAttributes(const UnitAttributes&) = default;
+
+    ~UnitAttributes() = default;
+
+    UnitAttributes& operator=(const UnitAttributes&) = default;
 
     void setStrength(UIntegerType s) { _stats[0] = s; }
     const UIntegerType& strength() const { return _stats[0]; }
@@ -49,6 +51,8 @@ public:
 
         return false;
     }
+
+    static UnitAttributes generateRandom(UIntegerType level);
 
 private:
 

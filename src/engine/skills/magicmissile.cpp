@@ -23,7 +23,7 @@ UIntegerType MagicMissile::action(Unit *u, EngineMap *, ProjectileCreationInterf
 
     if(info.step > 60) return 0;
 
-    Unit::AngleType missile_angle_precision = 2*M_PI/(1+(u->attributes().dexterity() + 3*u->attributes().wisdom())/10);
+    Unit::AngleType missile_angle_precision = 5*M_PI/(0.2*u->accuracy() + u->magicControl());
     Unit::AngleType missile_start_angle = u->angle() +
             utility::Random::realDistribution(-missile_angle_precision, missile_angle_precision);
 
@@ -32,13 +32,13 @@ UIntegerType MagicMissile::action(Unit *u, EngineMap *, ProjectileCreationInterf
 
     projectilefactory::MissileFactory::MissileInfo p_info;
 
-    p_info.durability = 10 + u->attributes().wisdom()/10;
+    p_info.durability = 0.3*u->magicPower();
     p_info.size = 20;
-    p_info.speed = 30 + u->attributes().wisdom()/4;
-    p_info.damage = 13 + ( 5*u->attributes().wisdom() + u->attributes().dexterity() )/15;
-    p_info.angular_speed = 0.05 + 0.002*u->attributes().wisdom();
+    p_info.speed = 30 + u->magicPower()/4;
+    p_info.damage = u->magicPower()/2;
+    p_info.angular_speed = 0.05 + 0.0015*u->magicControl();
 
-    Unit::AngleType accuracy = 2*M_PI/(1+(u->attributes().dexterity() + u->attributes().wisdom())/5);
+    Unit::AngleType accuracy = 20*M_PI/(u->accuracy() + u->magicControl());
 
     Unit::AngleType missile_angle = missile_start_angle + utility::Random::realDistribution(-accuracy, accuracy);
 

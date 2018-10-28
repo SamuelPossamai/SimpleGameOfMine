@@ -1,9 +1,9 @@
 
 #include <cmath>
 
-#include <gameinfo/maps/greenvalley.h>
-#include <gameinfo/maps/trainingground.h>
-
+#include "maps/greenvalley.h"
+#include "maps/trainingground.h"
+#include "maps/cave.h"
 #include "battlewidget.h"
 #include "characterinfodialog.h"
 #include "selectjobdialog.h"
@@ -73,6 +73,11 @@ void GameDefaultScreen::on_exploreButton2_clicked() {
     _start_battle(gameinfo::map::GreenValley::getMap());
 }
 
+void GameDefaultScreen::on_exploreButton3_clicked() {
+
+    _start_battle(gameinfo::map::Cave::getMap());
+}
+
 void GameDefaultScreen::on_strAddButton_clicked() {
 
     _assign_point(0);
@@ -121,7 +126,8 @@ void GameDefaultScreen::_start_battle(gameinfo::CreatureMap *m) {
     for(const gameinfo::CreatureMap::CreaturesContainerContent& creature_info : m->getCreatures()) {
 
         _xp_for_victory += std::ceil(std::pow(creature_info.creature_level + 3, 1.5));
-        bw->addCreature(creature_info.creature_name, UnitAttributes(), creature_info.creature_level, 1);
+        bw->addCreature(creature_info.creature_type,
+                        UnitAttributes::generateRandom(creature_info.creature_level), creature_info.creature_level, 1);
     }
 
     bw->start();

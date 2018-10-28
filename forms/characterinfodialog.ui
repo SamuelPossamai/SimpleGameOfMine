@@ -97,7 +97,7 @@ border-color: rgb(0, 0, 0);
      </property>
     </widget>
    </item>
-   <item row="12" column="0">
+   <item row="15" column="0">
     <widget class="QLabel" name="label_5">
      <property name="text">
       <string>Speed:</string>
@@ -118,7 +118,7 @@ border-color: rgb(0, 0, 0);
      </property>
     </widget>
    </item>
-   <item row="12" column="1" alignment="Qt::AlignRight">
+   <item row="15" column="1" alignment="Qt::AlignRight">
     <widget class="QLabel" name="speedLabel">
      <property name="text">
       <string>0</string>
@@ -160,14 +160,14 @@ border-color: rgb(0, 0, 0);
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
+   <item row="16" column="0">
     <widget class="QLabel" name="label_13">
      <property name="text">
       <string>Size:</string>
      </property>
     </widget>
    </item>
-   <item row="13" column="1" alignment="Qt::AlignRight">
+   <item row="16" column="1" alignment="Qt::AlignRight">
     <widget class="QLabel" name="sizeLabel">
      <property name="text">
       <string>0</string>
@@ -190,6 +190,48 @@ border-color: rgb(0, 0, 0);
    </item>
    <item row="10" column="1" alignment="Qt::AlignRight">
     <widget class="QLabel" name="energyLabel">
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="0">
+    <widget class="QLabel" name="label_12">
+     <property name="text">
+      <string>Accuracy:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="0">
+    <widget class="QLabel" name="label_14">
+     <property name="text">
+      <string>Magic Power:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="0">
+    <widget class="QLabel" name="label_15">
+     <property name="text">
+      <string>Magic Control:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="12" column="1" alignment="Qt::AlignRight">
+    <widget class="QLabel" name="accuracyLabel">
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+   </item>
+   <item row="13" column="1" alignment="Qt::AlignRight">
+    <widget class="QLabel" name="magicPowerLabel">
+     <property name="text">
+      <string>0</string>
+     </property>
+    </widget>
+   </item>
+   <item row="14" column="1" alignment="Qt::AlignRight">
+    <widget class="QLabel" name="magicControlLabel">
      <property name="text">
       <string>0</string>
      </property>

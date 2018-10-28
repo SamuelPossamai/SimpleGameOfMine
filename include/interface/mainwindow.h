@@ -45,8 +45,10 @@ public:
 
 protected:
 
+    void keyPressEvent(QKeyEvent* event) final;
+
     void restoreProperties();
-    void resizeEvent(QResizeEvent* event);
+    void resizeEvent(QResizeEvent* event) final;
 
 private:
 

@@ -41,6 +41,10 @@ private slots:
 
     void on_exploreButton1_clicked();
 
+    void on_exploreButton2_clicked();
+
+    void on_exploreButton3_clicked();
+
     void on_strAddButton_clicked();
 
     void on_vitAddButton_clicked();
@@ -49,13 +53,11 @@ private slots:
 
     void on_agiAddButton_clicked();
 
+    void on_wisAddButton_clicked();
+
     void on_infoButton_clicked();
 
     void on_changeJobButton_clicked();
-
-    void on_wisAddButton_clicked();
-
-    void on_exploreButton2_clicked();
 
 private:
 

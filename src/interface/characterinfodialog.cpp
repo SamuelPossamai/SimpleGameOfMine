@@ -38,6 +38,9 @@ void CharacterInfoDialog::_init(const Character& c) {
     _ui->healthLabel->setText(QString::number(info->health(c.attributes(), c.level())));
     _ui->energyLabel->setText(QString::number(info->energy(c.attributes(), c.level())));
     _ui->attackLabel->setText(QString::number(info->baseAttack(c.attributes(), c.level())));
+    _ui->accuracyLabel->setText(QString::number(info->accuracy(c.attributes(), c.level())));
+    _ui->magicPowerLabel->setText(QString::number(info->magicPower(c.attributes(), c.level())));
+    _ui->magicControlLabel->setText(QString::number(info->magicControl(c.attributes(), c.level())));
     _ui->speedLabel->setText(QString::number(info->speed(c.attributes(), c.level())));
     _ui->sizeLabel->setText(QString::number(info->size(c.attributes(), c.level())));
 }

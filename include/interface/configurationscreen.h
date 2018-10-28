@@ -15,7 +15,7 @@ class ConfigurationScreen : public MainWidget {
 public:
 
     explicit ConfigurationScreen(MainWindow *parent = nullptr);
-    ~ConfigurationScreen();
+    ~ConfigurationScreen() final;
 
 private slots:
 

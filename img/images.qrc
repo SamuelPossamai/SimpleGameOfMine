@@ -91,5 +91,6 @@
         <file>shield_icon.png</file>
         <file>zu_walking_1.png</file>
         <file>zu_walking_2.png</file>
+        <file>shuriken_image.png</file>
     </qresource>
 </RCC>

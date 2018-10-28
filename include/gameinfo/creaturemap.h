@@ -7,6 +7,8 @@
 
 #include <config/types.h>
 
+#include "unitattributes.h"
+
 namespace gameinfo {
 
 /*!
@@ -18,7 +20,7 @@ public:
 
     struct CreaturesContainerContent {
 
-        std::string creature_name;
+        std::string creature_type;
         UIntegerType creature_level;
     };
 

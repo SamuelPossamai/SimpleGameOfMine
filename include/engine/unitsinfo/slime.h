@@ -27,6 +27,12 @@ protected:
     virtual HealthType healthCalculate(const Attributes&, UIntegerType level) const override;
     virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const override { return 0; }
     virtual AttackType attackCalculate(const Attributes&, UIntegerType level) const override;
+    virtual AccuracyType accuracyCalculate(const Attributes& attr, UIntegerType) const override {
+
+        return 20 + attr.dexterity();
+    }
+    virtual MagicPowerType magicPowerCalculate(const Attributes&, UIntegerType) const override { return 0; }
+    virtual MagicControlType magicControlCalculate(const Attributes&, UIntegerType) const override { return 0; }
     virtual SpeedType speedCalculate(const Attributes&, UIntegerType level) const override;
     virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const override { return 22; }
 
