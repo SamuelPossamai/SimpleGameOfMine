@@ -59,6 +59,7 @@ protected:
 
     void interfaceSkillButtonClicked(UIntegerType id);
     void interfaceMouseReleaseEvent(QMouseEvent *event);
+    void interfaceClickedEvent(const QPoint& click_point);
     void interfaceCancelButtonClicked();
 
 private:

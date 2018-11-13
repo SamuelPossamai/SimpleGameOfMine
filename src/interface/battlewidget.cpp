@@ -120,6 +120,8 @@ void BattleWidget::resizeEvent(QResizeEvent *event) {
 
 void BattleWidget::keyPressEvent(QKeyEvent *event) {
 
+    static const UIntegerType angle_rotation = 9;
+
     if(_engine->finished()) _exit();
     else if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier){
 
@@ -127,6 +129,18 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
         else if(event->key() == Qt::Key_Minus) zoomOut();
     }
     else if(event->key() >= Qt::Key_1 && event->key() <= Qt::Key_9) _skill_button_clicked(event->key() - Qt::Key_1);
+    else if(event->key() == Qt::Key_Escape) _input_interface->interfaceCancelButtonClicked();
+    else if(event->key() == Qt::Key_A) _arrow_item->setRotation(_arrow_item->rotation() - angle_rotation);
+    else if(event->key() == Qt::Key_D || event->key() == Qt::Key_S) {
+
+        _arrow_item->setRotation(_arrow_item->rotation() + angle_rotation);
+    }
+    else if(event->key() == Qt::Key_Space || event->key() == Qt::Key_Escape) {
+
+        RealType angle = (M_PI/180)*_arrow_item->rotation();
+        _input_interface->interfaceClickedEvent(QPoint(_arrow_item->x() + 20*std::cos(angle),
+                                                       _arrow_item->y() + 20*std::sin(angle)));
+    }
     else MainWidget::keyPressEvent(event);
 }
 

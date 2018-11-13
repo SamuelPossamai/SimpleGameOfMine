@@ -71,12 +71,18 @@ Vec2Type<IntegerType> BattleWidget::InputManager::askMouseClick() {
 
 void BattleWidget::InputManager::interfaceMouseReleaseEvent(QMouseEvent *event) {
 
+    auto p = _interface->_gview->mapToScene(event->x(), event->y());
+    interfaceClickedEvent(QPoint(p.x(), p.y()));
+}
+
+void BattleWidget::InputManager::interfaceClickedEvent(const QPoint& click_point) {
+
     std::unique_lock<std::mutex> lock(_input_mut);
 
     Q_UNUSED(lock);
 
-    _last_clicked_point.x = event->x();
-    _last_clicked_point.y = event->y();
+    _last_clicked_point.x = click_point.x();
+    _last_clicked_point.y = click_point.y();
 
     _mouse_clicked = true;
 
@@ -107,9 +113,7 @@ std::optional<UnitController::AngleType> BattleWidget::InputManager::controllerU
 
     if(_canceled) return std::nullopt;
 
-    QPointF p = _interface->_gview->mapToScene(cursor.x, cursor.y);
-
-    return std::atan2(p.y() - u->y(), p.x() - u->x());
+    return std::atan2(cursor.y - u->y(), cursor.x - u->x());
 }
 
 
