@@ -35,6 +35,8 @@ bool Unit::receiveDamage(AttackType damage, EngineObject *attacking /* = nullptr
         return false;
     }
 
+    setRage(rage() + damage);
+
     _notifyAll(&Observer::unitReceivedDamage);
 
     return true;
@@ -60,6 +62,24 @@ bool Unit::consumeEnergy(EnergyType energy) {
     this->setEnergy(this->energy() - energy);
 
     _notifyAll(&Observer::unitEnergyConsumed);
+
+    return true;
+}
+
+bool Unit::consumeSpecial(SpecialType special) {
+
+    if(special > this->special()) return false;
+
+    this->setSpecial(this->special() - special);
+
+    return true;
+}
+
+bool Unit::consumeRage(RageType rage) {
+
+    if(rage > this->rage()) return false;
+
+    this->setRage(this->rage() - rage);
 
     return true;
 }
@@ -244,3 +264,25 @@ void Unit::_verify_effects() {
         }
     }
 }
+
+bool Unit::setSpecial(SpecialType val) {
+
+    if(UnitBase::setSpecial(val)) {
+
+        _notifyAll(&Observer::unitSpecialChanged);
+        return true;
+    }
+    return false;
+}
+
+bool Unit::setRage(RageType val) {
+
+    if(UnitBase::setRage(val)) {
+
+        _notifyAll(&Observer::unitRageChanged);
+        return true;
+    }
+    return false;
+}
+
+

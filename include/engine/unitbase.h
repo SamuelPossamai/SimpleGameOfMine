@@ -15,6 +15,8 @@ public:
 
     using HealthType = Traits<Unit>::HealthType;
     using EnergyType = Traits<Unit>::EnergyType;
+    using SpecialType = UnitInfo::SpecialType;
+    using RageType = UnitInfo::RageType;
     using AttackType = Traits<Unit>::AttackType;
     using DefenseType = Traits<Unit>::DefenseType;
     using AccuracyType = UnitInfo::AccuracyType;
@@ -38,13 +40,6 @@ public:
     const UnitInfo *unitInfo() const { return _info; }
 
     /*!
-     * \brief Set a value to the health of the unit
-     * \param health The health the unit will have
-     * \sa health()
-     */
-    void setHealth(HealthType health);
-
-    /*!
      * \brief Return the amount of health the unit have
      * \return The value of health of the unit
      */
@@ -56,11 +51,17 @@ public:
      */
     HealthType maxHealth() const { return _info->health(attributes(), level()); }
 
-    void setEnergy(EnergyType energy) { _energy = energy; }
-
     EnergyType energy() const { return _energy; }
 
     EnergyType maxEnergy() const { return _info->energy(attributes(), level()); }
+
+    SpecialType special() const { return _special; }
+
+    SpecialType maxSpecial() const { return _info->special(attributes(), level()); }
+
+    EnergyType rage() const { return _rage; }
+
+    EnergyType maxRage() const { return _info->rage(attributes(), level()); }
 
     AttackType baseDamage() const { return _info->baseAttack(attributes(), level()); }
 
@@ -74,12 +75,41 @@ public:
 
     const Attributes& attributes() const { return _attr; }
 
+protected:
+
+    /*!
+     * \brief Set a value to the health of the unit
+     * \param health The health the unit will have
+     * \sa health()
+     */
+    bool setHealth(HealthType health) { return _set_bartype_val(health, maxHealth(), _health); }
+
+    bool setEnergy(EnergyType energy) { return _set_bartype_val(energy, maxEnergy(), _energy); }
+
+    bool setSpecial(SpecialType special) { return _set_bartype_val(special, maxSpecial(), _special); }
+
+    bool setRage(RageType rage) { return _set_bartype_val(rage, maxRage(), _rage); }
+
 private:
+
+    template<typename T>
+    bool _set_bartype_val(T new_val, T max, T& val) {
+
+        T prev = val;
+
+        if(new_val > max) val = max;
+        else if(new_val <= 0) val = 0;
+        else val = new_val;
+
+        return prev != new_val;
+    }
 
     const UnitInfo *_info;
 
     HealthType _health;
     EnergyType _energy;
+    SpecialType _special;
+    RageType _rage;
     UIntegerType _level;
     UnitAttributes _attr;
 };

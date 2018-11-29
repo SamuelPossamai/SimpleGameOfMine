@@ -12,7 +12,7 @@ UIntegerType Rage::action(Unit *u, EngineMap *, ProjectileCreationInterface&, co
 
     if(i.step >= 10) return 0;
 
-    if(!u->consumeEnergy(5)) return 0;
+    if(!u->consumeRage(50)) return 0;
 
     UnitEffect *effect = effect::Adrenaline::getEffect();
     u->removeEffect(effect);

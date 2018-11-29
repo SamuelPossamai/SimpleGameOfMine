@@ -18,6 +18,8 @@ public:
 
     using HealthType = Traits<Unit>::HealthType;
     using EnergyType = Traits<Unit>::EnergyType;
+    using SpecialType = EnergyType;
+    using RageType = EnergyType;
     using AttackType = Traits<Unit>::AttackType;
     using DefenseType = Traits<Unit>::DefenseType;
     using AccuracyType = AttackType;
@@ -45,6 +47,10 @@ public:
      * \return The maximum energy of the unit
      */
     EnergyType energy(const Attributes& attr, UIntegerType level) const { return energyCalculate(attr, level); }
+
+    SpecialType special(const Attributes& attr, UIntegerType level) const { return specialCalculate(attr, level); }
+
+    RageType rage(const Attributes& attr, UIntegerType level) const { return rageCalculate(attr, level); }
 
     /*!
      * \brief Return the base attack of the unit, it's used to calculate the damage dealt by skills
@@ -120,6 +126,8 @@ protected:
 
     virtual HealthType healthCalculate(const Attributes&, UIntegerType) const = 0;
     virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual SpecialType specialCalculate(const Attributes&, UIntegerType) const { return 0; }
+    virtual RageType rageCalculate(const Attributes&, UIntegerType) const { return 0; }
     virtual AttackType attackCalculate(const Attributes&, UIntegerType) const = 0;
     virtual AccuracyType accuracyCalculate(const Attributes&, UIntegerType) const = 0;
     virtual MagicPowerType magicPowerCalculate(const Attributes&, UIntegerType) const = 0;

@@ -59,6 +59,14 @@ protected:
 
         if(_energy_bar) _events.push({ &BasicUnitGraphicItem::uEnergyConsumed, nullptr });
     }
+    virtual void unitSpecialChanged(Unit *) override {
+
+        _events.push({ &BasicUnitGraphicItem::uSpecialChanged, nullptr });
+    }
+    virtual void unitRageChanged(Unit *) override {
+
+        _events.push({ &BasicUnitGraphicItem::uRageChanged, nullptr });
+    }
     virtual void unitEffectAdded(Unit *, const UnitEffect *e) override {
 
         _events.push({ &BasicUnitGraphicItem::uEffectAdded, static_cast<const void *>(e) });
@@ -78,6 +86,8 @@ protected:
     void uSkillAdvance(const void *);
     void uHealthChanged(const void *);
     void uEnergyConsumed(const void *);
+    void uSpecialChanged(const void *);
+    void uRageChanged(const void *);
     void uEffectAdded(const void *eff) { _add_effect_item(reinterpret_cast<const UnitEffect *>(eff)); }
     void uEffectRemoved(const void *eff);
 
@@ -99,10 +109,14 @@ private:
 
     void _init();
 
+    void _init_bar(ProgressBarItem *var, QColor color, UIntegerType width, UIntegerType height, UIntegerType value = 100);
+
     AnimatedObject *_obj;
     QGraphicsEffect *_select_effect;
     ProgressBarItem *_health_bar;
     ProgressBarItem *_energy_bar;
+    ProgressBarItem *_special_bar;
+    ProgressBarItem *_rage_bar;
     EventQueue _events;
 
     std::map<const UnitEffect *, PartialImageItem *> _effect_itens;

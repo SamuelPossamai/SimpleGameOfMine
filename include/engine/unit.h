@@ -56,7 +56,7 @@ public:
      * \sa receiveDamage(AttackType, Unit *)
      * \return true if the target remains alive, false otherwise
      */
-    bool attack(Unit *target, AttackType damage) { return target->receiveDamage(damage, this); }
+    bool attack(Unit *target, AttackType damage) { setSpecial(special() + damage); return target->receiveDamage(damage, this); }
 
     /*!
      * \brief The unit received damage
@@ -89,6 +89,10 @@ public:
      * \return true if the energy is consumed, false if it fails
      */
     bool consumeEnergy(EnergyType energy);
+
+    bool consumeSpecial(SpecialType special);
+
+    bool consumeRage(RageType rage);
 
     /*!
      * \brief Verify if the unit is dead
@@ -214,6 +218,9 @@ public:
 
 private:
 
+    bool setSpecial(SpecialType val);
+    bool setRage(RageType val);
+
     template <typename... Args>
     void _notifyAll(void (Observer::*ObserverMethod)(Unit *, Args...), Args... args) {
         for(Observer *observer : _observers) (observer->*ObserverMethod)(this, args...);
@@ -251,6 +258,8 @@ public:
     virtual void unitSelected(Unit *) {}
     virtual void unitUnselected(Unit *) {}
     virtual void unitEnergyConsumed(Unit *) {}
+    virtual void unitSpecialChanged(Unit *) {}
+    virtual void unitRageChanged(Unit *) {}
     virtual void unitEffectAdded(Unit *, const UnitEffect *) {}
     virtual void unitEffectRemoved(Unit *, const UnitEffect *) {}
 };

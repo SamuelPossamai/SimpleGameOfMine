@@ -16,9 +16,10 @@ protected:
 
         return 300 + 20*attr.vitality() + 0.1*attr.strength() + level;
     }
-    virtual EnergyType energyCalculate(const Attributes& attr, UIntegerType level) const override {
+    virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const override { return 0; }
+    virtual RageType rageCalculate(const Attributes& attr, UIntegerType level) const override {
 
-        return 10 + attr.wisdom() + attr.vitality() + level/4;
+        return 100 + 10*(attr.strength() + attr.vitality()) + level;
     }
     virtual AttackType attackCalculate(const Attributes& attr, UIntegerType) const override {
 

@@ -1,5 +1,4 @@
 
-#include <iostream>
 #include <cmath>
 
 #include <QGraphicsDropShadowEffect>
@@ -15,16 +14,14 @@
 #include "partialimageitem.h"
 #include "progressbaritem.h"
 
-namespace unitanimation {
+using namespace unitanimation;
 
 std::map<std::type_index, QImage> BasicUnitGraphicItem::_effect_images;
 
 BasicUnitGraphicItem::BasicUnitGraphicItem(Unit *u) : UnitAnimationItem(u), _obj(new AnimatedObject),
-    _health_bar(new ProgressBarItem), _energy_bar(nullptr) {
+    _health_bar(new ProgressBarItem), _energy_bar(nullptr), _special_bar(nullptr), _rage_bar(nullptr) {
 
     if(_effect_images.empty()) _init();
-
-    if(u->maxEnergy() > 0) _energy_bar = new ProgressBarItem;
 
     auto *effect = new QGraphicsDropShadowEffect;
 
@@ -33,14 +30,22 @@ BasicUnitGraphicItem::BasicUnitGraphicItem(Unit *u) : UnitAnimationItem(u), _obj
     effect->setColor(QColor(255, 0, 0));
     effect->setEnabled(false);
 
-    _health_bar->setWidth(2.5*u->size());
-    _health_bar->setHeight(10);
+    _init_bar(_health_bar, Qt::red, 2.5*u->size(), 10);
 
-    if(_energy_bar) {
+    if(u->maxEnergy() > 0) {
 
-        _energy_bar->setWidth(_health_bar->width());
-        _energy_bar->setHeight(_health_bar->height());
-        _energy_bar->setFgColor(Qt::blue);
+        _energy_bar = new ProgressBarItem;
+        _init_bar(_energy_bar, Qt::blue, _health_bar->width(), _health_bar->height());
+    }
+    if(u->maxSpecial() > 0) {
+
+        _special_bar = new ProgressBarItem;
+        _init_bar(_special_bar, Qt::green, _health_bar->width(), _health_bar->height(), 0);
+    }
+    if(u->maxRage() > 0) {
+
+        _rage_bar = new ProgressBarItem;
+        _init_bar(_rage_bar, QColor(0xff, 0xa5, 0x00), _health_bar->width(), _health_bar->height(), 0);
     }
 
     _obj->setGraphicsEffect(_select_effect = effect);
@@ -52,25 +57,33 @@ BasicUnitGraphicItem::~BasicUnitGraphicItem() {
 
     delete _obj;
     delete _health_bar;
-    delete _energy_bar;
+    if(_energy_bar) delete _energy_bar;
+    if(_special_bar) delete _special_bar;
+    if(_rage_bar) delete _rage_bar;
 
     for(auto p : _effect_itens) delete p.second;
 }
 
 void BasicUnitGraphicItem::addToScene(QGraphicsScene *scene) {
 
-    scene->addItem(_health_bar);
     scene->addItem(_obj);
-    if(_energy_bar) scene->addItem(_energy_bar);
+
+    ProgressBarItem *bars[] = { _health_bar, _energy_bar, _special_bar, _rage_bar };
+    for(auto *bar : bars) {
+        if(bar) scene->addItem(bar);
+    }
 
     for(auto p : _effect_itens) scene->addItem(p.second);
 }
 
 void BasicUnitGraphicItem::removeFromScene() {
 
-    scene()->removeItem(_health_bar);
     scene()->removeItem(_obj);
-    if(_energy_bar) scene()->removeItem(_energy_bar);
+
+    ProgressBarItem *bars[] = { _health_bar, _energy_bar, _special_bar, _rage_bar };
+    for(auto *bar : bars) {
+        if(bar) scene()->removeItem(bar);
+    }
 
     for(auto p : _effect_itens) scene()->removeItem(p.second);
 }
@@ -90,13 +103,15 @@ void BasicUnitGraphicItem::uMoved(const void *) {
 
     if(!_effect_itens.empty()) bar_pos.setY(bar_pos.y() + 20);
 
-    _health_bar->setPos(bar_pos);
+    ProgressBarItem *bars[] = { _health_bar, _energy_bar, _special_bar, _rage_bar };
 
-    if(_energy_bar) {
+    for(ProgressBarItem *bar : bars) {
 
-        auto p = _health_bar->pos();
-        p.setY(p.y() + 10);
-        _energy_bar->setPos(p);
+        if(bar) {
+
+            bar->setPos(bar_pos);
+            bar_pos.setY(bar_pos.y() + 10);
+        }
     }
 }
 
@@ -138,7 +153,17 @@ void BasicUnitGraphicItem::uHealthChanged(const void *) {
 
 void BasicUnitGraphicItem::uEnergyConsumed(const void *) {
 
-    _energy_bar->setValue(100*unit()->energy()/unit()->maxEnergy());
+    if(_energy_bar) _energy_bar->setValue(100*unit()->energy()/unit()->maxEnergy());
+}
+
+void BasicUnitGraphicItem::uSpecialChanged(const void *) {
+
+    if(_special_bar) _special_bar->setValue(100*unit()->special()/unit()->maxSpecial());
+}
+
+void BasicUnitGraphicItem::uRageChanged(const void *) {
+
+    if(_rage_bar) _rage_bar->setValue(100*unit()->rage()/unit()->maxRage());
 }
 
 void BasicUnitGraphicItem::uEffectRemoved(const void *eff) {
@@ -242,4 +267,11 @@ void BasicUnitGraphicItem::_init() {
     _effect_images[typeid(effect::Shield)] = QImage(":/shield_icon.png").scaled(13, 13);
 }
 
-} /* namespace unitanimation */
+void BasicUnitGraphicItem::_init_bar(ProgressBarItem *bar, QColor color, UIntegerType width,
+                                     UIntegerType height, UIntegerType value) {
+
+    bar->setWidth(width);
+    bar->setHeight(height);
+    bar->setFgColor(color);
+    bar->setValue(value);
+}
