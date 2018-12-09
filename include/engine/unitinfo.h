@@ -18,47 +18,63 @@ public:
 
     using HealthType = Traits<Unit>::HealthType;
     using EnergyType = Traits<Unit>::EnergyType;
+    using SpecialType = EnergyType;
+    using RageType = EnergyType;
     using AttackType = Traits<Unit>::AttackType;
     using DefenseType = Traits<Unit>::DefenseType;
+    using AccuracyType = AttackType;
+    using MagicPowerType = AttackType;
+    using MagicControlType = MagicPowerType;
     using SizeType = Traits<Unit>::SizeType;
     using SpeedType = Traits<Unit>::SpeedType;
+    using Attributes = UnitAttributes;
 
     /*!
      * \brief Construct an UnitInfo, all the parameters are set to zero
      */
-    UnitInfo() : _max_health(0), _max_energy(0), _base_attack(0), _speed(0), _size(0) {}
+    UnitInfo() = default;
 
-    virtual ~UnitInfo();
+    virtual ~UnitInfo() = default;
 
     /*!
      * \brief Return the maximum health of the unit
      * \return The maximum health of the unit
      */
-    HealthType health() const { return _max_health; }
+    HealthType health(const Attributes& attr, UIntegerType level) const { return healthCalculate(attr, level); }
 
     /*!
      * \brief Return the maximum energy of the unit
      * \return The maximum energy of the unit
      */
-    EnergyType energy() const { return _max_energy; }
+    EnergyType energy(const Attributes& attr, UIntegerType level) const { return energyCalculate(attr, level); }
+
+    SpecialType special(const Attributes& attr, UIntegerType level) const { return specialCalculate(attr, level); }
+
+    RageType rage(const Attributes& attr, UIntegerType level) const { return rageCalculate(attr, level); }
 
     /*!
      * \brief Return the base attack of the unit, it's used to calculate the damage dealt by skills
      * \return The unit's base attack
      */
-    AttackType baseAttack() const { return _base_attack; }
+    AttackType baseAttack(const Attributes& attr, UIntegerType level) const { return attackCalculate(attr, level); }
+
+    AccuracyType accuracy(const Attributes& attr, UIntegerType level) const { return accuracyCalculate(attr, level); }
+
+    MagicPowerType magicPower(const Attributes& attr, UIntegerType level) const { return magicPowerCalculate(attr, level); }
+
+    MagicControlType magicControl(const Attributes& attr, UIntegerType level) const { return magicControlCalculate(attr, level); }
 
     /*!
      * \brief Return the size of the unit, the unit is represented by a circle in the engine
      * \return The size of the unit
      */
-    SizeType size() const { return _size; }
+    SizeType size(const Attributes& attr, UIntegerType level) const { return sizeCalculate(attr, level); }
 
     /*!
      * \brief The speed of the unit, higher this parameter, more turns the unit will have
      * \return The speed of the unit
      */
-    SpeedType speed() const { return _speed; }
+    SpeedType speed(const Attributes& attr, UIntegerType level) const { return speedCalculate(attr, level); }
 
     /*!
      * \brief Return the icon of a skill
@@ -72,11 +88,13 @@ public:
      * \param n The skill's id, if it's invalid it will have undefined behavior
      * \param u The unit that is performing the skill
      * \param m Map containing the units in the battle
+     * \param pci Interface to create projectiles.
      * \param info Basic information about the call
      * \sa UnitSkill
      * \return After how many steps the skill should be performed again
      */
-    UIntegerType callSkill(UIntegerType n, Unit *u, Map *m, const UnitSkill::Info& info) const;
+    UIntegerType callSkill(UIntegerType n, Unit *u, Map *m,
+                           UnitSkill::ProjectileCreationInterface& pci, const UnitSkill::Info& info) const;
 
     /*!
      * \brief Verify if a skill needs angle
@@ -97,24 +115,6 @@ public:
      */
     virtual void init(Unit *u) const { Q_UNUSED(u); }
 
-    /*!
-     * \brief Copy the stats and skills from other UnitInfo
-     * \param i UnitInfo that will be copied
-     */
-    void copy(const UnitInfo *i) { copySkills(i); copyStats(i); }
-
-    /*!
-     * \brief Copy the skills from other UnitInfo
-     * \param i UnitInfo that will be copied
-     */
-    void copySkills(const UnitInfo *i) { _skills = i->_skills; }
-
-    /*!
-     * \brief Copy the stats from other UnitInfo
-     * \param i UnitInfo that will be copied
-     */
-    void copyStats(const UnitInfo *i);
-
 protected:
 
     /*!
@@ -124,47 +124,20 @@ protected:
      */
     void addSkill(UnitSkill *skill, const QPixmap& icon = QPixmap()) { _skills.emplace_back(skill, icon); }
 
-    /*!
-     * \brief Set the value of the max health for this unit info
-     * \param health New value for the max health
-     */
-    void setHealth(HealthType health) { _max_health = health; }
-
-    /*!
-     * \brief Set the value of the max energy for this unit info
-     * \param energy New value for the max energy
-     */
-    void setEnergy(EnergyType energy) { _max_energy = energy; }
-
-    /*!
-     * \brief Set the value of the base attack for this unit info
-     * \param attack New value for the base attack
-     */
-    void setBaseAttack(AttackType attack) { _base_attack = attack; }
-
-    /*!
-     * \brief Set the value of the speed for this unit info
-     * \param speed New value for the speed
-     */
-    void setSpeed(SpeedType speed) { _speed = speed; }
-
-    /*!
-     * \brief Set the value of the size for this unit info
-     * \param size New value for the size
-     */
-    void setSize(SizeType size) { _size = size; }
+    virtual HealthType healthCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual SpecialType specialCalculate(const Attributes&, UIntegerType) const { return 0; }
+    virtual RageType rageCalculate(const Attributes&, UIntegerType) const { return 0; }
+    virtual AttackType attackCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual AccuracyType accuracyCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual MagicPowerType magicPowerCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual MagicControlType magicControlCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual SpeedType speedCalculate(const Attributes&, UIntegerType) const = 0;
+    virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const = 0;
 
 private:
 
     using SkillVector = std::vector<std::pair<UnitSkill *, QPixmap> >;
-
-    HealthType _max_health;
-    EnergyType _max_energy;
-    AttackType _base_attack;
-    DefenseType _base_defense;
-    SpeedType _speed;
-
-    SizeType _size;
 
     SkillVector _skills;
 };

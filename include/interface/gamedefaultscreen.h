@@ -41,6 +41,10 @@ private slots:
 
     void on_exploreButton1_clicked();
 
+    void on_exploreButton2_clicked();
+
+    void on_exploreButton3_clicked();
+
     void on_strAddButton_clicked();
 
     void on_vitAddButton_clicked();
@@ -49,17 +53,15 @@ private slots:
 
     void on_agiAddButton_clicked();
 
+    void on_wisAddButton_clicked();
+
     void on_infoButton_clicked();
 
     void on_changeJobButton_clicked();
 
-    void on_wisAddButton_clicked();
-
-    void on_exploreButton2_clicked();
-
 private:
 
-    void _start_battle(CreatureMap *m);
+    void _start_battle(gameinfo::CreatureMap *m);
     void _reselect() { _select_char_info(_selected); }
     void _select_char_info(UIntegerType id);
     void _assign_point(UIntegerType id);

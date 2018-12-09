@@ -16,23 +16,31 @@ public:
 
     virtual ~Slime();
 
-    static Slime *getInfo(UIntegerType level, const Type& type = Type::Normal) { return _memmanager.get(Slime(level, type)); }
+    static Slime *getInfo(const Type& type = Type::Normal) { return _memmanager.get(Slime(type)); }
 
-    bool operator <(const Slime& other) const {
-
-        if(_type != other._type) return _type < other._type;
-
-        return _level < other._level;
-    }
+    bool operator <(const Slime& other) const { return _type < other._type; }
 
     virtual void init(Unit *u) const override;
 
+protected:
+
+    virtual HealthType healthCalculate(const Attributes&, UIntegerType level) const override;
+    virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const override { return 0; }
+    virtual AttackType attackCalculate(const Attributes&, UIntegerType level) const override;
+    virtual AccuracyType accuracyCalculate(const Attributes& attr, UIntegerType) const override {
+
+        return 20 + attr.dexterity();
+    }
+    virtual MagicPowerType magicPowerCalculate(const Attributes&, UIntegerType) const override { return 0; }
+    virtual MagicControlType magicControlCalculate(const Attributes&, UIntegerType) const override { return 0; }
+    virtual SpeedType speedCalculate(const Attributes&, UIntegerType level) const override;
+    virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const override { return 22; }
+
 private:
 
-    Slime(UIntegerType level, const Type& type);
+    Slime(const Type& type);
 
     Type _type;
-    UIntegerType _level;
 
     static OneCopyMemoryManager<Slime> _memmanager;
 };

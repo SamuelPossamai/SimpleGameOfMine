@@ -22,7 +22,7 @@ public:
 
     class MemoryInterface;
 
-    virtual UIntegerType action(Unit*, Map*, const Info&) override;
+    virtual UIntegerType action(Unit*, EngineMap*, ProjectileCreationInterface&, const Info&) override;
 
     bool operator<(const BasicAttack& other) const {
 

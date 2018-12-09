@@ -2,7 +2,7 @@
 #include <cmath>
 
 #include <engine/unit.h>
-#include <engine/map.h>
+#include <engine/enginemap.h>
 #include <utility/random.h>
 
 #include "controllers/ai/monsterplant.h"
@@ -14,7 +14,7 @@ MonsterPlant *MonsterPlant::_controller;
 
 UIntegerType MonsterPlant::chooseSkill(const Unit *u, const Map *m, UserInterface *) {
 
-    return m->unitsDistance(u, m->closerEnemy(u)) < 110 ? 1 : 0;
+    return m->objectsDistance(u, m->closerEnemy(u)) < 110 ? 1 : 0;
 }
 
 std::optional<MonsterPlant::AngleType> MonsterPlant::chooseAngle(const Unit *u, const Map *m, UserInterface *) {

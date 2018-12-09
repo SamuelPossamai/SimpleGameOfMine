@@ -1,5 +1,6 @@
 
 #include <fstream>
+#include <sstream>
 
 #include <config/sgomfiles.h>
 
@@ -8,19 +9,46 @@
 Character::Character(std::string char_name) : _name(char_name), _char_class("jobless"), _level(0),
     _experience(0), _attr({}) {
 
-    std::ifstream file(SGOMFiles::get()->charFilePath(char_name));
+    auto opt = SGOMFiles::readSGOMDataFile(SGOMFiles::get()->charFilePath(char_name));
 
-    std::getline(file, _char_class, '\n');
+    if(!opt) return;
 
-    file >> _level;
+    for(auto& p : *opt) {
 
-    for(UIntegerType i = 0; i < Attributes::statsCount(); i++) {
+        const std::string& section_name = p.first;
 
-        file >> _attr.stats[i];
-        file.ignore();
+        if(section_name == "General") {
+
+            auto& job = p.second["job"];
+
+            if(!job.empty()) _char_class = job;
+
+            auto level = _get_int(p.second["level"]);
+
+            if(level) _level = *level;
+
+            auto xp = _get_int(p.second["xp"]);
+
+            if(xp) _experience = *xp;
+        }
+        else if(section_name == "Attributes") {
+
+            auto str = _get_int(p.second["STR"]);
+            if(str) _attr.setStrength(*str);
+
+            auto vit = _get_int(p.second["VIT"]);
+            if(vit) _attr.setVitality(*vit);
+
+            auto agi = _get_int(p.second["AGI"]);
+            if(agi) _attr.setAgility(*agi);
+
+            auto dex = _get_int(p.second["DEX"]);
+            if(dex) _attr.setDexterity(*dex);
+
+            auto wis = _get_int(p.second["WIS"]);
+            if(wis)  _attr.setWisdom(*wis);
+        }
     }
-
-    file >> _experience;
 
     _calculate_free_points_and_experience();
 }
@@ -37,14 +65,23 @@ Character Character::newChar(std::string name, std::string job) {
 
 void Character::save() const {
 
-    std::ofstream file(SGOMFiles::get()->charFilePath(_name));
+    SGOMFiles::DataFileInfo info;
 
-    file << _char_class << std::endl;
-    file << _level << std::endl;
+    info.emplace_back("General", SGOMFiles::DataFileInfo::value_type::second_type());
 
-    for(UIntegerType i = 0; i < Attributes::statsCount(); i++) file << _attr.stats[i] << std::endl;
+    info.back().second["level"] = std::to_string(_level);
+    info.back().second["xp"] = std::to_string(_experience);
+    info.back().second["job"] = _char_class;
 
-    file << _experience << std::endl;
+    info.emplace_back("Attributes", SGOMFiles::DataFileInfo::value_type::second_type());
+
+    info.back().second["STR"] = std::to_string(_attr.strength());
+    info.back().second["VIT"] = std::to_string(_attr.vitality());
+    info.back().second["AGI"] = std::to_string(_attr.agility());
+    info.back().second["WIS"] = std::to_string(_attr.wisdom());
+    info.back().second["DEX"] = std::to_string(_attr.dexterity());
+
+    SGOMFiles::writeSGOMDataFile(SGOMFiles::get()->charFilePath(_name), info);
 }
 
 void Character::_calculate_free_points_and_experience() {
@@ -58,9 +95,23 @@ void Character::_calculate_free_points_and_experience() {
     }
 
     UIntegerType attr_count = 0;
-    for(UIntegerType i = 0; i < Attributes::statsCount(); i++) attr_count += _attr.stats[i];
+    for(UIntegerType i = 0; i < Attributes::statsCount(); i++) attr_count += _attr.getAttributeValue(i);
 
     UIntegerType total_points = _level*freePointsPerLevel();
     _free_points = total_points >= attr_count ? total_points - attr_count : 0;
 }
 
+std::optional<UIntegerType> Character::_get_int(const std::string& s) {
+
+    if(s.empty()) return std::nullopt;
+
+    std::istringstream ss(s);
+
+    UIntegerType value;
+
+    ss >> value;
+
+    if(ss.eof() && !ss.fail() && !ss.bad()) return value;
+
+    return std::nullopt;
+}

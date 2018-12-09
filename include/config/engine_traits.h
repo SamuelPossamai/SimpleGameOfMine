@@ -12,10 +12,6 @@ struct Traits <BattleEngine> {
     using PositionType = RealType;
     using AngleType = RealType;
 
-    enum class AngleUnitType { radians, degrees };
-
-    static const AngleUnitType angle_unit = AngleUnitType::radians;
-
     using PointType = Vec2Type<PositionType>;
 };
 

@@ -6,11 +6,14 @@
 #include <QKeyEvent>
 #include <QGraphicsPixmapItem>
 #include <QLabel>
+#include <QMessageBox>
 
+#include <animation/projectileanimationitemfactory.h>
+#include <animation/projectileanimationitem.h>
 #include <config/engine_traits.h>
 #include <memory/memorymanager.h>
-#include <unittypes/creatures.h>
-#include <unittypes/jobs.h>
+#include <gameinfo/creatures.h>
+#include <gameinfo/jobs.h>
 #include <engine/controllers/human.h>
 
 #include "ui_battlewidget.h"
@@ -39,7 +42,7 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */, UIntegerType *res
     setStyleSheet("background-color:lightGray;");
 
     _input_interface->enable();
-
+    _gview->setFocus();
 }
 
 BattleWidget::~BattleWidget() {
@@ -53,6 +56,12 @@ BattleWidget::~BattleWidget() {
 }
 
 void BattleWidget::showSkillButtons(const UnitInfo *info) {
+
+    if(info->skills() == 0) {
+
+        _current_buttons = 0;
+        return;
+    }
 
     static const auto button_size = Traits<BattleWidget>::skillButtonSize;
 
@@ -69,10 +78,14 @@ void BattleWidget::showSkillButtons(const UnitInfo *info) {
 
     _current_buttons = info->skills();
 
+    _skill_buttons.front()->show();
+
     _update_buttons();
 
     for(UIntegerType i = 0; i < _current_buttons; i++) _skill_buttons[i]->setIcon(QIcon(info->skillIcon(i)));
     for(UIntegerType i = _current_buttons; i < _skill_buttons.size(); i++) _skill_buttons[i]->hide();
+
+    _gview->setFocus();
 }
 
 void BattleWidget::hideSkillButtons() {
@@ -90,6 +103,8 @@ bool BattleWidget::skillButtonsVisible() const {
 
 void BattleWidget::step(){
 
+    if(!_message && _engine->finished()) return _exit();
+
     _input_interface->handleEvents();
     for(auto *animation : _animations) animation->redraw();
 
@@ -105,16 +120,28 @@ void BattleWidget::resizeEvent(QResizeEvent *event) {
 
 void BattleWidget::keyPressEvent(QKeyEvent *event) {
 
-    if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier){
+    static const UIntegerType angle_rotation = 9;
+
+    if(_engine->finished()) _exit();
+    else if((event->modifiers() & Qt::ControlModifier) == Qt::ControlModifier){
 
         if(event->key() == Qt::Key_Plus || event->key() == Qt::Key_Equal) zoomIn();
         else if(event->key() == Qt::Key_Minus) zoomOut();
     }
-    else {
+    else if(event->key() >= Qt::Key_1 && event->key() <= Qt::Key_9) _skill_button_clicked(event->key() - Qt::Key_1);
+    else if(event->key() == Qt::Key_Escape) _input_interface->interfaceCancelButtonClicked();
+    else if(event->key() == Qt::Key_A) _arrow_item->setRotation(_arrow_item->rotation() - angle_rotation);
+    else if(event->key() == Qt::Key_D || event->key() == Qt::Key_S) {
 
-        if(event->key() >= Qt::Key_1 && event->key() <= Qt::Key_9) _skill_button_clicked(event->key() - Qt::Key_1);
-        else event->key();
+        _arrow_item->setRotation(_arrow_item->rotation() + angle_rotation);
     }
+    else if(event->key() == Qt::Key_Space || event->key() == Qt::Key_Escape) {
+
+        RealType angle = (M_PI/180)*_arrow_item->rotation();
+        _input_interface->interfaceClickedEvent(QPoint(_arrow_item->x() + 20*std::cos(angle),
+                                                       _arrow_item->y() + 20*std::sin(angle)));
+    }
+    else MainWidget::keyPressEvent(event);
 }
 
 void BattleWidget::graphicsViewMouseMoveEvent(QMouseEvent *event) {
@@ -123,14 +150,15 @@ void BattleWidget::graphicsViewMouseMoveEvent(QMouseEvent *event) {
 
     _ui->cursorLabel->setText(QString("%1, %2").arg(p.x()).arg(p.y()));
 
-    if(!_arrow_item->isVisible()) return;
-
     auto x = p.x() - _arrow_item->x();
     auto y = p.y() - _arrow_item->y();
 
     RealType angle = 180*atan2(y, x)/M_PI;
 
     _arrow_item->setRotation(angle);
+
+    if(!_arrow_item->isVisible()) return;
+
     _ui->cursorLabel->setText(_ui->cursorLabel->text() + QString(" (%1°)").arg(IntegerType(angle)));
 }
 
@@ -152,31 +180,56 @@ void BattleWidget::start(){
     _timer->start();
 }
 
-void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UnitAnimationItemFactory *f, UIntegerType team) {
+void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UnitAnimationItemFactory *f,
+                           const UnitAttributes& attr, UIntegerType level, UIntegerType team) {
 
-    _animations.push_back(f->create(_engine->addUnit(u, c, team)));
+    _animations.push_back(f->create(_engine->addUnit(u, c, attr, level, team)));
 
     _animations.back()->setScene(_gview->scene());
 }
 
-bool BattleWidget::addCreature(std::string name, UIntegerType level, UIntegerType team) {
+bool BattleWidget::addCreature(std::string name, const UnitAttributes& attr, UIntegerType level, UIntegerType team) {
 
-    auto opt = Creatures::get(name, level);
+    auto opt = gameinfo::Creatures::get(name);
     if(!opt.has_value()) return false;
 
-    Creatures::Info i = *opt;
-    addUnit(std::get<0>(i), std::get<2>(i), std::get<1>(i), team);
+    gameinfo::Creatures::Info i = *opt;
+    addUnit(std::get<0>(i), std::get<2>(i), std::get<1>(i), attr, level, team);
 
     return true;
 }
 
-bool BattleWidget::addHero(std::string name, const Character::Attributes& attr, UIntegerType team) {
+bool BattleWidget::addHero(std::string name, const Character::Attributes& attr, UIntegerType level, UIntegerType team) {
 
-    auto opt = Jobs::get(name, attr);
+    auto opt = gameinfo::Jobs::get(name);
     if(!opt.has_value()) return false;
 
-    Jobs::Info i = *opt;
-    addUnit(std::get<0>(i), controller::Human::getController(), std::get<1>(i), team);
+    gameinfo::Jobs::Info i = *opt;
+    addUnit(std::get<0>(i), controller::Human::getController(), std::get<1>(i), attr, level, team);
+
+    return true;
+}
+
+void BattleWidget::addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
+                                 const Unit *creator, Projectile::AngleType dir,
+                                 Projectile::PointType pos, Projectile::AngleType angle) {
+
+    _animations.push_back(itemFactory->create(_engine->addProjectile(projFactory, creator, dir, pos, angle)));
+
+    _animations.back()->setScene(_gview->scene());
+}
+
+bool BattleWidget::addProjectile(const std::string& projectile_type, const Unit *creator,
+                                 const gameinfo::Projectiles::ProjectileInfo& p_info,
+                                 Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle) {
+
+    std::optional<gameinfo::Projectiles::Info> opt = gameinfo::Projectiles::get(projectile_type, p_info);
+
+    if(!opt.has_value()) return false;
+
+    gameinfo::Projectiles::Info i = *opt;
+
+    addProjectile(std::get<0>(i), std::get<1>(i), creator, dir, pos, angle);
 
     return true;
 }
@@ -230,10 +283,14 @@ void BattleWidget::on_cancelButton_clicked() {
 
 void BattleWidget::on_returnButton_clicked() {
 
-    _exit();
+    if(QMessageBox::question(this, "SGOM Dialog", "Are you sure that you want to exit from battle?")
+            == QMessageBox::Yes) _exit();
 }
 
 void BattleWidget::_update_buttons() {
+
+    if(_skill_buttons.empty()) return;
+    if(_skill_buttons.front()->isHidden()) return;
 
     static const auto button_size = Traits<BattleWidget>::skillButtonSize;
 

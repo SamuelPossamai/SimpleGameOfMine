@@ -4,8 +4,9 @@
 
 #include <mutex>
 
-#include "map.h"
+#include "enginemap.h"
 #include "unit.h"
+#include "projectile.h"
 
 namespace std {
 class thread;
@@ -14,7 +15,7 @@ class thread;
 /*!
  * \brief This class manage controller and skills calls and animation step.
  * \brief Each time 'step' is called, the battle and animation progress a quantum.
- * \sa Map, BattleWidget, BattleEngine::step()
+ * \sa EngineMap, BattleWidget, BattleEngine::step()
  */
 class BattleEngine : Unit::Observer {
 
@@ -38,7 +39,11 @@ public:
      * \param team Unit team, it determines if other units are allies or enemies
      * \return Return the unit that was just created
      */
-    Unit *addUnit(const UnitInfo *unit_info, Controller *controller, UIntegerType team);
+    Unit *addUnit(const UnitInfo *unit_info, Controller *controller,
+                  const UnitAttributes& attr, UIntegerType level, UIntegerType team);
+
+    Projectile *addProjectile(ProjectileFactory *factory, const Unit *creator,
+                              Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);
 
     /*!
      * \brief Progress the battle by a quantum, it will do nothing if the game's waiting input.
@@ -48,7 +53,7 @@ public:
     /*!
      * \brief Choose an initial position for every unit in the battle.
      */
-    void placeUnits() { _map.placeUnits(); }
+    void placeUnits() { _map.resolvePendings(); _map.placeUnits(); }
 
     /*!
      * \brief Return if the game has finished
@@ -67,19 +72,21 @@ private:
     void unitDeathEvent(Unit *u);
 
     bool _step_loop();
-    void _ask_controller(Unit * const &, const Controller *);
 
-    static void _ask_controller_internal(Unit *, BattleEngine *);
+    void _object_act(EngineObject *obj) { if(!obj->act()) _map.removeObject(obj); }
+
+    static void _perform_internal(EngineObject *, BattleEngine *);
 
     void _delete_thread();
 
-    Map _map;
+    EngineMap _map;
     BattleWidget *_interface;
 
-    UIntegerType _cur_unit;
+    UIntegerType _cur_obj;
 
-    struct ContainerContent { Unit *unit; RealType to_perform; };
-    std::vector<ContainerContent> _units;
+    struct ContainerContent { EngineObject *object; RealType to_perform; };
+    std::vector<ContainerContent> _objects;
+    std::vector<ContainerContent> _destroyed_objects;
 
     Unit::SpeedType _max_speed;
 

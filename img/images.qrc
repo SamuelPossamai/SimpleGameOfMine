@@ -52,9 +52,45 @@
         <file>green_circle.png</file>
         <file>red_cross.png</file>
         <file>rage_img.png</file>
-        <file>images.qrc</file>
         <file>monsterplant_img1.png</file>
         <file>monsterplant_img2.png</file>
         <file>monsterplant_library_img.png</file>
+        <file>icons/fighter.png</file>
+        <file>icons/ninja.png</file>
+        <file>icons/unknown_icon.png</file>
+        <file>arrow_projectile_image.png</file>
+        <file>archer_attack_1.png</file>
+        <file>archer_attack_2.png</file>
+        <file>archer_attack_3.png</file>
+        <file>archer_idle.png</file>
+        <file>archer_walking_1n3.png</file>
+        <file>archer_walking_2.png</file>
+        <file>archer_walking_4.png</file>
+        <file>archer_walking_5.png</file>
+        <file>icons/archer.png</file>
+        <file>archer_shoot_1.png</file>
+        <file>archer_shoot_2.png</file>
+        <file>archer_shoot_3.png</file>
+        <file>archer_shoot_4.png</file>
+        <file>magic_missile_1.png</file>
+        <file>magic_missile_2.png</file>
+        <file>magic_missile_3.png</file>
+        <file>magic_missile_4.png</file>
+        <file>mage_idle.png</file>
+        <file>mage_walking_1n3.png</file>
+        <file>mage_walking_2.png</file>
+        <file>mage_walking_4.png</file>
+        <file>mage_walking_5.png</file>
+        <file>teleport_mage_icon.png</file>
+        <file>fireball_image.png</file>
+        <file>explosion_icon.png</file>
+        <file>magic_shield.png</file>
+        <file>icons/knight.png</file>
+        <file>icons/mage.png</file>
+        <file>knight_block.png</file>
+        <file>shield_icon.png</file>
+        <file>zu_walking_1.png</file>
+        <file>zu_walking_2.png</file>
+        <file>shuriken_image.png</file>
     </qresource>
 </RCC>

@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/data">
+        <file>config/default.conf</file>
+        <file>library/archer.conf</file>
+        <file>library/blue_slime.conf</file>
+        <file>library/fighter.conf</file>
+        <file>library/knight.conf</file>
+        <file>library/mage.conf</file>
+        <file>library/monster_plant.conf</file>
+        <file>library/ninja.conf</file>
+        <file>library/orange_slime.conf</file>
+        <file>library/pink_slime.conf</file>
+        <file>library/purple_slime.conf</file>
+        <file>library/slime.conf</file>
+        <file>library/white_slime.conf</file>
+        <file>library/yellow_slime.conf</file>
+    </qresource>
+</RCC>

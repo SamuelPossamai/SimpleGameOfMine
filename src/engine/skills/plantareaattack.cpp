@@ -2,7 +2,7 @@
 #include <cmath>
 
 #include <engine/unit.h>
-#include <engine/map.h>
+#include <engine/enginemap.h>
 
 #include "skills/plantareaattack.h"
 
@@ -10,7 +10,7 @@ using namespace skill;
 
 PlantAreaAttack *PlantAreaAttack::_skill = nullptr;
 
-UIntegerType PlantAreaAttack::action(Unit *u, Map *m, const Info& i) {
+UIntegerType PlantAreaAttack::action(Unit *u, EngineMap *m, ProjectileCreationInterface&, const Info& i) {
 
     if(i.step > 50) return 0;
 
@@ -19,7 +19,7 @@ UIntegerType PlantAreaAttack::action(Unit *u, Map *m, const Info& i) {
 
     auto v = m->unitsInRange(u->pos(), 100);
 
-    for(Unit *other_unit : v) if(other_unit->team() != u->team()) u->attack(other_unit, u->unitInfo()->baseAttack()/2);
+    for(Unit *other_unit : v) if(other_unit->team() != u->team()) u->attack(other_unit, u->baseDamage()/2);
 
     return 5;
 }

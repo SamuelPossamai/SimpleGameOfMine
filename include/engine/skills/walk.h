@@ -28,7 +28,7 @@ public:
 
     virtual ~Walk() {}
 
-    virtual UIntegerType action(Unit*, Map*, const Info&) override;
+    virtual UIntegerType action(Unit*, EngineMap*, ProjectileCreationInterface&, const Info&) override;
 
     bool operator<(const Walk& other) const {
 
@@ -39,8 +39,7 @@ public:
 
 protected:
 
-
-    UIntegerType doAction(Unit *, Map *, const Info&, RealType);
+    UIntegerType doAction(Unit *, EngineMap *, const Info&, RealType);
 
 private:
 

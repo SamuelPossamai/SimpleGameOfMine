@@ -23,6 +23,10 @@ private slots:
 
 private:
 
+    void _add_info(const std::string& filename);
+    bool _add_info_verify(UIntegerType size, UIntegerType desired_size, const char *filetext, const char *entrytext);
+    static IntegerType _tab_widget_tab_exist(QTabWidget *tab_widget, QString tab_name);
+
     Ui::LibraryWidget *_ui;
 };
 

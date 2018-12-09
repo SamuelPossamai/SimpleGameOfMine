@@ -21,7 +21,7 @@ public:
 
     virtual ~Slime() {}
 
-    virtual UIntegerType chooseSkill(const Unit *, const Map *, UserInterface *);
+    virtual UIntegerType chooseSkill(const Unit *, const EngineMap *, UserInterface *);
     virtual std::optional<AngleType> chooseAngle(const Unit *, const Map *, UserInterface *);
 
     /*!

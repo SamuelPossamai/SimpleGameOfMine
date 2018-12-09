@@ -1,22 +1,23 @@
 
 #include "unit.h"
-#include "map.h"
+#include "enginemap.h"
 #include "uniteffect.h"
 
-Unit::Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i) :
-    Base(info), _team(team), _controller(controller), _map(m),
-    _skill(info->skills()), _interface(i) {
+Unit::Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, BattleWidget *i,
+           const Attributes& attr, UIntegerType level, UIntegerType team) :
+    Base(info, m, attr, level), _team(team), _controller(controller), _skill(info->skills()), _interface(i) {
 
 }
 
-Unit::~Unit() {
+bool Unit::receiveDamage(AttackType damage, Unit *attacking) {
 
-    _notifyAll(&Observer::unitObjectDestroyed);
+    for(auto p : attacking->_effects) damage = p.first->doAttackEffect(attacking, this, damage);
+
+    return receiveDamage(damage, static_cast<EngineObject *>(attacking));
 }
 
-bool Unit::receiveDamage(AttackType damage, Unit *attacking /* = nullptr */) {
+bool Unit::receiveDamage(AttackType damage, EngineObject *attacking /* = nullptr */) {
 
-    if(attacking) for(auto p : attacking->_effects) damage = p.first->doAttackEffect(attacking, this, damage);
     for(auto p : _effects) damage = p.first->doDefenseEffect(this, attacking, damage);
 
     if(damage > health()) damage = health();
@@ -28,10 +29,13 @@ bool Unit::receiveDamage(AttackType damage, Unit *attacking /* = nullptr */) {
 
     if(isDead()) {
 
+        map()->removeObject(this);
         _notifyAll(&Observer::unitDeathEvent);
 
         return false;
     }
+
+    setRage(rage() + damage);
 
     _notifyAll(&Observer::unitReceivedDamage);
 
@@ -62,7 +66,27 @@ bool Unit::consumeEnergy(EnergyType energy) {
     return true;
 }
 
+bool Unit::consumeSpecial(SpecialType special) {
+
+    if(special > this->special()) return false;
+
+    this->setSpecial(this->special() - special);
+
+    return true;
+}
+
+bool Unit::consumeRage(RageType rage) {
+
+    if(rage > this->rage()) return false;
+
+    this->setRage(this->rage() - rage);
+
+    return true;
+}
+
 bool Unit::attachObserver(Observer *h) {
+
+    EngineObject::attachObserver(h);
 
     if(std::find(_observers.begin(), _observers.end(), h) == _observers.end()) {
 
@@ -75,6 +99,8 @@ bool Unit::attachObserver(Observer *h) {
 }
 
 bool Unit::detachObserver(Observer *h) {
+
+    EngineObject::detachObserver(h);
 
     auto it = std::find(_observers.begin(), _observers.end(), h);
     if(it != _observers.end()) {
@@ -115,26 +141,6 @@ bool Unit::removeEffect(const UnitEffect *effect) {
     return false;
 }
 
-bool Unit::setPos(PointType p) {
-
-    if(!_map->unitMoveVerify(this, p)) return false;
-
-    Base::setPos(p);
-
-    _notifyAll(&Observer::unitMoved);
-
-    return true;
-}
-
-bool Unit::setAngle(AngleType angle){
-
-    Base::setAngle(angle);
-
-    _notifyAll(&Observer::unitRotated);
-
-    return true;
-}
-
 bool Unit::choose() {
 
     auto i = _interface->inputInterface();
@@ -148,16 +154,21 @@ bool Unit::choose() {
 
 bool Unit::act() {
 
-    if(isPerformingSkill()) return perform();
+    if(isDead()) return false;
 
-    return choose();
+    if(isPerformingSkill()) perform();
+    else choose();
+
+    return true;
 }
 
 bool Unit::perform() {
 
+    UnitSkill::ProjectileCreationInterface pci(_interface);
+
     if(_skill_next_call == _skill_step){
 
-        _skill_next_call = _skill_step + unitInfo()->callSkill(_skill, this, _map, { _skill_step, _skill_angle });
+        _skill_next_call = _skill_step + unitInfo()->callSkill(_skill, this, map(), pci, { _skill_step, _skill_angle });
 
         if(_skill_next_call <= _skill_step) {
 
@@ -190,9 +201,9 @@ void Unit::unselect() {
 
 Unit::PointType Unit::maxPosition() const {
 
-    if(_map->width() < size() || _map->height() < size()) return { 0, 0 };
+    if(map()->width() < size() || map()->height() < size()) return { 0, 0 };
 
-    return { _map->width() - size(), _map->height() - size()};
+    return { map()->width() - size(), map()->height() - size()};
 }
 
 Unit::SpeedType Unit::effectiveSpeed() const {
@@ -206,14 +217,14 @@ Unit::SpeedType Unit::effectiveSpeed() const {
 
 bool Unit::_choose_internal(BattleWidget::InputInterface& i) {
 
-    _skill = _controller->chooseSkill(this, _map, i.get());
+    _skill = _controller->chooseSkill(this, map(), i.get());
     if(!isPerformingSkill()) return false;
 
     _skill_angle = 0;
 
     if(unitInfo()->skillNeedAngle(_skill)) {
 
-        auto opt = _controller->chooseAngle(this, _map, i.get());
+        auto opt = _controller->chooseAngle(this, map(), i.get());
         if(!opt) return false;
 
         _skill_angle = *opt;
@@ -253,3 +264,25 @@ void Unit::_verify_effects() {
         }
     }
 }
+
+bool Unit::setSpecial(SpecialType val) {
+
+    if(UnitBase::setSpecial(val)) {
+
+        _notifyAll(&Observer::unitSpecialChanged);
+        return true;
+    }
+    return false;
+}
+
+bool Unit::setRage(RageType val) {
+
+    if(UnitBase::setRage(val)) {
+
+        _notifyAll(&Observer::unitRageChanged);
+        return true;
+    }
+    return false;
+}
+
+

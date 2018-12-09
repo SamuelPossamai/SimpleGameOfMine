@@ -3,13 +3,13 @@
 
 #include "skills/evade.h"
 #include "unit.h"
-#include "map.h"
+#include "enginemap.h"
 
 namespace skill {
 
 Evade *Evade::_skill = nullptr;
 
-UIntegerType Evade::action(Unit *u, Map *, const Info& info) {
+UIntegerType Evade::action(Unit *u, EngineMap *, ProjectileCreationInterface&, const Info& info) {
 
     if(info.step < 10) {
 

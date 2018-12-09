@@ -7,7 +7,9 @@
 #include <config/interface_traits.h>
 #include <engine/unitcontroller.h>
 #include <engine/character.h>
+#include <engine/projectile.h>
 
+#include "gameinfo/projectiles.h"
 #include "graphicsview.h"
 #include "mainwidget.h"
 
@@ -29,6 +31,8 @@ public:
 
     class InputManager;
     using InputInterface = std::shared_ptr<InputManager>;
+
+    class ProjectileCreationInterface;
 
     /*!
      * \brief Creates a BattleWidget passing it's parent
@@ -103,7 +107,8 @@ public:
      * \param f Factory to create the unit animation
      * \param team Team of the unit that will be added
      */
-    void addUnit(UnitInfo *i, UnitController *c, UnitAnimationItemFactory *f, UIntegerType team);
+    void addUnit(UnitInfo *i, UnitController *c, UnitAnimationItemFactory *f,
+                 const UnitAttributes& attr, UIntegerType level, UIntegerType team);
 
     /*!
      * \brief Add a creature to the graphics scene and to the battle engine
@@ -113,7 +118,7 @@ public:
      * \sa addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory, UIntegerType)
      * \return true if it succeds, false otherwise(It can fail if the creature type is invalid)
      */
-    bool addCreature(std::string name, UIntegerType level, UIntegerType team);
+    bool addCreature(std::string name, const UnitAttributes& attr, UIntegerType level, UIntegerType team);
 
     /*!
      * \brief Add a hero to the graphics scene and to the battle engine
@@ -123,7 +128,7 @@ public:
      * \sa addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory, UIntegerType)
      * \return true if it succeds, false otherwise(It can fail if the job/class is invalid)
      */
-    bool addHero(std::string name, const Character::Attributes& attr, UIntegerType team);
+    bool addHero(std::string name, const Character::Attributes& attr, UIntegerType level, UIntegerType team);
 
     /*!
      * \brief Add a hero to the graphics scene and to the battle engine
@@ -131,7 +136,15 @@ public:
      * \param team Hero's team
      * \return true if it succeds, false otherwise(It can fail if the hero has an invalid job/class)
      */
-    bool addHero(const Character& c, UIntegerType team) { return addHero(c.className(), c.attributes(), team); }
+    bool addHero(const Character& c, UIntegerType team) { return addHero(c.className(), c.attributes(), c.level(), team); }
+
+    void addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
+                       const Unit *creator, Projectile::AngleType dir, Projectile::PointType pos,
+                       Projectile::AngleType angle);
+
+    bool addProjectile(const std::string& projectile_type, const Unit *creator,
+                       const gameinfo::Projectiles::ProjectileInfo& p_info,
+                       Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);
 
     /*!
      * \brief Display a message on the screen, it will stay there until a click is performed
@@ -211,12 +224,29 @@ private:
 
     InputInterface _input_interface;
 
-
-    std::vector<UnitAnimationItem *> _animations;
+    std::vector<AnimationItemBase *> _animations;
 
     Ui::BattleWidget *_ui;
 };
 
-#include "battlewidget_inputmanager.h"
+class BattleWidget::ProjectileCreationInterface {
+
+public:
+
+    ProjectileCreationInterface(BattleWidget *bw) : _bw(bw) {}
+
+    bool create(const std::string& projectile_type, const Unit *creator,
+                const gameinfo::Projectiles::ProjectileInfo& p_info,
+                Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle) {
+
+        return _bw->addProjectile(projectile_type, creator, p_info, dir, pos, angle);
+    }
+
+private:
+
+    BattleWidget *_bw;
+};
 
 #endif // BATTLEWIDGET_H
+
+#include "battlewidget_inputmanager.h"

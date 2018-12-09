@@ -1,7 +1,7 @@
 
 #include <engine/unitinfo.h>
 #include <engine/character.h>
-#include <unittypes/jobs.h>
+#include <gameinfo/jobs.h>
 
 #include "characterinfodialog.h"
 #include "ui_characterinfodialog.h"
@@ -30,14 +30,17 @@ void CharacterInfoDialog::_init(const Character& c) {
     _ui->agiLabel->setText(QString::number(c.attributes().agility()));
     _ui->wisLabel->setText(QString::number(c.attributes().wisdom()));
 
-    std::optional opt = Jobs::get(c.className(), c.attributes());
+    std::optional opt = gameinfo::Jobs::get(c.className());
     if(!opt.has_value()) return;
 
     UnitInfo *info = std::get<0>(*opt);
 
-    _ui->healthLabel->setText(QString::number(info->health()));
-    _ui->energyLabel->setText(QString::number(info->energy()));
-    _ui->attackLabel->setText(QString::number(info->baseAttack()));
-    _ui->speedLabel->setText(QString::number(info->speed()));
-    _ui->sizeLabel->setText(QString::number(info->size()));
+    _ui->healthLabel->setText(QString::number(info->health(c.attributes(), c.level())));
+    _ui->energyLabel->setText(QString::number(info->energy(c.attributes(), c.level())));
+    _ui->attackLabel->setText(QString::number(info->baseAttack(c.attributes(), c.level())));
+    _ui->accuracyLabel->setText(QString::number(info->accuracy(c.attributes(), c.level())));
+    _ui->magicPowerLabel->setText(QString::number(info->magicPower(c.attributes(), c.level())));
+    _ui->magicControlLabel->setText(QString::number(info->magicControl(c.attributes(), c.level())));
+    _ui->speedLabel->setText(QString::number(info->speed(c.attributes(), c.level())));
+    _ui->sizeLabel->setText(QString::number(info->size(c.attributes(), c.level())));
 }

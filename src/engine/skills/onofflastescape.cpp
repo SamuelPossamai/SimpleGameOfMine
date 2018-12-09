@@ -8,7 +8,7 @@ using namespace skill;
 
 OnOffLastEscape *OnOffLastEscape::_skill = nullptr;
 
-UIntegerType OnOffLastEscape::action(Unit *u, Map *, const Info&) {
+UIntegerType OnOffLastEscape::action(Unit *u, EngineMap *, ProjectileCreationInterface&, const Info&) {
 
     UnitEffect *effect = effect::LastEscape::getEffect();
     if(!u->removeEffect(effect)) u->addEffect(effect);

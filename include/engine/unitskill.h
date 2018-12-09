@@ -4,6 +4,8 @@
 
 #include <config/types.h>
 
+#include "battlewidget.h"
+
 /*!
  * \brief This is a virtual pure class that represents an unit skill, all skills need to inherit it directly or indirectly.
  * \brief Specific skills are in the skills directory.
@@ -11,6 +13,8 @@
 class UnitSkill {
 
 public:
+
+    using ProjectileCreationInterface = BattleWidget::ProjectileCreationInterface;
 
     struct Info {
 
@@ -32,20 +36,25 @@ public:
      * \brief This function is called several times, and it determine what the skill does.
      * \param unit The unit that is performing the skill.
      * \param map Object that contains all the units.
+     * \param pci Interface to create projectiles.
      * \param info Information about the skill being performed, including how many steps(timer cycle) has passed.
      * \return Number of steps until the next call to 'action', to stop the skill return 0.
      */
-    virtual UIntegerType action(Unit *unit, Map *map, const Info& info) = 0;
+    virtual UIntegerType action(Unit *unit, EngineMap *map, ProjectileCreationInterface& pci, const Info& info) = 0;
 
     /*!
      * \brief Same as a call to action.
      * \sa action(Unit *, Map *, const Info&)
      * \param unit The unit that is performing thne skill.
      * \param map Object that contains all the units.
+     * \param pci Interface to create projectiles.
      * \param info Information about the skill being performed, including how many steps(timer cycle) has passed.
      * \return Number of steps until the next call to 'action', to stop the skill return 0.
      */
-    UIntegerType operator() (Unit *unit, Map *map, const Info& info) { return this->action(unit, map, info); }
+    UIntegerType operator() (Unit *unit, EngineMap *map, ProjectileCreationInterface& pci, const Info& info) {
+
+        return this->action(unit, map, pci, info);
+    }
 
     /*!
      * \brief Return true if this skill needs an angle to be performed.

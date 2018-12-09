@@ -359,7 +359,7 @@
      <item>
       <widget class="QPushButton" name="exploreButton3">
        <property name="text">
-        <string>&lt;coming soon&gt;</string>
+        <string>Cave</string>
        </property>
       </widget>
      </item>

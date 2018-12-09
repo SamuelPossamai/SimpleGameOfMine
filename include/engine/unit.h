@@ -9,7 +9,7 @@
  * \brief Class that represents an unit in the engine
  * \sa BattleEngine, UnitBase, UnitInfo, UnitAnimationItem
  */
-class Unit : public UnitBase {
+class Unit final : public UnitBase {
 
     using Base = UnitBase;
 
@@ -26,13 +26,21 @@ public:
      * \brief Construct an Unit object
      * \param info UnitInfo with the information about this unit type
      * \param controller Controller that will be used to select skills to perform
-     * \param m Map where the unit is
+     * \param m EngineMap where the unit is
      * \param team Team of the unit
      * \param i BattleWidget object, it's used to receive user input when the controller asks for
      */
-    Unit(const UnitInfo *info, UnitController *controller, Map *m, UIntegerType team, BattleWidget *i);
+    Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, BattleWidget *i,
+         const Attributes& attr, UIntegerType level, UIntegerType team);
 
-    ~Unit();
+    ~Unit() final = default;
+
+    bool needThreadToAct() final {
+
+        if(isDead() || isPerformingSkill()) return false;
+
+        return !controller()->isFast();
+    }
 
     /*!
      * \brief Return the team of the unit
@@ -48,15 +56,17 @@ public:
      * \sa receiveDamage(AttackType, Unit *)
      * \return true if the target remains alive, false otherwise
      */
-    bool attack(Unit *target, AttackType damage) { return target->receiveDamage(damage, this); }
+    bool attack(Unit *target, AttackType damage) { setSpecial(special() + damage); return target->receiveDamage(damage, this); }
 
     /*!
      * \brief The unit received damage
      * \param damage Damage amount(effects can modify it)
-     * \param attacking The unit that is attacking, nullptr the damage was not caused by other unit, by default nullptr
+     * \param attacking The unit that is attacking, nullptr the damage was not caused by other unit
      * \return true if the unit remains alive, false otherwise
      */
-    bool receiveDamage(AttackType damage, Unit *attacking = nullptr);
+    bool receiveDamage(AttackType damage, Unit *attacking);
+
+    bool receiveDamage(AttackType damage, EngineObject *attacking = nullptr);
 
     /*!
      * \brief The unit calling this method will heal 'target'
@@ -79,6 +89,10 @@ public:
      * \return true if the energy is consumed, false if it fails
      */
     bool consumeEnergy(EnergyType energy);
+
+    bool consumeSpecial(SpecialType special);
+
+    bool consumeRage(RageType rage);
 
     /*!
      * \brief Verify if the unit is dead
@@ -103,13 +117,13 @@ public:
     /*!
      * \brief Detach all of the observers of the unit
      */
-    void detachAllObservers() { _observers.clear(); }
+    void detachAllObservers() { EngineObject::detachAllObservers(); _observers.clear(); }
 
     /*!
      * \brief Return the list of all the observers of the unit
      * \return List with all the observers
      */
-    const ObserversList& observers() const { return _observers; }
+    const ObserversList& unitObservers() const { return _observers; }
 
     /*!
      * \brief Add a permanent effect to this unit
@@ -141,47 +155,11 @@ public:
     const EffectsList& effects() const { return _effects; }
 
     /*!
-     * \brief Set the x position of the unit if it's possible
-     * \param x The new value for x position
-     * \return true if it was able to change the position, false otherwise
-     */
-    bool setX(PositionType x) { return setPos(x, Base::y()); }
-
-    /*!
-     * \brief Set the y position of the unit if it's possible
-     * \param y The new value for y position
-     * \return true if it was able to change the position, false otherwise
-     */
-    bool setY(PositionType y) { return setPos(Base::x(), y); }
-
-    /*!
-     * \brief Set the position of the unit if it's possible
-     * \param x The new value for x position
-     * \param y The new value for y position
-     * \return true if it was able to change the position, false otherwise
-     */
-    bool setPos(PositionType x, PositionType y) { return setPos({x, y}); }
-
-    /*!
-     * \brief Set the position of the unit if it's possible
-     * \param p The new position of the unit
-     * \return true if it was able to change the position, false otherwise
-     */
-    bool setPos(PointType p);
-
-    /*!
-     * \brief Set the unit's angle
-     * \param angle New angle value, in radians
-     * \return Always true
-     */
-    bool setAngle(AngleType angle);
-
-    /*!
-     * \brief If it's performing a skill, perform, if it's not choose
+     * \brief If it's performing a skill, perform, if it's not, choose
      * \sa choose(), perform()
-     * \return choose() return if it's not performing a skill, perform() return otherwise
+     * \return false if it was unable to act, true otherwise
      */
-    bool act();
+    bool act() final;
 
     /*!
      * \brief Ask the controller to choose a skill and if needed, an angle
@@ -229,8 +207,7 @@ public:
      */
     PointType maxPosition() const;
 
-    SpeedType baseSpeed() const { return unitInfo()->speed(); }
-    SpeedType effectiveSpeed() const;
+    SpeedType effectiveSpeed() const override;
 
     struct EffectInfo {
 
@@ -240,6 +217,9 @@ public:
     };
 
 private:
+
+    bool setSpecial(SpecialType val);
+    bool setRage(RageType val);
 
     template <typename... Args>
     void _notifyAll(void (Observer::*ObserverMethod)(Unit *, Args...), Args... args) {
@@ -252,7 +232,6 @@ private:
     UIntegerType _team;
     ObserversList _observers;
     UnitController * const _controller;
-    Map * const _map;
 
     UIntegerType _skill_step;
     AngleType _skill_angle;
@@ -266,7 +245,7 @@ private:
     BattleWidget *_interface;
 };
 
-class Unit::Observer {
+class Unit::Observer : virtual public EngineObject::Observer {
 
 public:
 
@@ -275,13 +254,12 @@ public:
     virtual void unitSkillFinished(Unit *) {}
     virtual void unitReceivedDamage(Unit *) {}
     virtual void unitHealed(Unit *) {}
-    virtual void unitMoved(Unit *) {}
-    virtual void unitRotated(Unit *) {}
     virtual void unitDeathEvent(Unit *) {}
-    virtual void unitObjectDestroyed(Unit *) {}
     virtual void unitSelected(Unit *) {}
     virtual void unitUnselected(Unit *) {}
     virtual void unitEnergyConsumed(Unit *) {}
+    virtual void unitSpecialChanged(Unit *) {}
+    virtual void unitRageChanged(Unit *) {}
     virtual void unitEffectAdded(Unit *, const UnitEffect *) {}
     virtual void unitEffectRemoved(Unit *, const UnitEffect *) {}
 };

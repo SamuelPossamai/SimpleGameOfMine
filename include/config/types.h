@@ -8,15 +8,22 @@ class SGOMFiles;
 
 class BattleEngine;
 
+class EngineObject;
+class EngineObjectBase;
+
 class Unit;
 class UnitBase;
 class UnitInfo;
+
+class Projectile;
+class ProjectileFactory;
 
 class UnitController;
 class UnitSkill;
 class UnitEffect;
 
-class Map;
+class EngineMap;
+using Map = EngineMap;
 
 class Character;
 
@@ -33,12 +40,20 @@ class AnimatedObject;
 class AnimationHandler;
 class ProgressBarItem;
 class PartialImageItem;
+class AnimationItemBase;
 class UnitAnimationItem;
 class UnitAnimationItemFactory;
+class ProjectileAnimationItem;
+class ProjectileAnimationItemFactory;
 
-class Jobs;
+namespace gameinfo {
+
 class Creatures;
+class Jobs;
+class Projectiles;
 class CreatureMap;
+
+} /* namespace gameinfo */
 
 namespace utility {
 

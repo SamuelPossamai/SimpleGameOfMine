@@ -17,7 +17,7 @@ class LastEscape : public UnitEffect {
 
 public:
 
-    virtual AttackType doDefenseEffect(Unit *def, Unit *att, AttackType a) const override;
+    virtual AttackType doDefenseEffect(Unit *def, EngineObject *att, AttackType a) const override;
 
     /*!
      * \brief Return a dynamically allocated copy of this class instance, if it is yet not created, create it

@@ -20,7 +20,7 @@ public:
     /*!
      * \brief Add LastEscape effect if it's off and remove it if it's on
      */
-    virtual UIntegerType action(Unit *, Map *, const Info&) override;
+    virtual UIntegerType action(Unit *, EngineMap *, ProjectileCreationInterface&, const Info&) override;
 
     /*!
      * \brief Return a dynamically allocated copy of this class instance, if it is yet not created, create it

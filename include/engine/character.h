@@ -2,9 +2,12 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
+#include <optional>
 #include <string>
 
 #include <config/types.h>
+
+#include "unitattributes.h"
 
 /*!
  * \brief Class meant to hold information about a character
@@ -13,9 +16,9 @@ class Character {
 
 public:
 
-    struct Attributes;
+    using Attributes = UnitAttributes;
 
-    static constexpr UIntegerType freePointsPerLevel() { return 4; }
+    static constexpr UIntegerType freePointsPerLevel() { return UnitAttributes::freePointsPerLevel(); }
 
     /*!
      * \brief Construct a Character object passing the character name
@@ -93,7 +96,7 @@ public:
 
         if(stat < _attr.statsCount() && _free_points) {
 
-            _attr.stats[stat]++;
+            _attr.assignPoint(stat);
             _free_points--;
         }
     }
@@ -103,50 +106,10 @@ public:
      */
     void save() const;
 
-    /*!
-     * \brief Struct that represents the attributes of a character
-     */
-    struct Attributes {
-
-        enum class Stat : UIntegerType { strength, vitality, dexterity, agility };
-
-        /*!
-         * \brief Return the quantity of stats
-         * \return The quantity of stats
-         */
-        static constexpr UIntegerType statsCount() { return sizeof(stats)/sizeof(stats[0]); }
-
-        bool operator<(const Attributes& other) const {
-
-            for(UIntegerType i = 0; i < statsCount(); i++) {
-
-                if(this->stats[i] != other.stats[i]) return this->stats[i] < other.stats[i];
-            }
-
-            return false;
-        }
-
-        UIntegerType& strength() { return stats[0]; }
-        const UIntegerType& strength() const { return stats[0]; }
-
-        UIntegerType& vitality() { return stats[1]; }
-        const UIntegerType& vitality() const { return stats[1]; }
-
-        UIntegerType& dexterity() { return stats[2]; }
-        const UIntegerType& dexterity() const { return stats[2]; }
-
-        UIntegerType& agility() { return stats[3]; }
-        const UIntegerType& agility() const { return stats[3]; }
-
-        UIntegerType& wisdom() { return stats[4]; }
-        const UIntegerType& wisdom() const { return stats[4]; }
-
-        UIntegerType stats[5];
-    };
-
 private:
 
     void _calculate_free_points_and_experience();
+    std::optional<UIntegerType> _get_int(const std::string&);
 
     std::string _name;
     std::string _char_class;
