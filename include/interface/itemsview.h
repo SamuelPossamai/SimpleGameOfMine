@@ -13,6 +13,8 @@ class ItemsView;
 
 class ItemsView : public QWidget {
 
+    Q_OBJECT
+
 public:
 
     explicit ItemsView(QWidget *parent = nullptr);

@@ -194,7 +194,7 @@ bool BattleWidget::addCreature(std::string name, const UnitAttributes& attr, UIn
     if(!opt.has_value()) return false;
 
     gameinfo::Creatures::Info i = *opt;
-    addUnit(std::get<0>(i), std::get<2>(i), std::get<1>(i), attr, level, team);
+    addUnit(i.unitInfo, i.unitController, i.unitAnimationItemFactory, attr, level, team);
 
     return true;
 }

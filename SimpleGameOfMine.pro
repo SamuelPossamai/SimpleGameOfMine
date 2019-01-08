@@ -110,7 +110,8 @@ SOURCES += src/main.cpp \
     src/gameinfo/maps/cave.cpp \
     src/animation/animationfactories/projectile/shurikenanimationfactory.cpp \
     src/gameinfo/items.cpp \
-    src/interface/itemsview.cpp
+    src/interface/itemsview.cpp \
+    src/interface/itemimagewidget.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -242,7 +243,8 @@ HEADERS += include/interface/mainwindow.h \
     include/gameinfo/maps/cave.h \
     include/animation/animationfactories/projectile/shurikenanimationfactory.h \
     include/gameinfo/items.h \
-    include/interface/itemsview.h
+    include/interface/itemsview.h \
+    include/interface/itemimagewidget.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc

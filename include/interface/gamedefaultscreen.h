@@ -27,7 +27,7 @@ public:
      * \param parent Parent of this QObject
      */
     explicit GameDefaultScreen(std::vector<std::string> players, MainWindow *parent = nullptr);
-    virtual ~GameDefaultScreen();
+    virtual ~GameDefaultScreen() override;
 
 protected:
 
@@ -69,6 +69,8 @@ private:
     UIntegerType _xp_for_victory;
     UIntegerType _result;
     UIntegerType _selected;
+
+    std::vector<std::string> _itens_for_victory;
 
     std::vector<Character> _chars;
 

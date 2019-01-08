@@ -15,8 +15,6 @@ public:
         _bg(Qt::white), _fg(Qt::lightGray) {}
     virtual ~ImageWidget() override {}
 
-    virtual void paintEvent(QPaintEvent *) override;
-
     void setBackground(QColor c) { _bg = c ; update(); }
     QColor background() const { return _bg; }
 
@@ -25,6 +23,10 @@ public:
 
     void setImage(const QImage& im) { _im = im; update(); }
     QImage image() const { return _im; }
+
+protected:
+
+    virtual void paintEvent(QPaintEvent *) override;
 
 private:
 

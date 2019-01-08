@@ -4,7 +4,7 @@
 #include <QResizeEvent>
 #include <QTableWidget>
 
-#include "imagewidget.h"
+#include "itemimagewidget.h"
 #include "itemsview.h"
 #include "ui_itemsview.h"
 
@@ -46,6 +46,7 @@ void ItemsView::updateItems() {
 
             im = std::get<0>(*opt);
             tooltip += QString::fromStdString(std::get<1>(*opt));
+            tooltip += QString(" [%0]").arg(item_info.second);
         }
         else {
 
@@ -53,9 +54,7 @@ void ItemsView::updateItems() {
             tooltip += "This item is not recognized in this version of the game";
         }
 
-        ImageWidget *im_w = new ImageWidget(im);
-        im_w->setForeground(Qt::transparent);
-        im_w->setBackground(Qt::transparent);
+        ItemImageWidget *im_w = new ItemImageWidget(im, item_info.second);
         im_w->setToolTip(tooltip);
 
         _ui->table->setCellWidget(int(cur_row), int(cur_col), im_w);

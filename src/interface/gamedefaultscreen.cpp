@@ -4,6 +4,7 @@
 #include "maps/greenvalley.h"
 #include "maps/trainingground.h"
 #include "maps/cave.h"
+#include "creatures.h"
 #include "battlewidget.h"
 #include "characterinfodialog.h"
 #include "selectjobdialog.h"
@@ -28,9 +29,14 @@ GameDefaultScreen::~GameDefaultScreen() {
 
 void GameDefaultScreen::activate() {
 
-    if(_xp_for_victory && _result == 0) {
+    if(_xp_for_victory && _result == 0 && _chars.size() > 0) {
 
         _xp_for_victory = _xp_for_victory/_chars.size();
+
+        for(const std::string& item : _itens_for_victory){
+
+            _chars[UIntegerType(utility::Random::uniformIntDistribution(0, IntegerType(_chars.size()) - 1))].addItem(item);
+        }
 
         for(Character& c : _chars) {
 
@@ -38,6 +44,7 @@ void GameDefaultScreen::activate() {
             c.save();
         }
 
+        _itens_for_victory.clear();
         _xp_for_victory = 0;
     }
 
@@ -114,6 +121,8 @@ void GameDefaultScreen::on_changeJobButton_clicked() {
     activate();
 }
 
+#include <iostream>
+
 void GameDefaultScreen::_start_battle(gameinfo::CreatureMap *m) {
 
     BattleWidget *bw = new BattleWidget(parent(), &_result);
@@ -123,9 +132,11 @@ void GameDefaultScreen::_start_battle(gameinfo::CreatureMap *m) {
     for(const Character& c : _chars) bw->addHero(c, 0);
 
     _xp_for_victory = 0;
+    _itens_for_victory.clear();
     for(const gameinfo::CreatureMap::CreaturesContainerContent& creature_info : m->getCreatures()) {
 
         _xp_for_victory += std::ceil(std::pow(creature_info.creature_level + 3, 1.5));
+        gameinfo::Creatures::xGetItems(_itens_for_victory, creature_info.creature_type);
         bw->addCreature(creature_info.creature_type,
                         UnitAttributes::generateRandom(creature_info.creature_level), creature_info.creature_level, 1);
     }
