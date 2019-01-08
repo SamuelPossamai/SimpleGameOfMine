@@ -19,7 +19,7 @@ using namespace gameinfo;
 
 std::map<std::string, Creatures::GetCreatureFunctionType> Creatures::_creatures;
 
-std::optional<Creatures::Info> Creatures::get(std::string name) {
+std::optional<Creatures::Info> Creatures::get(const std::string& name) {
 
     if(_creatures.empty()) _init();
 

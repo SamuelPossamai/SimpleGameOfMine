@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include <fstream>
 #include <sstream>
 
@@ -48,6 +49,7 @@ Character::Character(std::string char_name) : _name(char_name), _char_class("job
             auto wis = _get_int(p.second["WIS"]);
             if(wis)  _attr.setWisdom(*wis);
         }
+        else if(section_name == "Items") _load_items(p.second);
     }
 
     _calculate_free_points_and_experience();
@@ -81,7 +83,36 @@ void Character::save() const {
     info.back().second["WIS"] = std::to_string(_attr.wisdom());
     info.back().second["DEX"] = std::to_string(_attr.dexterity());
 
+    info.emplace_back("Items", SGOMFiles::DataFileInfo::value_type::second_type());
+
+    for(auto& item : _items) {
+
+        info.back().second[item.first] = std::to_string(item.second);
+    }
+
     SGOMFiles::writeSGOMDataFile(SGOMFiles::get()->charFilePath(_name), info);
+}
+
+void Character::_load_items(const std::map<std::string, std::string>& items) {
+
+    for(auto& item : items){
+
+        const std::string& item_type = item.first;
+        const std::string& item_qtd_s = item.second;
+
+        auto item_qtd_val = _get_int(item_qtd_s);
+
+        if(!item_qtd_val) {
+
+            std::cerr << "Reading character file found '" << item_type <<
+                         "' item info with invalid quantity value '" <<
+                         item_qtd_s << "' for character '" <<
+                         _name << "'." << std::endl;
+            continue;
+        }
+
+        _items[item_type] = *item_qtd_val;
+    }
 }
 
 void Character::_calculate_free_points_and_experience() {

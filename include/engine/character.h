@@ -4,6 +4,7 @@
 
 #include <optional>
 #include <string>
+#include <map>
 
 #include <config/types.h>
 
@@ -19,6 +20,12 @@ public:
     using Attributes = UnitAttributes;
 
     static constexpr UIntegerType freePointsPerLevel() { return UnitAttributes::freePointsPerLevel(); }
+
+    /*!
+     * \brief Contruct an invalid Character object
+     */
+    Character() : _name(), _char_class("jobless"), _level(0), _free_points(0),
+        _experience(0), _attr({}) {}
 
     /*!
      * \brief Construct a Character object passing the character name
@@ -106,8 +113,28 @@ public:
      */
     void save() const;
 
+    void addItem(const std::string& type, UIntegerType qtd = 1) { _items[type] += qtd; }
+    void remItem(const std::string& type, UIntegerType qtd = 1) {
+
+        auto it = _items.find(type);
+        if(it == _items.end()) return;
+
+        if(it->second > qtd) it->second -= qtd;
+        else _items.erase(it);
+    }
+
+    UIntegerType searchItem(const std::string& type) const {
+
+        auto it = _items.find(type);
+        if(it == _items.end()) return 0;
+        return it->second;
+    }
+
+    const std::map<std::string, UIntegerType>& items() const { return _items; }
+
 private:
 
+    void _load_items(const std::map<std::string, std::string>& items);
     void _calculate_free_points_and_experience();
     std::optional<UIntegerType> _get_int(const std::string&);
 
@@ -118,6 +145,8 @@ private:
     UIntegerType _free_points;
     UIntegerType _experience;
     Attributes _attr;
+
+    std::map<std::string, UIntegerType> _items;
 };
 
 #endif // CHARACTER_H

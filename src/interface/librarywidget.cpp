@@ -50,7 +50,7 @@ void LibraryWidget::_add_info(const std::string& filename) {
         section_id = _tab_widget_tab_exist(_ui->tabWidget, section_name);
     }
 
-    QTabWidget *tab_section = static_cast<QTabWidget *>(_ui->tabWidget->widget(section_id));
+    QTabWidget *tab_section = static_cast<QTabWidget *>(_ui->tabWidget->widget(int(section_id)));
 
     QString name = QString::fromStdString(name_v.front());
     IntegerType name_id = _tab_widget_tab_exist(tab_section, name);
@@ -61,7 +61,7 @@ void LibraryWidget::_add_info(const std::string& filename) {
         name_id = _tab_widget_tab_exist(tab_section, name);
     }
 
-    LibraryWidgetInfoTab *info_tab = static_cast<LibraryWidgetInfoTab *>(tab_section->widget(name_id));
+    LibraryWidgetInfoTab *info_tab = static_cast<LibraryWidgetInfoTab *>(tab_section->widget(int(name_id)));
 
     info_tab->setImage(image_v.front());
     info_tab->setText(map["Text"]);
@@ -87,7 +87,7 @@ IntegerType LibraryWidget::_tab_widget_tab_exist(QTabWidget *tab_widget, QString
 
     for(IntegerType i = 0; i < tab_widget->count(); i++) {
 
-        if(tab_widget->tabText(i) == tab_name) return i;
+        if(tab_widget->tabText(int(i)) == tab_name) return i;
     }
 
     return -1;

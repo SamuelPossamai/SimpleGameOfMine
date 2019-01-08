@@ -334,7 +334,7 @@
     </layout>
    </item>
    <item row="3" column="0" rowspan="2">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="verticalLayoutLeft">
      <item alignment="Qt::AlignHCenter">
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -384,6 +384,16 @@
       </spacer>
      </item>
      <item>
+      <widget class="ItemsView" name="itemView" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>204</width>
+         <height>50</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -407,6 +417,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ItemsView</class>
+   <extends>QWidget</extends>
+   <header location="global">itemsview.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

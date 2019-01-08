@@ -108,7 +108,9 @@ SOURCES += src/main.cpp \
     src/engine/unitsinfo/zu.cpp \
     src/engine/controllers/ai/zucontroller.cpp \
     src/gameinfo/maps/cave.cpp \
-    src/animation/animationfactories/projectile/shurikenanimationfactory.cpp
+    src/animation/animationfactories/projectile/shurikenanimationfactory.cpp \
+    src/gameinfo/items.cpp \
+    src/interface/itemsview.cpp
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -238,7 +240,9 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/unitattributes.h \
     include/engine/controllers/ai/zucontroller.h \
     include/gameinfo/maps/cave.h \
-    include/animation/animationfactories/projectile/shurikenanimationfactory.h
+    include/animation/animationfactories/projectile/shurikenanimationfactory.h \
+    include/gameinfo/items.h \
+    include/interface/itemsview.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc
@@ -253,7 +257,8 @@ FORMS += forms/gamedefaultscreen.ui \
     forms/librarywidget.ui \
     forms/characterselectionscreen.ui \
     forms/librarywidgetinfotab.ui \
-    forms/configurationscreen.ui
+    forms/configurationscreen.ui \
+    forms/itemsview.ui
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET

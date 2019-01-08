@@ -200,7 +200,7 @@ private:
     template<typename T, typename... Args>
     static EngineObject *_search_object(UIntegerType i, T v, Args... args);
 
-    static constexpr nullptr_t _search_object(UIntegerType) { return nullptr; }
+    static constexpr std::nullptr_t _search_object(UIntegerType) { return nullptr; }
 
     template<typename T, typename... Args>
     static UIntegerType _count_size(T v, Args... args) { return v.size() + _count_size(args...); }

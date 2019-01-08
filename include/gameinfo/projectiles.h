@@ -27,7 +27,7 @@ public:
         Projectile::DamageType damage;
     };
 
-    static std::optional<Info> get(std::string name, const ProjectileInfo& p_info);
+    static std::optional<Info> get(const std::string& name, const ProjectileInfo& p_info);
 
 private:
 

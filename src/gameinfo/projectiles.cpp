@@ -13,7 +13,7 @@ using namespace gameinfo;
 
 std::map<std::string, Projectiles::GetProjectileFunctionType> Projectiles::_projectiles;
 
-std::optional<Projectiles::Info> Projectiles::get(std::string name, const ProjectileInfo& p_info) {
+std::optional<Projectiles::Info> Projectiles::get(const std::string& name, const ProjectileInfo& p_info) {
 
     if(_projectiles.empty()) _init();
 

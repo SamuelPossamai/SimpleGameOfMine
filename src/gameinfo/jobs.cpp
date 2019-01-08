@@ -16,7 +16,7 @@ using namespace gameinfo;
 
 std::map<std::string, Jobs::GetJobFunctionType> Jobs::_jobs;
 
-std::optional<Jobs::Info> Jobs::get(std::string name) {
+std::optional<Jobs::Info> Jobs::get(const std::string& name) {
 
     if(_jobs.empty()) _init();
 

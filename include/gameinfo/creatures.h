@@ -16,7 +16,7 @@ public:
 
     using Info = std::tuple<UnitInfo *, UnitAnimationItemFactory *, UnitController *>;
 
-    static std::optional<Info> get(std::string name);
+    static std::optional<Info> get(const std::string& name);
 
 private:
 

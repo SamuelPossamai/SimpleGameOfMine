@@ -60,7 +60,7 @@ void GameDefaultScreen::on_menuButton_clicked() {
 
 void GameDefaultScreen::on_charactersList_itemClicked(QListWidgetItem *item) {
 
-    _select_char_info(_ui->charactersList->row(item));
+    _select_char_info(UIntegerType(_ui->charactersList->row(item)));
 }
 
 void GameDefaultScreen::on_exploreButton1_clicked() {
@@ -152,6 +152,8 @@ void GameDefaultScreen::_select_char_info(UIntegerType id) {
     _ui->wisLabel->setText(QString::number(c.attributes().wisdom()));
 
     _ui->expLabel->setText(QString("%1 / %2").arg(c.experience()).arg(c.experienceNeeded()));
+
+    _ui->itemView->setCharacter(c);
 }
 
 void GameDefaultScreen::_assign_point(UIntegerType id) {
