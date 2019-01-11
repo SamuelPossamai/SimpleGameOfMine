@@ -12,7 +12,7 @@ class ShurikenAnimationFactory : public ProjectileAnimationItemFactory {
 
 public:
 
-    virtual ~ShurikenAnimationFactory() {}
+    virtual ~ShurikenAnimationFactory() override {}
 
     virtual ProjectileAnimationItem *create(Projectile *) override;
 

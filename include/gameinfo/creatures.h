@@ -10,6 +10,7 @@
 #include <config/types.h>
 
 #include "utility/random.h"
+#include "utility/iteratorwrapper.h"
 
 namespace gameinfo {
 
@@ -17,8 +18,25 @@ class Creatures {
 
 public:
 
+    struct Info;
+
+private:
+
+    using GetCreatureFunctionType = Info (*)();
+    using CreaturesInfoContainer = std::map<std::string, GetCreatureFunctionType>;
+
+    struct CallGetZero {
+
+        auto operator()(const CreaturesInfoContainer::value_type& val) -> decltype(std::get<0>(val)) { return std::get<0>(val); }
+    };
+
+public:
+
     using DropItemsType = std::vector<std::pair<std::string, RealType> >;
 
+    /*!
+     * \brief Struct with the information about a creature
+     */
     struct Info {
 
         Info(UnitInfo *uinfo, UnitAnimationItemFactory *uanfac, UnitController *uctrl,
@@ -32,6 +50,13 @@ public:
         DropItemsType dropItems;
     };
 
+    Creatures() { if(_creatures.empty()) _init(); }
+
+    /*!
+     * \brief Access information of a creature type
+     * \param name Name of the creature type
+     * \return std::optional with the information about the creature if it exists
+     */
     static std::optional<Info> get(const std::string& name);
 
     template<typename... Args>
@@ -54,9 +79,19 @@ public:
 
     static void xGetItems(std::vector<std::string>&) {}
 
-private:
+    /*!
+     * \brief Return an iterator to the begin of a list of the creature type names
+     * \return iterator the the begin of a list of the creature type names
+     */
+    utility::IteratorWrapper<CreaturesInfoContainer::const_iterator, CallGetZero> begin() const { return _creatures.cbegin(); }
 
-    using GetCreatureFunctionType = Info (*)();
+    /*!
+     * \brief Return an iterator to the end of a list of the creature type names
+     * \return iterator the the end of a list of the creature type names
+     */
+    utility::IteratorWrapper<CreaturesInfoContainer::const_iterator, CallGetZero> end() const { return _creatures.cend(); }
+
+private:
 
     static void _init();
 
@@ -72,7 +107,7 @@ private:
         for(auto&& drop : drops) if(utility::Random::chance(drop.second)) out.push_back(drop.first);
     }
 
-    static std::map<std::string, GetCreatureFunctionType> _creatures;
+    static CreaturesInfoContainer _creatures;
 };
 
 } /* namespace gameinfo */

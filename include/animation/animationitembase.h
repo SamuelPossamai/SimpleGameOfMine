@@ -15,12 +15,13 @@ public:
      */
     AnimationItemBase(EngineObject *obj) : _scene(nullptr), _obj(obj) { obj->attachObserver(this); }
 
-    virtual ~AnimationItemBase() { if(_obj) _obj->detachObserver(this); }
+    virtual ~AnimationItemBase() override { if(_obj) _obj->detachObserver(this); }
 
     /*!
      * \brief This method should be called in a loop, all changes in the graphics display must be done here
+     * \return false if the animation is over, true otherwise
      */
-    virtual void redraw() = 0;
+    virtual bool redraw() = 0;
 
     /*!
      * \brief Set an scene where the item will be displayed

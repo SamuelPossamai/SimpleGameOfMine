@@ -35,6 +35,10 @@ public:
 
     ~Unit() final = default;
 
+    /*!
+     * \brief Verify if the unit needs a thread to act
+     * \return true if the the unit need a thread to act, false otherwise
+     */
     bool needThreadToAct() final {
 
         if(isDead() || isPerformingSkill()) return false;
@@ -66,6 +70,12 @@ public:
      */
     bool receiveDamage(AttackType damage, Unit *attacking);
 
+    /*!
+     * \brief The unit received damage
+     * \param damage Damage amount(effects can modify it)
+     * \param attacking The object that is attacking, nullptr the damage was not caused by an engine object
+     * \return true if the unit remains alive, false otherwise
+     */
     bool receiveDamage(AttackType damage, EngineObject *attacking = nullptr);
 
     /*!

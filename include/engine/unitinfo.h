@@ -34,7 +34,7 @@ public:
      */
     UnitInfo() = default;
 
-    virtual ~UnitInfo() = default;
+    virtual ~UnitInfo();
 
     /*!
      * \brief Return the maximum health of the unit
@@ -81,7 +81,7 @@ public:
      * \param n The id of the skill, a call to this method with an invalid id have undefined behavior
      * \return The icon of a skill
      */
-    const QPixmap& skillIcon(UIntegerType n) const { return _skills[n].second; }
+    const QPixmap& skillIcon(UIntegerType n) const { return std::get<1>(_skills[n]); }
 
     /*!
      * \brief Perform a call to a skill
@@ -101,7 +101,7 @@ public:
      * \param n The skill's id, if it's invalid the behavior will be undefined
      * \return true if it needs an angle, false otherwise
      */
-    bool skillNeedAngle(UIntegerType n) const { return _skills[n].first->needAngle(); }
+    bool skillNeedAngle(UIntegerType n) const { return std::get<0>(_skills[n])->needAngle(); }
 
     /*!
      * \brief Return the number of skills
@@ -121,8 +121,12 @@ protected:
      * \brief Add a skill to the unit information
      * \param skill Skill that will be added
      * \param icon Icon of the skill that will be added, by default blank
+     * \param delete_after if true the skill will be deleted when the UnitInfo is destroyed
      */
-    void addSkill(UnitSkill *skill, const QPixmap& icon = QPixmap()) { _skills.emplace_back(skill, icon); }
+    void addSkill(UnitSkill *skill, const QPixmap& icon = QPixmap(), bool delete_after = false) {
+
+        _skills.emplace_back(skill, icon, delete_after);
+    }
 
     virtual HealthType healthCalculate(const Attributes&, UIntegerType) const = 0;
     virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const = 0;
@@ -137,7 +141,7 @@ protected:
 
 private:
 
-    using SkillVector = std::vector<std::pair<UnitSkill *, QPixmap> >;
+    using SkillVector = std::vector<std::tuple<UnitSkill *, QPixmap, bool> >;
 
     SkillVector _skills;
 };

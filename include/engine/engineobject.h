@@ -5,6 +5,10 @@
 #include "enginemap.h"
 #include "engineobjectbase.h"
 
+/*!
+ * \brief A class that represents an object that can be managed by BattleEngine and EngineMap
+ * \sa BattleEngine, EngineMap
+ */
 class EngineObject : public EngineObjectBase {
 
     using Base = EngineObjectBase;
@@ -21,8 +25,18 @@ public:
 
     virtual ~EngineObject() override;
 
+    /*!
+     * \brief This is an abstract method that do the object's action, it's called
+     * \return false if the object has expired, true otherwise
+     */
     virtual bool act() = 0;
 
+    /*!
+     * \brief This method will warn the engine that this object needs a thread to act
+     * \brief It will need a thread if it takes some time to perform the action
+     * \brief If it will ask for users input, this method must return true
+     * \return true if it needs a thred to act, false otherwise, by default return false
+     */
     virtual bool needThreadToAct() { return false; }
 
     /*!
@@ -115,6 +129,8 @@ private:
 class EngineObject::Observer {
 
 public:
+
+    virtual ~Observer() = default;
 
     virtual void engineObjectDestroyed(EngineObject *) {}
     virtual void engineObjectMoved(EngineObject *) {}

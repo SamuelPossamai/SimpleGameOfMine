@@ -13,6 +13,7 @@ LibraryWidget::LibraryWidget(MainWindow *parent) : MainWidget(parent), _ui(new U
     _ui->tabWidget->setCurrentIndex(0);
 
     for(auto s : SGOMFiles::findDataFiles("library", ".conf")) _add_info(s);
+    for(auto s : SGOMFiles::findUserFiles("library", ".conf")) _add_info(s);
 }
 
 LibraryWidget::~LibraryWidget() {

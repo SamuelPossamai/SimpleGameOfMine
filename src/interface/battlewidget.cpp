@@ -71,7 +71,7 @@ void BattleWidget::showSkillButtons(const UnitInfo *info) {
 
         _skill_buttons.back()->setFocusPolicy(Qt::NoFocus);
 
-        _skill_buttons.back()->setIconSize(QSize(button_size, button_size));
+        _skill_buttons.back()->setIconSize(QSize(int(button_size), int(button_size)));
 
         QObject::connect(_skill_buttons.back(), &IdButton::clickedId, this, &BattleWidget::_skill_button_clicked);
     }
@@ -108,6 +108,11 @@ void BattleWidget::step(){
     _input_interface->handleEvents();
     for(auto *animation : _animations) animation->redraw();
 
+    auto redraw = [](AnimationItemBase *animation){ return !animation->redraw(); };
+    auto del_st_it = std::remove_if(_animations.begin(), _animations.end(), redraw);
+    for(auto it = del_st_it; it != _animations.end(); it++) delete *it;
+    _animations.erase(del_st_it, _animations.end());
+
     _engine->step();
 }
 
@@ -128,7 +133,7 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
         if(event->key() == Qt::Key_Plus || event->key() == Qt::Key_Equal) zoomIn();
         else if(event->key() == Qt::Key_Minus) zoomOut();
     }
-    else if(event->key() >= Qt::Key_1 && event->key() <= Qt::Key_9) _skill_button_clicked(event->key() - Qt::Key_1);
+    else if(event->key() >= Qt::Key_1 && event->key() <= Qt::Key_9) _skill_button_clicked(UIntegerType(event->key() - Qt::Key_1));
     else if(event->key() == Qt::Key_Escape) _input_interface->interfaceCancelButtonClicked();
     else if(event->key() == Qt::Key_A) _arrow_item->setRotation(_arrow_item->rotation() - angle_rotation);
     else if(event->key() == Qt::Key_D || event->key() == Qt::Key_S) {
@@ -138,8 +143,8 @@ void BattleWidget::keyPressEvent(QKeyEvent *event) {
     else if(event->key() == Qt::Key_Space || event->key() == Qt::Key_Escape) {
 
         RealType angle = (M_PI/180)*_arrow_item->rotation();
-        _input_interface->interfaceClickedEvent(QPoint(_arrow_item->x() + 20*std::cos(angle),
-                                                       _arrow_item->y() + 20*std::sin(angle)));
+        _input_interface->interfaceClickedEvent(QPoint(int(_arrow_item->x() + 20*std::cos(angle)),
+                                                       int(_arrow_item->y() + 20*std::sin(angle))));
     }
     else MainWidget::keyPressEvent(event);
 }
@@ -319,7 +324,7 @@ void BattleWidget::_update_buttons() {
                                                      UIntegerType(Traits<BattleWidget>::skillButtonVerticalAlign));
         }
 
-        button->setGeometry(button_x, button_y, button_size, button_size);
+        button->setGeometry(int(button_x), int(button_y), int(button_size), int(button_size));
 
         button->show();
     }

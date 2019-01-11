@@ -1,56 +1,55 @@
 
 #include <iostream>
 #include <fstream>
-#include <experimental/filesystem>
 
 #include <QDir>
+#include <QDirIterator>
 #include <QFile>
+#include <QFileInfo>
 
 #include "sgomfiles.h"
 
-using namespace std::experimental;
-
-SGOMFiles *SGOMFiles::_f;
+SGOMFiles *SGOMFiles::_f = nullptr;
 
 SGOMFiles::SGOMFiles() {
 
     _base_path = std::getenv("HOME");
     _base_path += "/.sgom";
 
-    _create_dir_if_missing(_base_path);
-
     _char_path += _base_path + "/chars";
 
-    _create_dir_if_missing(_char_path);
+    auto config_path = _base_path + "/config";
 
-    _create_dir_if_missing(_base_path + "/config");
+    const char *paths_to_create[] = { _char_path.c_str(), config_path.c_str() };
+    for(const char *path : paths_to_create){
+
+       if(!QDir().mkpath(path)) std::cerr << "Failed to create directory '" << path << "'" << std::endl;
+    }
 }
 
 bool SGOMFiles::charExists(std::string char_name) const {
 
-    return filesystem::exists(getCharsPath() + '/' + char_name + ".dat");
+    return QFile::exists(QString::fromStdString(getCharsPath() + '/' + char_name + ".dat"));
 }
 
 void SGOMFiles::removeChar(std::string char_name) const {
 
-    filesystem::remove(getCharsPath() + '/' + char_name + ".dat");
+    QFile::remove(QString::fromStdString(getCharsPath() + '/' + char_name + ".dat"));
 }
 
 std::vector<std::string> SGOMFiles::characters() const {
 
     decltype(characters()) chars;
 
-    for(auto& dir_entry : filesystem::directory_iterator(getCharsPath())){
+    for(auto it = QDirIterator(QString::fromStdString(getCharsPath())); it.hasNext(); it.next()){
 
-        filesystem::path p = dir_entry.path();
+        QFileInfo p = it.filePath();
 
-        if(!filesystem::is_regular_file(p)) continue;
+        if(!p.isFile()) continue;
 
-        if(p.extension() != ".dat") continue;
+        if(p.completeSuffix() != "dat") continue;
 
-        p.replace_extension();
-
-        chars.push_back(p.filename());
+        chars.push_back(p.baseName().toStdString());
     }
 
     return chars;
@@ -73,7 +72,7 @@ std::optional<SGOMFiles::DataEntryFileInfo> SGOMFiles::readSGOMDataEntryFile(con
         if(!_read_SGOM_data_entry_file_loop(filename, result, section, in)) return std::nullopt;
     }
 
-    return result;
+    return std::move(result);
 }
 
 std::optional<SGOMFiles::EntryFileInfo> SGOMFiles::readSGOMEntryFile(const std::string& filename) {
@@ -88,7 +87,7 @@ std::optional<SGOMFiles::EntryFileInfo> SGOMFiles::readSGOMEntryFile(const std::
 
     for(auto& p : vec) result[p.first] = p.second;
 
-    return result;
+    return std::move(result);
 }
 
 std::optional<SGOMFiles::ConfigFileInfo> SGOMFiles::readSGOMConfigFile(const std::string& filename) {
@@ -113,7 +112,7 @@ std::optional<SGOMFiles::ConfigFileInfo> SGOMFiles::readSGOMConfigFile(const std
         }
     }
 
-    return ret;
+    return std::move(ret);
 }
 
 std::optional<SGOMFiles::DataFileInfo> SGOMFiles::readSGOMDataFile(const std::string& filename) {
@@ -138,7 +137,7 @@ std::optional<SGOMFiles::DataFileInfo> SGOMFiles::readSGOMDataFile(const std::st
         }
     }
 
-    return ret;
+    return std::move(ret);
 }
 
 SGOMFiles::ConfigFileInfo SGOMFiles::readSGOMConfigFile() {
@@ -258,9 +257,9 @@ bool SGOMFiles::_read_SGOM_data_entry_file_brackets(const std::string& filename,
     return true;
 }
 
-std::vector<std::string> SGOMFiles::findDataFiles(const std::string& dir) {
+std::vector<std::string> SGOMFiles::findFiles(const std::string& dir) {
 
-    QDir d(QString::fromStdString(":/data/" + dir));
+    QDir d(QString::fromStdString(dir));
 
     std::vector<std::string> ret;
 
@@ -269,11 +268,11 @@ std::vector<std::string> SGOMFiles::findDataFiles(const std::string& dir) {
     return ret;
 }
 
-std::vector<std::string> SGOMFiles::findDataFiles(const std::string& dir, const std::string& extension) {
+std::vector<std::string> SGOMFiles::findFiles(const std::string& dir, const std::string& extension) {
 
     std::vector<std::string> ret;
 
-    for(auto&& f : findDataFiles(dir)) {
+    for(auto&& f : findFiles(dir)) {
 
         if(std::string(std::find(std::find(f.rbegin(), f.rend(), '/').base(), f.end(), '.'), f.end()) == extension) {
 
@@ -282,15 +281,6 @@ std::vector<std::string> SGOMFiles::findDataFiles(const std::string& dir, const 
     }
 
     return ret;
-}
-
-bool SGOMFiles::_create_dir_if_missing(const std::string& dir_name) {
-
-    filesystem::path dir_path = dir_name;
-
-    if(!filesystem::exists(dir_path)) return filesystem::create_directory(dir_path);
-
-    return true;
 }
 
 bool SGOMFiles::_append_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section, const std::string& s) {

@@ -58,6 +58,8 @@ class UnitController::UserInterface {
 
 public:
 
+    virtual ~UserInterface() = default;
+
     UIntegerType askSkill(const Unit *u) { return this->controllerUserInterfaceAskSkillInput(u); }
     std::optional<UnitController::AngleType> askAngle(const Unit *u) { return this->controllerUserInterfaceAskAngleInput(u); }
 

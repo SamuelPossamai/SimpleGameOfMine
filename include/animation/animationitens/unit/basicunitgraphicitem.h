@@ -19,17 +19,19 @@ public:
 
     BasicUnitGraphicItem(Unit *u);
 
-    virtual ~BasicUnitGraphicItem();
+    virtual ~BasicUnitGraphicItem() override;
 
-    virtual void redraw() override {
+    virtual bool redraw() override {
 
-        if(object() == nullptr) return;
+        if(object() == nullptr) return false;
 
         while(!_events.empty()) {
 
             (this->*(_events.front().first))(_events.front().second);
             _events.pop();
         }
+
+        return true;
     }
 
     template <typename... Animations>

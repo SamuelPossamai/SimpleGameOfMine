@@ -93,6 +93,21 @@ void Character::save() const {
     SGOMFiles::writeSGOMDataFile(SGOMFiles::get()->charFilePath(_name), info);
 }
 
+UIntegerType Character::remItem(const std::string& type, UIntegerType qtd /* = 1 */) {
+
+    auto it = _items.find(type);
+    if(it == _items.end()) return 0;
+
+    UIntegerType ret = qtd;
+    if(it->second > qtd) it->second -= qtd;
+    else {
+        ret = it->second;
+        _items.erase(it);
+    }
+
+    return ret;
+}
+
 void Character::_load_items(const std::map<std::string, std::string>& items) {
 
     for(auto& item : items){

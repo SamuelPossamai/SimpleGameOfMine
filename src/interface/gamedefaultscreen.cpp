@@ -35,7 +35,7 @@ void GameDefaultScreen::activate() {
 
         for(const std::string& item : _itens_for_victory){
 
-            _chars[UIntegerType(utility::Random::uniformIntDistribution(0, IntegerType(_chars.size()) - 1))].addItem(item);
+            _chars.at(UIntegerType(utility::Random::uniformIntDistribution(0, IntegerType(_chars.size()) - 1))).addItem(item);
         }
 
         for(Character& c : _chars) {
@@ -120,8 +120,6 @@ void GameDefaultScreen::on_changeJobButton_clicked() {
     SelectJobDialog(_chars[_selected], this).exec();
     activate();
 }
-
-#include <iostream>
 
 void GameDefaultScreen::_start_battle(gameinfo::CreatureMap *m) {
 

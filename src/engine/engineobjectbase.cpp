@@ -3,6 +3,10 @@
 
 #include "engineobjectbase.h"
 
+EngineObjectBase::~EngineObjectBase() {
+
+}
+
 void EngineObjectBase::setAngle(AngleType angle) {
 
     angle = std::fmod(angle, 2*M_PI);

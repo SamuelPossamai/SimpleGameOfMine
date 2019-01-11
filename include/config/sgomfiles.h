@@ -75,8 +75,23 @@ public:
      */
     static SGOMFiles *get() { if(!_f) _f = new SGOMFiles; return _f; }
 
-    static std::vector<std::string> findDataFiles(const std::string& dir);
-    static std::vector<std::string> findDataFiles(const std::string& dir, const std::string& extension);
+    static std::vector<std::string> findFiles(const std::string& dir);
+    static std::vector<std::string> findFiles(const std::string& dir, const std::string& extension);
+
+    static std::vector<std::string> findDataFiles(const std::string& dir) { return findFiles(":/data/" + dir); }
+    static std::vector<std::string> findDataFiles(const std::string& dir, const std::string& extension) {
+
+        return findFiles(":/data/" + dir, extension);
+    }
+
+    static std::vector<std::string> findUserFiles(const std::string& dir) {
+
+        return findFiles(get()->_base_path + '/' + dir);
+    }
+    static std::vector<std::string> findUserFiles(const std::string& dir, const std::string& extension) {
+
+        return findFiles(get()->_base_path + '/' + dir, extension);
+    }
 
     static std::optional<DataEntryFileInfo> readSGOMDataEntryFile(const std::string& filename);
 
@@ -106,8 +121,6 @@ private:
 
     template <typename T>
     static bool _write_SGOM_data_file(const std::string& filename, const T& info);
-
-    bool _create_dir_if_missing(const std::string& dir_name);
 
     static bool _append_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section, const std::string& s);
     static bool _create_section_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section);

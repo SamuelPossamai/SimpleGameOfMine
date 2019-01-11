@@ -12,10 +12,6 @@ class AnimationHandler {
 
 public:
 
-    /*!
-     * \brief
-     * \param animation
-     */
     AnimationHandler(Animation *animation = nullptr) : _animation(animation), _cur_step((animation) ? animation->steps() : 0),
         _vec_pos(0) { }
 

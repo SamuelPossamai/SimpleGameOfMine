@@ -244,7 +244,8 @@ HEADERS += include/interface/mainwindow.h \
     include/animation/animationfactories/projectile/shurikenanimationfactory.h \
     include/gameinfo/items.h \
     include/interface/itemsview.h \
-    include/interface/itemimagewidget.h
+    include/interface/itemimagewidget.h \
+    include/utility/iteratorwrapper.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc

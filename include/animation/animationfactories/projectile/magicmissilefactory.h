@@ -12,7 +12,7 @@ class MagicMissileFactory : public ProjectileAnimationItemFactory {
 
 public:
 
-    virtual ~MagicMissileFactory() {}
+    virtual ~MagicMissileFactory() override {}
 
     virtual ProjectileAnimationItem *create(Projectile *) override;
 

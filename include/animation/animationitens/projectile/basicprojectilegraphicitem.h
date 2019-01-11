@@ -22,9 +22,9 @@ public:
 
     virtual ~BasicProjectileGraphicItem() override { delete _obj; }
 
-    virtual void redraw() override {
+    virtual bool redraw() override {
 
-        if(projectile() == nullptr) return;
+        if(projectile() == nullptr) return false;
 
         if(projectile()->durability() == 0) {
 
@@ -35,6 +35,8 @@ public:
             _obj->setRotation(projectile()->angle()*180/M_PI);
             _obj->next();
         }
+
+        return true;
     }
 
     void setAnimations(const Animation& animation) {

@@ -7,6 +7,10 @@ UIntegerType Missile::stepAction() {
 
     auto target = map()->closerEnemy(pos(), creator()->team());
 
+    static const UIntegerType step_action_call_interval = 3;
+
+    if(target == nullptr) return step_action_call_interval;
+
     AngleType t_angle = std::atan2(target->y() - y(), target->x() - x());
 
     AngleType new_value = t_angle;
@@ -25,5 +29,5 @@ UIntegerType Missile::stepAction() {
     setAngle(new_value);
     setDirection(new_value);
 
-    return 3;
+    return step_action_call_interval;
 }

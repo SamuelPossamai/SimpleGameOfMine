@@ -113,16 +113,41 @@ public:
      */
     void save() const;
 
+    /*!
+     * \brief The amount of items of type 'type' will be increased by 'qtd'
+     * \param type Name of the type of items that will be added
+     * \param qtd Quantity of items added, by default 1
+     */
     void addItem(const std::string& type, UIntegerType qtd = 1) { _items[type] += qtd; }
-    void remItem(const std::string& type, UIntegerType qtd = 1) {
+
+    /*!
+     * \brief The amount of items of type 'type' will decreased by 'qtd'
+     * \brief if the current amount is lower than 'qtd', the current amount will be set to zero
+     * \param type Name of the type of items that will be added
+     * \param qtd Quantity of items removed, by default 1
+     * \return The number of items removed
+     */
+    UIntegerType remItem(const std::string& type, UIntegerType qtd = 1);
+
+    /*!
+     * \brief Verify if the character owns at least 'qtd' items of type 'type'
+     * \param type Name of the type of items
+     * \param qtd Quantity of items it need, by default 1
+     * \return true if it does have enough items of type 'type', false otherwise
+     */
+    bool haveItem(const std::string& type, UIntegerType qtd = 1) {
 
         auto it = _items.find(type);
-        if(it == _items.end()) return;
+        if(it == _items.end()) return false;
 
-        if(it->second > qtd) it->second -= qtd;
-        else _items.erase(it);
+        return it->second >= qtd;
     }
 
+    /*!
+     * \brief Return the amount of items of type 'type'
+     * \param type Name of the type of items
+     * \return The current amount of items of type 'type'
+     */
     UIntegerType searchItem(const std::string& type) const {
 
         auto it = _items.find(type);
@@ -130,6 +155,10 @@ public:
         return it->second;
     }
 
+    /*!
+     * \brief Access the items owned by the character
+     * \return A map with the type of the item as key and the amount of items with this type as value
+     */
     const std::map<std::string, UIntegerType>& items() const { return _items; }
 
 private:
