@@ -106,9 +106,9 @@ std::optional<SGOMFiles::ConfigFileInfo> SGOMFiles::readSGOMConfigFile(const std
 
         for(auto&& v : p.second) {
 
-            auto p = _split_equal_sign(v);
+            auto split_p = _split_equal_sign(v);
 
-            content_out[p.first] = p.second;
+            content_out[split_p.first] = Variant::fromString(split_p.second);
         }
     }
 
@@ -133,7 +133,7 @@ std::optional<SGOMFiles::DataFileInfo> SGOMFiles::readSGOMDataFile(const std::st
 
             auto p = _split_equal_sign(v);
 
-            ret.back().second[p.first] = p.second;
+            ret.back().second[p.first] = Variant::fromString(p.second);
         }
     }
 

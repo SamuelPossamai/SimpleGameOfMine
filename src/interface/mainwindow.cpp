@@ -9,7 +9,7 @@
 MainWindow::MainWindow() {
 
     setGeometry(Traits<MainWindow>::x, Traits<MainWindow>::y, Traits<MainWindow>::width, Traits<MainWindow>::height);
-    if(SGOMFiles::get()->readSGOMConfigFile()["Game Start"]["fullscreen"] == "yes") this->showFullScreen();
+    if(bool(SGOMFiles::get()->readSGOMConfigFile()["Game Start"]["fullscreen"])) this->showFullScreen();
 
     restoreProperties();
 }

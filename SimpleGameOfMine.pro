@@ -14,7 +14,7 @@ TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
-CONFIG += object_parallel_to_source c++1z
+CONFIG += object_parallel_to_source c++1z precompile_header
 OBJECTS_DIR = .
 
 SOURCES += src/main.cpp \
@@ -111,7 +111,16 @@ SOURCES += src/main.cpp \
     src/animation/animationfactories/projectile/shurikenanimationfactory.cpp \
     src/gameinfo/items.cpp \
     src/interface/itemsview.cpp \
-    src/interface/itemimagewidget.cpp
+    src/interface/itemimagewidget.cpp \
+    src/utility/variant.cpp
+
+
+PRECOMPILED_HEADER = include/config/sgomfiles.h \
+                     include/engine/character.h \
+                     include/interface/battlewidget.h \
+                     include/engine/unitinfo.h \
+                     include/engine/unitskill.h \
+                     include/engine/uniteffect.h
 
 HEADERS += include/interface/mainwindow.h \
     include/engine/unitbase.h \
@@ -245,7 +254,8 @@ HEADERS += include/interface/mainwindow.h \
     include/gameinfo/items.h \
     include/interface/itemsview.h \
     include/interface/itemimagewidget.h \
-    include/utility/iteratorwrapper.h
+    include/utility/iteratorwrapper.h \
+    include/utility/variant.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc

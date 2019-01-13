@@ -27,7 +27,8 @@ public:
 
 protected:
 
-    static SelectUserInterfaceBase *_create(const utility::Interval<UIntegerType>& n_characters, const std::string& mode);
+    static SelectUserInterfaceBase *_create(const utility::Interval<UIntegerType>& n_characters,
+                                            const SGOMFiles::Variant& mode);
 
     template <typename ITER>
     bool finalize(const ITER& begin, const ITER& end) {

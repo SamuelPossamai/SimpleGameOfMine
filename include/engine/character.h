@@ -6,6 +6,7 @@
 #include <string>
 #include <map>
 
+#include <config/sgomfiles.h>
 #include <config/types.h>
 
 #include "unitattributes.h"
@@ -163,9 +164,10 @@ public:
 
 private:
 
-    void _load_items(const std::map<std::string, std::string>& items);
+    static void _type_error_message(const char *section, const char *data, const char *desired_type,
+                                    const char *type, const char *name);
+    void _load_items(const std::map<std::string, SGOMFiles::Variant>& items, const char *char_name);
     void _calculate_free_points_and_experience();
-    std::optional<UIntegerType> _get_int(const std::string&);
 
     std::string _name;
     std::string _char_class;
