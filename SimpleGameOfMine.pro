@@ -112,7 +112,9 @@ SOURCES += src/main.cpp \
     src/gameinfo/items.cpp \
     src/interface/itemsview.cpp \
     src/interface/itemimagewidget.cpp \
-    src/utility/variant.cpp
+    src/utility/variant.cpp \
+    src/engine/skills/action.cpp \
+    src/gameinfo/skills.cpp
 
 
 PRECOMPILED_HEADER = include/config/sgomfiles.h \
@@ -255,7 +257,13 @@ HEADERS += include/interface/mainwindow.h \
     include/interface/itemsview.h \
     include/interface/itemimagewidget.h \
     include/utility/iteratorwrapper.h \
-    include/utility/variant.h
+    include/utility/variant.h \
+    include/engine/skills/action.h \
+    include/engine/skills/actionshandler.h \
+    include/engine/skills/actions/walkaction.h \
+    include/gameinfo/skills.h \
+    include/engine/unitskillfactory.h \
+    include/engine/skillfactories/genericskillfactory.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc

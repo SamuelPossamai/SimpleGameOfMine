@@ -20,6 +20,7 @@ class ProjectileFactory;
 
 class UnitController;
 class UnitSkill;
+class UnitSkillFactory;
 class UnitEffect;
 
 class EngineMap;
@@ -59,6 +60,7 @@ namespace utility {
 
 class ImageColorChange;
 template<typename> class Interval;
+class Variant;
 
 } /* namespace utility */
 

@@ -79,7 +79,8 @@ public:
     using List = std::vector<Variant>;
     using Map = std::map<Variant, Variant>;
     using String = std::string;
-    using InternalVariant = std::variant<Invalid, Error, bool, Integer, Real, String, List, Map>;
+    using Pointer = void *;
+    using InternalVariant = std::variant<Invalid, Error, bool, Integer, Real, String, List, Map, Pointer>;
 
     /*!
      * \brief Construct a Variant object in a invalid state
@@ -87,17 +88,30 @@ public:
     Variant() : _var(Invalid()) {}
 
     Variant(const Variant& other) : _var(other._var) {}
-    Variant(const char *c_str) : _var(String(c_str)) {}
 
-    template<typename T>
-    Variant(const T& val) : _var(val) {}
+    Variant(const char *c_str) : _var(String(c_str)) {}
+    Variant(const Invalid& i) : _var(i) {}
+    Variant(const Error& e) : _var(e) {}
+    Variant(bool b) : _var(b) {}
+    Variant(const Integer& i) : _var(i) {}
+    Variant(const Real& r) : _var(r) {}
+    Variant(const String& s) : _var(s) {}
+    Variant(const List& l) : _var(l) {}
+    Variant(const Map& m) : _var(m) {}
+    Variant(const Pointer& p) : _var(p) {}
 
     Variant& operator=(const Variant& other) { _var = other._var; return *this; }
 
-    template<typename T>
-    Variant& operator=(const T& other) { _var = other; return *this; }
-
-    Variant& operator=(const char *other) { _var = String(other); return *this; }
+    Variant& operator=(const char *c_str) { _var = String(c_str); return *this; }
+    Variant& operator=(const Invalid& i) { _var = i; return *this; }
+    Variant& operator=(const Error& e) { _var = e; return *this; }
+    Variant& operator=(bool b) { _var = b; return *this; }
+    Variant& operator=(const Integer& i) { _var = i; return *this; }
+    Variant& operator=(const Real& r) { _var = r; return *this; }
+    Variant& operator=(const String& s) { _var = s; return *this; }
+    Variant& operator=(const List& l) { _var = l; return *this; }
+    Variant& operator=(const Map& m) { _var = m; return *this; }
+    Variant& operator=(const Pointer& p) { _var = p; return *this; }
 
     ~Variant() = default;
 
@@ -201,6 +215,12 @@ public:
      * \return true if the data is a Map, false otherwise
      */
     bool isMap() const { return isType<Map>(); }
+
+    /*!
+     * \brief Verify if the type of the data is Pointer
+     * \return true if the data is a Pointer, false otherwise
+     */
+    bool isPointer() const { return isType<Pointer>(); }
 
     /*!
      * \brief Convert the data to a bool
@@ -344,7 +364,7 @@ constexpr const char *Variant::typeName(UIntegerType id) {
 
     switch (id) {
 
-        case getTypeId<Error>(): return "bool";
+        case getTypeId<Error>(): return "Error";
         case getTypeId<bool>(): return "bool";
         case getTypeId<Integer>(): return "Integer";
         case getTypeId<Real>(): return "Real";
@@ -358,6 +378,7 @@ constexpr const char *Variant::typeName(UIntegerType id) {
 
 using VariantList = Variant::List;
 using VariantMap = Variant::Map;
+using VariantDataInfo = std::map<std::string, Variant>;
 
 } /* namespace utility */
 

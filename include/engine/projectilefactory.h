@@ -8,7 +8,7 @@ class ProjectileFactory {
 
 public:
 
-    virtual ~ProjectileFactory() {}
+    virtual ~ProjectileFactory() = default;
 
     virtual Projectile *create(Map *m, const Unit *creator, Projectile::AngleType dir,
                                Projectile::PointType pos, Projectile::AngleType angle) = 0;

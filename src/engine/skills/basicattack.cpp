@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include <cmath>
 
 #include "enginemap.h"
@@ -37,3 +38,24 @@ UIntegerType BasicAttack::action(Unit *u, EngineMap *m, ProjectileCreationInterf
 
     return 5;
 }
+
+UnitSkill *BasicAttack::create(const utility::VariantDataInfo& m) {
+
+    auto distance = decltype(_distance)(30);
+
+    auto it = m.find("distance");
+
+    if(it != m.end()) {
+
+        if(it->second.isNumber()) distance = decltype(distance)(it->second.getNumber());
+        else std::cerr << "skill::BasicAttack: Distance passed is not a number" << std::endl;
+    }
+
+    return MemoryInterface::dependentGet(distance, false);
+}
+
+void BasicAttack::destroy() {
+
+    MemoryInterface::noLongerDepend(*this);
+}
+

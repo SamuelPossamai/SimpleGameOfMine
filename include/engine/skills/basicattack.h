@@ -4,6 +4,7 @@
 
 #include <memory/onecopymemorymanager.h>
 
+#include "types.h"
 #include "unitskill.h"
 
 namespace skill {
@@ -14,9 +15,9 @@ class BasicAttack : public UnitSkill {
 
 protected:
 
-    BasicAttack(UIntegerType distance, bool attack_from_above) : UnitSkill(true), _distance(distance),
-        _att_from_above(attack_from_above) {}
-    BasicAttack(const BasicAttack& other) : UnitSkill(true), _distance(other._distance), _att_from_above(other._att_from_above) {}
+    BasicAttack(UIntegerType distance, bool attack_from_above) : UnitSkill(true),
+        _att_from_above(attack_from_above), _distance(distance) {}
+    BasicAttack(const BasicAttack& other) : UnitSkill(true), _att_from_above(other._att_from_above), _distance(other._distance) {}
 
 public:
 
@@ -30,13 +31,14 @@ public:
         return _att_from_above < other._att_from_above;
     }
 
-    template<typename... Args>
-    static BasicAttack *getSkill(Args... args) { return _skills.get(args...); }
+    static UnitSkill *create(const utility::VariantDataInfo& m);
+
+    virtual void destroy() override;
 
 private:
 
-    UIntegerType _distance;
     bool _att_from_above;
+    UIntegerType _distance;
 
     static OneCopyMemoryManager<BasicAttack> _skills;
 };
@@ -44,9 +46,6 @@ private:
 class BasicAttack::MemoryInterface {
 
 public:
-
-    template <typename... Args>
-    static BasicAttack *get(Args... args) { return BasicAttack::_skills.get(BasicAttack(args...)); }
 
     template <typename... Args>
     static BasicAttack *dependentGet(Args... args) { return BasicAttack::_skills.dependentGet(BasicAttack(args...)); }
