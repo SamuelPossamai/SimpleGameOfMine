@@ -1,12 +1,41 @@
 
+#include <iostream>
+
 #include "unit.h"
 #include "enginemap.h"
 #include "uniteffect.h"
+#include "unitskillfactory.h"
+
+#include "gameinfo/skills.h"
 
 Unit::Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, BattleWidget *i,
            const Attributes& attr, UIntegerType level, UIntegerType team) :
-    Base(info, m, attr, level), _team(team), _controller(controller), _skill(info->skills()), _interface(i) {
+    Base(info, m, attr, level), _team(team), _controller(controller), _interface(i) {
 
+    auto v = unitInfo()->getSkills(this);
+
+    for(auto&& s: v) {
+
+        auto opt = gameinfo::Skills::get(std::get<0>(s));
+        if(!opt) {
+
+            std::cerr << "Failed to load skill '" << std::get<0>(s) << '\'' << std::endl;
+            continue;
+        }
+
+        UnitSkillFactory *factory = opt->factory;
+
+        UnitSkill *skill = factory->create(std::get<1>(s));
+
+        _skills.push_back({ std::get<0>(s), skill });
+    }
+
+    _skill = _skills.size();
+}
+
+Unit::~Unit() {
+
+    for(auto&& p : _skills) std::get<1>(p)->destroy();
 }
 
 bool Unit::receiveDamage(AttackType damage, Unit *attacking) {
@@ -168,11 +197,11 @@ bool Unit::perform() {
 
     if(_skill_next_call == _skill_step){
 
-        _skill_next_call = _skill_step + unitInfo()->callSkill(_skill, this, map(), pci, { _skill_step, _skill_angle });
+        _skill_next_call = _skill_step + _skills.at(_skill).second->action(this, map(), pci, { _skill_step, _skill_angle });
 
         if(_skill_next_call <= _skill_step) {
 
-            _skill = unitInfo()->skills();
+            _skill = skillsAmount();
 
             _notifyAll(&Unit::Observer::unitSkillFinished);
 
@@ -222,7 +251,7 @@ bool Unit::_choose_internal(BattleWidget::InputInterface& i) {
 
     _skill_angle = 0;
 
-    if(unitInfo()->skillNeedAngle(_skill)) {
+    if(_skills.at(_skill).second->needAngle()) {
 
         auto opt = _controller->chooseAngle(this, map(), i.get());
         if(!opt) return false;

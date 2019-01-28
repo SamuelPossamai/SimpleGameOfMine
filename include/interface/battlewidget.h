@@ -91,9 +91,9 @@ public:
 
     /*!
      * \brief Show the skill buttons based on the information in 'u'
-     * \param u The UnitInfo containing the information about the skills' icon and quantity
+     * \param u The Unit whose skills will be shown
      */
-    void showSkillButtons(const UnitInfo *u);
+    void showSkillButtons(const Unit *u);
 
     /*!
      * \brief Hide the skill buttons

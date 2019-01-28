@@ -33,7 +33,11 @@ public:
     Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, BattleWidget *i,
          const Attributes& attr, UIntegerType level, UIntegerType team);
 
-    ~Unit() final = default;
+    Unit(const Unit&) = delete;
+
+    Unit& operator=(const Unit&) = delete;
+
+    ~Unit() final;
 
     /*!
      * \brief Verify if the unit needs a thread to act
@@ -193,11 +197,16 @@ public:
      */
     void unselect();
 
+    UIntegerType skillsAmount() const { return _skills.size(); }
+
+    const std::string& skillName() const { return _skills.at(skillId()).first; }
+    const std::string& skillName(UIntegerType n) const { return _skills.at(n).first; }
+
     /*!
      * \brief Verify if the unit is performing a skill
      * \return true if it is, false otherwise
      */
-    bool isPerformingSkill() const { return _skill < unitInfo()->skills(); }
+    bool isPerformingSkill() const { return _skill < skillsAmount(); }
 
     /*!
      * \brief Return the id of the skill beeing performed
@@ -228,6 +237,8 @@ public:
 
 private:
 
+    using SkillVector = std::vector<std::pair<std::string, UnitSkill *> >;
+
     bool setSpecial(SpecialType val);
     bool setRage(RageType val);
 
@@ -253,6 +264,8 @@ private:
     UnitAnimationItem *_gitem;
 
     BattleWidget *_interface;
+
+    SkillVector _skills;
 };
 
 class Unit::Observer : virtual public EngineObject::Observer {

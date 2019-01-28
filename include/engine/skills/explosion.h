@@ -24,6 +24,10 @@ public:
         return _skill;
     }
 
+    static UnitSkill *create(const utility::VariantDataInfo&) { return getSkill(); }
+
+    virtual void destroy() override {}
+
 private:
 
     static Explosion *_skill;

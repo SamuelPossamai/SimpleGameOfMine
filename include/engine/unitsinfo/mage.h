@@ -2,64 +2,53 @@
 #ifndef UNITSINFO_MAGE_H
 #define UNITSINFO_MAGE_H
 
-#include <QPixmap>
-
 #include <memory/genericmemorymanager.h>
 
-#include "skills/mageonoffmagicshield.h"
-#include "skills/walk.h"
-#include "skills/magicmissile.h"
-#include "skills/teleport.h"
-#include "skills/fireball.h"
-#include "skills/explosion.h"
 #include "unitinfo.h"
 
 namespace unitsinfo {
 
 class Mage : public UnitInfo, public GenericMemoryManager::ManagedObject {
 
-    Mage() {
-
-        addSkill(skill::Walk::MemoryInterface::dependentGet(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
-        addSkill(skill::MagicMissile::getSkill(), QPixmap(":/magic_missile_3.png").scaled(50, 50));
-        addSkill(skill::Teleport::getSkill(), QPixmap(":/teleport_mage_icon.png").scaled(50, 50));
-        addSkill(skill::Fireball::getSkill(), QPixmap(":/fireball_image.png").scaled(50, 50));
-        addSkill(skill::Explosion::getSkill(), QPixmap(":/explosion_icon.png").scaled(50, 50));
-        addSkill(skill::MageOnOffMagicShield::getSkill(), QPixmap(":/magic_shield.png").scaled(50, 50));
-    }
+    Mage() = default;
 
 public:
 
     static Mage *getInfo() { return static_cast<Mage *>(getObjCopy(Mage())); }
 
-    virtual ~Mage() override { skill::Walk::MemoryInterface::noLongerDepend(10, 100); }
+    virtual ~Mage() override = default;
+
+    virtual Skills getSkills(const Unit *) const override;
 
 protected:
 
     virtual HealthType healthCalculate(const Attributes& attr, UIntegerType level) const override {
 
-        return 100 + 6*attr.vitality() + level/2;
+        return HealthType(100 + 6*attr.vitality() + level/2);
     }
     virtual EnergyType energyCalculate(const Attributes& attr, UIntegerType level) const override {
 
-        return 200 + 12*attr.wisdom() + level;
+        return EnergyType(200 + 12*attr.wisdom() + level);
     }
-    virtual AttackType attackCalculate(const Attributes& attr, UIntegerType) const override { return 2 + 0.2*attr.strength(); }
+    virtual AttackType attackCalculate(const Attributes& attr, UIntegerType) const override {
+
+        return AttackType(2 + 0.2*attr.strength());
+    }
     virtual AccuracyType accuracyCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 15 + 0.7*attr.dexterity();
+        return AccuracyType(15 + 0.7*attr.dexterity());
     }
     virtual MagicPowerType magicPowerCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 10 + attr.wisdom();
+        return MagicPowerType(10 + attr.wisdom());
     }
     virtual MagicControlType magicControlCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 5 + 1.5*attr.wisdom() + 0.2*attr.dexterity();
+        return MagicControlType(5 + 1.5*attr.wisdom() + 0.2*attr.dexterity());
     }
     virtual SpeedType speedCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 55 + 0.55*attr.agility() + 0.2*attr.dexterity();
+        return SpeedType(55 + 0.55*attr.agility() + 0.2*attr.dexterity());
     }
     virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const override { return 24; }
 

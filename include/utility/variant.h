@@ -99,6 +99,7 @@ public:
     Variant(const List& l) : _var(l) {}
     Variant(const Map& m) : _var(m) {}
     Variant(const Pointer& p) : _var(p) {}
+    Variant(int i) : _var(Integer(i)) {}
 
     Variant& operator=(const Variant& other) { _var = other._var; return *this; }
 
@@ -112,6 +113,7 @@ public:
     Variant& operator=(const List& l) { _var = l; return *this; }
     Variant& operator=(const Map& m) { _var = m; return *this; }
     Variant& operator=(const Pointer& p) { _var = p; return *this; }
+    Variant& operator=(int i) { _var = Integer(i); return *this; }
 
     ~Variant() = default;
 

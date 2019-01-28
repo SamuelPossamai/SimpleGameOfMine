@@ -114,7 +114,9 @@ SOURCES += src/main.cpp \
     src/interface/itemimagewidget.cpp \
     src/utility/variant.cpp \
     src/engine/skills/action.cpp \
-    src/gameinfo/skills.cpp
+    src/gameinfo/skills.cpp \
+    src/engine/unitsinfo/archer.cpp \
+    src/engine/unitsinfo/mage.cpp
 
 
 PRECOMPILED_HEADER = include/config/sgomfiles.h \

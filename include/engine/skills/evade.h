@@ -30,6 +30,10 @@ public:
         return _skill;
     }
 
+    static UnitSkill *create(const utility::VariantDataInfo&) { return getSkill(); }
+
+    void destroy() override {}
+
 private:
 
     static Evade *_skill;

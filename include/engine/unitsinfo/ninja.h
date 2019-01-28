@@ -8,11 +8,11 @@ namespace unitsinfo {
 
 class Ninja : public Fighter {
 
-    Ninja();
+    Ninja() = default;
 
     virtual HealthType healthCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 150 + 8*attr.vitality() + 0.2*attr.dexterity();
+        return HealthType(150 + 8*attr.vitality() + 0.2*attr.dexterity());
     }
     virtual EnergyType energyCalculate(const Attributes& attr, UIntegerType level) const override {
 
@@ -20,28 +20,29 @@ class Ninja : public Fighter {
     }
     virtual AttackType attackCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 12 + 0.7*attr.strength() + 0.35*attr.dexterity() + 0.05*attr.agility() + 0.1*attr.wisdom();
+        return AttackType(12 + 0.7*attr.strength() + 0.35*attr.dexterity() + 0.05*attr.agility() + 0.1*attr.wisdom());
     }
     virtual AccuracyType accuracyCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 40 + 1.2*attr.dexterity();
+        return AccuracyType(40 + 1.2*attr.dexterity());
     }
     virtual MagicPowerType magicPowerCalculate(const Attributes&, UIntegerType) const override { return 0; }
     virtual MagicControlType magicControlCalculate(const Attributes&, UIntegerType) const override { return 0; }
     virtual SpeedType speedCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 65 + 0.85*attr.agility() + 0.35*attr.dexterity();
+        return SpeedType(65 + 0.85*attr.agility() + 0.35*attr.dexterity());
     }
     virtual SizeType sizeCalculate(const Attributes& attr, UIntegerType level) const override {
 
-        SizeType size = Fighter::sizeCalculate(attr, level) - 0.005*(attr.dexterity() + attr.agility() + level);
+        SizeType size = SizeType(Fighter::sizeCalculate(attr, level) - 0.005*(attr.dexterity() + attr.agility() + level));
         return size > 15 ? size : 15;
     }
 
+    virtual Skills getSkills(const Unit *) const override;
+
 public:
 
-    virtual ~Ninja() { delete _shoot_skill; }
-
+    virtual ~Ninja() override = default;
     static Ninja *getInfo() {
 
         if(_info) return _info;
@@ -54,8 +55,6 @@ public:
 private:
 
     static Ninja *_info;
-
-    UnitSkill *_shoot_skill;
 };
 
 } /* namespace creature */

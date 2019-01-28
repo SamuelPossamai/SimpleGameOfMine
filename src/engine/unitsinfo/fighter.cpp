@@ -1,27 +1,16 @@
 
-#include "animation.h"
 #include "unitsinfo/fighter.h"
-#include "skills/walk.h"
-#include "skills/basicattack.h"
-
-#include "gameinfo/skills.h"
-#include "unitskillfactory.h"
 
 using namespace unitsinfo;
 
 Fighter *Fighter::_info = nullptr;
 
-Fighter::~Fighter() {
+UnitInfo::Skills Fighter::getSkills(const Unit *) const {
 
-    skill::Walk::MemoryInterface::noLongerDepend(10, 140);
-    //skill::BasicAttack::MemoryInterface::noLongerDepend(50, true);
-}
+    UnitInfo::Skills s;
 
-Fighter::Fighter()  {
+    s.push_back({"walk", {{"distance", 140}, {"duration", 10}}});
+    s.push_back({"basic attack", {{"distance", 50}}});
 
-    addSkill(skill::Walk::MemoryInterface::dependentGet(10, 140), QPixmap(":/wing_boot.png").scaled(50, 50));
-
-    auto i = *gameinfo::Skills::get("basic attack");
-
-    addSkill(i.factory->create(), i.icon);
+    return s;
 }

@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include <cmath>
 
 #include "utility/random.h"
@@ -35,6 +36,20 @@ UIntegerType Shoot::action(Unit *u, EngineMap *, ProjectileCreationInterface& pc
     pci.create(_projectile_type, u, p_info, arrow_angle, { u->x() + dx, u->y() + dy }, arrow_angle);
 
     return 20;
+}
+
+UnitSkill *Shoot::create(const utility::VariantDataInfo& d) {
+
+    auto it = d.find("projectile");
+
+    if(it == d.end()) {
+
+        std::cerr << "skill::Shoot: Projectile not passed" << std::endl;
+
+        return nullptr;
+    }
+
+    return new Shoot(it->second.get<utility::Variant::String>());
 }
 
 } /* namespace skill */

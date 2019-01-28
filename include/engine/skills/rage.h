@@ -22,6 +22,10 @@ public:
      */
     static Rage *getSkill() { if(!_skill) _skill = new Rage; return _skill; }
 
+    static UnitSkill *create(const utility::VariantDataInfo&) { return getSkill(); }
+
+    virtual void destroy() override {}
+
 private:
 
     static Rage *_skill;

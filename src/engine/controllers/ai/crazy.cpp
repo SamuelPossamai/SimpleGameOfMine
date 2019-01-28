@@ -13,7 +13,7 @@ Crazy *Crazy::_controller;
 
 UIntegerType Crazy::chooseSkill(const Unit *u, const Map *, UserInterface *) {
 
-    return Random::uniformIntDistribution(0, u->unitInfo()->skills() - 1);
+    return Random::uniformIntDistribution(0, u->skillsAmount() - 1);
 }
 
 std::optional<Crazy::AngleType> Crazy::chooseAngle(const Unit *, const Map *, UserInterface *) {

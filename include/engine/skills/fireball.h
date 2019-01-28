@@ -26,6 +26,10 @@ public:
 
     static void shoot(Unit *, ProjectileCreationInterface&, Unit::AngleType angle);
 
+    static UnitSkill *create(const utility::VariantDataInfo&) { return getSkill(); }
+
+    virtual void destroy() override {}
+
 private:
 
     static Fireball *_skill;

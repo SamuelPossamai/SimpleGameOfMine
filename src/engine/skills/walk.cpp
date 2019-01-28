@@ -30,4 +30,33 @@ UIntegerType Walk::doAction(Unit *u, EngineMap *, const Info& info, RealType ang
     return period;
 }
 
+UnitSkill *Walk::create(const utility::VariantDataInfo& m) {
+
+    auto distance = decltype(_ds)(100);
+    auto duration = decltype(_dur)(10);
+
+    auto it = m.find("distance");
+
+    if(it != m.end()) {
+
+        if(it->second.isNumber()) distance = decltype(distance)(it->second.getNumber());
+        else std::cerr << "skill::Walk: Distance passed is not a number" << std::endl;
+    }
+
+    it = m.find("duration");
+
+    if(it != m.end()) {
+
+        if(it->second.isNumber()) duration = decltype(duration)(it->second.getNumber());
+        else std::cerr << "skill::Walk: Duration passed is not a number" << std::endl;
+    }
+
+    return MemoryInterface::dependentGet(duration, distance);
+}
+
+void Walk::destroy() {
+
+    MemoryInterface::noLongerDepend(*this);
+}
+
 } /* namespace skill */

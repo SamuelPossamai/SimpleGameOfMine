@@ -8,13 +8,14 @@
 #include <QLabel>
 #include <QMessageBox>
 
-#include <animation/projectileanimationitemfactory.h>
-#include <animation/projectileanimationitem.h>
-#include <config/engine_traits.h>
-#include <memory/memorymanager.h>
-#include <gameinfo/creatures.h>
-#include <gameinfo/jobs.h>
-#include <engine/controllers/human.h>
+#include "animation/projectileanimationitemfactory.h"
+#include "animation/projectileanimationitem.h"
+#include "config/engine_traits.h"
+#include "memory/memorymanager.h"
+#include "gameinfo/creatures.h"
+#include "gameinfo/jobs.h"
+#include "gameinfo/skills.h"
+#include "engine/controllers/human.h"
 
 #include "ui_battlewidget.h"
 #include "mainwindow.h"
@@ -55,9 +56,9 @@ BattleWidget::~BattleWidget() {
     }
 }
 
-void BattleWidget::showSkillButtons(const UnitInfo *info) {
+void BattleWidget::showSkillButtons(const Unit *unit) {
 
-    if(info->skills() == 0) {
+    if(unit->skillsAmount() == 0) {
 
         _current_buttons = 0;
         return;
@@ -65,7 +66,7 @@ void BattleWidget::showSkillButtons(const UnitInfo *info) {
 
     static const auto button_size = Traits<BattleWidget>::skillButtonSize;
 
-    while(_skill_buttons.size() < info->skills()) {
+    while(_skill_buttons.size() < unit->skillsAmount()) {
 
         _skill_buttons.push_back(new IdButton(_skill_buttons.size(), this));
 
@@ -76,13 +77,19 @@ void BattleWidget::showSkillButtons(const UnitInfo *info) {
         QObject::connect(_skill_buttons.back(), &IdButton::clickedId, this, &BattleWidget::_skill_button_clicked);
     }
 
-    _current_buttons = info->skills();
+    _current_buttons = unit->skillsAmount();
 
     _skill_buttons.front()->show();
 
     _update_buttons();
 
-    for(UIntegerType i = 0; i < _current_buttons; i++) _skill_buttons[i]->setIcon(QIcon(info->skillIcon(i)));
+    for(UIntegerType i = 0; i < _current_buttons; i++) {
+
+        auto opt = gameinfo::Skills::get(unit->skillName(i));
+        if(!opt) continue;
+
+        _skill_buttons[i]->setIcon(QIcon(opt->icon));
+    }
     for(UIntegerType i = _current_buttons; i < _skill_buttons.size(); i++) _skill_buttons[i]->hide();
 
     _gview->setFocus();

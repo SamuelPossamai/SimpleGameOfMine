@@ -6,6 +6,8 @@
 
 #include <QPixmap>
 
+#include "utility/variant.h"
+
 #include "engine_traits.h"
 #include "unitskill.h"
 
@@ -28,13 +30,14 @@ public:
     using SizeType = Traits<Unit>::SizeType;
     using SpeedType = Traits<Unit>::SpeedType;
     using Attributes = UnitAttributes;
+    using Skills = std::vector<std::pair<std::string, utility::VariantDataInfo> >;
 
     /*!
      * \brief Construct an UnitInfo, all the parameters are set to zero
      */
     UnitInfo() = default;
 
-    virtual ~UnitInfo();
+    virtual ~UnitInfo() = default;
 
     /*!
      * \brief Return the maximum health of the unit
@@ -76,38 +79,7 @@ public:
      */
     SpeedType speed(const Attributes& attr, UIntegerType level) const { return speedCalculate(attr, level); }
 
-    /*!
-     * \brief Return the icon of a skill
-     * \param n The id of the skill, a call to this method with an invalid id have undefined behavior
-     * \return The icon of a skill
-     */
-    const QPixmap& skillIcon(UIntegerType n) const { return std::get<1>(_skills[n]); }
-
-    /*!
-     * \brief Perform a call to a skill
-     * \param n The skill's id, if it's invalid it will have undefined behavior
-     * \param u The unit that is performing the skill
-     * \param m Map containing the units in the battle
-     * \param pci Interface to create projectiles.
-     * \param info Basic information about the call
-     * \sa UnitSkill
-     * \return After how many steps the skill should be performed again
-     */
-    UIntegerType callSkill(UIntegerType n, Unit *u, Map *m,
-                           UnitSkill::ProjectileCreationInterface& pci, const UnitSkill::Info& info) const;
-
-    /*!
-     * \brief Verify if a skill needs angle
-     * \param n The skill's id, if it's invalid the behavior will be undefined
-     * \return true if it needs an angle, false otherwise
-     */
-    bool skillNeedAngle(UIntegerType n) const { return std::get<0>(_skills[n])->needAngle(); }
-
-    /*!
-     * \brief Return the number of skills
-     * \return The numbers of skills
-     */
-    UIntegerType skills() const { return _skills.size(); }
+    virtual Skills getSkills(const Unit *) const = 0;
 
     /*!
      * \brief Virtual method called when an unit is created
@@ -116,17 +88,6 @@ public:
     virtual void init(Unit *u) const { Q_UNUSED(u); }
 
 protected:
-
-    /*!
-     * \brief Add a skill to the unit information
-     * \param skill Skill that will be added
-     * \param icon Icon of the skill that will be added, by default blank
-     * \param delete_after if true the skill will be deleted when the UnitInfo is destroyed
-     */
-    void addSkill(UnitSkill *skill, const QPixmap& icon = QPixmap(), bool delete_after = false) {
-
-        _skills.emplace_back(skill, icon, delete_after);
-    }
 
     virtual HealthType healthCalculate(const Attributes&, UIntegerType) const = 0;
     virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const = 0;
@@ -138,12 +99,6 @@ protected:
     virtual MagicControlType magicControlCalculate(const Attributes&, UIntegerType) const = 0;
     virtual SpeedType speedCalculate(const Attributes&, UIntegerType) const = 0;
     virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const = 0;
-
-private:
-
-    using SkillVector = std::vector<std::tuple<UnitSkill *, QPixmap, bool> >;
-
-    SkillVector _skills;
 };
 
 #endif // UNITINFO_H

@@ -41,6 +41,10 @@ public:
      */
     static bool teleportUnit(Unit *u);
 
+    static UnitSkill *create(const utility::VariantDataInfo&) { return getSkill(); }
+
+    virtual void destroy() override {}
+
 private:
 
     static Teleport *_skill;

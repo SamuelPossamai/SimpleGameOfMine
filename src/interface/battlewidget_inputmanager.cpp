@@ -21,7 +21,7 @@ void BattleWidget::InputManager::handleEvents() {
         switch (event.first) {
 
             case Event::AskSkillStart:
-                _interface->showSkillButtons(reinterpret_cast<const Unit *>(event.second)->unitInfo());
+                _interface->showSkillButtons(reinterpret_cast<const Unit *>(event.second));
                 break;
 
             case Event::AskSkillFinish:
@@ -31,7 +31,7 @@ void BattleWidget::InputManager::handleEvents() {
             case Event::AskAngleStart:
                 {
                     auto u = reinterpret_cast<const Unit *>(event.second);
-                    _interface->showArrow(u->x(), u->y());
+                    _interface->showArrow(UIntegerType(u->x()), UIntegerType(u->y()));
                     _interface->showCancelButton();
                 }
                 break;

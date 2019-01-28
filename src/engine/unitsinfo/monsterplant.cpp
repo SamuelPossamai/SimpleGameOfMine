@@ -1,20 +1,16 @@
 
-#include <engine/skills/walk.h>
-#include <engine/skills/plantareaattack.h>
-
 #include "unitsinfo/monsterplant.h"
 
 using namespace unitsinfo;
 
 MonsterPlant *MonsterPlant::_info = nullptr;
 
-MonsterPlant::MonsterPlant() {
+UnitInfo::Skills MonsterPlant::getSkills(const Unit *) const {
 
-    addSkill(skill::Walk::MemoryInterface::dependentGet(15, 80), QPixmap(":/wing_boot.png").scaled(50, 50));
-    addSkill(skill::PlantAreaAttack::getSkill());
-}
+    UnitInfo::Skills s;
 
-MonsterPlant::~MonsterPlant() {
+    s.push_back({"walk", {{"distance", 80}, {"duration", 15}}});
+    s.push_back({"plant area attack", {}});
 
-    skill::Walk::MemoryInterface::noLongerDepend(15, 80);
+    return s;
 }
