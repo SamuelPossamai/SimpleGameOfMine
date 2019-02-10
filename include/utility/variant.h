@@ -93,7 +93,8 @@ public:
     Variant(const Invalid& i) : _var(i) {}
     Variant(const Error& e) : _var(e) {}
     Variant(bool b) : _var(b) {}
-    Variant(const Integer& i) : _var(i) {}
+    Variant(const IntegerType& i) : _var(Integer(i)) {}
+    Variant(const UIntegerType& i) : _var(Integer(i)) {}
     Variant(const Real& r) : _var(r) {}
     Variant(const String& s) : _var(s) {}
     Variant(const List& l) : _var(l) {}
@@ -107,7 +108,8 @@ public:
     Variant& operator=(const Invalid& i) { _var = i; return *this; }
     Variant& operator=(const Error& e) { _var = e; return *this; }
     Variant& operator=(bool b) { _var = b; return *this; }
-    Variant& operator=(const Integer& i) { _var = i; return *this; }
+    Variant& operator=(const IntegerType& i) { _var = Integer(i); return *this; }
+    Variant& operator=(const UIntegerType& i) { _var = Integer(i); return *this; }
     Variant& operator=(const Real& r) { _var = r; return *this; }
     Variant& operator=(const String& s) { _var = s; return *this; }
     Variant& operator=(const List& l) { _var = l; return *this; }

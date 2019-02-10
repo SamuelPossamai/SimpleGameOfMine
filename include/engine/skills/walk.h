@@ -41,6 +41,8 @@ public:
 
     virtual void destroy() override;
 
+    static UIntegerType walk(Unit *, UIntegerType step, UIntegerType dur, UIntegerType ds, RealType angle);
+
 protected:
 
     UIntegerType doAction(Unit *, EngineMap *, const Info&, RealType);

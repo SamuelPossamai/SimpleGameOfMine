@@ -16,18 +16,23 @@ UIntegerType Walk::action(Unit *u, EngineMap *m, ProjectileCreationInterface&, c
     return doAction(u, m, info, u->angle());
 }
 
-UIntegerType Walk::doAction(Unit *u, EngineMap *, const Info& info, RealType angle){
+UIntegerType Walk::walk(Unit *u, UIntegerType step, UIntegerType dur, UIntegerType ds, RealType angle) {
 
     static const UIntegerType period = 3;
 
-    if(info.step >= period*_dur) return 0;
+    if(step >= period*dur) return 0;
 
-    Unit::PositionType dx = _ds*cos(angle);
-    Unit::PositionType dy = _ds*sin(angle);
+    Unit::PositionType dx = ds*cos(angle);
+    Unit::PositionType dy = ds*sin(angle);
 
     u->setPos(u->x() + dx, u->y() + dy);
 
     return period;
+}
+
+UIntegerType Walk::doAction(Unit *u, EngineMap *, const Info& info, RealType angle){
+
+    return walk(u, info.step, _dur, _ds, angle);
 }
 
 UnitSkill *Walk::create(const utility::VariantDataInfo& m) {

@@ -116,7 +116,10 @@ SOURCES += src/main.cpp \
     src/engine/skills/action.cpp \
     src/gameinfo/skills.cpp \
     src/engine/unitsinfo/archer.cpp \
-    src/engine/unitsinfo/mage.cpp
+    src/engine/unitsinfo/mage.cpp \
+    src/engine/skills/actionssequeceskill.cpp \
+    src/engine/skills/actions/walkaction.cpp \
+    src/utility/variantdatainfo.cpp
 
 
 PRECOMPILED_HEADER = include/config/sgomfiles.h \
@@ -265,7 +268,9 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/actions/walkaction.h \
     include/gameinfo/skills.h \
     include/engine/unitskillfactory.h \
-    include/engine/skillfactories/genericskillfactory.h
+    include/engine/skillfactories/genericskillfactory.h \
+    include/engine/skills/actionssequeceskill.h \
+    include/utility/variantdatainfo.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc

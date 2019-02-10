@@ -6,38 +6,46 @@
 
 class ActionsHandler {
 
+    struct ActionElement;
+
 public:
 
     using ActInfo = Action::ActInfo;
     using SkillInfo = Action::SkillInfo;
     using ProjectileCreationInterface = Action::ProjectileCreationInterface;
 
-    ActionsHandler(const std::vector<Action *>& actions, ActInfo& a_info) {
+    ActionsHandler(const std::vector<std::pair<Action *, ActInfo> >& actions) {
 
         _actions.reserve(actions.size());
 
-        for(Action *a : actions) {
+        for(auto& p : actions) {
 
-            a->configActInfo(a_info);
-            _actions.emplace_back(a, a->firstAct(a_info));
-        }
-
-    }
-
-    UIntegerType callAct(Unit *u, EngineMap *m, ProjectileCreationInterface& pci,
-                                 const SkillInfo& s_info, const ActInfo& a_info) {
-
-        for(auto& p : _actions) {
-
-            if(p.second == s_info.step) p.second += p.first->act(u, m, pci, s_info, a_info);
+            _actions.push_back({ p.first, p.first->firstAct(p.second), p.second });
+            p.first->configActInfo(_actions.back().act_info);
         }
     }
 
-    void reset() { for(auto& p : _actions) p.second = 0; }
+    void callAct(Unit *u, EngineMap *m, ProjectileCreationInterface& pci,
+                 const SkillInfo& s_info, const ActInfo& a_info) {
+
+        for(auto& a : _actions) {
+
+            if(a.next_step == s_info.step) a.next_step += a.action->act(u, m, pci, s_info, a_info);
+        }
+    }
+
+    void reset() { for(auto& a : _actions) a.next_step = 0; }
 
 private:
 
-    std::vector<std::pair<Action *, UIntegerType> > _actions;
+    struct ActionElement {
+
+        Action *action;
+        UIntegerType next_step;
+        ActInfo act_info;
+    };
+
+    std::vector<ActionElement> _actions;
 };
 
 #endif // ACTIONSHANDLER_H

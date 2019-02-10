@@ -11,7 +11,7 @@ public:
 
     using Variant = utility::Variant;
     using SkillInfo = UnitSkill::Info;
-    using ActInfo = std::map<std::string, Variant>;
+    using ActInfo = utility::VariantDataInfo;
     using ProjectileCreationInterface = UnitSkill::ProjectileCreationInterface;
 
     Action() = default;
@@ -59,15 +59,6 @@ public:
         _actions->erase(it);
 
         return true;
-    }
-
-protected:
-
-    void configActDefaultsTo(ActInfo& a_info, const std::string& str, const Variant& v) {
-
-        auto it = a_info.find(str);
-
-        if(it == a_info.end()) a_info.insert({ str, v });
     }
 
 private:
