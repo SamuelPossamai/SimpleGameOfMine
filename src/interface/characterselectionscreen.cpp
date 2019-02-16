@@ -24,11 +24,6 @@ CharacterSelectionScreen::~CharacterSelectionScreen() {
     delete ui;
 }
 
-void CharacterSelectionScreen::activate() {
-
-    parent()->setStyleSheet("background-color: rgb(245, 245, 245);");
-}
-
 void CharacterSelectionScreen::_update_image() {
 
     bool is_valid = _selecteds.size() >= minCharacters() && _selecteds.size() <= maxCharacters();

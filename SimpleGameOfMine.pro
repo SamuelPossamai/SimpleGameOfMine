@@ -273,7 +273,8 @@ HEADERS += include/interface/mainwindow.h \
     include/utility/variantdatainfo.h
 
 RESOURCES += img/images.qrc \
-    data/data.qrc
+    data/data.qrc \
+    qss/qss.qrc
 
 FORMS += forms/gamedefaultscreen.ui \
     forms/menu.ui \

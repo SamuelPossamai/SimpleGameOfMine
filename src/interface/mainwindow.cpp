@@ -53,14 +53,28 @@ void MainWindow::popWidget() {
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
 
-    if(event->key() == Qt::Key_F12) {
+    bool accept = true;
+    switch (event->key()) {
 
-        this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
+        case Qt::Key_F11:
+            this->setWindowState(this->windowState() ^ Qt::WindowMaximized);
+            break;
+        case Qt::Key_F12:
+            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
+            break;
+        case Qt::Key_Escape: {
+            if(this->windowState() & Qt::WindowFullScreen) {
+                this->setWindowState(this->windowState() & ~Qt::WindowFullScreen);
+            }
+            else accept = false;
+            break;
+        }
+        default:
+            accept = false;
+            break;
     }
-    if(event->key() == Qt::Key_F11) {
 
-        this->setWindowState(this->windowState() ^ Qt::WindowMaximized);
-    }
+    if(accept) event->accept();
 }
 
 void MainWindow::swapWidget(MainWidget *w) {
@@ -87,6 +101,4 @@ void MainWindow::restoreProperties() {
 
     setAutoFillBackground(true);
     setWindowTitle(Traits<MainWindow>::name);
-    setStyleSheet("background-color: rgb(245, 245, 245);"
-                  "color: rgb(20, 20, 20);");
 }

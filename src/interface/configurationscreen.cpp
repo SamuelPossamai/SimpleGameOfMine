@@ -29,7 +29,7 @@ ConfigurationScreen::ConfigurationScreen(MainWindow *parent) : MainWidget(parent
     }
     else ui->characterSelectionScreenComboBox->setCurrentIndex(int(mode_id));
 
-    ui->windowFullscreenCheckBox->setChecked(map["Game Start"]["fullscreen"] == "yes");
+    ui->windowFullscreenCheckBox->setChecked(map["Game Start"]["fullscreen"] == true);
 
     _saved = true;
 }
