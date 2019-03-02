@@ -27,7 +27,8 @@
 
 BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */, UIntegerType *result /* = nullptr */) :
     MainWidget(parent), _result(result), _current_buttons(0), _arrow_item(nullptr), _message(nullptr),
-    _input_interface(std::make_shared<InputManager>(this)), _ui(new Ui::BattleWidget) {
+    _input_interface(std::make_shared<InputManager>(this)), _skill_button_size(50), _skill_button_distance(20),
+    _skill_button_border_vertical_distance(20), _skill_button_border_horizontal_distance(20), _ui(new Ui::BattleWidget) {
 
     MemoryManager::cleanAll(25);
 
@@ -39,8 +40,6 @@ BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */, UIntegerType *res
 
     _ui->cursorLabel->setAttribute(Qt::WA_TransparentForMouseEvents);
     hideCancelButton();
-
-    setStyleSheet("background-color:lightGray;");
 
     _input_interface->enable();
     _gview->setFocus();
@@ -64,17 +63,21 @@ void BattleWidget::showSkillButtons(const Unit *unit) {
         return;
     }
 
-    static const auto button_size = Traits<BattleWidget>::skillButtonSize;
+    static const auto button_size = _skill_button_size;
 
     while(_skill_buttons.size() < unit->skillsAmount()) {
 
-        _skill_buttons.push_back(new IdButton(_skill_buttons.size(), this));
+        IdButton *new_button = new IdButton(_skill_buttons.size(), this);
 
-        _skill_buttons.back()->setFocusPolicy(Qt::NoFocus);
+        _skill_buttons.push_back(new_button);
 
-        _skill_buttons.back()->setIconSize(QSize(int(button_size), int(button_size)));
+        new_button->setAccessibleName("battleSkillButton");
 
-        QObject::connect(_skill_buttons.back(), &IdButton::clickedId, this, &BattleWidget::_skill_button_clicked);
+        new_button->setFocusPolicy(Qt::NoFocus);
+
+        new_button->setIconSize(QSize(int(button_size), int(button_size)));
+
+        QObject::connect(new_button, &IdButton::clickedId, this, &BattleWidget::_skill_button_clicked);
     }
 
     _current_buttons = unit->skillsAmount();
@@ -171,7 +174,7 @@ void BattleWidget::graphicsViewMouseMoveEvent(QMouseEvent *event) {
 
     if(!_arrow_item->isVisible()) return;
 
-    _ui->cursorLabel->setText(_ui->cursorLabel->text() + QString(" (%1°)").arg(IntegerType(angle)));
+    _ui->cursorLabel->setText(_ui->cursorLabel->text() + QString(" (%1°)").arg(-IntegerType(angle)));
 }
 
 void BattleWidget::graphicsViewMouseReleaseEvent(QMouseEvent *event) {
@@ -301,19 +304,21 @@ void BattleWidget::on_returnButton_clicked() {
 
 void BattleWidget::_update_buttons() {
 
+    auto [horizontal_align, vertical_align] = _decode_aligment();
+
     if(_skill_buttons.empty()) return;
     if(_skill_buttons.front()->isHidden()) return;
 
-    static const auto button_size = Traits<BattleWidget>::skillButtonSize;
+    static const auto button_size = _skill_button_size;
 
     RealType button_x, button_y;
 
     if(Traits<BattleWidget>::skillButtonDirection == Traits<BattleWidget>::Direction::Horizontal){
 
-        button_y = _button_pos_calculate_static(false, UIntegerType(Traits<BattleWidget>::skillButtonVerticalAlign));
+        button_y = _button_pos_calculate_static(false, UIntegerType(vertical_align));
     }else {
 
-        button_x = _button_pos_calculate_static(true, UIntegerType(Traits<BattleWidget>::skillButtonHorizontalAlign));
+        button_x = _button_pos_calculate_static(true, UIntegerType(horizontal_align));
     }
 
     for(UIntegerType i = 0; i < _current_buttons; i++){
@@ -323,12 +328,12 @@ void BattleWidget::_update_buttons() {
         if(Traits<BattleWidget>::skillButtonDirection == Traits<BattleWidget>::Direction::Horizontal){
 
             button_x = _button_pos_calculate_dynamic(i, _current_buttons, true,
-                                                     UIntegerType(Traits<BattleWidget>::skillButtonHorizontalAlign));
+                                                     UIntegerType(horizontal_align));
 
         }else {
 
             button_y = _button_pos_calculate_dynamic(i, _current_buttons, false,
-                                                     UIntegerType(Traits<BattleWidget>::skillButtonVerticalAlign));
+                                                     UIntegerType(vertical_align));
         }
 
         button->setGeometry(int(button_x), int(button_y), int(button_size), int(button_size));
@@ -352,29 +357,29 @@ void BattleWidget::_skill_button_clicked(UIntegerType id){
 RealType BattleWidget::_button_pos_calculate_static(bool x_dir, UIntegerType mode) {
 
     auto max = x_dir ? this->width() : this->height();
-    auto border_distance = x_dir ? Traits<BattleWidget>::skillButtonBorderHorizontalDistance :
-                                   Traits<BattleWidget>::skillButtonBorderVerticalDistance;
+    auto border_distance = x_dir ? _skill_button_border_horizontal_distance :
+                                   _skill_button_border_vertical_distance;
 
     switch(mode) {
 
         case 0:
             return border_distance;
         case 1:
-            return max/2 - Traits<BattleWidget>::skillButtonSize/2;
+            return max/2 - _skill_button_size/2;
         default:
-            return max - border_distance - Traits<BattleWidget>::skillButtonSize;
+            return max - border_distance - _skill_button_size;
     }
 }
 
 RealType BattleWidget::_button_pos_calculate_dynamic(UIntegerType i, UIntegerType i_max, bool x_dir, UIntegerType mode) {
 
-    static const auto button_size = Traits<BattleWidget>::skillButtonSize;
-    static const auto buttons_distance = Traits<BattleWidget>::skillButtonDistance;
+    static const auto button_size = _skill_button_size;
+    static const auto buttons_distance = _skill_button_distance;
 
 
     auto max = x_dir ? this->width() : this->height();
-    auto border_distance = x_dir ? Traits<BattleWidget>::skillButtonBorderHorizontalDistance :
-                                   Traits<BattleWidget>::skillButtonBorderVerticalDistance;
+    auto border_distance = x_dir ? _skill_button_border_horizontal_distance :
+                                   _skill_button_border_vertical_distance;
 
     switch(mode) {
 
@@ -384,7 +389,7 @@ RealType BattleWidget::_button_pos_calculate_dynamic(UIntegerType i, UIntegerTyp
             return max/2 + (RealType(i) - i_max/2)*(button_size + buttons_distance) + \
                     (i_max%2 ? -button_size/2 : RealType(buttons_distance)/2);
         default:
-            return max - border_distance - i*(button_size + buttons_distance) - Traits<BattleWidget>::skillButtonSize;
+            return max - border_distance - i*(button_size + buttons_distance) - _skill_button_size;
     }
 }
 
@@ -431,3 +436,17 @@ void BattleWidget::_timer_construct() {
     QObject::connect(_timer, &QTimer::timeout, this, &BattleWidget::step);
 }
 
+std::pair<UIntegerType, UIntegerType> BattleWidget::_decode_aligment() const {
+
+    auto p = std::pair<UIntegerType, UIntegerType>(1, 2);
+
+    if(_alignment & Qt::AlignLeft) p.first = 0;
+    else if(_alignment & Qt::AlignHCenter) p.first = 1;
+    else if(_alignment & Qt::AlignRight) p.first = 2;
+
+    if(_alignment & Qt::AlignTop) p.second = 0;
+    else if(_alignment & Qt::AlignVCenter) p.second = 1;
+    else if(_alignment & Qt::AlignBottom) p.second = 2;
+
+    return p;
+}

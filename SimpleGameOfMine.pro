@@ -270,7 +270,9 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/unitskillfactory.h \
     include/engine/skillfactories/genericskillfactory.h \
     include/engine/skills/actionssequeceskill.h \
-    include/utility/variantdatainfo.h
+    include/utility/variantdatainfo.h \
+    include/config/game_traits.h \
+    include/config/metatypes.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc \

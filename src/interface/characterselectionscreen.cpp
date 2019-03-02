@@ -1,4 +1,5 @@
 
+#include <QStyle>
 #include <QMessageBox>
 #include <QInputDialog>
 
@@ -11,8 +12,6 @@ CharacterSelectionScreen::CharacterSelectionScreen(const utility::Interval<UInte
     SelectUserInterfaceBase(n_characters, parent), ui(new Ui::CharacterSelectionScreen), _cur(0) {
 
     ui->setupUi(this);
-
-    ui->iconWidget->setForeground(QColor(240, 240, 240));
 
     _char_names = SGOMFiles::get()->characters();
 
@@ -28,8 +27,11 @@ void CharacterSelectionScreen::_update_image() {
 
     bool is_valid = _selecteds.size() >= minCharacters() && _selecteds.size() <= maxCharacters();
 
-    ui->selNumLabel->setText(QString("<font color='%0'>Selecteds: %1/%2</font>")
-                             .arg(is_valid ? "green" : "red").arg(_selecteds.size()).arg(maxCharacters()));
+    ui->selNumLabel->setText(QString("Selecteds: %1/%2").arg(_selecteds.size()).arg(maxCharacters()));
+
+    ui->selNumLabel->setProperty("selectValid", is_valid);
+    ui->selNumLabel->style()->unpolish(ui->selNumLabel);
+    ui->selNumLabel->style()->polish(ui->selNumLabel);
 
     ui->goButton->setEnabled(is_valid);
 
@@ -142,7 +144,7 @@ void CharacterSelectionScreen::on_newButton_clicked() {
     _char_names = SGOMFiles::get()->characters();
 
     if(cur_name.empty()) _cur = 0;
-    else _cur = std::distance(_char_names.begin(), std::find(_char_names.begin(), _char_names.end(), cur_name));
+    else _cur = UIntegerType(std::distance(_char_names.begin(), std::find(_char_names.begin(), _char_names.end(), cur_name)));
 
     _update_image();
 }

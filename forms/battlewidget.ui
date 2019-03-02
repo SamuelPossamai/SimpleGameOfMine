@@ -16,8 +16,11 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
     <widget class="QLabel" name="cursorLabel">
+     <property name="accessibleName">
+      <string>battleWidgetCoordLabel</string>
+     </property>
      <property name="styleSheet">
-      <string notr="true">background-color: transparent;</string>
+      <string notr="true"/>
      </property>
      <property name="text">
       <string>0, 0</string>
@@ -44,6 +47,9 @@
      </property>
      <item>
       <widget class="QPushButton" name="returnButton">
+       <property name="accessibleName">
+        <string>battleWidgetButton battleWidgetStaticButton battleWidgetReturnButton</string>
+       </property>
        <property name="text">
         <string>Return</string>
        </property>
@@ -64,6 +70,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="cancelButton">
+       <property name="accessibleName">
+        <string>battleWidgetButton battleWidgetStaticButton battleWidgetCancelButton</string>
+       </property>
        <property name="text">
         <string>Cancel</string>
        </property>

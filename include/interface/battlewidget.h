@@ -4,6 +4,7 @@
 
 #include <memory>
 
+#include <config/metatypes.h>
 #include <config/interface_traits.h>
 #include <engine/unitcontroller.h>
 #include <engine/character.h>
@@ -26,6 +27,11 @@ class QGraphicsPixmapItem;
 class BattleWidget : public MainWidget, public GraphicsView::Handler {
 
     Q_OBJECT
+    Q_PROPERTY(Qt::Alignment skillButtonAlign READ skillButtonAlign WRITE setSkillButtonAlign)
+    Q_PROPERTY(RealType skillButtonSize READ skillButtonSize WRITE setSkillButtonSize)
+    Q_PROPERTY(RealType skillButtonDistance READ skillButtonDistance WRITE setSkillButtonDistance)
+    Q_PROPERTY(RealType skillButtonBorderVDistance READ skillButtonBorderVDistance WRITE setSkillButtonBorderVDistance)
+    Q_PROPERTY(RealType skillButtonBorderHDistance READ skillButtonBorderHDistance WRITE setSkillButtonBorderHDistance)
 
 public:
 
@@ -46,7 +52,7 @@ public:
      */
     void start();
 
-    ~BattleWidget();
+    virtual ~BattleWidget() override;
 
     /*!
      * \brief Zoom in the battle view
@@ -167,6 +173,26 @@ public:
      */
     void hideCancelButton();
 
+    void setSkillButtonAlign(Qt::Alignment alignment) { _alignment = alignment; }
+
+    Qt::Alignment skillButtonAlign() const { return _alignment; }
+
+    void setSkillButtonSize(RealType button_size) { _skill_button_size = button_size; }
+
+    RealType skillButtonSize() const { return _skill_button_size; }
+
+    void setSkillButtonDistance(RealType button_distance) { _skill_button_distance = button_distance; }
+
+    RealType skillButtonDistance() const { return _skill_button_distance; }
+
+    void setSkillButtonBorderVDistance(RealType border_vdist) { _skill_button_border_vertical_distance = border_vdist; }
+
+    RealType skillButtonBorderVDistance() const { return _skill_button_border_vertical_distance; }
+
+    void setSkillButtonBorderHDistance(RealType border_hdist) { _skill_button_border_horizontal_distance = border_hdist; }
+
+    RealType skillButtonBorderHDistance() const { return _skill_button_border_horizontal_distance; }
+
 public slots:
 
     /*!
@@ -196,6 +222,7 @@ private:
 
     void _update_buttons();
     void _exit();
+    std::pair<UIntegerType, UIntegerType> _decode_aligment() const;
 
     static void _step_internal(BattleWidget *);
     void _set_zoom(RealType zoom) { _gview->scale(zoom, zoom); }
@@ -225,6 +252,13 @@ private:
     InputInterface _input_interface;
 
     std::vector<AnimationItemBase *> _animations;
+
+    Qt::Alignment _alignment;
+
+    RealType _skill_button_size;
+    RealType _skill_button_distance;
+    RealType _skill_button_border_vertical_distance;
+    RealType _skill_button_border_horizontal_distance;
 
     Ui::BattleWidget *_ui;
 };

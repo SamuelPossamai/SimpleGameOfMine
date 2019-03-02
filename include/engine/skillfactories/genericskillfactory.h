@@ -27,7 +27,7 @@ protected:
 
         VariantDataInfo vdatainfo(v.begin(), v.end());
 
-        vdatainfo.insert(v.begin(), v.end());
+        vdatainfo.insert(_v.begin(), _v.end());
 
         return T::create(vdatainfo);
     }

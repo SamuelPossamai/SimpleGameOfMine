@@ -149,6 +149,9 @@
             <height>100</height>
            </size>
           </property>
+          <property name="accessibleName">
+           <string>characterSelectionCharacterIcon</string>
+          </property>
          </widget>
         </item>
         <item>
@@ -401,9 +404,11 @@
           <bold>true</bold>
          </font>
         </property>
+        <property name="accessibleName">
+         <string>characterSelectionScreenLabel characterSelectionScreenClassNameLabel</string>
+        </property>
         <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
+         <string notr="true"/>
         </property>
         <property name="text">
          <string>Class Name and level</string>
@@ -427,9 +432,11 @@ color: rgb(0, 0, 0);</string>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
         <item>
          <widget class="QLabel" name="selNumLabel">
+          <property name="accessibleName">
+           <string>characterSelectionScreenLabel characterSelectionScreenSelNumLabel</string>
+          </property>
           <property name="styleSheet">
-           <string notr="true">background-color: rgb(255, 255, 255);
-color: rgb(0, 0, 0);</string>
+           <string notr="true"/>
           </property>
           <property name="text">
            <string>Selecteds: 0/0</string>

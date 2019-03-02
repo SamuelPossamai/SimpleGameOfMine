@@ -52,6 +52,8 @@ protected:
 
 private:
 
+    void _change_window_apply(MainWidget *w);
+
     std::vector<MainWidget *> _widgets;
 };
 

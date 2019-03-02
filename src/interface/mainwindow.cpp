@@ -1,4 +1,5 @@
 
+#include <QStyle>
 #include <QKeyEvent>
 
 #include "config/sgomfiles.h"
@@ -29,9 +30,7 @@ void MainWindow::pushWidget(MainWidget *w) {
 
     _widgets.push_back(w);
 
-    w->activate();
-    w->setFocus();
-    w->show();
+    _change_window_apply(w);
 }
 
 void MainWindow::popWidget() {
@@ -43,12 +42,7 @@ void MainWindow::popWidget() {
 
     _widgets.back()->setGeometry(0, 0, width(), height());
 
-    if(!_widgets.empty()){
-
-        _widgets.back()->setFocus();
-        _widgets.back()->show();
-        _widgets.back()->activate();
-    }
+    if(!_widgets.empty()) _change_window_apply(_widgets.back());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
@@ -86,9 +80,9 @@ void MainWindow::swapWidget(MainWidget *w) {
 
     delete _widgets.back();
 
-    w->activate();
-    w->setFocus();
-    (_widgets.back() = w)->show();
+    _change_window_apply(w);
+
+    _widgets.back() = w;
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {
@@ -101,4 +95,15 @@ void MainWindow::restoreProperties() {
 
     setAutoFillBackground(true);
     setWindowTitle(Traits<MainWindow>::name);
+}
+
+void MainWindow::_change_window_apply(MainWidget *w) {
+
+    this->setProperty("currentWidget", w->property("accessibleName"));
+    this->style()->unpolish(this);
+    this->style()->polish(this);
+
+    w->activate();
+    w->setFocus();
+    w->show();
 }

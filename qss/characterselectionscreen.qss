@@ -1,61 +1,13 @@
 
-MainWindow {
+MainWindow[currentWidget~="CharacterSelectionScreen"] {
 
-    border: none;
-    background-color: rgb(245, 245, 245);
-    color: rgb(20, 20, 20);
-}
-
-[accessibleName~="Menu"] {
-
-    border-image: url(":/background_image_menu.png") 0 0 0 0 stretch stretch;
-}
-
-[accessibleName~="Settings"] {
-
-    border: none;
-    background-color: white;
-}
-
-[accessibleName~="settingsScrollArea"] {
-
-    border: none;
-    padding-top: 10px;
-    padding-left: 20px;
-    padding-right: 20px;
+    min-width: 650px;
+    min-height: 200px;
 }
 
 [accessibleName~=CharacterSelectionScreen] {
 
     background-color: white;
-}
-
-QPushButton[accessibleName~="menuButton"] {
-
-    color: black;
-    background-color: lightgreen;
-    width: 120px;
-    height: 25px;
-}
-
-QPushButton[accessibleName~="menuButton"]:hover{
-
-    background-color: green;
-}
-
-QComboBox[accessibleName~="configCharacterSelectionScreenComboBox"] {
-
-    color: black;
-    background-color: white;
-}
-
-QPushButton[accessibleName~="settingsReturnButton"], QPushButton[accessibleName~="settingsSaveButton"] {
-
-    color: black;
-    background-color: rgb(245, 245, 245);
-    width: 70px;
-    height: 22px;
-    margin-left: 2px;
 }
 
 QPushButton[accessibleName~="characterSelectionScreenButton"] {
@@ -98,6 +50,7 @@ QPushButton[accessibleName~="characterSelectionScreenPreviousButton"]:hover {
 }
 
 QPushButton[accessibleName~="characterSelectionScreenBottomButton"] {
+
     background-color: white;
     border-style: solid;
     border-width:1px;
@@ -110,8 +63,22 @@ QPushButton[accessibleName~="characterSelectionScreenBottomButton"] {
 }
 
 QPushButton[accessibleName~="characterSelectionScreenBottomButton"]:disabled {
+
     border-color: lightgray;
 }
 
+[accessibleName~="characterSelectionCharacterIcon"] {
 
+    color: rgb(245, 245, 245);
+    background-color: white;
+}
 
+[accessibleName~="characterSelectionScreenSelNumLabel"][selectValid=true]  {
+
+    color: green;
+}
+
+[accessibleName~="characterSelectionScreenSelNumLabel"][selectValid=false]  {
+
+    color: red;
+}
