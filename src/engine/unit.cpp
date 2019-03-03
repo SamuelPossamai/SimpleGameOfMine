@@ -1,6 +1,7 @@
 
 #include <iostream>
 
+#include "utility/variant.h"
 #include "unit.h"
 #include "enginemap.h"
 #include "uniteffect.h"
@@ -59,14 +60,14 @@ bool Unit::receiveDamage(AttackType damage, EngineObject *attacking /* = nullptr
     if(isDead()) {
 
         map()->removeObject(this);
-        _notifyAll(&Observer::unitDeathEvent);
+        notify(ObservedEventType::DeathEvent, utility::Variant());
 
         return false;
     }
 
     setRage(rage() + damage);
 
-    _notifyAll(&Observer::unitReceivedDamage);
+    notify(ObservedEventType::ReceivedDamage, utility::Variant::Integer(damage));
 
     return true;
 }
@@ -81,7 +82,7 @@ void Unit::healed(HealthType amount, Unit *healing /* = nullptr */) {
 
     setHealth(new_health_value);
 
-    _notifyAll(&Observer::unitHealed);
+    notify(ObservedEventType::Healed, utility::Variant::Integer(amount));
 }
 
 bool Unit::consumeEnergy(EnergyType energy) {
@@ -90,7 +91,7 @@ bool Unit::consumeEnergy(EnergyType energy) {
 
     this->setEnergy(this->energy() - energy);
 
-    _notifyAll(&Observer::unitEnergyConsumed);
+    notify(ObservedEventType::EnergyConsumed, utility::Variant::Integer(energy));
 
     return true;
 }
@@ -113,39 +114,11 @@ bool Unit::consumeRage(RageType rage) {
     return true;
 }
 
-bool Unit::attachObserver(Observer *h) {
-
-    EngineObject::attachObserver(h);
-
-    if(std::find(_observers.begin(), _observers.end(), h) == _observers.end()) {
-
-        _observers.push_back(h);
-
-        return true;
-    }
-
-    return false;
-}
-
-bool Unit::detachObserver(Observer *h) {
-
-    EngineObject::detachObserver(h);
-
-    auto it = std::find(_observers.begin(), _observers.end(), h);
-    if(it != _observers.end()) {
-
-        *it = _observers.back();
-        _observers.pop_back();
-
-        return true;
-    }
-
-    return false;
-}
-
 bool Unit::addEffect(const UnitEffect *effect, UIntegerType duration, bool renew /* = false */) {
 
-    _notifyAll(&Observer::unitEffectAdded, effect);
+    auto tmp = utility::VariantList({ utility::Variant::Pointer(effect), utility::Variant::Integer(duration), renew });
+
+    notify(ObservedEventType::EffectAdded, std::move(tmp));
 
     _effects.emplace_back(effect, EffectInfo{ duration, duration, renew });
 
@@ -159,7 +132,7 @@ bool Unit::removeEffect(const UnitEffect *effect) {
 
     if(it != _effects.end()) {
 
-        _notifyAll(&Observer::unitEffectRemoved, it->first);
+        notify(ObservedEventType::EffectRemoved, utility::Variant::Pointer(it->first));
 
         *it = _effects.back();
         _effects.pop_back();
@@ -176,7 +149,7 @@ bool Unit::choose() {
 
     while (!_choose_internal(i));
 
-    _notifyAll(&Observer::unitSkillStarted);
+    notify(ObservedEventType::SkillStarted, utility::Variant());
 
     return true;
 }
@@ -203,14 +176,14 @@ bool Unit::perform() {
 
             _skill = skillsAmount();
 
-            _notifyAll(&Unit::Observer::unitSkillFinished);
+            notify(ObservedEventType::SkillFinished, utility::Variant());
 
             return false;
         }
     }
 
     _skill_step++;
-    _notifyAll(&Unit::Observer::unitSkillAdvance);
+    notify(ObservedEventType::SkillAdvance, utility::Variant());
 
     for(auto& p : _effects) p.first->doTurnEffect(this, p.second.duration - 1);
     _verify_effects();
@@ -220,12 +193,12 @@ bool Unit::perform() {
 
 void Unit::select() {
 
-    _notifyAll(&Observer::unitSelected);
+    notify(ObservedEventType::Selected, utility::Variant());
 }
 
 void Unit::unselect() {
 
-    _notifyAll(&Observer::unitUnselected);
+    notify(ObservedEventType::Unselected, utility::Variant());
 }
 
 Unit::PointType Unit::maxPosition() const {
@@ -281,7 +254,7 @@ void Unit::_verify_effects() {
                 continue;
             }
 
-            _notifyAll(&Observer::unitEffectRemoved, it->first);
+            notify(ObservedEventType::EffectRemoved, utility::Variant::Pointer(it->first));
 
             bool is_last = ( it == _effects.end() - 1 );
 
@@ -298,7 +271,7 @@ bool Unit::setSpecial(SpecialType val) {
 
     if(UnitBase::setSpecial(val)) {
 
-        _notifyAll(&Observer::unitSpecialChanged);
+        notify(ObservedEventType::SpecialChanged, utility::Variant());
         return true;
     }
     return false;
@@ -308,10 +281,62 @@ bool Unit::setRage(RageType val) {
 
     if(UnitBase::setRage(val)) {
 
-        _notifyAll(&Observer::unitRageChanged);
+        notify(ObservedEventType::RageChanged, utility::Variant());
         return true;
     }
     return false;
 }
 
+void Unit::ObserverWrapper::update(const EngineObject *o, UIntegerType event_type, const utility::Variant& v) {
 
+    const Unit *u = static_cast<const Unit *>(o);
+
+    switch(event_type) {
+
+        case Unit::ObservedEventType::SkillStarted:
+            this->unitSkillStarted(u);
+            break;
+        case Unit::ObservedEventType::SkillAdvance:
+            this->unitSkillAdvance(u);
+            break;
+        case Unit::ObservedEventType::SkillFinished:
+            this->unitSkillFinished(u);
+            break;
+        case Unit::ObservedEventType::ReceivedDamage:
+            this->unitReceivedDamage(u);
+            break;
+        case Unit::ObservedEventType::Healed:
+            this->unitHealed(u);
+            break;
+        case Unit::ObservedEventType::DeathEvent:
+            this->unitDeathEvent(u);
+            break;
+        case Unit::ObservedEventType::Selected:
+            this->unitSelected(u);
+            break;
+        case Unit::ObservedEventType::Unselected:
+            this->unitUnselected(u);
+            break;
+        case Unit::ObservedEventType::EnergyConsumed:
+            this->unitEnergyConsumed(u);
+            break;
+        case Unit::ObservedEventType::SpecialChanged:
+            this->unitSpecialChanged(u);
+            break;
+        case Unit::ObservedEventType::RageChanged:
+            this->unitRageChanged(u);
+            break;
+        case Unit::ObservedEventType::EffectAdded: {
+
+            auto& l = v.get<utility::Variant::List>();
+            this->unitEffectAdded(u, static_cast<const UnitEffect *>(l.at(0).get<utility::Variant::Pointer>()));
+            break;
+        }
+        case Unit::ObservedEventType::EffectRemoved:
+            this->unitEffectRemoved(u, static_cast<const UnitEffect *>(v.get<utility::Variant::Pointer>()));
+            break;
+        default:
+            EngineObject::ObserverWrapper::update(o, event_type, v);
+            break;
+    }
+}

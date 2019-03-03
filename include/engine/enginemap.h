@@ -44,7 +44,7 @@ public:
      */
     void addObject(EngineObject *object);
 
-    void addObjectPending(EngineObject *object) { _pending = object; }
+    void addObjectPending(EngineObject *object) { resolvePendings(); _pending = object; }
 
     void resolvePendings() {
 

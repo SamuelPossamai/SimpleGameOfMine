@@ -63,7 +63,7 @@ void BattleEngine::step(){
     }
 }
 
-void BattleEngine::unitDeathEvent(Unit *u) {
+void BattleEngine::unitDeathEvent(const Unit *u) {
 
     if(_map.gameEndVerify()) _game_status = status::FINISHING;
 

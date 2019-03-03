@@ -17,7 +17,7 @@ class thread;
  * \brief Each time 'step' is called, the battle and animation progress a quantum.
  * \sa EngineMap, BattleWidget, BattleEngine::step()
  */
-class BattleEngine final : Unit::Observer {
+class BattleEngine final : Unit::ObserverWrapper {
 
     using Controller = UnitController;
 
@@ -78,7 +78,7 @@ public:
 
 private:
 
-    void unitDeathEvent(Unit *u);
+    void unitDeathEvent(const Unit *u) final;
 
     bool _step_loop();
 

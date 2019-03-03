@@ -272,7 +272,8 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/skills/actionssequeceskill.h \
     include/utility/variantdatainfo.h \
     include/config/game_traits.h \
-    include/config/metatypes.h
+    include/config/metatypes.h \
+    include/utility/observable.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc \

@@ -47,33 +47,33 @@ protected:
 
     virtual void removeFromScene() override;
 
-    virtual void unitDeathEvent(Unit *) override { _events.push({ &BasicUnitGraphicItem::uDeathEvent, nullptr }); }
-    virtual void unitSelected(Unit *) override { _events.push({ &BasicUnitGraphicItem::uSelected, nullptr }); }
-    virtual void unitUnselected(Unit *) override { _events.push({ &BasicUnitGraphicItem::uUnselected, nullptr }); }
-    virtual void engineObjectMoved(EngineObject *) override { _events.push({ &BasicUnitGraphicItem::uMoved, nullptr }); }
-    virtual void engineObjectRotated(EngineObject *) override { _events.push({ &BasicUnitGraphicItem::uRotated, nullptr }); }
-    virtual void unitSkillStarted(Unit *) override { _events.push({ &BasicUnitGraphicItem::uSkillStarted, nullptr }); }
-    virtual void unitSkillFinished(Unit *) override { _events.push({ &BasicUnitGraphicItem::uSkillFinished, nullptr }); }
-    virtual void unitSkillAdvance(Unit *) override { _events.push({ &BasicUnitGraphicItem::uSkillAdvance, nullptr }); }
-    virtual void unitReceivedDamage(Unit *) override { _events.push({ &BasicUnitGraphicItem::uHealthChanged, nullptr }); }
-    virtual void unitHealed(Unit *) override { _events.push({ &BasicUnitGraphicItem::uHealthChanged, nullptr }); }
-    virtual void unitEnergyConsumed(Unit *) override {
+    virtual void unitDeathEvent(const Unit *) override { _events.push({ &BasicUnitGraphicItem::uDeathEvent, nullptr }); }
+    virtual void unitSelected(const Unit *) override { _events.push({ &BasicUnitGraphicItem::uSelected, nullptr }); }
+    virtual void unitUnselected(const Unit *) override { _events.push({ &BasicUnitGraphicItem::uUnselected, nullptr }); }
+    virtual void engineObjectMoved(const EngineObject *) override { _events.push({ &BasicUnitGraphicItem::uMoved, nullptr }); }
+    virtual void engineObjectRotated(const EngineObject *) override { _events.push({ &BasicUnitGraphicItem::uRotated, nullptr }); }
+    virtual void unitSkillStarted(const Unit *) override { _events.push({ &BasicUnitGraphicItem::uSkillStarted, nullptr }); }
+    virtual void unitSkillFinished(const Unit *) override { _events.push({ &BasicUnitGraphicItem::uSkillFinished, nullptr }); }
+    virtual void unitSkillAdvance(const Unit *) override { _events.push({ &BasicUnitGraphicItem::uSkillAdvance, nullptr }); }
+    virtual void unitReceivedDamage(const Unit *) override { _events.push({ &BasicUnitGraphicItem::uHealthChanged, nullptr }); }
+    virtual void unitHealed(const Unit *) override { _events.push({ &BasicUnitGraphicItem::uHealthChanged, nullptr }); }
+    virtual void unitEnergyConsumed(const Unit *) override {
 
         if(_energy_bar) _events.push({ &BasicUnitGraphicItem::uEnergyConsumed, nullptr });
     }
-    virtual void unitSpecialChanged(Unit *) override {
+    virtual void unitSpecialChanged(const Unit *) override {
 
         _events.push({ &BasicUnitGraphicItem::uSpecialChanged, nullptr });
     }
-    virtual void unitRageChanged(Unit *) override {
+    virtual void unitRageChanged(const Unit *) override {
 
         _events.push({ &BasicUnitGraphicItem::uRageChanged, nullptr });
     }
-    virtual void unitEffectAdded(Unit *, const UnitEffect *e) override {
+    virtual void unitEffectAdded(const Unit *, const UnitEffect *e) override {
 
         _events.push({ &BasicUnitGraphicItem::uEffectAdded, static_cast<const void *>(e) });
     }
-    virtual void unitEffectRemoved(Unit *, const UnitEffect *e) override {
+    virtual void unitEffectRemoved(const Unit *, const UnitEffect *e) override {
 
         _events.push({ &BasicUnitGraphicItem::uEffectRemoved, static_cast<const void *>(e) });
     }
