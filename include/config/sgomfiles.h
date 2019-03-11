@@ -127,7 +127,6 @@ private:
 
     static bool _append_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section, const std::string& s);
     static bool _create_section_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section);
-    static std::pair<std::string, std::string> _split_equal_sign(const std::string& s);
 
     std::string _base_path;
     std::string _char_path;

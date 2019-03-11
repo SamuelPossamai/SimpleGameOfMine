@@ -7,7 +7,10 @@
 #include <QFile>
 #include <QFileInfo>
 
+#include "utility/stringutils.h"
 #include "sgomfiles.h"
+
+using namespace utility::stringutils;
 
 SGOMFiles *SGOMFiles::_f = nullptr;
 
@@ -106,7 +109,7 @@ std::optional<SGOMFiles::ConfigFileInfo> SGOMFiles::readSGOMConfigFile(const std
 
         for(auto&& v : p.second) {
 
-            auto split_p = _split_equal_sign(v);
+            auto split_p = splitSingle(v, '=');
 
             content_out[split_p.first] = Variant::fromString(split_p.second);
         }
@@ -131,7 +134,7 @@ std::optional<SGOMFiles::DataFileInfo> SGOMFiles::readSGOMDataFile(const std::st
 
         for(auto&& v : p.second) {
 
-            auto p = _split_equal_sign(v);
+            auto p = splitSingle(v, '=');
 
             ret.back().second[p.first] = Variant::fromString(p.second);
         }
@@ -313,18 +316,6 @@ bool SGOMFiles::_create_section_data_entry(SGOMFiles::DataEntryFileInfo& result,
     result.push_back({ section, DataEntryFileInfo::value_type::second_type() });
 
     return true;
-}
-
-std::pair<std::string, std::string> SGOMFiles::_split_equal_sign(const std::string& s) {
-
-    auto eq_it = std::find(s.begin(), s.end(), '=');
-
-    std::string first_str(s.begin(), eq_it);
-    std::string second_str;
-
-    if(eq_it != s.end()) second_str.assign(eq_it+1, s.end());
-
-    return { first_str, second_str };
 }
 
 template <typename T>

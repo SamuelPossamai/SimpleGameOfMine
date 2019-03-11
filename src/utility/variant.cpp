@@ -5,19 +5,10 @@
 #include <algorithm>
 
 #include "variant.h"
+#include "stringutils.h"
 
 using namespace utility;
-
-std::string Variant::_strip(const std::string& str) {
-
-    auto not_blank = [](char c){ return !std::isspace(c); };
-
-    auto st_it = std::find_if(str.begin(), str.end(), not_blank);
-
-    if(st_it == str.end()) return "";
-
-    return std::string(st_it, std::find_if(str.rbegin(), str.rend(), not_blank).base());
-}
+using namespace utility::stringutils;
 
 static Variant variantFromStringBasicNumber(const std::string& stripped_str) {
 
@@ -123,7 +114,7 @@ bool Variant::_add_variant_to_list(Variant& v, const std::string& str) {
 
 Variant Variant::fromString(const std::string& str) {
 
-    std::string stripped_str = _strip(str);
+    std::string stripped_str = strip(str);
 
     Variant var_basic = _variant_from_string_basic(stripped_str);
 
@@ -171,7 +162,7 @@ Variant Variant::fromString(const std::string& str) {
                 if(!_add_variant_to_map(result, el_str)) insert_failed = true;
             }
 
-            if(insert_failed) return Error("Failed to parse `" + _strip(el_str) + "`");
+            if(insert_failed) return Error("Failed to parse `" + strip(el_str) + "`");
 
             st_it = ++it;
         }

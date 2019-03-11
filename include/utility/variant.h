@@ -332,8 +332,6 @@ private:
 
     std::string _map_to_string(const Map& m) const;
 
-    static std::string _strip(const std::string& str);
-
     static Variant _variant_from_string_basic(const std::string& stripped_str);
 
     static bool _add_variant_to_list(Variant& v, const std::string& str);

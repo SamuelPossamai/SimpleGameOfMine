@@ -119,7 +119,10 @@ SOURCES += src/main.cpp \
     src/engine/unitsinfo/mage.cpp \
     src/engine/skills/actionssequeceskill.cpp \
     src/engine/skills/actions/walkaction.cpp \
-    src/utility/variantdatainfo.cpp
+    src/utility/variantdatainfo.cpp \
+    src/utility/stringutils.cpp \
+    src/utility/variantreader.cpp \
+    src/utility/toml.cpp
 
 
 PRECOMPILED_HEADER = include/config/sgomfiles.h \
@@ -273,7 +276,10 @@ HEADERS += include/interface/mainwindow.h \
     include/utility/variantdatainfo.h \
     include/config/game_traits.h \
     include/config/metatypes.h \
-    include/utility/observable.h
+    include/utility/observable.h \
+    include/utility/stringutils.h \
+    include/utility/variantreader.h \
+    include/utility/toml.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc \
