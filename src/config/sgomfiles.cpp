@@ -44,15 +44,17 @@ std::vector<std::string> SGOMFiles::characters() const {
 
     decltype(characters()) chars;
 
-    for(auto it = QDirIterator(QString::fromStdString(getCharsPath())); it.hasNext(); it.next()){
+    QDir dir(QString::fromStdString(getCharsPath()));
 
-        QFileInfo p = it.filePath();
+    dir.setSorting(QDir::Name);
 
-        if(!p.isFile()) continue;
+    for(auto filename: dir.entryList()) {
 
-        if(p.completeSuffix() != "dat") continue;
+        QFileInfo fileinfo(dir, filename);
 
-        chars.push_back(p.baseName().toStdString());
+        if(!fileinfo.isFile() || fileinfo.completeSuffix() != "dat") continue;
+
+        chars.push_back(fileinfo.baseName().toStdString());
     }
 
     return chars;

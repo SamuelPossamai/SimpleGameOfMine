@@ -18,6 +18,7 @@ CONFIG += object_parallel_to_source c++1z precompile_header
 OBJECTS_DIR = .
 
 SOURCES += src/main.cpp \
+    src/animation/animationitens/unit/basicunitgraphicitemmapped.cpp \
     src/interface/mainwindow.cpp \
     src/engine/unitbase.cpp \
     src/animation/animation.cpp \
@@ -133,6 +134,7 @@ PRECOMPILED_HEADER = include/config/sgomfiles.h \
                      include/engine/uniteffect.h
 
 HEADERS += include/interface/mainwindow.h \
+    include/animation/animationitens/unit/basicunitgraphicitemmapped.h \
     include/engine/unitbase.h \
     include/engine/unitinfo.h \
     include/config/types.h \

@@ -41,6 +41,15 @@ public:
         _add_animations(idle, skill_animations...);
     }
 
+    template <typename... Animations>
+    void addAnimations(const Animation& first, Animations&&... skill_animations) {
+
+        _add_animations(first, skill_animations...);
+    }
+
+
+    UIntegerType animationsAmount() const { return _obj->animations(); }
+
 protected:
 
     virtual void addToScene(QGraphicsScene *scene) override;
@@ -98,6 +107,11 @@ protected:
 
     void selectEffect();
     void removeSelectEffect();
+
+    void selectAnimation(UIntegerType animation_id) {
+
+        _obj->selectAnimation(animation_id);
+    }
 
 private:
 

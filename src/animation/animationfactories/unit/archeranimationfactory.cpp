@@ -1,7 +1,7 @@
 
 #include "animation.h"
 #include "animationfactories/unit/archeranimationfactory.h"
-#include "animationitens/unit/basicunitgraphicitem.h"
+#include "animationitens/unit/basicunitgraphicitemmapped.h"
 
 using namespace unitanimationfactory;
 
@@ -47,9 +47,12 @@ ArcherAnimationFactory::ArcherAnimationFactory() :
 
 UnitAnimationItem *ArcherAnimationFactory::create(Unit *u) {
 
-    auto *item = new unitanimation::BasicUnitGraphicItem(u);
+    auto *item = new unitanimation::BasicUnitGraphicItemMapped(u);
 
-    item->setAnimations(_idle_animation, _walking_animation, _attacking_animation, _shoot_animation);
+    item->addAnimation(_idle_animation, "__idle__");
+    item->addAnimation(_walking_animation, "walk");
+    item->addAnimation(_attacking_animation, "basic attack");
+    item->addAnimation(_shoot_animation, "shoot");
 
     return item;
 }
