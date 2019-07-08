@@ -107,34 +107,26 @@ public:
     void hideSkillButtons();
 
     /*!
-     * \brief Add an unit to the graphics scene and to the battle engine
-     * \param i Information about the unit that will be added
-     * \param c Unit controller, it will choose the skills to be performed
-     * \param f Factory to create the unit animation
+     * \brief Add an unit to the graphics scene and to the battle engine.
+     * \param i Information about the unit that will be added.
+     * \param c Unit controller, it will choose the skills to be performed.
+     * \param f Factory to create the unit animation.
+     * \param character Units character information.
      * \param team Team of the unit that will be added
      */
     void addUnit(UnitInfo *i, UnitController *c, UnitAnimationItemFactory *f,
-                 const UnitAttributes& attr, UIntegerType level, UIntegerType team);
+                 const UnitAttributes& attr, UIntegerType level, UIntegerType team,
+                 const Character *character = nullptr);
 
     /*!
-     * \brief Add a creature to the graphics scene and to the battle engine
-     * \param name Name of the creature type that will be added
-     * \param level Level of the creature
-     * \param team Team of the creature
+     * \brief Add a creature to the graphics scene and to the battle engine.
+     * \param name Name of the creature type that will be added.
+     * \param level Level of the creature.
+     * \param team Team of the creature.
      * \sa addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory, UIntegerType)
-     * \return true if it succeds, false otherwise(It can fail if the creature type is invalid)
+     * \return true if it succeds, false otherwise(It can fail if the creature type is invalid).
      */
     bool addCreature(std::string name, const UnitAttributes& attr, UIntegerType level, UIntegerType team);
-
-    /*!
-     * \brief Add a hero to the graphics scene and to the battle engine
-     * \param name Name of the hero's job/class
-     * \param attr The attributes of the hero
-     * \param team Hero's team
-     * \sa addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory, UIntegerType)
-     * \return true if it succeds, false otherwise(It can fail if the job/class is invalid)
-     */
-    bool addHero(std::string name, const Character::Attributes& attr, UIntegerType level, UIntegerType team);
 
     /*!
      * \brief Add a hero to the graphics scene and to the battle engine
@@ -142,7 +134,7 @@ public:
      * \param team Hero's team
      * \return true if it succeds, false otherwise(It can fail if the hero has an invalid job/class)
      */
-    bool addHero(const Character& c, UIntegerType team) { return addHero(c.className(), c.attributes(), c.level(), team); }
+    bool addHero(const Character *c, UIntegerType team);
 
     void addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
                        const Unit *creator, Projectile::AngleType dir, Projectile::PointType pos,

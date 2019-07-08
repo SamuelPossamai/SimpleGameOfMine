@@ -1,4 +1,5 @@
 
+#include "unit.h"
 #include "unitsinfo/mage.h"
 
 using namespace unitsinfo;

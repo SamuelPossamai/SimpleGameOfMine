@@ -37,10 +37,12 @@ public:
      * \param unit_info Information about the unit that will be added, including animation
      * \param controller The unit controller, it controls the decisions for the unit
      * \param team Unit team, it determines if other units are allies or enemies
+     * \param character Character information of the unit, by default 'nullptr'
      * \return Return the unit that was just created
      */
     Unit *addUnit(const UnitInfo *unit_info, Controller *controller,
-                  const UnitAttributes& attr, UIntegerType level, UIntegerType team);
+                  const UnitAttributes& attr, UIntegerType level, UIntegerType team,
+                  const Character *character = nullptr);
 
     /*!
      * \brief Create a projectile and add it to the battle

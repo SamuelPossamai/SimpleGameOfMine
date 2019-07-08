@@ -19,9 +19,10 @@ BattleEngine::~BattleEngine() {
 }
 
 Unit *BattleEngine::addUnit(const UnitInfo *unit_info, Controller *controller,
-                            const UnitAttributes& attr, UIntegerType level, UIntegerType team) {
+                            const UnitAttributes& attr, UIntegerType level, UIntegerType team,
+                            const Character *character) {
 
-    Unit *u = new Unit(unit_info, controller, &_map, _interface, attr, level, team);
+    Unit *u = new Unit(unit_info, controller, &_map, _interface, attr, level, team, character);
     _map.resolvePendings();
 
     _objects.push_back(ContainerContent{ u, 0 });

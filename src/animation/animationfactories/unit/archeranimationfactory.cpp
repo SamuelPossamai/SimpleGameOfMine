@@ -52,7 +52,7 @@ UnitAnimationItem *ArcherAnimationFactory::create(Unit *u) {
     item->addAnimation(_idle_animation, "__idle__");
     item->addAnimation(_walking_animation, "walk");
     item->addAnimation(_attacking_animation, "basic attack");
-    item->addAnimation(_shoot_animation, "shoot");
+    item->addAnimation(_shoot_animation, "shoot arrow");
 
     return item;
 }

@@ -29,9 +29,11 @@ public:
      * \param m EngineMap where the unit is
      * \param team Team of the unit
      * \param i BattleWidget object, it's used to receive user input when the controller asks for
+     * \param c Character information of this unit
      */
     Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, BattleWidget *i,
-         const Attributes& attr, UIntegerType level, UIntegerType team);
+         const Attributes& attr, UIntegerType level, UIntegerType team,
+         const Character *c = nullptr);
 
     Unit(const Unit&) = delete;
 
@@ -203,6 +205,8 @@ public:
 
     SpeedType effectiveSpeed() const override;
 
+    const Character *character() const { return _character; }
+
     struct EffectInfo {
 
         UIntegerType duration;
@@ -235,6 +239,8 @@ private:
     BattleWidget *_interface;
 
     SkillVector _skills;
+
+    const Character *_character;
 };
 
 struct Unit::ObservedEventType {

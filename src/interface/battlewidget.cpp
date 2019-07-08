@@ -196,9 +196,10 @@ void BattleWidget::start(){
 }
 
 void BattleWidget::addUnit(UnitInfo *u, UnitController *c, UnitAnimationItemFactory *f,
-                           const UnitAttributes& attr, UIntegerType level, UIntegerType team) {
+                           const UnitAttributes& attr, UIntegerType level, UIntegerType team,
+                           const Character *character) {
 
-    _animations.push_back(f->create(_engine->addUnit(u, c, attr, level, team)));
+    _animations.push_back(f->create(_engine->addUnit(u, c, attr, level, team, character)));
 
     _animations.back()->setScene(_gview->scene());
 }
@@ -214,13 +215,14 @@ bool BattleWidget::addCreature(std::string name, const UnitAttributes& attr, UIn
     return true;
 }
 
-bool BattleWidget::addHero(std::string name, const Character::Attributes& attr, UIntegerType level, UIntegerType team) {
+bool BattleWidget::addHero(const Character *c, UIntegerType team) {
 
-    auto opt = gameinfo::Jobs::get(name);
+    auto opt = gameinfo::Jobs::get(c->className());
     if(!opt.has_value()) return false;
 
     gameinfo::Jobs::Info i = *opt;
-    addUnit(std::get<0>(i), controller::Human::getController(), std::get<1>(i), attr, level, team);
+    addUnit(std::get<0>(i), controller::Human::getController(), std::get<1>(i),
+            c->attributes(), c->level(), team, c);
 
     return true;
 }

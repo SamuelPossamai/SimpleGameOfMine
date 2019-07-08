@@ -10,8 +10,8 @@
 #include "gameinfo/skills.h"
 
 Unit::Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, BattleWidget *i,
-           const Attributes& attr, UIntegerType level, UIntegerType team) :
-    Base(info, m, attr, level), _team(team), _controller(controller), _interface(i) {
+           const Attributes& attr, UIntegerType level, UIntegerType team, const Character *c) :
+    Base(info, m, attr, level), _team(team), _controller(controller), _interface(i), _character(c) {
 
     auto v = unitInfo()->getSkills(this);
 
@@ -74,7 +74,7 @@ bool Unit::receiveDamage(AttackType damage, EngineObject *attacking /* = nullptr
 
 void Unit::healed(HealthType amount, Unit *healing /* = nullptr */) {
 
-    Q_UNUSED(healing);
+    Q_UNUSED(healing)
 
     HealthType new_health_value = health() + amount;
 
