@@ -26,15 +26,25 @@ public:
     }
 
     void callAct(Unit *u, EngineMap *m, ProjectileCreationInterface& pci,
-                 const SkillInfo& s_info, const ActInfo& a_info) {
+                 const SkillInfo& s_info) {
 
         for(auto& a : _actions) {
 
-            if(a.next_step == s_info.step) a.next_step += a.action->act(u, m, pci, s_info, a_info);
+            if(a.next_step == s_info.step) a.next_step += a.action->act(u, m, pci, s_info, a.act_info);
         }
     }
 
     void reset() { for(auto& a : _actions) a.next_step = 0; }
+
+    bool finished(const SkillInfo& skill_info) const {
+
+        for(auto& a_el : _actions) {
+
+            if(!a_el.action->finished(skill_info, a_el.act_info)) return false;
+        }
+
+        return true;
+    }
 
 private:
 

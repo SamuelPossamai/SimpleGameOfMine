@@ -172,6 +172,12 @@ public:
     UIntegerType typeId() const { return _var.index(); }
 
     /*!
+     * \brief Get the name of the type of the data taht the variant is holding
+     * \return Name of the type of the data as a c-like string
+     */
+    const char *type() const { return typeName(typeId()); }
+
+    /*!
      * \brief Verify if this Variant carries data of the same type as other
      * \param other Variant that will be compared to this
      * \return true if the types are the same, false otherwise
