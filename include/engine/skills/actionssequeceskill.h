@@ -23,7 +23,7 @@ public:
 
         _actions.callAct(u, m, pci, info);
 
-        return _actions.finished(info) ? 0 : 1;
+        return _actions.finished() ? 0 : 1;
     }
 
     static UnitSkill *create(const utility::VariantDataInfo& data_info);

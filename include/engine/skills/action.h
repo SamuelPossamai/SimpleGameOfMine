@@ -24,10 +24,6 @@ public:
     virtual UIntegerType act(Unit*, EngineMap*, ProjectileCreationInterface&,
                              const SkillInfo&, const ActInfo&) = 0;
 
-    virtual bool needAngle(const ActInfo&) const = 0;
-
-    virtual bool finished(const SkillInfo&, const ActInfo&) const = 0;
-
     static Action *getAction(const std::string& name) {
 
         if(!_actions) return nullptr;

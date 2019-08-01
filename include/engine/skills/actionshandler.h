@@ -2,6 +2,8 @@
 #ifndef ACTIONSHANDLER_H
 #define ACTIONSHANDLER_H
 
+#include <limits>
+
 #include "skills/action.h"
 
 class ActionsHandler {
@@ -30,17 +32,22 @@ public:
 
         for(auto& a : _actions) {
 
-            if(a.next_step == s_info.step) a.next_step += a.action->act(u, m, pci, s_info, a.act_info);
+            if(a.next_step == s_info.step) {
+
+                UIntegerType after = a.action->act(u, m, pci, s_info, a.act_info);
+                if(after == 0) a.next_step = std::numeric_limits<UIntegerType>::max();
+                else a.next_step += after;
+            }
         }
     }
 
     void reset() { for(auto& a : _actions) a.next_step = 0; }
 
-    bool finished(const SkillInfo& skill_info) const {
+    bool finished() const {
 
         for(auto& a_el : _actions) {
 
-            if(!a_el.action->finished(skill_info, a_el.act_info)) return false;
+            if(a_el.next_step != std::numeric_limits<UIntegerType>::max()) return false;
         }
 
         return true;
