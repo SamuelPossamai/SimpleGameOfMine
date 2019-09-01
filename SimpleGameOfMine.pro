@@ -5,8 +5,10 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_CXXFLAGS += -std=c++17
 
+sutils_lib_path = $$PWD/submodules/s_utils/bin/libsutils.a
+
 LIBS += -L"$$PWD/submodules/s_utils/bin" -lstdc++fs -lsutils
-PRE_TARGETDEPS += libsutils.a
+PRE_TARGETDEPS += $$PWD/submodules/s_utils/bin/libsutils.a
 
 INCLUDEPATH += include include/animation include/config include/interface \
     include/engine include/utils include/utility include/memory include/gameinfo submodules/s_utils/include
@@ -294,7 +296,7 @@ FORMS += forms/gamedefaultscreen.ui \
 run.depends = $$TARGET
 run.commands = ./$$TARGET
 
-libsutils.target = libsutils.a
+libsutils.target = $$sutils_lib_path
 libsutils.commands = $(MAKE) -C '$$PWD/submodules/s_utils/' static_lib
 
 QMAKE_EXTRA_TARGETS = run all libsutils

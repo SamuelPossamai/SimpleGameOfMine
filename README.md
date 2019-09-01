@@ -17,6 +17,11 @@ For Ubuntu 18.04 the installing Qt5-default should be enough
     sudo apt update
     sudo apt qt5-default
 
+## Download with git
+
+    git clone https://github.com/SamuelPossamai/SimpleGameOfMine.git
+    git submodule update --init --recursive
+
 ## How to run without installing for linux
 
     qmake
