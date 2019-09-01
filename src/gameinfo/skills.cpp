@@ -115,14 +115,14 @@ static Skills::Info _get_rage() {
 
 static Skills::Info _get_shoot_arrow() {
 
-    static skillfactory::GenericSkillFactory<skill::Shoot, true> factory(utility::VariantDataInfo{{"projectile", "arrow"}});
+    static skillfactory::GenericSkillFactory<skill::Shoot, true> factory(sutils::VariantDataInfo{{"projectile", "arrow"}});
 
     return Skills::Info(&factory, QPixmap(":/arrow_projectile_image.png"));
 }
 
 static Skills::Info _get_throw_shuriken() {
 
-    static skillfactory::GenericSkillFactory<skill::Shoot, true> factory(utility::VariantDataInfo{{"projectile", "shuriken"}});
+    static skillfactory::GenericSkillFactory<skill::Shoot, true> factory(sutils::VariantDataInfo{{"projectile", "shuriken"}});
 
     return Skills::Info(&factory, QPixmap(":/shuriken_image.png"));
 }

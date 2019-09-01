@@ -26,7 +26,7 @@ public:
 
     static void shoot(Unit *, ProjectileCreationInterface&, Unit::AngleType angle);
 
-    static UnitSkill *create(const utility::VariantDataInfo&) { return getSkill(); }
+    static UnitSkill *create(const sutils::VariantDataInfo&) { return getSkill(); }
 
     virtual void destroy() override {}
 

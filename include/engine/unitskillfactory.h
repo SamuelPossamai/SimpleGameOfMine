@@ -2,14 +2,15 @@
 #ifndef UNITSKILLFACTORY_H
 #define UNITSKILLFACTORY_H
 
+#include <variant.h>
+
 #include "types.h"
-#include "utility/variant.h"
 
 class UnitSkillFactory {
 
 public:
 
-    using VariantDataInfo = utility::VariantDataInfo;
+    using VariantDataInfo = sutils::VariantDataInfo;
 
     virtual ~UnitSkillFactory() = default;
 

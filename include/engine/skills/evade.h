@@ -30,7 +30,7 @@ public:
         return _skill;
     }
 
-    static UnitSkill *create(const utility::VariantDataInfo&) { return getSkill(); }
+    static UnitSkill *create(const sutils::VariantDataInfo&) { return getSkill(); }
 
     void destroy() override {}
 

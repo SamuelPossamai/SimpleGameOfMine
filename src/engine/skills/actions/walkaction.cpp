@@ -1,12 +1,13 @@
 
 #include <iostream>
 
+#include <variantdatainfo.h>
+
 #include "unit.h"
 #include "skills/walk.h"
-#include "utility/variantdatainfo.h"
 #include "engine/skills/actions/walkaction.h"
 
-namespace ainfoconfig = utility::variantdatainfo;
+namespace ainfoconfig = sutils::variantdatainfo;
 
 void WalkAction::configActInfo(ActInfo& a_info) {
 

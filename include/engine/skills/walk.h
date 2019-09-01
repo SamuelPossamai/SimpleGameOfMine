@@ -37,7 +37,7 @@ public:
         return _ds < other._ds;
     }
 
-    static UnitSkill *create(const utility::VariantDataInfo& m);
+    static UnitSkill *create(const sutils::VariantDataInfo& m);
 
     virtual void destroy() override;
 
@@ -47,7 +47,7 @@ protected:
 
     UIntegerType doAction(Unit *, EngineMap *, const Info&, RealType);
 
-    static Walk fromVariantData(const utility::VariantDataInfo& m);
+    static Walk fromVariantData(const sutils::VariantDataInfo& m);
 
 private:
 

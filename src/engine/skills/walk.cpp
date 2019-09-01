@@ -35,7 +35,7 @@ UIntegerType Walk::doAction(Unit *u, EngineMap *, const Info& info, RealType ang
     return walk(u, info.step, _dur, _ds, angle);
 }
 
-UnitSkill *Walk::create(const utility::VariantDataInfo& m) {
+UnitSkill *Walk::create(const sutils::VariantDataInfo& m) {
 
     auto distance = decltype(_ds)(100);
     auto duration = decltype(_dur)(10);

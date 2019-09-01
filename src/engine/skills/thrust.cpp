@@ -23,7 +23,7 @@ UIntegerType Thrust::action(Unit *u, EngineMap *m, ProjectileCreationInterface&,
     return Walk::doAction(u, m, info, u->angle());
 }
 
-UnitSkill *Thrust::create(const utility::VariantDataInfo& m) {
+UnitSkill *Thrust::create(const sutils::VariantDataInfo& m) {
 
     UIntegerType distance = 100;
     UIntegerType duration = 10;

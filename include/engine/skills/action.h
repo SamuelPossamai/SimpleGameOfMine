@@ -2,16 +2,17 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-#include "utility/variant.h"
+#include <variant.h>
+
 #include "unitskill.h"
 
 class Action {
 
 public:
 
-    using Variant = utility::Variant;
+    using Variant = sutils::Variant;
     using SkillInfo = UnitSkill::Info;
-    using ActInfo = utility::VariantDataInfo;
+    using ActInfo = sutils::VariantDataInfo;
     using ProjectileCreationInterface = UnitSkill::ProjectileCreationInterface;
 
     Action() = default;

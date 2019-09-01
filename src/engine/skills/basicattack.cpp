@@ -39,7 +39,7 @@ UIntegerType BasicAttack::action(Unit *u, EngineMap *m, ProjectileCreationInterf
     return 5;
 }
 
-UnitSkill *BasicAttack::create(const utility::VariantDataInfo& m) {
+UnitSkill *BasicAttack::create(const sutils::VariantDataInfo& m) {
 
     auto distance = decltype(_distance)(30);
 

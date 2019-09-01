@@ -9,7 +9,7 @@
 
 #include <QTextStream>
 
-#include "utility/variant.h"
+#include <variant.h>
 
 /*!
  * \brief The SGOMFiles class is meant help with the localization of files for the game
@@ -23,7 +23,7 @@ class SGOMFiles {
 
 public:
 
-    using Variant = utility::Variant;
+    using Variant = sutils::Variant;
     using DataEntryFileInfo = std::vector<std::pair<std::string, std::vector<std::string> > >;
     using EntryFileInfo = std::map<std::string, std::vector<std::string> >;
     using ConfigFileInfo = std::map<std::string, std::map<std::string, Variant> >;

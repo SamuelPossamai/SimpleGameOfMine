@@ -6,7 +6,7 @@
 #include "enginemap.h"
 #include "engineobjectbase.h"
 
-using EngineObjectObservableBase = utility::Observable<EngineObject, UIntegerType, const utility::Variant&>;
+using EngineObjectObservableBase = utility::Observable<EngineObject, UIntegerType, const sutils::Variant&>;
 
 /*!
  * \brief A class that represents an object that can be managed by BattleEngine and EngineMap
@@ -155,7 +155,7 @@ public:
 
 protected:
 
-    virtual void update(const EngineObject *o, UIntegerType event_type, const utility::Variant&) override {
+    virtual void update(const EngineObject *o, UIntegerType event_type, const sutils::Variant&) override {
 
         switch(event_type) {
 

@@ -31,7 +31,7 @@ public:
         return _att_from_above < other._att_from_above;
     }
 
-    static UnitSkill *create(const utility::VariantDataInfo& m);
+    static UnitSkill *create(const sutils::VariantDataInfo& m);
 
     virtual void destroy() override;
 

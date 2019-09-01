@@ -287,7 +287,7 @@ public:
 
 protected:
 
-    virtual void update(const EngineObject *o, UIntegerType event_type, const utility::Variant& v) override;
+    virtual void update(const EngineObject *o, UIntegerType event_type, const sutils::Variant& v) override;
 };
 
 #endif // UNIT_H

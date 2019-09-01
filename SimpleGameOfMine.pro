@@ -1,13 +1,15 @@
 
-QT       += core gui
+QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_CXXFLAGS += -std=c++17
-LIBS += -lstdc++fs
+
+LIBS += -L"$$PWD/submodules/s_utils/bin" -lstdc++fs -lsutils
+PRE_TARGETDEPS += libsutils.a
 
 INCLUDEPATH += include include/animation include/config include/interface \
-    include/engine include/utils include/utility include/memory include/gameinfo
+    include/engine include/utils include/utility include/memory include/gameinfo submodules/s_utils/include
 
 TARGET = SGOM
 TEMPLATE = app
@@ -113,18 +115,12 @@ SOURCES += src/main.cpp \
     src/gameinfo/items.cpp \
     src/interface/itemsview.cpp \
     src/interface/itemimagewidget.cpp \
-    src/utility/variant.cpp \
     src/engine/skills/action.cpp \
     src/gameinfo/skills.cpp \
     src/engine/unitsinfo/archer.cpp \
     src/engine/unitsinfo/mage.cpp \
     src/engine/skills/actionssequeceskill.cpp \
-    src/engine/skills/actions/walkaction.cpp \
-    src/utility/variantdatainfo.cpp \
-    src/utility/stringutils.cpp \
-    src/utility/variantreader.cpp \
-    src/utility/toml.cpp
-
+    src/engine/skills/actions/walkaction.cpp
 
 PRECOMPILED_HEADER = include/config/sgomfiles.h \
                      include/engine/character.h \
@@ -267,7 +263,6 @@ HEADERS += include/interface/mainwindow.h \
     include/interface/itemsview.h \
     include/interface/itemimagewidget.h \
     include/utility/iteratorwrapper.h \
-    include/utility/variant.h \
     include/engine/skills/action.h \
     include/engine/skills/actionshandler.h \
     include/engine/skills/actions/walkaction.h \
@@ -275,13 +270,9 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/unitskillfactory.h \
     include/engine/skillfactories/genericskillfactory.h \
     include/engine/skills/actionssequeceskill.h \
-    include/utility/variantdatainfo.h \
     include/config/game_traits.h \
     include/config/metatypes.h \
-    include/utility/observable.h \
-    include/utility/stringutils.h \
-    include/utility/variantreader.h \
-    include/utility/toml.h
+    include/utility/observable.h
 
 RESOURCES += img/images.qrc \
     data/data.qrc \
@@ -303,7 +294,10 @@ FORMS += forms/gamedefaultscreen.ui \
 run.depends = $$TARGET
 run.commands = ./$$TARGET
 
-QMAKE_EXTRA_TARGETS = run
+libsutils.target = libsutils.a
+libsutils.commands = $(MAKE) -C '$$PWD/submodules/s_utils/' static_lib
+
+QMAKE_EXTRA_TARGETS = run all libsutils
 
 target.path = /usr/local/bin
 
@@ -314,4 +308,3 @@ desktopicon.path = /usr/share/icons/
 desktopicon.files += SGOM-icon.png
 
 INSTALLS += target desktop desktopicon
-

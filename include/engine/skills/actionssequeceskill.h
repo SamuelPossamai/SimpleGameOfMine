@@ -26,7 +26,7 @@ public:
         return _actions.finished() ? 0 : 1;
     }
 
-    static UnitSkill *create(const utility::VariantDataInfo& data_info);
+    static UnitSkill *create(const sutils::VariantDataInfo& data_info);
 
     virtual void destroy() override { delete this; }
 

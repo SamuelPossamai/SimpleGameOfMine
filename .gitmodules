@@ -1,0 +1,4 @@
+[submodule "submodules/s_utils"]
+	path = submodules/s_utils
+	url = https://github.com/SamuelPossamai/s_utils.git
+	branch = master

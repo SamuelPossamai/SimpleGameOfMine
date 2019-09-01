@@ -7,10 +7,11 @@
 #include <QFile>
 #include <QFileInfo>
 
-#include "utility/stringutils.h"
+#include <stringutils.h>
+
 #include "sgomfiles.h"
 
-using namespace utility::stringutils;
+using namespace sutils::stringutils;
 
 SGOMFiles *SGOMFiles::_f = nullptr;
 

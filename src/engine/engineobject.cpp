@@ -1,5 +1,6 @@
 
-#include "utility/variant.h"
+#include <variant.h>
+
 #include "enginemap.h"
 #include "engineobject.h"
 
@@ -12,7 +13,7 @@ bool EngineObject::setPos(PointType p) {
 
     if(!_map->engineObjectMoveVerify(this, p)) return false;
 
-    notify(ObservedEventType::Moved, utility::Variant());
+    notify(ObservedEventType::Moved, sutils::Variant());
 
     Base::setPos(p);
 
@@ -23,7 +24,7 @@ bool EngineObject::setAngle(AngleType angle){
 
     Base::setAngle(angle);
 
-    notify(ObservedEventType::Rotated, utility::Variant());
+    notify(ObservedEventType::Rotated, sutils::Variant());
 
     return true;
 }

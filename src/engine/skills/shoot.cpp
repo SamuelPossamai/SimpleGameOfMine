@@ -38,7 +38,7 @@ UIntegerType Shoot::action(Unit *u, EngineMap *, ProjectileCreationInterface& pc
     return 20;
 }
 
-UnitSkill *Shoot::create(const utility::VariantDataInfo& d) {
+UnitSkill *Shoot::create(const sutils::VariantDataInfo& d) {
 
     auto it = d.find("projectile");
 
@@ -49,7 +49,7 @@ UnitSkill *Shoot::create(const utility::VariantDataInfo& d) {
         return nullptr;
     }
 
-    return new Shoot(it->second.get<utility::Variant::String>());
+    return new Shoot(it->second.get<sutils::Variant::String>());
 }
 
 } /* namespace skill */

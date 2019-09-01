@@ -8,7 +8,7 @@ using namespace skill;
 ActionsSequeceSkill::~ActionsSequeceSkill() {
 }
 
-UnitSkill *ActionsSequeceSkill::create(const utility::VariantDataInfo& data_info) {
+UnitSkill *ActionsSequeceSkill::create(const sutils::VariantDataInfo& data_info) {
 
     auto&& name_it = data_info.find("name");
 
@@ -19,7 +19,7 @@ UnitSkill *ActionsSequeceSkill::create(const utility::VariantDataInfo& data_info
 
         if(name_it->second.isString())  {
 
-            name = name_it->second.get<utility::Variant::String>();
+            name = name_it->second.get<sutils::Variant::String>();
         }
         else name = "<<invalid>>";
     }
@@ -47,7 +47,7 @@ UnitSkill *ActionsSequeceSkill::create(const utility::VariantDataInfo& data_info
         return nullptr;
     }
 
-    auto& actions = actions_it->second.get<utility::Variant::List>();
+    auto& actions = actions_it->second.get<sutils::Variant::List>();
 
     std::vector<std::pair<Action *, ActInfo> > actions_arg;
 
@@ -62,7 +62,7 @@ UnitSkill *ActionsSequeceSkill::create(const utility::VariantDataInfo& data_info
             return nullptr;
         }
 
-        auto&& action_map = action.get<utility::Variant::Map>();
+        auto&& action_map = action.get<sutils::Variant::Map>();
 
         auto&& type_it = action_map.find("type");
 
@@ -80,7 +80,7 @@ UnitSkill *ActionsSequeceSkill::create(const utility::VariantDataInfo& data_info
             return nullptr;
         }
 
-        auto&& action_name = type_it->second.get<utility::Variant::String>();
+        auto&& action_name = type_it->second.get<sutils::Variant::String>();
         auto *action_type = Action::getAction(action_name);
 
         if(action_type == nullptr) {
@@ -106,13 +106,13 @@ UnitSkill *ActionsSequeceSkill::create(const utility::VariantDataInfo& data_info
             return nullptr;
         }
 
-        utility::VariantDataInfo data_info;
+        sutils::VariantDataInfo data_info;
 
-        for(auto p : info_it->second.get<utility::Variant::Map>()) {
+        for(auto p : info_it->second.get<sutils::Variant::Map>()) {
 
             if(p.first.isString()) {
 
-                data_info.insert({p.first.get<utility::Variant::String>(), p.second});
+                data_info.insert({p.first.get<sutils::Variant::String>(), p.second});
             }
             else {
 

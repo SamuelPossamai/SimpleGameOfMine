@@ -6,7 +6,7 @@
 
 #include <QPixmap>
 
-#include "utility/variant.h"
+#include <variant.h>
 
 #include "engine_traits.h"
 #include "unitskill.h"
@@ -30,7 +30,7 @@ public:
     using SizeType = Traits<Unit>::SizeType;
     using SpeedType = Traits<Unit>::SpeedType;
     using Attributes = UnitAttributes;
-    using Skills = std::vector<std::pair<std::string, utility::VariantDataInfo> >;
+    using Skills = std::vector<std::pair<std::string, sutils::VariantDataInfo> >;
 
     /*!
      * \brief Construct an UnitInfo, all the parameters are set to zero
@@ -85,7 +85,7 @@ public:
      * \brief Virtual method called when an unit is created
      * \param u Unit just created
      */
-    virtual void init(Unit *u) const { Q_UNUSED(u); }
+    virtual void init(Unit *u) const { Q_UNUSED(u) }
 
 protected:
 

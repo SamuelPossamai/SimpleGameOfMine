@@ -14,7 +14,7 @@ public:
 
     virtual UIntegerType action(Unit*, EngineMap*, ProjectileCreationInterface&, const Info&) override;
 
-    static UnitSkill *create(const utility::VariantDataInfo&);
+    static UnitSkill *create(const sutils::VariantDataInfo&);
 
 private:
 
