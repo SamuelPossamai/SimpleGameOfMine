@@ -24,6 +24,10 @@ public:
 
     virtual UIntegerType action(Unit*, EngineMap*, ProjectileCreationInterface&, const Info&) override;
 
+    static UnitSkill *create(const sutils::VariantDataInfo& m);
+
+    virtual void destroy() override;
+
 private:
 
     static OneCopyMemoryManager<Thrust> _skills;
@@ -32,9 +36,6 @@ private:
 class Thrust::MemoryInterface {
 
 public:
-
-    template <typename... Args>
-    static Thrust *get(Args... args) { return Thrust::_skills.get(Thrust(args...)); }
 
     template <typename... Args>
     static Thrust *dependentGet(Args... args) { return Thrust::_skills.dependentGet(Thrust(args...)); }

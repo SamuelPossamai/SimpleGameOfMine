@@ -19,7 +19,7 @@ using namespace gameinfo;
 
 std::map<std::string, Creatures::GetCreatureFunctionType> Creatures::_creatures;
 
-std::optional<Creatures::Info> Creatures::get(std::string name) {
+std::optional<Creatures::Info> Creatures::get(const std::string& name) {
 
     if(_creatures.empty()) _init();
 
@@ -34,7 +34,7 @@ static Creatures::Info _get_slime_info() {
 
     return Creatures::Info(unitsinfo::Slime::getInfo(),
                            unitanimationfactory::SlimeAnimationFactory::getFactory(),
-                           controller::AI::Slime::getController());
+                           controller::AI::Slime::getController(), {{"arrow", 70}});
 }
 
 static Creatures::Info _get_blue_slime_info() {
@@ -69,7 +69,7 @@ static Creatures::Info _get_yellow_slime_info() {
 
     return Creatures::Info(unitsinfo::Slime::getInfo(unitsinfo::Slime::Type::Normal),
                            unitanimationfactory::ColoredSlimeAnimationFactory::getFactory(Qt::yellow),
-                           controller::AI::TimidSlime::getController());
+                           controller::AI::TimidSlime::getController(), {{"sword", 70}});
 }
 
 static Creatures::Info _get_pink_slime_info() {

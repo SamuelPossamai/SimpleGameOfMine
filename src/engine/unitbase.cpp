@@ -9,4 +9,8 @@ UnitBase::UnitBase(const UnitInfo *info, EngineMap *m, const Attributes& attr, U
 
 }
 
+UnitBase::~UnitBase() {
+
+}
+
 

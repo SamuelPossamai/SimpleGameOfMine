@@ -4,6 +4,10 @@
 
 #include <engine_traits.h>
 
+/*!
+ * \brief Class with the basic information about an engine object
+ * \sa EngineObject
+ */
 class EngineObjectBase {
 
 public:
@@ -18,7 +22,7 @@ public:
     EngineObjectBase(SizeType s, SpeedType sp, PointType pos = {0, 0}, AngleType angle = 0) :
         _x(pos.x), _y(pos.y), _angle(angle), _size(s), _speed(sp) {}
 
-    virtual ~EngineObjectBase() {}
+    virtual ~EngineObjectBase();
 
     /*!
      * \brief Set the 'x' position of this object
@@ -90,6 +94,10 @@ public:
      */
     SizeType size() const { return _size; }
 
+    /*!
+     * \brief Return the speed of the object in the engine
+     * \return The object's speed, it will determine how often the object acts
+     */
     SpeedType speed() const { return _speed; }
 
 protected:

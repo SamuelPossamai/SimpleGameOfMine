@@ -9,6 +9,8 @@
 
 #include <QTextStream>
 
+#include <variant.h>
+
 /*!
  * \brief The SGOMFiles class is meant help with the localization of files for the game
  */
@@ -21,10 +23,11 @@ class SGOMFiles {
 
 public:
 
+    using Variant = sutils::Variant;
     using DataEntryFileInfo = std::vector<std::pair<std::string, std::vector<std::string> > >;
     using EntryFileInfo = std::map<std::string, std::vector<std::string> >;
-    using ConfigFileInfo = std::map<std::string, std::map<std::string, std::string> >;
-    using DataFileInfo = std::vector<std::pair<std::string, std::map<std::string, std::string> > >;
+    using ConfigFileInfo = std::map<std::string, std::map<std::string, Variant> >;
+    using DataFileInfo = std::vector<std::pair<std::string, std::map<std::string, Variant> > >;
 
     /*!
      * \brief Return the path to the base directory for all the game's files and directories
@@ -75,8 +78,23 @@ public:
      */
     static SGOMFiles *get() { if(!_f) _f = new SGOMFiles; return _f; }
 
-    static std::vector<std::string> findDataFiles(const std::string& dir);
-    static std::vector<std::string> findDataFiles(const std::string& dir, const std::string& extension);
+    static std::vector<std::string> findFiles(const std::string& dir);
+    static std::vector<std::string> findFiles(const std::string& dir, const std::string& extension);
+
+    static std::vector<std::string> findDataFiles(const std::string& dir) { return findFiles(":/data/" + dir); }
+    static std::vector<std::string> findDataFiles(const std::string& dir, const std::string& extension) {
+
+        return findFiles(":/data/" + dir, extension);
+    }
+
+    static std::vector<std::string> findUserFiles(const std::string& dir) {
+
+        return findFiles(get()->_base_path + '/' + dir);
+    }
+    static std::vector<std::string> findUserFiles(const std::string& dir, const std::string& extension) {
+
+        return findFiles(get()->_base_path + '/' + dir, extension);
+    }
 
     static std::optional<DataEntryFileInfo> readSGOMDataEntryFile(const std::string& filename);
 
@@ -107,11 +125,8 @@ private:
     template <typename T>
     static bool _write_SGOM_data_file(const std::string& filename, const T& info);
 
-    bool _create_dir_if_missing(const std::string& dir_name);
-
     static bool _append_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section, const std::string& s);
     static bool _create_section_data_entry(SGOMFiles::DataEntryFileInfo& result, const std::string& section);
-    static std::pair<std::string, std::string> _split_equal_sign(const std::string& s);
 
     std::string _base_path;
     std::string _char_path;

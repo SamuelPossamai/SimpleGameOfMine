@@ -11,21 +11,21 @@
  * \brief It observes an Unit so if something happens to the unit, it can use this information to change the graphics beeing displayed
  * \sa Unit
  */
-class UnitAnimationItem : public AnimationItemBase, public Unit::Observer {
+class UnitAnimationItem : public AnimationItemBase, public Unit::ObserverWrapper {
 
 public:
 
     /*!
      * \brief Creates an UnitAnimationItem, this constructor will be called by base classes
      * \brief The Unit 'u' will be attached
-     * \sa Unit::attachHandler(Unit::Handler *)
+     * \sa EngineObject::attachObserver(EngineObject::Observer *)
      * \param u The unit that a base class object will observe and display
      */
     explicit UnitAnimationItem(Unit *u) : AnimationItemBase(u) { u->attachObserver(this); }
 
     /*!
      * \brief The destructor will detach the handler
-     * \sa Unit::detachHandler(Unit::Handler *)
+     * \sa EngineObject::detachObserver(EngineObject::Observer *)
      */
     virtual ~UnitAnimationItem() override { static_cast<Unit *>(accessObject())->detachObserver(this); }
 

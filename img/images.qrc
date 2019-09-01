@@ -92,5 +92,12 @@
         <file>zu_walking_1.png</file>
         <file>zu_walking_2.png</file>
         <file>shuriken_image.png</file>
+        <file>question_mark.png</file>
+        <file>background_image_menu.png</file>
+        <file>wavy_arrow_to_right.png</file>
+        <file>wavy_arrow_to_left.png</file>
+        <file>wavy_arrow_to_right_red.png</file>
+        <file>wavy_arrow_to_left_red.png</file>
+        <file>skill_button_background.png</file>
     </qresource>
 </RCC>

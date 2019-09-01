@@ -129,6 +129,8 @@ class AnimatedObject::Handler {
 
 public:
 
+    virtual ~Handler() = default;
+
     virtual void animatedObjectMouseDoubleClickEvent(QGraphicsSceneMouseEvent *) {}
     virtual void animatedObjectMouseMoveEvent(QGraphicsSceneMouseEvent *) {}
     virtual void animatedObjectMousePressEvent(QGraphicsSceneMouseEvent *) {}

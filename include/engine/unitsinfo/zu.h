@@ -8,9 +8,9 @@ namespace unitsinfo {
 
 class Zu : public UnitInfo {
 
-    Zu();
+    Zu() = default;
 
-    virtual ~Zu() override;
+    virtual ~Zu() override = default;
 
 public:
 
@@ -22,6 +22,8 @@ public:
 
         return _info;
     }
+
+    virtual Skills getSkills(const Unit *) const override;
 
 protected:
 

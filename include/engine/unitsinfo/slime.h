@@ -2,7 +2,7 @@
 #ifndef UNITSINFO_SLIME_H
 #define UNITSINFO_SLIME_H
 
-#include <memory/onecopymemorymanager.h>
+#include "memory/onecopymemorymanager.h"
 
 #include "unitinfo.h"
 
@@ -14,13 +14,15 @@ public:
 
     enum class Type : UIntegerType { Normal, Fast, Immortal, Crazy, Ghost };
 
-    virtual ~Slime();
+    virtual ~Slime() override = default;
 
     static Slime *getInfo(const Type& type = Type::Normal) { return _memmanager.get(Slime(type)); }
 
     bool operator <(const Slime& other) const { return _type < other._type; }
 
     virtual void init(Unit *u) const override;
+
+    virtual Skills getSkills(const Unit *) const override;
 
 protected:
 
@@ -38,7 +40,7 @@ protected:
 
 private:
 
-    Slime(const Type& type);
+    Slime(const Type& type) : _type(type) {}
 
     Type _type;
 

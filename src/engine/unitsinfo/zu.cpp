@@ -6,12 +6,11 @@ using namespace unitsinfo;
 
 Zu *Zu::_info = nullptr;
 
-Zu::Zu() {
+UnitInfo::Skills Zu::getSkills(const Unit *) const {
 
-    addSkill(skill::Walk::MemoryInterface::dependentGet(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
-}
+    UnitInfo::Skills s;
 
-Zu::~Zu(){
+    s.push_back({"walk", {{"distance", 100}, {"duration", 10}}});
 
-    skill::Walk::MemoryInterface::noLongerDepend(10, 100);
+    return s;
 }

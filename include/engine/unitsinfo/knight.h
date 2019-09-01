@@ -10,24 +10,24 @@ class Knight : public UnitInfo {
 
 protected:
 
-    Knight();
+    Knight() = default;
 
     virtual HealthType healthCalculate(const Attributes& attr, UIntegerType level) const override {
 
-        return 300 + 20*attr.vitality() + 0.1*attr.strength() + level;
+        return HealthType(300 + 20*attr.vitality() + 0.1*attr.strength() + level);
     }
     virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const override { return 0; }
     virtual RageType rageCalculate(const Attributes& attr, UIntegerType level) const override {
 
-        return 100 + 10*(attr.strength() + attr.vitality()) + level;
+        return RageType(100 + 10*(attr.strength() + attr.vitality()) + level);
     }
     virtual AttackType attackCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 16 + 0.85*attr.strength() + 0.1*attr.dexterity() + 0.2*attr.wisdom();
+        return AttackType(16 + 0.85*attr.strength() + 0.1*attr.dexterity() + 0.2*attr.wisdom());
     }
     virtual AccuracyType accuracyCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 25 + 0.8*attr.dexterity();
+        return AccuracyType(25 + 0.8*attr.dexterity());
     }
     virtual MagicPowerType magicPowerCalculate(const Attributes&, UIntegerType) const override { return 0; }
     virtual MagicControlType magicControlCalculate(const Attributes&, UIntegerType) const override { return 0; }
@@ -36,7 +36,7 @@ protected:
 
 public:
 
-    virtual ~Knight();
+    virtual ~Knight() override = default;
 
     static Knight *getInfo() {
 
@@ -46,6 +46,8 @@ public:
 
         return _info;
     }
+
+    virtual Skills getSkills(const Unit *) const override;
 
 private:
 

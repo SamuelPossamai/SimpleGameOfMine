@@ -12,7 +12,7 @@ class ArrowAnimationFactory : public ProjectileAnimationItemFactory {
 
 public:
 
-    virtual ~ArrowAnimationFactory() {}
+    virtual ~ArrowAnimationFactory() override {}
 
     virtual ProjectileAnimationItem *create(Projectile *) override;
 

@@ -6,9 +6,6 @@
 
 namespace skill {
 
-/*!
- * \brief UnitSkill to add or remove(on/off), LastEscape effect
- */
 class PlantAreaAttack : public UnitSkill {
 
 protected:
@@ -29,6 +26,10 @@ public:
 
         return _skill;
     }
+
+    static UnitSkill *create(const sutils::VariantDataInfo&) { return getSkill(); }
+
+    virtual void destroy() override {}
 
 private:
 

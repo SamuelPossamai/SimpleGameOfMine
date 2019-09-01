@@ -15,7 +15,7 @@ class HelpWidget : public MainWidget {
 public:
 
     explicit HelpWidget(MainWindow * = nullptr);
-    ~HelpWidget();
+    virtual ~HelpWidget() override;
 
     virtual void activate() override;
 

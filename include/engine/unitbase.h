@@ -31,7 +31,7 @@ public:
      */
     UnitBase(const UnitInfo *info, EngineMap *m, const Attributes& attr, UIntegerType level);
 
-    virtual ~UnitBase() {}
+    virtual ~UnitBase();
 
     /*!
      * \brief Return the UnitInfo associated with this object
@@ -40,27 +40,51 @@ public:
     const UnitInfo *unitInfo() const { return _info; }
 
     /*!
-     * \brief Return the amount of health the unit have
+     * \brief Return the amount of health the unit has
      * \return The value of health of the unit
      */
     HealthType health() const { return _health; }
 
     /*!
-     * \brief Return the max amount of healht the unit can have
+     * \brief Return the max amount of health the unit can have
      * \return The max value for health this unit can have
      */
     HealthType maxHealth() const { return _info->health(attributes(), level()); }
 
+    /*!
+     * \brief Return the amount of energy the unit has
+     * \return The value of energy of the unit
+     */
     EnergyType energy() const { return _energy; }
 
+    /*!
+     * \brief Return the max amount of energy the unit can have
+     * \return The max value for energy this unit can have
+     */
     EnergyType maxEnergy() const { return _info->energy(attributes(), level()); }
 
+    /*!
+     * \brief Return the amount of special the unit has
+     * \return The value of special of the unit
+     */
     SpecialType special() const { return _special; }
 
+    /*!
+     * \brief Return the max amount of special the unit can have
+     * \return The max value for special this unit can have
+     */
     SpecialType maxSpecial() const { return _info->special(attributes(), level()); }
 
+    /*!
+     * \brief Return the amount of rage the unit has
+     * \return The value of rage of the unit
+     */
     EnergyType rage() const { return _rage; }
 
+    /*!
+     * \brief Return the max amount of rage the unit can have
+     * \return The max value for rage this unit can have
+     */
     EnergyType maxRage() const { return _info->rage(attributes(), level()); }
 
     AttackType baseDamage() const { return _info->baseAttack(attributes(), level()); }

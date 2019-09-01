@@ -16,7 +16,7 @@ class SelectJobDialog : public QDialog {
 
 public:
 
-    explicit SelectJobDialog(Character& c, QWidget *parent = 0);
+    explicit SelectJobDialog(Character& c, QWidget *parent = nullptr);
 
     ~SelectJobDialog();
 

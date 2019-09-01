@@ -17,7 +17,7 @@ class thread;
  * \brief Each time 'step' is called, the battle and animation progress a quantum.
  * \sa EngineMap, BattleWidget, BattleEngine::step()
  */
-class BattleEngine : Unit::Observer {
+class BattleEngine final : Unit::ObserverWrapper {
 
     using Controller = UnitController;
 
@@ -37,11 +37,22 @@ public:
      * \param unit_info Information about the unit that will be added, including animation
      * \param controller The unit controller, it controls the decisions for the unit
      * \param team Unit team, it determines if other units are allies or enemies
+     * \param character Character information of the unit, by default 'nullptr'
      * \return Return the unit that was just created
      */
     Unit *addUnit(const UnitInfo *unit_info, Controller *controller,
-                  const UnitAttributes& attr, UIntegerType level, UIntegerType team);
+                  const UnitAttributes& attr, UIntegerType level, UIntegerType team,
+                  const Character *character = nullptr);
 
+    /*!
+     * \brief Create a projectile and add it to the battle
+     * \param factory ProjectileFactory used to create the projectile
+     * \param creator The unit that will create the projectile in the battle
+     * \param dir Projectile velocity direction
+     * \param pos Projectile starting position
+     * \param angle Angle of the projectile
+     * \return The projectile that was created
+     */
     Projectile *addProjectile(ProjectileFactory *factory, const Unit *creator,
                               Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);
 
@@ -69,7 +80,7 @@ public:
 
 private:
 
-    void unitDeathEvent(Unit *u);
+    void unitDeathEvent(const Unit *u) final;
 
     bool _step_loop();
 

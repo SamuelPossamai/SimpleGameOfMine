@@ -1,23 +1,28 @@
 
-QT       += core gui
+QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 QMAKE_CXXFLAGS += -std=c++17
-LIBS += -lstdc++fs
+
+sutils_lib_path = $$PWD/submodules/s_utils/bin/libsutils.a
+
+LIBS += -L"$$PWD/submodules/s_utils/bin" -lstdc++fs -lsutils
+PRE_TARGETDEPS += $$PWD/submodules/s_utils/bin/libsutils.a
 
 INCLUDEPATH += include include/animation include/config include/interface \
-    include/engine include/utils include/utility include/memory include/gameinfo
+    include/engine include/utils include/utility include/memory include/gameinfo submodules/s_utils/include
 
 TARGET = SGOM
 TEMPLATE = app
 
 DEFINES += QT_DEPRECATED_WARNINGS
 
-CONFIG += object_parallel_to_source c++1z
+CONFIG += object_parallel_to_source c++1z precompile_header
 OBJECTS_DIR = .
 
 SOURCES += src/main.cpp \
+    src/animation/animationitens/unit/basicunitgraphicitemmapped.cpp \
     src/interface/mainwindow.cpp \
     src/engine/unitbase.cpp \
     src/animation/animation.cpp \
@@ -108,9 +113,26 @@ SOURCES += src/main.cpp \
     src/engine/unitsinfo/zu.cpp \
     src/engine/controllers/ai/zucontroller.cpp \
     src/gameinfo/maps/cave.cpp \
-    src/animation/animationfactories/projectile/shurikenanimationfactory.cpp
+    src/animation/animationfactories/projectile/shurikenanimationfactory.cpp \
+    src/gameinfo/items.cpp \
+    src/interface/itemsview.cpp \
+    src/interface/itemimagewidget.cpp \
+    src/engine/skills/action.cpp \
+    src/gameinfo/skills.cpp \
+    src/engine/unitsinfo/archer.cpp \
+    src/engine/unitsinfo/mage.cpp \
+    src/engine/skills/actionssequeceskill.cpp \
+    src/engine/skills/actions/walkaction.cpp
+
+PRECOMPILED_HEADER = include/config/sgomfiles.h \
+                     include/engine/character.h \
+                     include/interface/battlewidget.h \
+                     include/engine/unitinfo.h \
+                     include/engine/unitskill.h \
+                     include/engine/uniteffect.h
 
 HEADERS += include/interface/mainwindow.h \
+    include/animation/animationitens/unit/basicunitgraphicitemmapped.h \
     include/engine/unitbase.h \
     include/engine/unitinfo.h \
     include/config/types.h \
@@ -238,10 +260,25 @@ HEADERS += include/interface/mainwindow.h \
     include/engine/unitattributes.h \
     include/engine/controllers/ai/zucontroller.h \
     include/gameinfo/maps/cave.h \
-    include/animation/animationfactories/projectile/shurikenanimationfactory.h
+    include/animation/animationfactories/projectile/shurikenanimationfactory.h \
+    include/gameinfo/items.h \
+    include/interface/itemsview.h \
+    include/interface/itemimagewidget.h \
+    include/utility/iteratorwrapper.h \
+    include/engine/skills/action.h \
+    include/engine/skills/actionshandler.h \
+    include/engine/skills/actions/walkaction.h \
+    include/gameinfo/skills.h \
+    include/engine/unitskillfactory.h \
+    include/engine/skillfactories/genericskillfactory.h \
+    include/engine/skills/actionssequeceskill.h \
+    include/config/game_traits.h \
+    include/config/metatypes.h \
+    include/utility/observable.h
 
 RESOURCES += img/images.qrc \
-    data/data.qrc
+    data/data.qrc \
+    qss/qss.qrc
 
 FORMS += forms/gamedefaultscreen.ui \
     forms/menu.ui \
@@ -253,12 +290,16 @@ FORMS += forms/gamedefaultscreen.ui \
     forms/librarywidget.ui \
     forms/characterselectionscreen.ui \
     forms/librarywidgetinfotab.ui \
-    forms/configurationscreen.ui
+    forms/configurationscreen.ui \
+    forms/itemsview.ui
 
 run.depends = $$TARGET
 run.commands = ./$$TARGET
 
-QMAKE_EXTRA_TARGETS = run
+libsutils.target = $$sutils_lib_path
+libsutils.commands = $(MAKE) -C '$$PWD/submodules/s_utils/' static_lib
+
+QMAKE_EXTRA_TARGETS = run all libsutils
 
 target.path = /usr/local/bin
 
@@ -269,4 +310,3 @@ desktopicon.path = /usr/share/icons/
 desktopicon.files += SGOM-icon.png
 
 INSTALLS += target desktop desktopicon
-

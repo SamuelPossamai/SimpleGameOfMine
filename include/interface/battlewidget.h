@@ -4,6 +4,7 @@
 
 #include <memory>
 
+#include <config/metatypes.h>
 #include <config/interface_traits.h>
 #include <engine/unitcontroller.h>
 #include <engine/character.h>
@@ -26,6 +27,11 @@ class QGraphicsPixmapItem;
 class BattleWidget : public MainWidget, public GraphicsView::Handler {
 
     Q_OBJECT
+    Q_PROPERTY(Qt::Alignment skillButtonAlign READ skillButtonAlign WRITE setSkillButtonAlign)
+    Q_PROPERTY(RealType skillButtonSize READ skillButtonSize WRITE setSkillButtonSize)
+    Q_PROPERTY(RealType skillButtonDistance READ skillButtonDistance WRITE setSkillButtonDistance)
+    Q_PROPERTY(RealType skillButtonBorderVDistance READ skillButtonBorderVDistance WRITE setSkillButtonBorderVDistance)
+    Q_PROPERTY(RealType skillButtonBorderHDistance READ skillButtonBorderHDistance WRITE setSkillButtonBorderHDistance)
 
 public:
 
@@ -46,7 +52,7 @@ public:
      */
     void start();
 
-    ~BattleWidget();
+    virtual ~BattleWidget() override;
 
     /*!
      * \brief Zoom in the battle view
@@ -91,9 +97,9 @@ public:
 
     /*!
      * \brief Show the skill buttons based on the information in 'u'
-     * \param u The UnitInfo containing the information about the skills' icon and quantity
+     * \param u The Unit whose skills will be shown
      */
-    void showSkillButtons(const UnitInfo *u);
+    void showSkillButtons(const Unit *u);
 
     /*!
      * \brief Hide the skill buttons
@@ -101,34 +107,26 @@ public:
     void hideSkillButtons();
 
     /*!
-     * \brief Add an unit to the graphics scene and to the battle engine
-     * \param i Information about the unit that will be added
-     * \param c Unit controller, it will choose the skills to be performed
-     * \param f Factory to create the unit animation
+     * \brief Add an unit to the graphics scene and to the battle engine.
+     * \param i Information about the unit that will be added.
+     * \param c Unit controller, it will choose the skills to be performed.
+     * \param f Factory to create the unit animation.
+     * \param character Units character information.
      * \param team Team of the unit that will be added
      */
     void addUnit(UnitInfo *i, UnitController *c, UnitAnimationItemFactory *f,
-                 const UnitAttributes& attr, UIntegerType level, UIntegerType team);
+                 const UnitAttributes& attr, UIntegerType level, UIntegerType team,
+                 const Character *character = nullptr);
 
     /*!
-     * \brief Add a creature to the graphics scene and to the battle engine
-     * \param name Name of the creature type that will be added
-     * \param level Level of the creature
-     * \param team Team of the creature
+     * \brief Add a creature to the graphics scene and to the battle engine.
+     * \param name Name of the creature type that will be added.
+     * \param level Level of the creature.
+     * \param team Team of the creature.
      * \sa addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory, UIntegerType)
-     * \return true if it succeds, false otherwise(It can fail if the creature type is invalid)
+     * \return true if it succeds, false otherwise(It can fail if the creature type is invalid).
      */
     bool addCreature(std::string name, const UnitAttributes& attr, UIntegerType level, UIntegerType team);
-
-    /*!
-     * \brief Add a hero to the graphics scene and to the battle engine
-     * \param name Name of the hero's job/class
-     * \param attr The attributes of the hero
-     * \param team Hero's team
-     * \sa addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory, UIntegerType)
-     * \return true if it succeds, false otherwise(It can fail if the job/class is invalid)
-     */
-    bool addHero(std::string name, const Character::Attributes& attr, UIntegerType level, UIntegerType team);
 
     /*!
      * \brief Add a hero to the graphics scene and to the battle engine
@@ -136,7 +134,7 @@ public:
      * \param team Hero's team
      * \return true if it succeds, false otherwise(It can fail if the hero has an invalid job/class)
      */
-    bool addHero(const Character& c, UIntegerType team) { return addHero(c.className(), c.attributes(), c.level(), team); }
+    bool addHero(const Character *c, UIntegerType team);
 
     void addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
                        const Unit *creator, Projectile::AngleType dir, Projectile::PointType pos,
@@ -167,6 +165,26 @@ public:
      */
     void hideCancelButton();
 
+    void setSkillButtonAlign(Qt::Alignment alignment) { _alignment = alignment; }
+
+    Qt::Alignment skillButtonAlign() const { return _alignment; }
+
+    void setSkillButtonSize(RealType button_size) { _skill_button_size = button_size; }
+
+    RealType skillButtonSize() const { return _skill_button_size; }
+
+    void setSkillButtonDistance(RealType button_distance) { _skill_button_distance = button_distance; }
+
+    RealType skillButtonDistance() const { return _skill_button_distance; }
+
+    void setSkillButtonBorderVDistance(RealType border_vdist) { _skill_button_border_vertical_distance = border_vdist; }
+
+    RealType skillButtonBorderVDistance() const { return _skill_button_border_vertical_distance; }
+
+    void setSkillButtonBorderHDistance(RealType border_hdist) { _skill_button_border_horizontal_distance = border_hdist; }
+
+    RealType skillButtonBorderHDistance() const { return _skill_button_border_horizontal_distance; }
+
 public slots:
 
     /*!
@@ -196,6 +214,7 @@ private:
 
     void _update_buttons();
     void _exit();
+    std::pair<UIntegerType, UIntegerType> _decode_aligment() const;
 
     static void _step_internal(BattleWidget *);
     void _set_zoom(RealType zoom) { _gview->scale(zoom, zoom); }
@@ -225,6 +244,13 @@ private:
     InputInterface _input_interface;
 
     std::vector<AnimationItemBase *> _animations;
+
+    Qt::Alignment _alignment;
+
+    RealType _skill_button_size;
+    RealType _skill_button_distance;
+    RealType _skill_button_border_vertical_distance;
+    RealType _skill_button_border_horizontal_distance;
 
     Ui::BattleWidget *_ui;
 };

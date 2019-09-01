@@ -4,7 +4,9 @@
 
 #include <optional>
 #include <string>
+#include <map>
 
+#include <config/sgomfiles.h>
 #include <config/types.h>
 
 #include "unitattributes.h"
@@ -19,6 +21,12 @@ public:
     using Attributes = UnitAttributes;
 
     static constexpr UIntegerType freePointsPerLevel() { return UnitAttributes::freePointsPerLevel(); }
+
+    /*!
+     * \brief Contruct an invalid Character object
+     */
+    Character() : _name(), _char_class("jobless"), _level(0), _free_points(0),
+        _experience(0), _attr({}) {}
 
     /*!
      * \brief Construct a Character object passing the character name
@@ -106,10 +114,60 @@ public:
      */
     void save() const;
 
+    /*!
+     * \brief The amount of items of type 'type' will be increased by 'qtd'
+     * \param type Name of the type of items that will be added
+     * \param qtd Quantity of items added, by default 1
+     */
+    void addItem(const std::string& type, UIntegerType qtd = 1) { _items[type] += qtd; }
+
+    /*!
+     * \brief The amount of items of type 'type' will decreased by 'qtd'
+     * \brief if the current amount is lower than 'qtd', the current amount will be set to zero
+     * \param type Name of the type of items that will be added
+     * \param qtd Quantity of items removed, by default 1
+     * \return The number of items removed
+     */
+    UIntegerType remItem(const std::string& type, UIntegerType qtd = 1);
+
+    /*!
+     * \brief Verify if the character owns at least 'qtd' items of type 'type'
+     * \param type Name of the type of items
+     * \param qtd Quantity of items it need, by default 1
+     * \return true if it does have enough items of type 'type', false otherwise
+     */
+    bool haveItem(const std::string& type, UIntegerType qtd = 1) {
+
+        auto it = _items.find(type);
+        if(it == _items.end()) return false;
+
+        return it->second >= qtd;
+    }
+
+    /*!
+     * \brief Return the amount of items of type 'type'
+     * \param type Name of the type of items
+     * \return The current amount of items of type 'type'
+     */
+    UIntegerType searchItem(const std::string& type) const {
+
+        auto it = _items.find(type);
+        if(it == _items.end()) return 0;
+        return it->second;
+    }
+
+    /*!
+     * \brief Access the items owned by the character
+     * \return A map with the type of the item as key and the amount of items with this type as value
+     */
+    const std::map<std::string, UIntegerType>& items() const { return _items; }
+
 private:
 
+    static void _type_error_message(const char *section, const char *data, const char *desired_type,
+                                    const char *type, const char *name);
+    void _load_items(const std::map<std::string, SGOMFiles::Variant>& items, const char *char_name);
     void _calculate_free_points_and_experience();
-    std::optional<UIntegerType> _get_int(const std::string&);
 
     std::string _name;
     std::string _char_class;
@@ -118,6 +176,8 @@ private:
     UIntegerType _free_points;
     UIntegerType _experience;
     Attributes _attr;
+
+    std::map<std::string, UIntegerType> _items;
 };
 
 #endif // CHARACTER_H

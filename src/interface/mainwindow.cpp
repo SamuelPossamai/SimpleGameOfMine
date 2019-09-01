@@ -1,4 +1,5 @@
 
+#include <QStyle>
 #include <QKeyEvent>
 
 #include "config/sgomfiles.h"
@@ -9,7 +10,7 @@
 MainWindow::MainWindow() {
 
     setGeometry(Traits<MainWindow>::x, Traits<MainWindow>::y, Traits<MainWindow>::width, Traits<MainWindow>::height);
-    if(SGOMFiles::get()->readSGOMConfigFile()["Game Start"]["fullscreen"] == "yes") this->showFullScreen();
+    if(bool(SGOMFiles::get()->readSGOMConfigFile()["Game Start"]["fullscreen"])) this->showFullScreen();
 
     restoreProperties();
 }
@@ -29,9 +30,7 @@ void MainWindow::pushWidget(MainWidget *w) {
 
     _widgets.push_back(w);
 
-    w->activate();
-    w->setFocus();
-    w->show();
+    _change_window_apply(w);
 }
 
 void MainWindow::popWidget() {
@@ -43,24 +42,33 @@ void MainWindow::popWidget() {
 
     _widgets.back()->setGeometry(0, 0, width(), height());
 
-    if(!_widgets.empty()){
-
-        _widgets.back()->setFocus();
-        _widgets.back()->show();
-        _widgets.back()->activate();
-    }
+    if(!_widgets.empty()) _change_window_apply(_widgets.back());
 }
 
 void MainWindow::keyPressEvent(QKeyEvent* event) {
 
-    if(event->key() == Qt::Key_F12) {
+    bool accept = true;
+    switch (event->key()) {
 
-        this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
+        case Qt::Key_F11:
+            this->setWindowState(this->windowState() ^ Qt::WindowMaximized);
+            break;
+        case Qt::Key_F12:
+            this->setWindowState(this->windowState() ^ Qt::WindowFullScreen);
+            break;
+        case Qt::Key_Escape: {
+            if(this->windowState() & Qt::WindowFullScreen) {
+                this->setWindowState(this->windowState() & ~Qt::WindowFullScreen);
+            }
+            else accept = false;
+            break;
+        }
+        default:
+            accept = false;
+            break;
     }
-    if(event->key() == Qt::Key_F11) {
 
-        this->setWindowState(this->windowState() ^ Qt::WindowMaximized);
-    }
+    if(accept) event->accept();
 }
 
 void MainWindow::swapWidget(MainWidget *w) {
@@ -72,9 +80,9 @@ void MainWindow::swapWidget(MainWidget *w) {
 
     delete _widgets.back();
 
-    w->activate();
-    w->setFocus();
-    (_widgets.back() = w)->show();
+    _change_window_apply(w);
+
+    _widgets.back() = w;
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {
@@ -87,6 +95,15 @@ void MainWindow::restoreProperties() {
 
     setAutoFillBackground(true);
     setWindowTitle(Traits<MainWindow>::name);
-    setStyleSheet("background-color: rgb(245, 245, 245);"
-                  "color: rgb(20, 20, 20);");
+}
+
+void MainWindow::_change_window_apply(MainWidget *w) {
+
+    this->setProperty("currentWidget", w->property("accessibleName"));
+    this->style()->unpolish(this);
+    this->style()->polish(this);
+
+    w->activate();
+    w->setFocus();
+    w->show();
 }

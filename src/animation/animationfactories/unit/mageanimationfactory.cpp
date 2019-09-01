@@ -1,7 +1,7 @@
 
 #include "animation.h"
 #include "animationfactories/unit/mageanimationfactory.h"
-#include "animationitens/unit/basicunitgraphicitem.h"
+#include "animationitens/unit/basicunitgraphicitemmapped.h"
 
 using namespace unitanimationfactory;
 
@@ -28,10 +28,18 @@ MageAnimationFactory::MageAnimationFactory() :
 
 UnitAnimationItem *MageAnimationFactory::create(Unit *u) {
 
-    auto *item = new unitanimation::BasicUnitGraphicItem(u);
+    auto *item = new unitanimation::BasicUnitGraphicItemMapped(u);
 
-    item->setAnimations(_idle_animation, _walking_animation, _idle_animation,
-                        _idle_animation, _idle_animation, _idle_animation, _idle_animation);
+    const char *idle_animation_skill_names[] = {"__idle__",
+                                                "magic missile",
+                                                "teleport",
+                                                "fireball",
+                                                "explosion",
+                                                "ON/OFF magic shield"};
+
+    item->addAnimations(_idle_animation, idle_animation_skill_names, idle_animation_skill_names +
+                        sizeof(idle_animation_skill_names)/sizeof(idle_animation_skill_names[0]));
+    item->addAnimation(_walking_animation, "walk");
 
     return item;
 }

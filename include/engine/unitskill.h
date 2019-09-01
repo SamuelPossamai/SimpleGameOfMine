@@ -63,6 +63,11 @@ public:
      */
     bool needAngle() const { return _need_angle; }
 
+    /*!
+     * \brief Method to destroy the object, this method exists so derived classes can handle memory in a custom approach
+     */
+    virtual void destroy() { delete this; }
+
 private:
 
     const bool _need_angle;

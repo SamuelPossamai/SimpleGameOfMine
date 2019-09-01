@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/qss">
+        <file>main.qss</file>
+        <file>menu.qss</file>
+        <file>characterselectionscreen.qss</file>
+        <file>settings.qss</file>
+        <file>battlewidget.qss</file>
+    </qresource>
+</RCC>

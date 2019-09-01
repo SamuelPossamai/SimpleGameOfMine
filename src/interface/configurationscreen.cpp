@@ -15,15 +15,21 @@ ConfigurationScreen::ConfigurationScreen(MainWindow *parent) : MainWidget(parent
 
     auto map = SGOMFiles::get()->readSGOMConfigFile();
 
-    IntegerType mode_id = ui->characterSelectionScreenComboBox->findText(map["Character Selection Screen"]["mode"].c_str());
+    auto& char_sel_scn_mode = map["Character Selection Screen"]["mode"];
+
+    IntegerType mode_id = -1;
+    if(char_sel_scn_mode.isString()) {
+
+        mode_id = ui->characterSelectionScreenComboBox->findText(char_sel_scn_mode.get<SGOMFiles::Variant::String>().c_str());
+    }
 
     if(mode_id == -1) {
 
         std::cerr << "Invalid option chosen for character selection screen mode in the configuration" << std::endl;
     }
-    else ui->characterSelectionScreenComboBox->setCurrentIndex(mode_id);
+    else ui->characterSelectionScreenComboBox->setCurrentIndex(int(mode_id));
 
-    ui->windowFullscreenCheckBox->setChecked(map["Game Start"]["fullscreen"] == "yes");
+    ui->windowFullscreenCheckBox->setChecked(map["Game Start"]["fullscreen"] == true);
 
     _saved = true;
 }
@@ -56,7 +62,7 @@ void ConfigurationScreen::on_saveButton_clicked() {
     SGOMFiles::ConfigFileInfo cfi;
 
     cfi["Character Selection Screen"]["mode"] = ui->characterSelectionScreenComboBox->currentText().toStdString();
-    cfi["Game Start"]["fullscreen"] = ui->windowFullscreenCheckBox->isChecked() ? "yes" : "no";
+    cfi["Game Start"]["fullscreen"] = ui->windowFullscreenCheckBox->isChecked();
 
     SGOMFiles::get()->writeSGOMConfigFile(cfi);
 }

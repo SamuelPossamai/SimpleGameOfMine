@@ -15,11 +15,11 @@ class Unit final : public UnitBase {
 
 public:
 
-    class Observer;
+    struct ObservedEventType;
+    class ObserverWrapper;
 
     struct EffectInfo;
 
-    using ObserversList = std::vector<Observer *>;
     using EffectsList = std::vector<std::pair<const UnitEffect *, EffectInfo> >;
 
     /*!
@@ -29,12 +29,22 @@ public:
      * \param m EngineMap where the unit is
      * \param team Team of the unit
      * \param i BattleWidget object, it's used to receive user input when the controller asks for
+     * \param c Character information of this unit
      */
     Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, BattleWidget *i,
-         const Attributes& attr, UIntegerType level, UIntegerType team);
+         const Attributes& attr, UIntegerType level, UIntegerType team,
+         const Character *c = nullptr);
 
-    ~Unit() final = default;
+    Unit(const Unit&) = delete;
 
+    Unit& operator=(const Unit&) = delete;
+
+    ~Unit() final;
+
+    /*!
+     * \brief Verify if the unit needs a thread to act
+     * \return true if the the unit need a thread to act, false otherwise
+     */
     bool needThreadToAct() final {
 
         if(isDead() || isPerformingSkill()) return false;
@@ -66,6 +76,12 @@ public:
      */
     bool receiveDamage(AttackType damage, Unit *attacking);
 
+    /*!
+     * \brief The unit received damage
+     * \param damage Damage amount(effects can modify it)
+     * \param attacking The object that is attacking, nullptr the damage was not caused by an engine object
+     * \return true if the unit remains alive, false otherwise
+     */
     bool receiveDamage(AttackType damage, EngineObject *attacking = nullptr);
 
     /*!
@@ -99,31 +115,6 @@ public:
      * \return true if the unit is dead, false otherwise
      */
     bool isDead() const { return health() <= 0; }
-
-    /*!
-     * \brief Attach an observer to this unit, it will be notified for some unit events, like if it dies
-     * \param ob Observer that will be attached
-     * \return true if 'ob' was added successfully, false if it is already observing this unit
-     */
-    bool attachObserver(Observer *ob);
-
-    /*!
-     * \brief Detach an observer of this unit
-     * \param ob Observer that will be detached
-     * \return true if it was detached, false if it was not an observer of the unit
-     */
-    bool detachObserver(Observer *ob);
-
-    /*!
-     * \brief Detach all of the observers of the unit
-     */
-    void detachAllObservers() { EngineObject::detachAllObservers(); _observers.clear(); }
-
-    /*!
-     * \brief Return the list of all the observers of the unit
-     * \return List with all the observers
-     */
-    const ObserversList& unitObservers() const { return _observers; }
 
     /*!
      * \brief Add a permanent effect to this unit
@@ -183,11 +174,16 @@ public:
      */
     void unselect();
 
+    UIntegerType skillsAmount() const { return _skills.size(); }
+
+    const std::string& skillName() const { return _skills.at(skillId()).first; }
+    const std::string& skillName(UIntegerType n) const { return _skills.at(n).first; }
+
     /*!
      * \brief Verify if the unit is performing a skill
      * \return true if it is, false otherwise
      */
-    bool isPerformingSkill() const { return _skill < unitInfo()->skills(); }
+    bool isPerformingSkill() const { return _skill < skillsAmount(); }
 
     /*!
      * \brief Return the id of the skill beeing performed
@@ -209,6 +205,8 @@ public:
 
     SpeedType effectiveSpeed() const override;
 
+    const Character *character() const { return _character; }
+
     struct EffectInfo {
 
         UIntegerType duration;
@@ -218,19 +216,15 @@ public:
 
 private:
 
+    using SkillVector = std::vector<std::pair<std::string, UnitSkill *> >;
+
     bool setSpecial(SpecialType val);
     bool setRage(RageType val);
-
-    template <typename... Args>
-    void _notifyAll(void (Observer::*ObserverMethod)(Unit *, Args...), Args... args) {
-        for(Observer *observer : _observers) (observer->*ObserverMethod)(this, args...);
-    }
 
     bool _choose_internal(BattleWidget::InputInterface&);
     void _verify_effects();
 
     UIntegerType _team;
-    ObserversList _observers;
     UnitController * const _controller;
 
     UIntegerType _skill_step;
@@ -243,25 +237,57 @@ private:
     UnitAnimationItem *_gitem;
 
     BattleWidget *_interface;
+
+    SkillVector _skills;
+
+    const Character *_character;
 };
 
-class Unit::Observer : virtual public EngineObject::Observer {
+struct Unit::ObservedEventType {
 
 public:
 
-    virtual void unitSkillStarted(Unit *) {}
-    virtual void unitSkillAdvance(Unit *) {}
-    virtual void unitSkillFinished(Unit *) {}
-    virtual void unitReceivedDamage(Unit *) {}
-    virtual void unitHealed(Unit *) {}
-    virtual void unitDeathEvent(Unit *) {}
-    virtual void unitSelected(Unit *) {}
-    virtual void unitUnselected(Unit *) {}
-    virtual void unitEnergyConsumed(Unit *) {}
-    virtual void unitSpecialChanged(Unit *) {}
-    virtual void unitRageChanged(Unit *) {}
-    virtual void unitEffectAdded(Unit *, const UnitEffect *) {}
-    virtual void unitEffectRemoved(Unit *, const UnitEffect *) {}
+    enum : UIntegerType { START = EngineObject::ObservedEventType::END,
+                          SkillStarted, SkillAdvance, SkillFinished,
+                          ReceivedDamage, Healed, DeathEvent, Selected,
+                          Unselected, EnergyConsumed, SpecialChanged,
+                          RageChanged, EffectAdded, EffectRemoved, END };
+
+    ObservedEventType(UIntegerType event_type_id) : _int(event_type_id) {}
+    ObservedEventType(const ObservedEventType&) = default;
+
+    ObservedEventType& operator=(const ObservedEventType&) = default;
+
+    operator UIntegerType() const { return _int; }
+
+private:
+
+    UIntegerType _int;
+};
+
+class Unit::ObserverWrapper : virtual public EngineObject::ObserverWrapper {
+
+public:
+
+    virtual ~ObserverWrapper() override = default;
+
+    virtual void unitSkillStarted(const Unit *) {}
+    virtual void unitSkillAdvance(const Unit *) {}
+    virtual void unitSkillFinished(const Unit *) {}
+    virtual void unitReceivedDamage(const Unit *) {}
+    virtual void unitHealed(const Unit *) {}
+    virtual void unitDeathEvent(const Unit *) {}
+    virtual void unitSelected(const Unit *) {}
+    virtual void unitUnselected(const Unit *) {}
+    virtual void unitEnergyConsumed(const Unit *) {}
+    virtual void unitSpecialChanged(const Unit *) {}
+    virtual void unitRageChanged(const Unit *) {}
+    virtual void unitEffectAdded(const Unit *, const UnitEffect *) {}
+    virtual void unitEffectRemoved(const Unit *, const UnitEffect *) {}
+
+protected:
+
+    virtual void update(const EngineObject *o, UIntegerType event_type, const sutils::Variant& v) override;
 };
 
 #endif // UNIT_H

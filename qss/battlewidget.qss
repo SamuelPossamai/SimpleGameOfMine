@@ -1,0 +1,49 @@
+
+BattleWidget {
+
+    qproperty-skillButtonAlign: 'AlignHCenter | AlignBottom';
+    qproperty-skillButtonSize: 55;
+    qproperty-skillButtonDistance: 20;
+}
+
+[accessibleName~="battleSkillButton"] {
+
+    border-image: url(":/skill_button_background.png");
+}
+
+[accessibleName~="battleWidgetStaticButton"] {
+
+    background-color: rgb(250, 250, 250);
+    border-style: solid;
+    border-width: 2px;
+    border-radius: 20px;
+    border-color: black;
+    max-width: 40px;
+    max-height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+}
+
+[accessibleName~="battleWidgetStaticButton"]:hover {
+
+    background-color: rgb(235, 235, 235);
+}
+
+[accessibleName~="battleWidgetReturnButton"] {
+
+    qproperty-text: '↩';
+    font: 16pt;
+    color: black;
+}
+
+[accessibleName~="battleWidgetCancelButton"] {
+
+    qproperty-text: '✖';
+    font: 20pt;
+    color: red;
+}
+
+[accessibleName~="battleWidgetCoordLabel"] {
+
+    background-color: transparent;
+}

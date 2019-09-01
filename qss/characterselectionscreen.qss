@@ -1,0 +1,84 @@
+
+MainWindow[currentWidget~="CharacterSelectionScreen"] {
+
+    min-width: 650px;
+    min-height: 200px;
+}
+
+[accessibleName~=CharacterSelectionScreen] {
+
+    background-color: white;
+}
+
+QPushButton[accessibleName~="characterSelectionScreenButton"] {
+
+    background-color: white;
+}
+
+QPushButton[accessibleName~="characterSelectionScreenButton"]:hover {
+
+    background-color: lightgray;
+}
+
+QPushButton[accessibleName~="characterSelectionScreenDirectionButton"],
+QPushButton[accessibleName~="characterSelectionScreenDirectionButton"]:hover {
+
+    background-color: white;
+    border-width: 2px;
+    height: 40px;
+    width: 100px;
+}
+
+QPushButton[accessibleName~="characterSelectionScreenNextButton"] {
+
+    border-image: url(":/wavy_arrow_to_right.png") 20;
+}
+
+QPushButton[accessibleName~="characterSelectionScreenPreviousButton"] {
+
+    border-image: url(":/wavy_arrow_to_left.png") 20;
+}
+
+QPushButton[accessibleName~="characterSelectionScreenNextButton"]:hover {
+
+    border-image: url(":/wavy_arrow_to_right_red.png") 20;
+}
+
+QPushButton[accessibleName~="characterSelectionScreenPreviousButton"]:hover {
+
+    border-image: url(":/wavy_arrow_to_left_red.png") 20;
+}
+
+QPushButton[accessibleName~="characterSelectionScreenBottomButton"] {
+
+    background-color: white;
+    border-style: solid;
+    border-width:1px;
+    border-radius:15px;
+    border-color: black;
+    max-width:100px;
+    max-height:30px;
+    min-width:100px;
+    min-height:30px;
+}
+
+QPushButton[accessibleName~="characterSelectionScreenBottomButton"]:disabled {
+
+    border-color: lightgray;
+}
+
+[accessibleName~="characterSelectionCharacterIcon"] {
+
+    color: rgb(245, 245, 245);
+    background-color: white;
+}
+
+[accessibleName~="characterSelectionScreenSelNumLabel"][selectValid=true]  {
+
+    color: green;
+}
+
+[accessibleName~="characterSelectionScreenSelNumLabel"][selectValid=false]  {
+
+    color: red;
+}

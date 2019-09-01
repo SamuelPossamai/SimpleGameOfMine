@@ -1,12 +1,43 @@
 
+#include <iostream>
+
+#include <variant.h>
+
 #include "unit.h"
 #include "enginemap.h"
 #include "uniteffect.h"
+#include "unitskillfactory.h"
+
+#include "gameinfo/skills.h"
 
 Unit::Unit(const UnitInfo *info, UnitController *controller, EngineMap *m, BattleWidget *i,
-           const Attributes& attr, UIntegerType level, UIntegerType team) :
-    Base(info, m, attr, level), _team(team), _controller(controller), _skill(info->skills()), _interface(i) {
+           const Attributes& attr, UIntegerType level, UIntegerType team, const Character *c) :
+    Base(info, m, attr, level), _team(team), _controller(controller), _interface(i), _character(c) {
 
+    auto v = unitInfo()->getSkills(this);
+
+    for(auto&& s: v) {
+
+        auto opt = gameinfo::Skills::get(std::get<0>(s));
+        if(!opt) {
+
+            std::cerr << "Failed to load skill '" << std::get<0>(s) << '\'' << std::endl;
+            continue;
+        }
+
+        UnitSkillFactory *factory = opt->factory;
+
+        UnitSkill *skill = factory->create(std::get<1>(s));
+
+        _skills.push_back({ std::get<0>(s), skill });
+    }
+
+    _skill = _skills.size();
+}
+
+Unit::~Unit() {
+
+    for(auto&& p : _skills) std::get<1>(p)->destroy();
 }
 
 bool Unit::receiveDamage(AttackType damage, Unit *attacking) {
@@ -30,21 +61,21 @@ bool Unit::receiveDamage(AttackType damage, EngineObject *attacking /* = nullptr
     if(isDead()) {
 
         map()->removeObject(this);
-        _notifyAll(&Observer::unitDeathEvent);
+        notify(ObservedEventType::DeathEvent, sutils::Variant());
 
         return false;
     }
 
     setRage(rage() + damage);
 
-    _notifyAll(&Observer::unitReceivedDamage);
+    notify(ObservedEventType::ReceivedDamage, sutils::Variant::Integer(damage));
 
     return true;
 }
 
 void Unit::healed(HealthType amount, Unit *healing /* = nullptr */) {
 
-    Q_UNUSED(healing);
+    Q_UNUSED(healing)
 
     HealthType new_health_value = health() + amount;
 
@@ -52,7 +83,7 @@ void Unit::healed(HealthType amount, Unit *healing /* = nullptr */) {
 
     setHealth(new_health_value);
 
-    _notifyAll(&Observer::unitHealed);
+    notify(ObservedEventType::Healed, sutils::Variant::Integer(amount));
 }
 
 bool Unit::consumeEnergy(EnergyType energy) {
@@ -61,7 +92,7 @@ bool Unit::consumeEnergy(EnergyType energy) {
 
     this->setEnergy(this->energy() - energy);
 
-    _notifyAll(&Observer::unitEnergyConsumed);
+    notify(ObservedEventType::EnergyConsumed, sutils::Variant::Integer(energy));
 
     return true;
 }
@@ -84,39 +115,11 @@ bool Unit::consumeRage(RageType rage) {
     return true;
 }
 
-bool Unit::attachObserver(Observer *h) {
-
-    EngineObject::attachObserver(h);
-
-    if(std::find(_observers.begin(), _observers.end(), h) == _observers.end()) {
-
-        _observers.push_back(h);
-
-        return true;
-    }
-
-    return false;
-}
-
-bool Unit::detachObserver(Observer *h) {
-
-    EngineObject::detachObserver(h);
-
-    auto it = std::find(_observers.begin(), _observers.end(), h);
-    if(it != _observers.end()) {
-
-        *it = _observers.back();
-        _observers.pop_back();
-
-        return true;
-    }
-
-    return false;
-}
-
 bool Unit::addEffect(const UnitEffect *effect, UIntegerType duration, bool renew /* = false */) {
 
-    _notifyAll(&Observer::unitEffectAdded, effect);
+    auto tmp = sutils::VariantList({ sutils::Variant::Pointer(effect), sutils::Variant::Integer(duration), renew });
+
+    notify(ObservedEventType::EffectAdded, std::move(tmp));
 
     _effects.emplace_back(effect, EffectInfo{ duration, duration, renew });
 
@@ -130,7 +133,7 @@ bool Unit::removeEffect(const UnitEffect *effect) {
 
     if(it != _effects.end()) {
 
-        _notifyAll(&Observer::unitEffectRemoved, it->first);
+        notify(ObservedEventType::EffectRemoved, sutils::Variant::Pointer(it->first));
 
         *it = _effects.back();
         _effects.pop_back();
@@ -147,7 +150,7 @@ bool Unit::choose() {
 
     while (!_choose_internal(i));
 
-    _notifyAll(&Observer::unitSkillStarted);
+    notify(ObservedEventType::SkillStarted, sutils::Variant());
 
     return true;
 }
@@ -168,20 +171,20 @@ bool Unit::perform() {
 
     if(_skill_next_call == _skill_step){
 
-        _skill_next_call = _skill_step + unitInfo()->callSkill(_skill, this, map(), pci, { _skill_step, _skill_angle });
+        _skill_next_call = _skill_step + _skills.at(_skill).second->action(this, map(), pci, { _skill_step, _skill_angle });
 
         if(_skill_next_call <= _skill_step) {
 
-            _skill = unitInfo()->skills();
+            _skill = skillsAmount();
 
-            _notifyAll(&Unit::Observer::unitSkillFinished);
+            notify(ObservedEventType::SkillFinished, sutils::Variant());
 
             return false;
         }
     }
 
     _skill_step++;
-    _notifyAll(&Unit::Observer::unitSkillAdvance);
+    notify(ObservedEventType::SkillAdvance, sutils::Variant());
 
     for(auto& p : _effects) p.first->doTurnEffect(this, p.second.duration - 1);
     _verify_effects();
@@ -191,12 +194,12 @@ bool Unit::perform() {
 
 void Unit::select() {
 
-    _notifyAll(&Observer::unitSelected);
+    notify(ObservedEventType::Selected, sutils::Variant());
 }
 
 void Unit::unselect() {
 
-    _notifyAll(&Observer::unitUnselected);
+    notify(ObservedEventType::Unselected, sutils::Variant());
 }
 
 Unit::PointType Unit::maxPosition() const {
@@ -222,7 +225,7 @@ bool Unit::_choose_internal(BattleWidget::InputInterface& i) {
 
     _skill_angle = 0;
 
-    if(unitInfo()->skillNeedAngle(_skill)) {
+    if(_skills.at(_skill).second->needAngle()) {
 
         auto opt = _controller->chooseAngle(this, map(), i.get());
         if(!opt) return false;
@@ -252,7 +255,7 @@ void Unit::_verify_effects() {
                 continue;
             }
 
-            _notifyAll(&Observer::unitEffectRemoved, it->first);
+            notify(ObservedEventType::EffectRemoved, sutils::Variant::Pointer(it->first));
 
             bool is_last = ( it == _effects.end() - 1 );
 
@@ -269,7 +272,7 @@ bool Unit::setSpecial(SpecialType val) {
 
     if(UnitBase::setSpecial(val)) {
 
-        _notifyAll(&Observer::unitSpecialChanged);
+        notify(ObservedEventType::SpecialChanged, sutils::Variant());
         return true;
     }
     return false;
@@ -279,10 +282,62 @@ bool Unit::setRage(RageType val) {
 
     if(UnitBase::setRage(val)) {
 
-        _notifyAll(&Observer::unitRageChanged);
+        notify(ObservedEventType::RageChanged, sutils::Variant());
         return true;
     }
     return false;
 }
 
+void Unit::ObserverWrapper::update(const EngineObject *o, UIntegerType event_type, const sutils::Variant& v) {
 
+    const Unit *u = static_cast<const Unit *>(o);
+
+    switch(event_type) {
+
+        case Unit::ObservedEventType::SkillStarted:
+            this->unitSkillStarted(u);
+            break;
+        case Unit::ObservedEventType::SkillAdvance:
+            this->unitSkillAdvance(u);
+            break;
+        case Unit::ObservedEventType::SkillFinished:
+            this->unitSkillFinished(u);
+            break;
+        case Unit::ObservedEventType::ReceivedDamage:
+            this->unitReceivedDamage(u);
+            break;
+        case Unit::ObservedEventType::Healed:
+            this->unitHealed(u);
+            break;
+        case Unit::ObservedEventType::DeathEvent:
+            this->unitDeathEvent(u);
+            break;
+        case Unit::ObservedEventType::Selected:
+            this->unitSelected(u);
+            break;
+        case Unit::ObservedEventType::Unselected:
+            this->unitUnselected(u);
+            break;
+        case Unit::ObservedEventType::EnergyConsumed:
+            this->unitEnergyConsumed(u);
+            break;
+        case Unit::ObservedEventType::SpecialChanged:
+            this->unitSpecialChanged(u);
+            break;
+        case Unit::ObservedEventType::RageChanged:
+            this->unitRageChanged(u);
+            break;
+        case Unit::ObservedEventType::EffectAdded: {
+
+            auto& l = v.get<sutils::Variant::List>();
+            this->unitEffectAdded(u, static_cast<const UnitEffect *>(l.at(0).get<sutils::Variant::Pointer>()));
+            break;
+        }
+        case Unit::ObservedEventType::EffectRemoved:
+            this->unitEffectRemoved(u, static_cast<const UnitEffect *>(v.get<sutils::Variant::Pointer>()));
+            break;
+        default:
+            EngineObject::ObserverWrapper::update(o, event_type, v);
+            break;
+    }
+}

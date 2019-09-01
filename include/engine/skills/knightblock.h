@@ -23,6 +23,10 @@ public:
         return _skill;
     }
 
+    static UnitSkill *create(const sutils::VariantDataInfo&) { return getSkill(); }
+
+    virtual void destroy() override {}
+
 private:
 
     static KnightBlock *_skill;

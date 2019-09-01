@@ -26,6 +26,9 @@ public:
 
     using CreaturesContainer = std::vector<CreaturesContainerContent>;
 
+    CreatureMap() = default;
+    virtual ~CreatureMap() = default;
+
     /*!
      * \brief Return the creatures that were found exploring the map
      * \return Creatures found in the map

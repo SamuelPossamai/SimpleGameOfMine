@@ -15,9 +15,7 @@ class CharacterSelectionScreen : public SelectUserInterfaceBase {
 public:
 
     explicit CharacterSelectionScreen(const utility::Interval<UIntegerType>& n_characters, MainWindow *parent = nullptr);
-    ~CharacterSelectionScreen();
-
-    void activate() final;
+    virtual ~CharacterSelectionScreen() final;
 
 private slots:
 

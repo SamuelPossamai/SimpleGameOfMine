@@ -4,6 +4,7 @@
 #include "maps/greenvalley.h"
 #include "maps/trainingground.h"
 #include "maps/cave.h"
+#include "creatures.h"
 #include "battlewidget.h"
 #include "characterinfodialog.h"
 #include "selectjobdialog.h"
@@ -28,9 +29,14 @@ GameDefaultScreen::~GameDefaultScreen() {
 
 void GameDefaultScreen::activate() {
 
-    if(_xp_for_victory && _result == 0) {
+    if(_xp_for_victory && _result == 0 && _chars.size() > 0) {
 
         _xp_for_victory = _xp_for_victory/_chars.size();
+
+        for(const std::string& item : _itens_for_victory){
+
+            _chars.at(UIntegerType(utility::Random::uniformIntDistribution(0, IntegerType(_chars.size()) - 1))).addItem(item);
+        }
 
         for(Character& c : _chars) {
 
@@ -38,6 +44,7 @@ void GameDefaultScreen::activate() {
             c.save();
         }
 
+        _itens_for_victory.clear();
         _xp_for_victory = 0;
     }
 
@@ -60,7 +67,7 @@ void GameDefaultScreen::on_menuButton_clicked() {
 
 void GameDefaultScreen::on_charactersList_itemClicked(QListWidgetItem *item) {
 
-    _select_char_info(_ui->charactersList->row(item));
+    _select_char_info(UIntegerType(_ui->charactersList->row(item)));
 }
 
 void GameDefaultScreen::on_exploreButton1_clicked() {
@@ -120,12 +127,14 @@ void GameDefaultScreen::_start_battle(gameinfo::CreatureMap *m) {
 
     _result = 1;
 
-    for(const Character& c : _chars) bw->addHero(c, 0);
+    for(const Character& c : _chars) bw->addHero(&c, 0);
 
     _xp_for_victory = 0;
+    _itens_for_victory.clear();
     for(const gameinfo::CreatureMap::CreaturesContainerContent& creature_info : m->getCreatures()) {
 
-        _xp_for_victory += std::ceil(std::pow(creature_info.creature_level + 3, 1.5));
+        _xp_for_victory += UIntegerType(std::ceil(std::pow(creature_info.creature_level + 3, 1.5)));
+        gameinfo::Creatures::xGetItems(_itens_for_victory, creature_info.creature_type);
         bw->addCreature(creature_info.creature_type,
                         UnitAttributes::generateRandom(creature_info.creature_level), creature_info.creature_level, 1);
     }
@@ -152,6 +161,8 @@ void GameDefaultScreen::_select_char_info(UIntegerType id) {
     _ui->wisLabel->setText(QString::number(c.attributes().wisdom()));
 
     _ui->expLabel->setText(QString("%1 / %2").arg(c.experience()).arg(c.experienceNeeded()));
+
+    _ui->itemView->setCharacter(c);
 }
 
 void GameDefaultScreen::_assign_point(UIntegerType id) {

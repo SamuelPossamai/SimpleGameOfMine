@@ -69,6 +69,13 @@ public:
      */
     static RealType realDistribution(RealType min, RealType max) { return std::uniform_real_distribution<RealType>(min, max)(_gen); }
 
+    /*!
+     * \brief Receive a probability from something, if it is meant to happen return true
+     * \param p Probability of the event in the range [0,100]
+     * \return true if the event is meant to happen, false otherwise
+     */
+    static bool chance(RealType p) { return p >= realDistribution(0, 100); }
+
 private:
 
     static std::mt19937 _gen;

@@ -8,11 +8,11 @@ namespace unitsinfo {
 
 class MonsterPlant : public UnitInfo {
 
-    MonsterPlant();
+    MonsterPlant() = default;
 
 public:
 
-    virtual ~MonsterPlant();
+    virtual ~MonsterPlant() override = default;
 
     static MonsterPlant *getInfo() {
 
@@ -23,6 +23,8 @@ public:
         return _info;
     }
 
+    virtual Skills getSkills(const Unit *) const override;
+
 protected:
 
     virtual HealthType healthCalculate(const Attributes& attr, UIntegerType level) const override {
@@ -32,17 +34,17 @@ protected:
     virtual EnergyType energyCalculate(const Attributes&, UIntegerType) const override { return 0; }
     virtual AttackType attackCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 15 + 1.1*attr.strength() + 0.1*attr.dexterity();
+        return AttackType(15 + 1.1*attr.strength() + 0.1*attr.dexterity());
     }
     virtual AccuracyType accuracyCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 5 + 0.3*attr.dexterity();
+        return AccuracyType(5 + 0.3*attr.dexterity());
     }
     virtual MagicPowerType magicPowerCalculate(const Attributes&, UIntegerType) const override { return 0; }
     virtual MagicControlType magicControlCalculate(const Attributes&, UIntegerType) const override { return 0; }
     virtual SpeedType speedCalculate(const Attributes& attr, UIntegerType) const override {
 
-        return 60 + attr.agility() + 0.1*attr.dexterity();
+        return SpeedType(60 + attr.agility() + 0.1*attr.dexterity());
     }
     virtual SizeType sizeCalculate(const Attributes&, UIntegerType) const override { return 30; }
 

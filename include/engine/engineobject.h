@@ -2,18 +2,28 @@
 #ifndef ENGINEOBJECT_H
 #define ENGINEOBJECT_H
 
+#include "utility/observable.h"
 #include "enginemap.h"
 #include "engineobjectbase.h"
 
-class EngineObject : public EngineObjectBase {
+using EngineObjectObservableBase = utility::Observable<EngineObject, UIntegerType, const sutils::Variant&>;
+
+/*!
+ * \brief A class that represents an object that can be managed by BattleEngine and EngineMap
+ * \sa BattleEngine, EngineMap
+ */
+class EngineObject : public EngineObjectBase, protected EngineObjectObservableBase {
+
+    friend EngineObjectObservableBase;
 
     using Base = EngineObjectBase;
 
 public:
 
-    class Observer;
+    using Observer = Observable::Observer;
 
-    using ObserversList = std::vector<Observer *>;
+    struct ObservedEventType;
+    class ObserverWrapper;
 
     EngineObject(const EngineObject&) = delete;
 
@@ -21,8 +31,18 @@ public:
 
     virtual ~EngineObject() override;
 
+    /*!
+     * \brief This is an abstract method that do the object's action, it's called
+     * \return false if the object has expired, true otherwise
+     */
     virtual bool act() = 0;
 
+    /*!
+     * \brief This method will warn the engine that this object needs a thread to act
+     * \brief It will need a thread if it takes some time to perform the action
+     * \brief If it will ask for users input, this method must return true
+     * \return true if it needs a thred to act, false otherwise, by default return false
+     */
     virtual bool needThreadToAct() { return false; }
 
     /*!
@@ -30,25 +50,25 @@ public:
      * \param ob Observer that will be attached
      * \return true if 'ob' was added successfully, false if it is already observing this object
      */
-    bool attachObserver(Observer *ob);
+    bool attachObserver(Observer *ob) { return attach(ob); }
 
     /*!
      * \brief Detach an observer of this object
      * \param ob Observer that will be detached
      * \return true if it was detached, false if it was not an observer of the object
      */
-    bool detachObserver(Observer *ob);
+    bool detachObserver(Observer *ob) { return detach(ob); }
 
     /*!
      * \brief Detach all of the observers of the object
      */
-    void detachAllObservers() { _observers.clear(); }
+    void detachAllObservers() { return detachAll(); }
 
     /*!
      * \brief Return the list of all the observers of the object
      * \return List with all the observers
      */
-    const ObserversList& engineObjectObservers() const { return _observers; }
+    const ObserverList& engineObjectObservers() const { return observers(); }
 
     /*!
      * \brief Set the x position of the object if it's possible
@@ -102,23 +122,53 @@ protected:
 
 private:
 
-    template <typename... Args>
-    void _notifyAll(void (Observer::*ObserverMethod)(EngineObject *, Args...), Args... args) {
-        for(Observer *observer : _observers) (observer->*ObserverMethod)(this, args...);
-    }
-
     EngineMap * const _map;
-
-    ObserversList _observers;
 };
 
-class EngineObject::Observer {
+struct EngineObject::ObservedEventType {
 
 public:
 
-    virtual void engineObjectDestroyed(EngineObject *) {}
-    virtual void engineObjectMoved(EngineObject *) {}
-    virtual void engineObjectRotated(EngineObject *) {}
+    enum : UIntegerType { START = 0, Moved, Rotated, END };
+
+    ObservedEventType(UIntegerType event_type_id) : _int(event_type_id) {}
+    ObservedEventType(const ObservedEventType&) = default;
+
+    ObservedEventType& operator=(const ObservedEventType&) = default;
+
+    operator UIntegerType() const { return _int; }
+
+private:
+
+    UIntegerType _int;
+};
+
+class EngineObject::ObserverWrapper : virtual protected EngineObject::Observer {
+
+public:
+
+    virtual ~ObserverWrapper() override = default;
+
+    virtual void engineObjectDestroyed(const EngineObject *) {}
+    virtual void engineObjectMoved(const EngineObject *) {}
+    virtual void engineObjectRotated(const EngineObject *) {}
+
+protected:
+
+    virtual void update(const EngineObject *o, UIntegerType event_type, const sutils::Variant&) override {
+
+        switch(event_type) {
+
+            case EngineObject::ObservedEventType::Moved:
+                this->engineObjectMoved(o);
+                break;
+            case EngineObject::ObservedEventType::Rotated:
+                this->engineObjectRotated(o);
+                break;
+        }
+    }
+
+    virtual void observableDestroyed(const EngineObject *o) override { this->engineObjectDestroyed(o); }
 };
 
 #endif // ENGINEOBJECT_H

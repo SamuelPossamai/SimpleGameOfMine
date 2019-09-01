@@ -26,7 +26,7 @@ public:
 
     class MemoryInterface;
 
-    virtual ~Walk() {}
+    virtual ~Walk() override = default;
 
     virtual UIntegerType action(Unit*, EngineMap*, ProjectileCreationInterface&, const Info&) override;
 
@@ -37,9 +37,17 @@ public:
         return _ds < other._ds;
     }
 
+    static UnitSkill *create(const sutils::VariantDataInfo& m);
+
+    virtual void destroy() override;
+
+    static UIntegerType walk(Unit *, UIntegerType step, UIntegerType dur, UIntegerType ds, RealType angle);
+
 protected:
 
     UIntegerType doAction(Unit *, EngineMap *, const Info&, RealType);
+
+    static Walk fromVariantData(const sutils::VariantDataInfo& m);
 
 private:
 

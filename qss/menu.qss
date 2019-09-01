@@ -1,0 +1,24 @@
+
+MainWindow[currentWidget~="Menu"] {
+
+    min-width: 500px;
+    min-height: 350px;
+}
+
+[accessibleName~="Menu"] {
+
+    border-image: url(":/background_image_menu.png") 0 0 0 0 stretch stretch;
+}
+
+QPushButton[accessibleName~="menuButton"] {
+
+    color: black;
+    background-color: lightgreen;
+    width: 120px;
+    height: 25px;
+}
+
+QPushButton[accessibleName~="menuButton"]:hover{
+
+    background-color: green;
+}

@@ -2,27 +2,21 @@
 #include <engine/unit.h>
 
 #include "effects/regeneration.h"
-#include "animation.h"
 #include "unitsinfo/slime.h"
-#include "skills/walk.h"
-#include "skills/evade.h"
-#include "skills/thrust.h"
 
 using namespace unitsinfo;
 
 OneCopyMemoryManager<Slime> Slime::_memmanager;
 
-Slime::Slime(const Type& type) : _type(type) {
+UnitInfo::Skills Slime::getSkills(const Unit *) const {
 
-    addSkill(skill::Walk::MemoryInterface::dependentGet(10, 100), QPixmap(":/wing_boot.png").scaled(50, 50));
-    addSkill(skill::Evade::getSkill(), QPixmap(":/wing_boot_blue.png").scaled(50, 50));
-    addSkill(skill::Thrust::MemoryInterface::dependentGet(12, 90), QPixmap(":/x_simbol.png").scaled(50, 50));
-}
+    UnitInfo::Skills s;
 
-Slime::~Slime() {
+    s.push_back({"walk", {{"distance", 100}, {"duration", 10}}});
+    s.push_back({"evade", {}});
+    s.push_back({"thrust", {{"distance", 90}, {"duration", 12}}});
 
-    skill::Walk::MemoryInterface::noLongerDepend(10, 100);
-    skill::Thrust::MemoryInterface::noLongerDepend(12, 90);
+    return s;
 }
 
 void Slime::init(Unit *u) const {
@@ -32,7 +26,7 @@ void Slime::init(Unit *u) const {
 
 Slime::HealthType Slime::healthCalculate(const Attributes& attr, UIntegerType level) const {
 
-    UIntegerType value = 100 + 10*attr.vitality() + 0.5*attr.strength() + level;
+    HealthType value = HealthType(100 + 10*attr.vitality() + 0.5*attr.strength() + level);
 
     switch(_type) {
 
@@ -57,7 +51,7 @@ Slime::HealthType Slime::healthCalculate(const Attributes& attr, UIntegerType le
 
 Slime::AttackType Slime::attackCalculate(const Attributes& attr, UIntegerType) const  {
 
-    UIntegerType value = 5 + 0.9*attr.strength() + 0.2*attr.dexterity();
+    AttackType value = AttackType(5 + 0.9*attr.strength() + 0.2*attr.dexterity());
 
     switch(_type) {
 
@@ -82,7 +76,7 @@ Slime::AttackType Slime::attackCalculate(const Attributes& attr, UIntegerType) c
 
 Slime::SpeedType Slime::speedCalculate(const Attributes& attr, UIntegerType) const {
 
-    UIntegerType value = 100 + 1.6*attr.agility() + 0.4*attr.dexterity();
+    SpeedType value = SpeedType(100 + 1.6*attr.agility() + 0.4*attr.dexterity());
 
     switch(_type) {
 
