@@ -11,16 +11,16 @@ void ImageWidget::paintEvent(QPaintEvent *) {
 
     QPainter painter(this);
 
-    painter.setPen(opt.palette.background().color());
-    painter.setBrush(opt.palette.background().color());
+    painter.setPen(opt.palette.window().color());
+    painter.setBrush(opt.palette.window().color());
 
     painter.drawRect(this->rect());
 
     QRegion r(this->rect(), QRegion::Ellipse);
     painter.setClipRegion(r);
 
-    painter.setPen(opt.palette.foreground().color());
-    painter.setBrush(opt.palette.foreground());
+    painter.setPen(opt.palette.windowText().color());
+    painter.setBrush(opt.palette.windowText());
 
     painter.drawEllipse(this->rect());
     painter.drawImage(this->rect(), _im);
