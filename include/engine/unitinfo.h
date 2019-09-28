@@ -10,6 +10,7 @@
 
 #include "engine_traits.h"
 #include "unitskill.h"
+#include "unitattributes.h"
 
 /*!
  * \brief Class with basic information about an unit

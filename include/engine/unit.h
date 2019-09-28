@@ -237,6 +237,7 @@ private:
     UnitAnimationItem *_gitem;
 
     BattleWidget *_interface;
+    const BattleEngine *_engine;
 
     SkillVector _skills;
 

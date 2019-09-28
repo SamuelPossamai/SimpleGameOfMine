@@ -4,7 +4,7 @@
 
 #include <config/types.h>
 
-#include "battlewidget.h"
+#include "gameinfo/projectiles.h"
 
 /*!
  * \brief This is a virtual pure class that represents an unit skill, all skills need to inherit it directly or indirectly.
@@ -12,9 +12,25 @@
  */
 class UnitSkill {
 
+    using ProjectileInfo = gameinfo::Projectiles::ProjectileInfo;
+
 public:
 
-    using ProjectileCreationInterface = BattleWidget::ProjectileCreationInterface;
+    class ProjectileCreationInterface {
+
+    public:
+
+        ProjectileCreationInterface() = default;
+
+        virtual ~ProjectileCreationInterface();
+
+        virtual bool create(const std::string& projectile_type,
+                            const Unit *creator,
+                            const ProjectileInfo& p_info,
+                            Projectile::AngleType dir,
+                            Projectile::PointType pos,
+                            Projectile::AngleType angle) = 0;
+    };
 
     struct Info {
 

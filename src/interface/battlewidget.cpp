@@ -25,10 +25,15 @@
 #include "unitanimationitem.h"
 #include "unitanimationitemfactory.h"
 
-BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */, UIntegerType *result /* = nullptr */) :
-    MainWidget(parent), _result(result), _current_buttons(0), _arrow_item(nullptr), _message(nullptr),
-    _input_interface(std::make_shared<InputManager>(this)), _skill_button_size(50), _skill_button_distance(20),
-    _skill_button_border_vertical_distance(20), _skill_button_border_horizontal_distance(20), _ui(new Ui::BattleWidget) {
+BattleWidget::BattleWidget(MainWindow *parent /* = nullptr */,
+                           UIntegerType *result /* = nullptr */) :
+    MainWidget(parent), _result(result), _current_buttons(0),
+    _arrow_item(nullptr), _message(nullptr),
+    _input_interface(std::make_shared<InputManager>(this)),
+    _skill_button_size(50), _skill_button_distance(20),
+    _skill_button_border_vertical_distance(20),
+    _skill_button_border_horizontal_distance(20),
+    _pci(this), _ui(new Ui::BattleWidget) {
 
     MemoryManager::cleanAll(25);
 
@@ -451,4 +456,7 @@ std::pair<UIntegerType, UIntegerType> BattleWidget::_decode_aligment() const {
     else if(_alignment & Qt::AlignBottom) p.second = 2;
 
     return p;
+}
+
+BattleWidget::ProjectileCreationInterface::~ProjectileCreationInterface() {
 }

@@ -3,3 +3,6 @@
 
 UnitSkill::~UnitSkill() {
 }
+
+UnitSkill::ProjectileCreationInterface::~ProjectileCreationInterface() {
+}

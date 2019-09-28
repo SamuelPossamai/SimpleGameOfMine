@@ -4,13 +4,16 @@
 
 #include <memory>
 
-#include <config/metatypes.h>
-#include <config/interface_traits.h>
-#include <engine/unitcontroller.h>
-#include <engine/character.h>
-#include <engine/projectile.h>
+#include "config/metatypes.h"
+#include "config/interface_traits.h"
+
+#include "engine/unitcontroller.h"
+#include "engine/character.h"
+#include "engine/projectile.h"
+#include "engine/unitskill.h"
 
 #include "gameinfo/projectiles.h"
+
 #include "graphicsview.h"
 #include "mainwidget.h"
 
@@ -27,25 +30,53 @@ class QGraphicsPixmapItem;
 class BattleWidget : public MainWidget, public GraphicsView::Handler {
 
     Q_OBJECT
-    Q_PROPERTY(Qt::Alignment skillButtonAlign READ skillButtonAlign WRITE setSkillButtonAlign)
-    Q_PROPERTY(RealType skillButtonSize READ skillButtonSize WRITE setSkillButtonSize)
-    Q_PROPERTY(RealType skillButtonDistance READ skillButtonDistance WRITE setSkillButtonDistance)
-    Q_PROPERTY(RealType skillButtonBorderVDistance READ skillButtonBorderVDistance WRITE setSkillButtonBorderVDistance)
-    Q_PROPERTY(RealType skillButtonBorderHDistance READ skillButtonBorderHDistance WRITE setSkillButtonBorderHDistance)
+    Q_PROPERTY(Qt::Alignment skillButtonAlign READ skillButtonAlign
+               WRITE setSkillButtonAlign)
+    Q_PROPERTY(RealType skillButtonSize READ skillButtonSize
+               WRITE setSkillButtonSize)
+    Q_PROPERTY(RealType skillButtonDistance READ skillButtonDistance
+               WRITE setSkillButtonDistance)
+    Q_PROPERTY(RealType skillButtonBorderVDistance READ
+               skillButtonBorderVDistance WRITE setSkillButtonBorderVDistance)
+    Q_PROPERTY(RealType skillButtonBorderHDistance READ
+               skillButtonBorderHDistance WRITE setSkillButtonBorderHDistance)
 
 public:
 
     class InputManager;
     using InputInterface = std::shared_ptr<InputManager>;
 
-    class ProjectileCreationInterface;
+    class ProjectileCreationInterface :
+            public UnitSkill::ProjectileCreationInterface {
+
+    public:
+
+        ProjectileCreationInterface(BattleWidget *bw) : _bw(bw) {}
+
+        virtual ~ProjectileCreationInterface();
+
+        bool create(const std::string& projectile_type, const Unit *creator,
+                    const gameinfo::Projectiles::ProjectileInfo& p_info,
+                    Projectile::AngleType dir, Projectile::PointType pos,
+                    Projectile::AngleType angle) {
+
+            return _bw->addProjectile(projectile_type, creator,
+                                      p_info, dir, pos, angle);
+        }
+
+    private:
+
+        BattleWidget *_bw;
+    };
 
     /*!
      * \brief Creates a BattleWidget passing it's parent
-     * \param parent BattleWidget parent, it must be an MainWindow or a derived class
+     * \param parent BattleWidget parent, it must be an MainWindow or a <!--
+     * --> derived class
      * \param result Location to write the result of the battle after finishing
      */
-    explicit BattleWidget(MainWindow *parent = nullptr, UIntegerType *result = nullptr);
+    explicit BattleWidget(MainWindow *parent = nullptr,
+                          UIntegerType *result = nullptr);
 
     /*!
      * \brief Start the timer that will advance the battle
@@ -56,24 +87,37 @@ public:
 
     /*!
      * \brief Zoom in the battle view
-     * \param value Multiplier for the zoom intensity, if less than one will zoom out
+     * \param value Multiplier for the zoom intensity, if less than one <!--
+     * --> will zoom out
      * \sa zoomOut(RealType)
      */
-    void zoomIn(RealType value = Traits<BattleWidget>::zoomInMultiplier) { _set_zoom(value);  }
+    void zoomIn(RealType value = Traits<BattleWidget>::zoomInMultiplier) {
+
+        _set_zoom(value);
+    }
 
     /*!
      * \brief Zoom out the battle view
-     * \param value Multiplier for the zoom intensity, if less than one will zoom in
+     * \param value Multiplier for the zoom intensity, if less than one <!--
+     * --> will zoom in
      * \sa zoomIn(RealType)
      */
-    void zoomOut(RealType value = Traits<BattleWidget>::zoomOutMultiplier) { _set_zoom(1/value);  }
+    void zoomOut(RealType value = Traits<BattleWidget>::zoomOutMultiplier) {
+
+        _set_zoom(1/value);
+    }
 
     /*!
      * \brief Move the battle view
-     * \param dx X parameter, it will move(not to outside the scene) this amount in the x diretion
-     * \param dy Y parameter, it will move(not to outside the scene) this amount in the y diretion
+     * \param dx X parameter, it will move(not to outside the scene) this <!--
+     * --> amount in the x diretion
+     * \param dy Y parameter, it will move(not to outside the scene) this <!--
+     * --> amount in the y diretion
      */
-    void translate(IntegerType dx, IntegerType dy) { _gview->translate(dx, dy); }
+    void translate(IntegerType dx, IntegerType dy) {
+
+        _gview->translate(dx, dy);
+    }
 
     /*!
      * \brief Show an arrow following the mouse
@@ -115,37 +159,44 @@ public:
      * \param team Team of the unit that will be added
      */
     void addUnit(UnitInfo *i, UnitController *c, UnitAnimationItemFactory *f,
-                 const UnitAttributes& attr, UIntegerType level, UIntegerType team,
-                 const Character *character = nullptr);
+                 const UnitAttributes& attr, UIntegerType level,
+                 UIntegerType team, const Character *character = nullptr);
 
     /*!
      * \brief Add a creature to the graphics scene and to the battle engine.
      * \param name Name of the creature type that will be added.
      * \param level Level of the creature.
      * \param team Team of the creature.
-     * \sa addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory, UIntegerType)
-     * \return true if it succeds, false otherwise(It can fail if the creature type is invalid).
+     * \sa addUnit(UnitInfo *, UnitController *, UnitAnimationItemFactory, <!--
+     * --> UIntegerType)
+     * \return true if it succeds, false otherwise(It can fail if the <!--
+     * --> creature type is invalid).
      */
-    bool addCreature(std::string name, const UnitAttributes& attr, UIntegerType level, UIntegerType team);
+    bool addCreature(std::string name, const UnitAttributes& attr,
+                     UIntegerType level, UIntegerType team);
 
     /*!
      * \brief Add a hero to the graphics scene and to the battle engine
      * \param c Hero/Character that will be added
      * \param team Hero's team
-     * \return true if it succeds, false otherwise(It can fail if the hero has an invalid job/class)
+     * \return true if it succeds, false otherwise(It can fail if the hero <!--
+     * --> has an invalid job/class)
      */
     bool addHero(const Character *c, UIntegerType team);
 
-    void addProjectile(ProjectileFactory *projFactory, ProjectileAnimationItemFactory *itemFactory,
-                       const Unit *creator, Projectile::AngleType dir, Projectile::PointType pos,
-                       Projectile::AngleType angle);
+    void addProjectile(ProjectileFactory *projFactory,
+                       ProjectileAnimationItemFactory *itemFactory,
+                       const Unit *creator, Projectile::AngleType dir,
+                       Projectile::PointType pos, Projectile::AngleType angle);
 
     bool addProjectile(const std::string& projectile_type, const Unit *creator,
                        const gameinfo::Projectiles::ProjectileInfo& p_info,
-                       Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle);
+                       Projectile::AngleType dir, Projectile::PointType pos,
+                       Projectile::AngleType angle);
 
     /*!
-     * \brief Display a message on the screen, it will stay there until a click is performed
+     * \brief Display a message on the screen, it will stay there until a <!--
+     * --> click is performed
      */
     void displayMessage(std::string);
 
@@ -165,25 +216,48 @@ public:
      */
     void hideCancelButton();
 
-    void setSkillButtonAlign(Qt::Alignment alignment) { _alignment = alignment; }
+    void setSkillButtonAlign(Qt::Alignment alignment) {
+
+        _alignment = alignment;
+    }
 
     Qt::Alignment skillButtonAlign() const { return _alignment; }
 
-    void setSkillButtonSize(RealType button_size) { _skill_button_size = button_size; }
+    void setSkillButtonSize(RealType button_size) {
+
+        _skill_button_size = button_size;
+    }
 
     RealType skillButtonSize() const { return _skill_button_size; }
 
-    void setSkillButtonDistance(RealType button_distance) { _skill_button_distance = button_distance; }
+    void setSkillButtonDistance(RealType button_distance) {
+
+        _skill_button_distance = button_distance;
+    }
 
     RealType skillButtonDistance() const { return _skill_button_distance; }
 
-    void setSkillButtonBorderVDistance(RealType border_vdist) { _skill_button_border_vertical_distance = border_vdist; }
+    void setSkillButtonBorderVDistance(RealType border_vdist) {
 
-    RealType skillButtonBorderVDistance() const { return _skill_button_border_vertical_distance; }
+        _skill_button_border_vertical_distance = border_vdist;
+    }
 
-    void setSkillButtonBorderHDistance(RealType border_hdist) { _skill_button_border_horizontal_distance = border_hdist; }
+    RealType skillButtonBorderVDistance() const {
 
-    RealType skillButtonBorderHDistance() const { return _skill_button_border_horizontal_distance; }
+        return _skill_button_border_vertical_distance;
+    }
+
+    void setSkillButtonBorderHDistance(RealType border_hdist) {
+
+        _skill_button_border_horizontal_distance = border_hdist;
+    }
+
+    RealType skillButtonBorderHDistance() const {
+
+        return _skill_button_border_horizontal_distance;
+    }
+
+    ProjectileCreationInterface& projectileCreationInterface() { return _pci; }
 
 public slots:
 
@@ -219,7 +293,8 @@ private:
     static void _step_internal(BattleWidget *);
     void _set_zoom(RealType zoom) { _gview->scale(zoom, zoom); }
     RealType _button_pos_calculate_static(bool x_dir, UIntegerType mode);
-    RealType _button_pos_calculate_dynamic(UIntegerType i, UIntegerType i_max, bool x_dir, UIntegerType mode);
+    RealType _button_pos_calculate_dynamic(UIntegerType i, UIntegerType i_max,
+                                           bool x_dir, UIntegerType mode);
 
     void _gview_construct();
     void _engine_construct();
@@ -252,25 +327,9 @@ private:
     RealType _skill_button_border_vertical_distance;
     RealType _skill_button_border_horizontal_distance;
 
+    ProjectileCreationInterface _pci;
+
     Ui::BattleWidget *_ui;
-};
-
-class BattleWidget::ProjectileCreationInterface {
-
-public:
-
-    ProjectileCreationInterface(BattleWidget *bw) : _bw(bw) {}
-
-    bool create(const std::string& projectile_type, const Unit *creator,
-                const gameinfo::Projectiles::ProjectileInfo& p_info,
-                Projectile::AngleType dir, Projectile::PointType pos, Projectile::AngleType angle) {
-
-        return _bw->addProjectile(projectile_type, creator, p_info, dir, pos, angle);
-    }
-
-private:
-
-    BattleWidget *_bw;
 };
 
 #endif // BATTLEWIDGET_H
