@@ -14,5 +14,6 @@
         <file>library/slime.conf</file>
         <file>library/white_slime.conf</file>
         <file>library/yellow_slime.conf</file>
+        <file>skills/testskill.toml</file>
     </qresource>
 </RCC>

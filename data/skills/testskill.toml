@@ -1,0 +1,24 @@
+
+name = "testskill-actions"
+
+[[action]]
+
+type = "walk"
+
+[action.info]
+
+start = 0
+duration = 30
+distance = 10
+angle = 0
+
+[[action]]
+
+type = "walk"
+
+[action.info]
+
+start = 90
+duration = 10
+distance = 40
+angle = 1

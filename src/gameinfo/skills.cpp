@@ -1,4 +1,10 @@
 
+#include <sstream>
+
+#include <QFile>
+
+#include <toml.h>
+
 #include "utility/imagecolorchange.h"
 
 #include "gameinfo/skills.h"
@@ -18,6 +24,7 @@
 #include "engine/skills/teleport.h"
 #include "engine/skills/thrust.h"
 #include "engine/skills/walk.h"
+#include "engine/skills/actionssequeceskill.h"
 
 using namespace gameinfo;
 
@@ -80,7 +87,8 @@ static Skills::Info _get_knight_block() {
 
 static Skills::Info _get_on_off_magic_shield() {
 
-    static skillfactory::GenericSkillFactory<skill::MageOnOffMagicShield> factory;
+    static skillfactory::GenericSkillFactory<
+            skill::MageOnOffMagicShield> factory;
 
     return Skills::Info(&factory, QPixmap(":/magic_shield.png"));
 }
@@ -89,7 +97,8 @@ static Skills::Info _get_magic_missile() {
 
     static skillfactory::GenericSkillFactory<skill::MagicMissile> factory;
 
-    return Skills::Info(&factory, QPixmap(":/magic_missile_3.png").scaled(50, 50));
+    return Skills::Info(&factory,
+                        QPixmap(":/magic_missile_3.png").scaled(50, 50));
 }
 
 static Skills::Info _get_on_off_last_escape() {
@@ -115,14 +124,16 @@ static Skills::Info _get_rage() {
 
 static Skills::Info _get_shoot_arrow() {
 
-    static skillfactory::GenericSkillFactory<skill::Shoot, true> factory(sutils::VariantDataInfo{{"projectile", "arrow"}});
+    static skillfactory::GenericSkillFactory<skill::Shoot, true> factory(
+                sutils::VariantDataInfo{{"projectile", "arrow"}});
 
     return Skills::Info(&factory, QPixmap(":/arrow_projectile_image.png"));
 }
 
 static Skills::Info _get_throw_shuriken() {
 
-    static skillfactory::GenericSkillFactory<skill::Shoot, true> factory(sutils::VariantDataInfo{{"projectile", "shuriken"}});
+    static skillfactory::GenericSkillFactory<skill::Shoot, true> factory(
+                sutils::VariantDataInfo{{"projectile", "shuriken"}});
 
     return Skills::Info(&factory, QPixmap(":/shuriken_image.png"));
 }
@@ -148,6 +159,22 @@ static Skills::Info _get_walk() {
     return Skills::Info(&factory, QPixmap(":/wing_boot.png"));
 }
 
+static Skills::Info _get_actions_test_skill() {
+
+    QFile file(":/data/skills/testskill.toml");
+    file.open(QFile::ReadOnly | QFile::Text);
+
+    QTextStream ftstream(&file);
+
+    std::stringstream sstream(ftstream.readAll().toStdString());
+
+    static skillfactory::GenericSkillFactory<
+            skill::ActionsSequeceSkill, true> factory(
+                sutils::toml::read(sstream));
+
+    return Skills::Info(&factory, QPixmap(":/x_simbol.png"));
+}
+
 void Skills::_init() {
 
     _skills["basic attack"] = _get_basic_attack;
@@ -165,4 +192,5 @@ void Skills::_init() {
     _skills["teleport"] = _get_teleport;
     _skills["thrust"] = _get_thrust;
     _skills["walk"] = _get_walk;
+    _skills["actions-test-skill"] = _get_actions_test_skill;
 }

@@ -30,7 +30,7 @@ UnitSkill *ActionsSequeceSkill::create(const sutils::VariantDataInfo& data_info)
 
     if(need_angle_it != data_info.end()) need_angle = bool(need_angle_it->second);
 
-    auto&& actions_it = data_info.find("actions");
+    auto&& actions_it = data_info.find("action");
 
     if(actions_it == data_info.end()) {
 
