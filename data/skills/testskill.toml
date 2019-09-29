@@ -9,7 +9,7 @@ type = "walk"
 
 start = 0
 duration = 30
-distance = 10
+distance = 8
 angle = 0
 
 [[action]]
@@ -20,5 +20,5 @@ type = "walk"
 
 start = 90
 duration = 10
-distance = 40
+distance = 8
 angle = 1

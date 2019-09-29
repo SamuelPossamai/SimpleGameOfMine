@@ -7,6 +7,17 @@
 #include "skills/walk.h"
 #include "engine/skills/actions/walkaction.h"
 
+static WalkAction _action;
+
+static struct { struct Init {
+
+    Init() {
+
+        Action::addAction("walk", &_action);
+    }
+
+} _; } __init;
+
 namespace ainfoconfig = sutils::variantdatainfo;
 
 void WalkAction::configActInfo(ActInfo& a_info) {
@@ -16,8 +27,10 @@ void WalkAction::configActInfo(ActInfo& a_info) {
     auto&& start = ainfoconfig::defaultsTo(a_info, "start", 0).first;
     auto&& duration = ainfoconfig::defaultsTo(a_info, "duration", 20).first;
     auto&& distance = ainfoconfig::defaultsTo(a_info, "distance", 10).first;
-    auto&& angle_relative_to_char = ainfoconfig::defaultsTo(a_info, "angle_relative_to_char", true).first;
-    auto&& angle_relative_to_chosen = ainfoconfig::defaultsTo(a_info, "angle_relative_to_chosen", true).first;
+    auto&& angle_relative_to_char = ainfoconfig::defaultsTo(
+                a_info, "angle_relative_to_char", true).first;
+    auto&& angle_relative_to_chosen = ainfoconfig::defaultsTo(
+                a_info, "angle_relative_to_chosen", false).first;
     auto&& angle = ainfoconfig::defaultsTo(a_info, "angle", 10).first;
 
     if(!start->second.isNumber()) _wrong_type(is_ok, "start");
@@ -29,18 +42,27 @@ void WalkAction::configActInfo(ActInfo& a_info) {
     if(!distance->second.isNumber()) _wrong_type(is_ok, "distance");
     else distance->second.numberToInteger();
 
-    a_info["__ds__"] = RealType(distance->second.get<Variant::Integer>()) / duration->second.get<Variant::Integer>();
+    a_info["__ds__"] = 10*RealType(distance->second.get<Variant::Integer>())
+            / duration->second.get<Variant::Integer>();
 
-    if(!ainfoconfig::isType<bool>(angle_relative_to_char)) _wrong_type(is_ok, "angle_relative_to_char");
+    if(!ainfoconfig::isType<bool>(angle_relative_to_char)) {
 
-    if(!ainfoconfig::isType<bool>(angle_relative_to_chosen)) _wrong_type(is_ok, "angle_relative_to_chosen");
+        _wrong_type(is_ok, "angle_relative_to_char");
+    }
+
+    if(!ainfoconfig::isType<bool>(angle_relative_to_chosen)) {
+
+        _wrong_type(is_ok, "angle_relative_to_chosen");
+    }
 
     if(is_ok) {
 
-        if(bool(angle_relative_to_char->second) && bool(angle_relative_to_chosen->second)) {
+        if(bool(angle_relative_to_char->second) &&
+                bool(angle_relative_to_chosen->second)) {
 
-            std::cerr << "walk action: both 'angle_relative_to_char' and 'angle_relative_to_chosen'"
-                         " were set, assuming 'angle_relative_to_char'" << std::endl;
+            std::cerr << "walk action: both 'angle_relative_to_char' and "
+                         "'angle_relative_to_chosen' were set, assuming "
+                         "'angle_relative_to_char'" << std::endl;
             angle_relative_to_chosen->second = false;
         }
     }
@@ -53,16 +75,30 @@ UIntegerType WalkAction::firstAct(const ActInfo& a_info) {
     return UIntegerType(a_info.find("start")->second.get<Variant::Integer>());
 }
 
-UIntegerType WalkAction::act(Unit *u, EngineMap *, ProjectileCreationInterface&, const SkillInfo& i, const ActInfo& a) {
+UIntegerType WalkAction::act(Unit *u, EngineMap *, ProjectileCreationInterface&,
+                             const SkillInfo& i, const ActInfo& a) {
+
+    const auto start =
+            UIntegerType(a.find("start")->second.get<Variant::Integer>());
+
+    if(i.step < start) return start - i.step;
 
     auto angle = i.angle;
 
     angle += a.find("angle")->second.getNumber();
 
-    if(a.find("angle_relative_to_char")->second.get<bool>()) angle += u->angle();
+    if(a.find("angle_relative_to_char")->second.get<bool>()) {
 
-    return skill::Walk::walk(u, i.step, UIntegerType(a.find("duration")->second.get<Variant::Integer>()),
-                             UIntegerType(a.find("__ds__")->second.getNumber()), angle);
+        angle += u->angle();
+    }
+
+    const auto duration =
+            UIntegerType(a.find("duration")->second.get<Variant::Integer>());
+
+    const auto ds =
+            UIntegerType(a.find("__ds__")->second.getNumber());
+
+    return skill::Walk::walk(u, i.step - start, duration, ds, angle);
 }
 
 void WalkAction::_wrong_type(Variant& is_ok, const char *attr) {

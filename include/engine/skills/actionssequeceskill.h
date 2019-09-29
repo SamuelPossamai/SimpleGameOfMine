@@ -21,6 +21,8 @@ public:
     virtual UIntegerType action(Unit *u, EngineMap *m, ProjectileCreationInterface& pci,
                                 const Info& info) override {
 
+        if(info.step == 0) _actions.reset();
+
         _actions.callAct(u, m, pci, info);
 
         return _actions.finished() ? 0 : 1;
