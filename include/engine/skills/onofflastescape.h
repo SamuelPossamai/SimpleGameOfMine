@@ -13,7 +13,7 @@ class OnOffLastEscape : public UnitSkill {
 
 protected:
 
-    OnOffLastEscape() : UnitSkill(false) {}
+    OnOffLastEscape() {}
 
 public:
 

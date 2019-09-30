@@ -10,7 +10,9 @@ class Shoot : public UnitSkill {
 
 public:
 
-    Shoot(const std::string& projectile_type) : UnitSkill(true), _projectile_type(projectile_type) {}
+    Shoot(const std::string& projectile_type) :
+        UnitSkill(UnitSkill::InputType::angle),
+        _projectile_type(projectile_type) {}
 
     virtual UIntegerType action(Unit*, EngineMap*, ProjectileCreationInterface&, const Info&) override;
 

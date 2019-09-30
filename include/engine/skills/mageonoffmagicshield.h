@@ -11,7 +11,7 @@ class MageOnOffMagicShield : public UnitSkill {
 
 protected:
 
-    MageOnOffMagicShield() : UnitSkill(false) {}
+    MageOnOffMagicShield() {}
 
 public:
 

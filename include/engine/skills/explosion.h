@@ -11,7 +11,7 @@ class Explosion : public UnitSkill {
 
 protected:
 
-    Explosion() : UnitSkill(true) {}
+    Explosion() : UnitSkill(UnitSkill::InputType::angle) {}
 
 public:
 

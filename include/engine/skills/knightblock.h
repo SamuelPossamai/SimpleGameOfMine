@@ -10,7 +10,7 @@ class KnightBlock : public UnitSkill {
 
 protected:
 
-    KnightBlock() : UnitSkill(true) {}
+    KnightBlock() : UnitSkill(UnitSkill::InputType::angle) {}
 
 public:
 

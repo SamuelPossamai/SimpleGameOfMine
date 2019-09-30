@@ -10,7 +10,7 @@ class MagicMissile : public UnitSkill {
 
 protected:
 
-    MagicMissile() : UnitSkill(true) {}
+    MagicMissile() : UnitSkill(UnitSkill::InputType::angle) {}
 
 public:
 

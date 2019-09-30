@@ -10,7 +10,7 @@ class PlantAreaAttack : public UnitSkill {
 
 protected:
 
-    PlantAreaAttack() : UnitSkill(false) {}
+    PlantAreaAttack() {}
 
 public:
 

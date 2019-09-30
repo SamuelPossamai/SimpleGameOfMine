@@ -11,7 +11,7 @@ class Fireball : public UnitSkill {
 
 protected:
 
-    Fireball() : UnitSkill(true) {}
+    Fireball() : UnitSkill(UnitSkill::InputType::angle) {}
 
 public:
 

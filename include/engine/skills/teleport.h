@@ -13,7 +13,7 @@ class Teleport : public UnitSkill {
 
 protected:
 
-    Teleport() : UnitSkill(false) {}
+    Teleport() {}
 
 public:
 

@@ -10,7 +10,7 @@ class Rage : public UnitSkill {
 
 protected:
 
-    Rage() : UnitSkill(false) {}
+    Rage() {}
 
 public:
 

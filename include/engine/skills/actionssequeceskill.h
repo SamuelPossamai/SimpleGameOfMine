@@ -16,7 +16,8 @@ public:
 
     ActionsSequeceSkill(const ActionsList& actions) : _actions(actions) {
 
-        UnitSkill::setNeedAngle(_actions.needAngle());
+        UnitSkill::setInputType(UnitSkill::InputType::angle,
+                                _actions.needAngle());
     }
 
     virtual ~ActionsSequeceSkill() override;

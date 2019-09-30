@@ -13,7 +13,7 @@ class Evade : public UnitSkill {
 
 protected:
 
-    Evade() : UnitSkill(false) {}
+    Evade() {}
 
 public:
 

@@ -16,11 +16,19 @@ protected:
 
     using MemoryManager = OneCopyMemoryManager<Walk>;
 
-    Walk(UIntegerType duration, UIntegerType distance) : Walk(true, duration, distance) {}
+    Walk(UIntegerType duration, UIntegerType distance) :
+        Walk(true, duration, distance) {}
     Walk(const Walk& other) : Walk(true, other) {}
-    Walk(bool need_arrow, UIntegerType duration, UIntegerType distance) : UnitSkill(need_arrow),
-        _dur(duration), _ds(distance/duration) {}
-    Walk(bool need_arrow, const Walk& other) : UnitSkill(need_arrow), _dur(other._dur), _ds(other._ds) {}
+    Walk(bool need_arrow, UIntegerType duration, UIntegerType distance) :
+        _dur(duration), _ds(distance/duration) {
+
+        setInputType(UnitSkill::InputType::angle, need_arrow);
+    }
+    Walk(bool need_arrow, const Walk& other) :
+        _dur(other._dur), _ds(other._ds) {
+
+        setInputType(UnitSkill::InputType::angle, need_arrow);
+    }
 
 public:
 

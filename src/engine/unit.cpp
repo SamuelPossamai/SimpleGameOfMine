@@ -226,7 +226,7 @@ bool Unit::_choose_internal(BattleWidget::InputInterface& i) {
 
     _skill_angle = 0;
 
-    if(_skills.at(_skill).second->needAngle()) {
+    if(_skills.at(_skill).second->inputType(UnitSkill::InputType::angle)) {
 
         auto opt = _controller->chooseAngle(this, map(), i.get());
         if(!opt) return false;

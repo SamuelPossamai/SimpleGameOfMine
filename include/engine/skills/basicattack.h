@@ -15,7 +15,8 @@ class BasicAttack : public UnitSkill {
 
 protected:
 
-    BasicAttack(UIntegerType distance, bool attack_from_above) : UnitSkill(true),
+    BasicAttack(UIntegerType distance, bool attack_from_above) :
+        UnitSkill(UnitSkill::InputType::angle),
         _att_from_above(attack_from_above), _distance(distance) {}
     BasicAttack(const BasicAttack& other) : UnitSkill(true), _att_from_above(other._att_from_above), _distance(other._distance) {}
 
