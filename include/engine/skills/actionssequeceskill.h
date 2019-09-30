@@ -12,13 +12,17 @@ class ActionsSequeceSkill : public UnitSkill {
 public:
 
     using ActInfo = Action::ActInfo;
+    using ActionsList = std::vector<std::pair<Action *, ActInfo> >;
 
-    ActionsSequeceSkill(bool need_angle, const std::vector<std::pair<Action *, ActInfo> >& actions) :
-        UnitSkill(need_angle), _actions(actions) {}
+    ActionsSequeceSkill(const ActionsList& actions) : _actions(actions) {
+
+        UnitSkill::setNeedAngle(_actions.needAngle());
+    }
 
     virtual ~ActionsSequeceSkill() override;
 
-    virtual UIntegerType action(Unit *u, EngineMap *m, ProjectileCreationInterface& pci,
+    virtual UIntegerType action(Unit *u, EngineMap *m,
+                                ProjectileCreationInterface& pci,
                                 const Info& info) override {
 
         if(info.step == 0) _actions.reset();

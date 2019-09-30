@@ -24,12 +24,6 @@ UnitSkill *ActionsSequeceSkill::create(const sutils::VariantDataInfo& data_info)
         else name = "<<invalid>>";
     }
 
-    auto&& need_angle_it = data_info.find("need_angle");
-
-    bool need_angle = false;
-
-    if(need_angle_it != data_info.end()) need_angle = bool(need_angle_it->second);
-
     auto&& actions_it = data_info.find("action");
 
     if(actions_it == data_info.end()) {
@@ -125,5 +119,5 @@ UnitSkill *ActionsSequeceSkill::create(const sutils::VariantDataInfo& data_info)
         actions_arg.emplace_back(action_type, data_info);
     }
 
-    return new ActionsSequeceSkill(need_angle, actions_arg);
+    return new ActionsSequeceSkill(actions_arg);
 }

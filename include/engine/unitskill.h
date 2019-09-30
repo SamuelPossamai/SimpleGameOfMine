@@ -84,9 +84,13 @@ public:
      */
     virtual void destroy() { delete this; }
 
+protected:
+
+    void setNeedAngle(bool need_angle) { _need_angle = need_angle; }
+
 private:
 
-    const bool _need_angle;
+    bool _need_angle;
 };
 
 #endif // UNITSKILL_H

@@ -22,8 +22,10 @@ public:
 
     virtual UIntegerType firstAct(const ActInfo&) = 0;
 
+    virtual bool needAngle(const ActInfo&) { return false; }
+
     virtual UIntegerType act(Unit*, EngineMap*, ProjectileCreationInterface&,
-                             const SkillInfo&, const ActInfo&) = 0;
+                             const SkillInfo&, ActInfo&) = 0;
 
     static Action *getAction(const std::string& name) {
 

@@ -15,7 +15,9 @@ public:
     virtual UIntegerType firstAct(const ActInfo&) override;
 
     virtual UIntegerType act(Unit*, EngineMap*, ProjectileCreationInterface&,
-                             const SkillInfo&, const ActInfo&) override;
+                             const SkillInfo&, ActInfo&) override;
+
+    virtual bool needAngle(const ActInfo&) override;
 
 protected:
 

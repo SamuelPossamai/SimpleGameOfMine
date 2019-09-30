@@ -22,7 +22,8 @@ public:
 
         for(auto& p : actions) {
 
-            _actions.push_back({ p.first, p.first->firstAct(p.second), p.second });
+            _actions.push_back({ p.first,
+                                 p.first->firstAct(p.second), p.second });
             p.first->configActInfo(_actions.back().act_info);
         }
     }
@@ -34,8 +35,11 @@ public:
 
             if(a.next_step == s_info.step) {
 
-                UIntegerType after = a.action->act(u, m, pci, s_info, a.act_info);
-                if(after == 0) a.next_step = std::numeric_limits<UIntegerType>::max();
+                UIntegerType after = a.action->act(u, m, pci,
+                                                   s_info, a.act_info);
+                if(after == 0) {
+                    a.next_step = std::numeric_limits<UIntegerType>::max();
+                }
                 else a.next_step += after;
             }
         }
@@ -47,10 +51,23 @@ public:
 
         for(auto& a_el : _actions) {
 
-            if(a_el.next_step != std::numeric_limits<UIntegerType>::max()) return false;
+            if(a_el.next_step != std::numeric_limits<UIntegerType>::max()) {
+
+                return false;
+            }
         }
 
         return true;
+    }
+
+    bool needAngle() const {
+
+        for(auto& a_el : _actions) {
+
+            if(a_el.action->needAngle(a_el.act_info)) return true;
+        }
+
+        return false;
     }
 
 private:

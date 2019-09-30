@@ -8,9 +8,11 @@ type = "walk"
 [action.info]
 
 start = 0
-duration = 30
-distance = 8
-angle = 0
+duration = 20
+distance = 14
+angle = 30
+set_angle = true
+angle_relative_to_chosen = true
 
 [[action]]
 
@@ -18,7 +20,22 @@ type = "walk"
 
 [action.info]
 
-start = 90
+start = 20
 duration = 10
-distance = 8
-angle = 1
+distance = 14
+angle = -60
+set_angle = true
+angle_relative_to_chosen = true
+
+[[action]]
+
+type = "walk"
+
+[action.info]
+
+start = 30
+duration = 10
+distance = 14
+angle = 30
+set_angle = true
+angle_relative_to_chosen = true
